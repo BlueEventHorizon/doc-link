@@ -4,7 +4,7 @@
 **更新日**: 2026-09-28\
 **対象**: Claude Code 用プラグイン `doc-link`（仮称）
 
-[総論](REQ-001-overview.md) · [管理対象と文書 ID](REQ-002-document-id.md) · [ToC 管理](REQ-003-toc.md) · [文書検索](REQ-004-search.md) · [参照と影響調査](REQ-005-references.md)
+[総論](REQ-001-overview.md) · [管理対象と文書 ID](REQ-002-document-id.md) · [ToC 管理](REQ-003-toc.md) · [文書検索](REQ-004-search.md) · [参照と変更通知](REQ-005-references.md)
 
 <a id="sec-6"></a>
 

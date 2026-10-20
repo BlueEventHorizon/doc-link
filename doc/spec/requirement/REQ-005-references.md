@@ -1,7 +1,7 @@
 # doc-link 要件定義書 — 参照と変更通知
 
 **状態**: Draft 0.1\
-**更新日**: 2026-10-15\
+**更新日**: 2026-10-20\
 **対象**: Claude Code 用プラグイン `doc-link`（仮称）
 
 [総論](REQ-001-overview.md) · [管理対象と文書 ID](REQ-002-document-id.md) · [ToC 管理](REQ-003-toc.md) · [文書検索](REQ-004-search.md) · [参照と変更通知](REQ-005-references.md)
@@ -17,9 +17,9 @@
 Markdown では、標準のリファレンスリンクを使用する。
 
 ```markdown
-詳細は[アーキテクチャ原則][DLID-7K3M9P2X6T8V4R1Q]を参照する。
+詳細は[アーキテクチャ原則][DLID-7k3m9q2x4p8r]を参照する。
 
-[DLID-7K3M9P2X6T8V4R1Q]: ../architecture/overview.md
+[DLID-7k3m9q2x4p8r]: ../architecture/overview.md
 ```
 
 この記法では、文書 ID が参照先の論理的な同一性を表し、リンク定義のパスが参照先として指定された物理的な配置を表す。パスが現在も正しいかは実際のディレクトリ検索で検査する。

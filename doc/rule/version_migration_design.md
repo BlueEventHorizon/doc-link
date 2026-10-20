@@ -117,13 +117,13 @@ MIGRATIONS = {
     6: migrate_v5_to_v6,  # v5 → v6 の変換
 }
 
+
 def apply_migrations(old_data: dict, old_ver: int, new_ver: int) -> dict:
     """
     old_ver から new_ver まで順次マイグレーションを適用する。
     各ステップが前ステップの出力を受け取るパイプライン設計。
     """
-    targets = [v for v in sorted(MIGRATIONS.keys())
-               if old_ver < v <= new_ver]
+    targets = [v for v in sorted(MIGRATIONS.keys()) if old_ver < v <= new_ver]
     current = old_data
     for v in targets:
         current = MIGRATIONS[v](current)  # 前ステップの出力を次に渡す
@@ -257,13 +257,16 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 def apply_db_migrations(conn, current_version: int, target_version: int):
     """未適用のマイグレーションを昇順に適用する"""
     applied = get_applied_versions(conn)
-    pending = [v for v in sorted(ALL_MIGRATIONS.keys())
-               if current_version < v <= target_version and v not in applied]
+    pending = [
+        v
+        for v in sorted(ALL_MIGRATIONS.keys())
+        if current_version < v <= target_version and v not in applied
+    ]
 
     for v in pending:
         with conn.transaction():
-            ALL_MIGRATIONS[v](conn)             # マイグレーション実行
-            record_migration(conn, version=v)   # 適用履歴を記録
+            ALL_MIGRATIONS[v](conn)  # マイグレーション実行
+            record_migration(conn, version=v)  # 適用履歴を記録
 ```
 
 **ポイント:**

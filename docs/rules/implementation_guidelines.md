@@ -16,7 +16,7 @@ doc-link プラグインのスクリプト（Python / Bash）と SKILL.md を実
   - PyYAML（標準ライブラリに YAML パーサーが無いため）
   - markdown-it-py（CommonMark 準拠の Markdown パーサーが標準ライブラリに無いため）
 - Python スクリプトは `uv run` で実行し、依存は script ごとに PEP 723 のインラインメタデータで宣言する。利用者の環境に必要なのは uv だけであり、Python 本体と宣言した依存は uv が用意する。システムの `python3` の有無や版には依存しない
-- Python と依存は最新の安定版を使う。実行・依存の追加・ロック・更新の手順は [uv 利用ルール](uv_usage_rules.md) に従い、版番号を手で書かない
+- Python と依存は最新の安定版を使う。実行・依存の追加・ロック・更新の手順は [uv 利用ルール][uv_usage_rules] に従い、版番号を手で書かない
 - Node.js を使わない。Node.js で動くツール・パッケージ・GitHub Actions のアクションに依存しない
 - Bash スクリプトは外部コマンド（git, curl 等）の呼び出しに使ってよい
 
@@ -215,3 +215,5 @@ ${CLAUDE_PROJECT_DIR}/.temp/doc-link/<skill>/<name>_${CLAUDE_SESSION_ID}.md
 | 並行する変更の衝突の回避   | 複数の変更が同じバージョン行を編集すると、マージで衝突が頻発する |
 
 バージョン更新が必要だと判断したら、自分で上げず、ユーザーにリリースの手順の実行を提案する。
+
+[uv_usage_rules]: uv_usage_rules.md

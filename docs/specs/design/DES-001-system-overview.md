@@ -2,13 +2,17 @@
 
 **状態**: Draft 0.1・未承認\
 **更新日**: 2026-10-26\
-**根拠**: [要件総論](../requirement/REQ-001-overview.md)、[設計書の構成](README.md)
+**根拠**: [要件総論][req-001]、[設計書の構成][readme]
+
+<a id="sec-1"></a>
 
 ## 1. システム境界
 
 doc-link は DocAdvisor を置き換え、管理対象 Markdown の文書 ID、ToC、検索、参照検査、変更影響候補の通知を担う。対象集合は呼び出し元が完全な desired state として渡す。Forge の設定ファイルは呼び出し元が解釈し、doc-link は直接読まない。管理キーは対象集合を指定するが、参照の有効範囲は限定しない。
 
-doc-link が管理対象 Markdown に書き込めるのは DLID だけであり、位置は frontmatter の `doc_link_id`、見出し直前のアンカー行、参照リンクの title 属性に限る（要件 D-031）。DLID の書き込みは明示的に起動する ID 付与操作だけが行い、ToC の構築と検索は管理対象 Markdown を書き換えない（要件 D-035）。それ以外の本文・見出し・リンクの修正は、通知を受けたプロジェクト管理 AI が行う。Skill、script、AI の内部責務は [DES-002](DES-002-execution-responsibilities.md) に定める。
+doc-link が管理対象 Markdown に書き込めるのは DLID だけであり、位置は frontmatter の `doc_link_id`、見出し直前のアンカー行、参照リンクの title 属性に限る（要件 D-031）。DLID の書き込みは明示的に起動する ID 付与操作だけが行い、ToC の構築と検索は管理対象 Markdown を書き換えない（要件 D-035）。それ以外の本文・見出し・リンクの修正は、通知を受けたプロジェクト管理 AI が行う。Skill、script、AI の内部責務は [DES-002][des-002] に定める。
+
+<a id="sec-2"></a>
 
 ## 2. 全体の操作と接続
 
@@ -23,9 +27,11 @@ doc-link が管理対象 Markdown に書き込めるのは DLID だけであり�
 
 ToC 構築・再構築は、対象確定、ID 確認、変更検出、必要情報の取得、参照検査、候補検査、確定の順に行う。ID 確認では ID 未付与・重複の文書を除外して報告し、構築を止めない（要件 D-036）。初回 ToC がないキーでは検索できない。検索と変更影響候補の通知は、ToC 確定後の別操作である。報告の成功は、ToC 更新の成功と同義ではない。
 
+<a id="sec-3"></a>
+
 ## 3. 全体シーケンスの概要
 
-次の図は ToC 構築（`index-docs`）と、その後に別操作として行う変更影響候補の通知（`check-impact`）の正常系を示す。SKILL の構成と各 SKILL のシーケンスは [DES-010](DES-010-skill-composition.md) に置く。修正要否は doc-link では判定しない。失敗分岐、検索時の確認、状態遷移の許可条件は処理別文書と [DES-004](DES-004-state-machines.md) に置く。
+次の図は ToC 構築（`index-docs`）と、その後に別操作として行う変更影響候補の通知（`check-impact`）の正常系を示す。SKILL の構成と各 SKILL のシーケンスは [DES-010][des-010] に置く。修正要否は doc-link では判定しない。失敗分岐、検索時の確認、状態遷移の許可条件は処理別文書と [DES-004][des-004] に置く。
 
 ```mermaid
 sequenceDiagram
@@ -55,9 +61,11 @@ sequenceDiagram
     end
 ```
 
-処理済み比較基準は図中の ToC 確定時には進めない。変更と参照元の報告後に比較基準を更新する条件は [DES-007](DES-007-references-impact.md) で扱う。
+処理済み比較基準は図中の ToC 確定時には進めない。変更と参照元の報告後に比較基準を更新する条件は [DES-007][des-007] で扱う。
 
-構築中に対象文書が再変更された場合に、どの観測版を候補に含められるかは [DES-005](DES-005-indexing.md) の一貫性条件で扱う。参照先ディレクトリの走査不能は検査不能として記録し、確定を妨げない（要件 D-025）。
+構築中に対象文書が再変更された場合に、どの観測版を候補に含められるかは [DES-005][des-005] の一貫性条件で扱う。参照先ディレクトリの走査不能は検査不能として記録し、確定を妨げない（要件 D-025）。
+
+<a id="sec-4"></a>
 
 ## 4. 共通不変条件
 
@@ -68,6 +76,18 @@ sequenceDiagram
 5. 逆参照と変更影響候補の報告範囲は、走査して登録した参照元の範囲を超えない。
 6. あるキーの更新は、指定されていないキーの ToC を更新・削除しない。
 
+<a id="sec-5"></a>
+
 ## 5. 本書で確定しないこと
 
-保存方式（SQLite と文書単位のロック）、同一 ID の複数キー間での見え方、変更報告の比較基準の単位、検索時の参照検査結果の鮮度、参照先の走査不能時の確定可否は個別設計で決定済みである（[DES-002](DES-002-execution-responsibilities.md)、[DES-003](DES-003-data-model.md)、[DES-005](DES-005-indexing.md)、[DES-006](DES-006-search.md)、[DES-007](DES-007-references-impact.md)）。これらの選択は対応する個別設計に理由と帰結を記録し、要件変更が必要なら要件書にも反映する。
+保存方式（SQLite と文書単位のロック）、同一 ID の複数キー間での見え方、変更報告の比較基準の単位、検索時の参照検査結果の鮮度、参照先の走査不能時の確定可否は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録し、要件変更が必要なら要件書にも反映する。
+
+[req-001]: ../requirement/REQ-001-overview.md
+[readme]: README.md
+[des-002]: DES-002-execution-responsibilities.md
+[des-010]: DES-010-skill-composition.md
+[des-004]: DES-004-state-machines.md
+[des-007]: DES-007-references-impact.md
+[des-005]: DES-005-indexing.md
+[des-003]: DES-003-data-model.md
+[des-006]: DES-006-search.md

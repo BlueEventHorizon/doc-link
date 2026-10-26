@@ -34,17 +34,24 @@ uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-p
 ## 文書を書く・直すときのルール
 
 - 文書の記述スタイル（タグ・見出し・参照記法・履歴を置かない等）は、末尾の forge 規範ブロックと forge 同梱の文書スタイル指針に従う。
-- 実装（`plugins/` 配下の script・SKILL.md）を書く段階になったら [docs/rules/implementation_guidelines.md](docs/rules/implementation_guidelines.md) に従う。特に以下は MANDATORY:
+- 実装（`plugins/` 配下の script・SKILL.md）を書く段階になったら [docs/rules/implementation_guidelines.md][implementation_guidelines] に従う。特に以下は MANDATORY:
   - Python script は `uv run` で実行し、依存は PEP 723 で宣言する。外部依存は PyYAML と markdown-it-py のみ許容（それ以外は標準ライブラリ）。Python と依存は最新の安定版を使う。外部コマンド呼び出しは Bash
   - Node.js を使わない（ツール・パッケージ・GitHub Actions のアクションを含む）
   - `plugins/` 配下の `.py` にはテスト必須（`tests/{plugin}/{skill}/` に配置、`test_*.py` 命名）
   - SKILL.md にロジックをインライン記述しない。独立スクリプトを呼び出す形にする
   - 配布物（SKILL.md / agents / commands / 配布物内蔵 docs）から本リポジトリの `docs/specs/` `docs/rules/` を参照しない
   - バージョン関連ファイル（`plugin.json` の version、CHANGELOG 等）は作業 PR で編集しない。更新は `/forge:update-version` のみ
-- uv による実行・依存の追加・ロック・更新は [docs/rules/uv_usage_rules.md](docs/rules/uv_usage_rules.md) に従う（版番号を手で書かない）。
-- SKILL とカスタム Agent の組み方は [docs/rules/claude_code_authoring_guide.md](docs/rules/claude_code_authoring_guide.md)、依拠する Claude Code の事実は [docs/rules/claude_code_reference.md](docs/rules/claude_code_reference.md) に従う。
-- SKILL とカスタム Agent の間の一過性データの受け渡しは [docs/rules/agent_data_exchange_rules.md](docs/rules/agent_data_exchange_rules.md) に従う。
-- script の終了コード・標準出力の契約は [docs/rules/script_error_output_rules.md](docs/rules/script_error_output_rules.md) に従う（`0`/`1`/`2` は全 script 共通、`3` 以上は script 自身の docstring で宣言）。
+- uv による実行・依存の追加・ロック・更新は [docs/rules/uv_usage_rules.md][uv_usage_rules] に従う（版番号を手で書かない）。
+- SKILL とカスタム Agent の組み方は [docs/rules/claude_code_authoring_guide.md][claude_code_authoring_guide]、依拠する Claude Code の事実は [docs/rules/claude_code_reference.md][claude_code_reference] に従う。
+- SKILL とカスタム Agent の間の一過性データの受け渡しは [docs/rules/agent_data_exchange_rules.md][agent_data_exchange_rules] に従う。
+- script の終了コード・標準出力の契約は [docs/rules/script_error_output_rules.md][script_error_output_rules] に従う（`0`/`1`/`2` は全 script 共通、`3` 以上は script 自身の docstring で宣言）。
+
+[implementation_guidelines]: docs/rules/implementation_guidelines.md
+[uv_usage_rules]: docs/rules/uv_usage_rules.md
+[claude_code_authoring_guide]: docs/rules/claude_code_authoring_guide.md
+[claude_code_reference]: docs/rules/claude_code_reference.md
+[agent_data_exchange_rules]: docs/rules/agent_data_exchange_rules.md
+[script_error_output_rules]: docs/rules/script_error_output_rules.md
 
 <!-- FORGE_ONBOARDING_START hash=6a3a278b2d31 -->
 

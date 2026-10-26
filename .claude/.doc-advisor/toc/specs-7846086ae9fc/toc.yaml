@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (specs)
   key: specs
-  generated_at: 2026-10-26T08:12:55Z
+  generated_at: 2026-10-26T12:27:05Z
   file_count: 16
 
 docs:
@@ -74,92 +74,95 @@ docs:
       - ID assignment
       - DES-002
   docs/specs/design/DES-003-data-model.md:
-    title: Logical Data Model (DES-003)
-    purpose: "Defines the logical data model of doc-link: document identity, document info, references, inspection results, confirmed ToC versions, processed comparison baselines, builds and document locks."
+    title: DES-003 Logical Data Model
+    purpose: "Defines the logical data model of doc-link: information identities, relations, versions and primary sources, and the multiplicity and freshness rules that bind them. Excludes physical storage schema."
     content_details:
-      - "Logical information table: document identity (doc_link_id), management target spec, observation, document info, reference description, reference inspection result, confirmed ToC version, processed baseline, build execution, document lock"
-      - Document info is stored as one row per doc_link_id and not copied per key; all keys reference the same latest row (D-024, old R-001)
-      - "Confirmed ToC version holds only per-key index state: membership, reference relations, reflected hash, inspection results"
-      - Processed baseline is keyed by section or document ID x referrer ID, independent of the reflected hash and of the scan key (old R-002)
-      - Document lock per target (document ID, or path if unassigned) with holder build ID, stage and timestamps; one build holds at most one lock; forced release needs user confirmation (old R-004)
-      - "Multiplicity: a document belongs to several keys, has several references, and reverse references are derived only from registered referrers"
-      - At most one confirmed ToC version per key, none before the first build; candidate versions are never public
-      - Section identified by the DLID placed directly above its heading; heading text is never a permanent ID (D-033)
-      - A path-only change of a link target does not count as a body change; reference comparison values detect path changes (D-039)
-      - Inspection match holds only for the recorded directory and time; document and reference target freshness are independent; documents leaving scope are removed from the confirmed version
+      - Document identity by doc_link_id, independent of path and key
+      - "Logical information table: document identity, management target specification, target observation, document information, reference description, reference check result, ToC confirmed version, processed comparison baseline, build execution, lock"
+      - Document information stored once per doc_link_id as one row and not duplicated per key
+      - Reference description keeps relative link paths without DLID to detect logical target changes (D-045)
+      - Processed comparison baseline kept per referrer, independent of ToC hashes, retained after key departure until reported (D-046)
+      - "Lock model: one document lock per document and one key lock per key, released on release, forced release needs user confirmation"
+      - Section identity by DLID placed before the heading; headings without DLID are not stable identifiers (D-033)
+      - Body hash and reference path comparison values kept separate; path-only link changes are not reported as body changes (D-039)
+      - Documents leaving a key scope removed from its confirmed version without searching outside the scope
     applicable_tasks:
-      - Implementation of the SQLite table design for doc-link management state
-      - Review of data ownership between document info rows and per-key ToC versions
-      - Design of processed comparison baseline keys and change report bookkeeping
-      - Modification of the document lock schema and forced release handling
-      - Review of reference inspection result freshness and validity conditions
-      - Verification of section identity rules for headings without a DLID
+      - Data model design review
+      - Implementation of document identity and reference storage for doc-link
+      - Modification of ToC confirmed version or lock structures
+      - Review of processed comparison baseline handling across keys
+      - Verification of freshness rules for body hash and reference path
     keywords:
       - doc_link_id
-      - processed baseline
-      - document lock
+      - logical data model
+      - DLID
       - reference description
-      - inspection result
-      - confirmed ToC version
-      - build ID
-      - DLID
-      - reverse reference
-      - DES-003
-  docs/specs/design/DES-004-state-machines.md:
-    title: DES-004 State Model and Allowed Transitions
-    purpose: Defines the allowed state transitions for ToC publication and build execution, separating publication state from build progress, and the freshness rules for reference check results.
-    content_details:
-      - ToC publication states Unbuilt and Published with transitions P-01 to P-03
-      - Build execution states from Started through ScopeReady, IdsReady, ChangesReady, DataReady, RefsReady and CandidateReady to Finished, with transitions B-01 to B-09
-      - Guard conditions per build transition, such as candidate check success and batch confirmation success
-      - Rule that a failed build stage never publishes the candidate and keeps the previous published version (B-08)
-      - Rule that the script rejects any state, event or guard combination absent from the transition table
-      - Rule that Failed returns to Started only on explicit re-run (B-09)
-      - Separation of reference check results into match, path mismatch, absent in designated directory and unverifiable
-      - "Freshness rule: search re-scans references of result documents, and saved check results are not updated automatically"
-    applicable_tasks:
-      - Implementation of ToC build and rebuild state transitions
-      - Test design for state transitions per DES-009
-      - Failure and re-run handling review for ToC build
-      - Review of publication version switching between Unbuilt and Published
-      - Freshness design review for reference check results
-    keywords:
-      - ToC publication state
-      - build state machine
-      - allowed transitions
-      - B-08 failure
-      - P-01 transition
-      - CandidateReady
+      - processed comparison baseline
+      - ToC confirmed version
+      - lock
+      - body hash
+      - build execution
       - reference check result
-      - stateDiagram
-  docs/specs/design/DES-005-indexing.md:
-    title: DES-005 Target Resolution, ID Assignment and ToC Build Design
-    purpose: Defines the input and output boundary of ToC build, target resolution and ID verification, the DLID assignment operation, change set decisions, and per-document locking for document information rows.
+  docs/specs/design/DES-004-state-machines.md:
+    title: DES-004 State Model and Permitted Transitions
+    purpose: Defines the separated states of ToC publication, ToC build and rebuild runs, DLID embedding runs, and impact reporting runs, with the permitted transitions, guards, and failure outcomes that the script must enforce. Rejected transitions change nothing.
     content_details:
-      - "Inputs and outputs of ToC build: management key, complete desired target specification, last published version and processed comparison baseline"
-      - "Target resolution: expansion of directories and patterns into a concrete Markdown list with exclusions, and reporting of documents without doc_link_id or with duplicate IDs"
-      - "DLID assignment operation: 60-bit random Crockford Base32 12-character IDs checked against IDs of all keys and the current scan"
-      - "Duplicate resolution order: current path in management state, file creation time (newer treated as copy), content hash, then user confirmation"
-      - Section anchor DLID issuance and DLID insertion into links whose title lacks a DLID, applied only to unambiguous targets
-      - "Change set categories recorded independently: new, target removed, same-ID path change, body comparison value change, reference or physical path change"
-      - Per-document lock with content hash recheck after waiting, holding one lock at a time, stored as SQLite lock rows
-      - Document information row kept independently of keys and confirmed per document, not rolled back on build failure
+      - "ToC publication state per key: Unbuilt or Published with a confirmed version, transitions P-01 to P-03"
+      - ToC build run states B-01 to B-09 from start through scope, ID confirmation, change set, data, reference check, candidate check, to finished or failed
+      - Build run writes no managed Markdown; ID embedding is a separate operation
+      - DLID embedding run states E-01 to E-07; only E-05 writes DLIDs into Markdown under a per-document lock with a diff check
+      - Impact reporting run states N-01 to N-05; only N-04 advances the processed comparison baseline
+      - "Reference check result classes: match, path mismatch, absent within specified directory, check impossible, retained with directory and check time"
+      - Retry after failure (B-09, E-07) re-evaluates incomplete processing; already written DLIDs are not rolled back
+      - Transition table is normative; transitions absent from the table are rejected without changing the confirmed version or baseline
     applicable_tasks:
-      - Implementation of target resolution and ID verification in ToC build
-      - Implementation of the DLID assignment operation
-      - Design review of duplicate doc_link_id resolution
-      - Implementation of per-document locking for document information rows
-      - Review of change set decision logic for ToC build
+      - State machine implementation for ToC build and rebuild
+      - Implementation of DLID embedding run states and failure handling
+      - Review of permitted transitions and guards for impact reporting
+      - Design of retry and failure recovery for build runs
+      - Test design for transition table coverage
     keywords:
-      - doc_link_id
-      - DLID
+      - state transition
+      - Unbuilt
+      - Published
+      - permitted transition guard
+      - embed-dlid
+      - check-impact
+      - processed comparison baseline
+      - reference check result
+      - failure recovery
+      - rejected transition
+  docs/specs/design/DES-005-indexing.md:
+    title: DES-005 Target Confirmation, ID Assignment, and ToC Build Design
+    purpose: Defines the design of target confirmation, DLID assignment, change set classification, candidate validation, and document-level locking for building a ToC, including its input-output boundary and rerun behavior.
+    content_details:
+      - "Build inputs: management key, complete target specification, target Markdown, last confirmed version, processed comparison baseline; outputs: confirmed version or diagnostics, unreported changes, reference check results"
+      - Target confirmation expands directory patterns and exclusions; documents without doc_link_id or with duplicate IDs are excluded and reported, and read failures stop progress
+      - ID assignment runs separately from build, is started explicitly, and that start counts as write approval
+      - "Duplicate ID original resolution order: current path, file creation time with newer treated as copy, content hash; user confirms the original"
+      - "New DLID generation: 60-bit random value as 12-character Crockford Base32, checked against IDs of all keys and the scanned set"
+      - "Change set kinds recorded independently: new, target departure, path change with same ID, body comparison value change, reference and physical path change"
+      - Candidate check covers ID uniqueness, target correspondence, reference and backlink consistency, required fields; only a checked candidate is published at once
+      - Document information rows updated under a per-document lock with hash recomparison after the lock is acquired; lock rows stored in SQLite; forced release needs user confirmation
+      - Key lock taken at build start and document locks taken after it, fixed order to avoid deadlock
+      - Reference absence, path mismatch, and check impossible are recorded as candidate results, not build failure
+    applicable_tasks:
+      - Implementation of target confirmation and frontmatter reading for ToC build
+      - Implementation of DLID assignment and duplicate resolution for the embed-dlid operation
+      - Implementation of document lock and key lock acquisition procedures
+      - Review of change set classification and candidate validation rules
+      - Modification of DLID generation rules and collision checks
+    keywords:
+      - target confirmation
+      - DLID assignment
       - Crockford Base32
-      - ID assignment operation
-      - per-document lock
-      - lock row
+      - duplicate resolution
+      - document lock
+      - key lock
       - change set
-      - duplicate ID resolution
-      - target resolution
+      - candidate check
+      - processed comparison baseline
+      - embed-dlid
   docs/specs/design/DES-006-search.md:
     title: DES-006 Document Search Design
     purpose: Defines the pre-search judgment that decides whether a ToC rebuild is needed, the search result contract with document IDs and freshness, and the re-scan of reference checks for search result documents.
@@ -191,129 +194,129 @@ docs:
       - published ToC version
   docs/specs/design/DES-007-references-impact.md:
     title: DES-007 Reference Inspection and Change Impact Candidate Notification
-    purpose: Defines how doc-link inspects DLID-based references within a scanned directory, notifies change impact candidates to the managing AI, and advances the processed comparison baseline.
+    purpose: Defines formal DLID-based reference inspection, directory-scoped target resolution, change impact candidate detection and notification, and comparison baseline advancement rules.
     content_details:
-      - Formal reference extraction from Markdown links whose title ends with a DLID, keeping source ID, position, target ID and link path separately
-      - Directory scan classification into match, same ID at a different path, absent in the scanned directory, or unreadable directory
-      - Same ID found multiple times is reported as a duplicate diagnostic with no unique current path inferred
-      - Fix-target path notified only when the same ID is uniquely confirmed by a real scan
-      - Path mismatch, absence and unreadable results do not block ToC confirmation (U-020, D-025)
-      - Reverse references built from scanned referrers bound to comparison value, scanned key and time
-      - Direct referrers listed; section-DLID referrers notified only on section change, document-DLID referrers on any change
-      - Comparison value ignores DLID writes and link path-only edits (D-039); indirect referrers are not listed
-      - Processed baseline kept per (target ID, referrer ID) pair and advanced only after the report is returned successfully
-      - Inspection split into check-dlid, check-links, check-toc, check-impact; only check-impact writes management state and no inspection modifies Markdown
+      - Formal reference extraction from Markdown links whose title ends with a DLID (D-032)
+      - "Inspection outcomes: match, path mismatch, absent in scanned directory, scan failure"
+      - Directory-scoped scan matching frontmatter doc_link_id and anchor-line section DLIDs
+      - Section DLID ownership by the containing document and fragment-independent identity check
+      - Repair path notified only when the same ID is uniquely confirmed by an actual scan
+      - Inverse reference table built from scanned referrers keyed by scan key, target and time
+      - "Per-section change classification: addition, change, move, deletion"
+      - "Change report fields: changed ID, location, comparison value, referrer ID, reference description, scan range"
+      - Comparison baseline keyed by (target DLID, referrer ID or no referrer), kept until report completes
+      - Doc-link does not judge or edit referrers; the managing AI decides and fixes
     applicable_tasks:
-      - Implementation of reference inspection for DLID-titled links
-      - Implementation of change impact candidate notification in check-impact
-      - Design review of directory scan result classification
-      - Implementation of processed comparison baseline update logic
-      - Review of reverse reference and indirect impact handling
-      - Consistency verification of inspection category and SKILL split
+      - Implementation of reference inspection and dangling reference detection
+      - Review of change impact candidate notification logic
+      - Modification of comparison baseline advancement rules
+      - Design review of directory-scoped reference target resolution
+      - Verification of section change classification (addition, change, move, deletion)
     keywords:
       - DLID
       - check-links
       - check-impact
-      - reverse reference
+      - inverse reference
+      - change impact candidate
       - comparison baseline
-      - path mismatch
-      - directory scan
-      - impact candidate
-      - duplicate diagnostic
-      - processed baseline
-  docs/specs/design/DES-008-content-rules.md:
-    title: DES-008 Markdown Parsing, Comparison Value and Generated Information Rules
-    purpose: Defines how doc-link reads and writes DLID values in Markdown, computes the content comparison value by SHA-256 after removing management-only text, and constrains AI-generated ToC fields.
-    content_details:
-      - DLID read from frontmatter doc_link_id as a single case-sensitive DLID-prefixed 12-character string; missing or unrecognizable values classified as no document ID
-      - Issued ID is a 60-bit random value from secrets encoded as lowercase Crockford Base32 (decision U-001)
-      - Only DLID is written, at frontmatter doc_link_id, heading anchor line or reference link title; code and HTML blocks excluded
-      - Post-write re-parse with markdown-it-py verifies only intended DLID positions changed, otherwise the write is rolled back
-      - Formal references are links whose title ends with a DLID; section range runs to the next heading of same or higher level
-      - Relative link paths resolved from the referrer file location; target ID and physical path never propagated to each other
-      - Heading anchors resolved by GitHub-compatible slug rules during migration; unresolvable links reported without adding a DLID
-      - Content comparison value is SHA-256 of UTF-8 text after removing DLID writes; link path-only edits and newline differences do not change it
-      - Removal uses markdown-it-py token positions for frontmatter, anchor HTML block and link title, then re-parses to verify
-      - AI-generated fields limited by per-field length L with a hidden validator tolerance; the hard boundary is not disclosed to the generating AI
-    applicable_tasks:
-      - Implementation of DLID read and write logic for frontmatter, anchor line and link title
-      - Implementation of markdown-it-py based reference and section range parsing
-      - Implementation of content comparison value calculation
-      - Creation of test vectors for comparison value invariance and change detection
-      - Review of write-back verification and rollback behavior
-      - Implementation of length and count validation for AI-generated ToC fields
-    keywords:
-      - DLID
+      - section DLID
       - doc_link_id
-      - Crockford Base32
+      - path mismatch
+      - scan failure
+  docs/specs/design/DES-008-content-rules.md:
+    title: DES-008 Markdown Parsing, Comparison Value and Generation Information Rules
+    purpose: Defines Markdown parsing with markdown-it-py, placement and verification of document ID writes, content comparison value and hash rules, and input limits for AI-generated ToC fields.
+    content_details:
+      - doc_link_id reading from frontmatter, accepted only as a DLID- prefixed 12-character lowercase Crockford Base32 value
+      - Anchor line placement before headings with required blank line handling
+      - DLID appended to reference link title attribute without changing its quote enclosure
+      - Write-back limited to DLID positions, verified by re-parsing and rolled back on other differences
+      - markdown-it-py parsing for code blocks, headings, link URLs, link titles and HTML blocks
+      - Section scope from an anchor-line heading up to the next heading of same or higher level
+      - Heading anchor resolution with GitHub-compatible slug rules during migration
+      - Content comparison value as SHA-256 of UTF-8 text with management-only elements removed
+      - Removal rules for DLID in frontmatter, anchor lines and link titles, with reproducible test vectors
+      - AI-generated field input limits per field and validator tolerance without exposing the hard limit
+    applicable_tasks:
+      - Implementation of doc_link_id reading and writing in frontmatter and anchor lines
+      - Implementation of Markdown link and section parsing with markdown-it-py
+      - Review of content comparison value and hash computation rules
+      - Creation of reproducible test vectors for comparison value invariance and sensitivity
+      - Modification of AI-generated field input limits and validation behavior
+    keywords:
+      - doc_link_id
+      - DLID
       - markdown-it-py
+      - anchor line
       - content comparison value
       - SHA-256
-      - anchor line
-      - title attribute
-      - section range
-      - generation length limit
+      - reference link title
+      - section scope
+      - GitHub slug
+      - AI-generated field
   docs/specs/design/DES-009-verification.md:
     title: DES-009 Requirement Coverage and Design Verification
-    purpose: Defines test rules for state-based processing and deterministic units, maps requirements to design and acceptance verification points, and lists cross-cutting scenarios for doc-link.
+    purpose: Defines test norms and requirement-to-design verification mapping for doc-link, covering state transitions, document locks, deterministic unit tests and cross-cutting scenarios.
     content_details:
-      - State tests use the DES-004 transition table as the only allowed transition list for P-01 to P-03 and B-01 to B-09
-      - Rejection tests for failed guards, unlisted events and events from other states keep public version and comparison baseline unchanged
-      - "Scan failure tests: unreadable directory, absent directory and absent ID recorded as check-failed or absent, and confirmation still allowed (U-020)"
-      - State tests include interruption, rerun, retained old confirmed version, partially saved IDs and multi-key isolation
-      - "Document lock tests with two concurrent builds: recompare after wait, forced unlock rejects stale writes, search does not wait"
-      - "Deterministic units tested separately: target expansion, Markdown parsing, ID issue and duplicates, path resolution, scan classification, comparison value, AI output validation"
-      - Requirement-to-design mapping table covering FR-001 to FR-017 and NFR-001 to NFR-008 with main design documents and verification points
-      - "Cross-cutting scenarios: first build, move with same ID and content, content change, failure at each step, multi-key sharing, out-of-scope reference, concurrent sessions"
-      - Failure handling keeps old published version and old comparison baseline per failure point while confirmed document info rows are not rolled back
-      - Design is a first draft before review, not a fixed implementation spec, while open items are all decided
+      - State transition tests driven by the DES-004 transition table as the only permitted transition list
+      - Rejection tests for guard failures, unlisted events and events from other states
+      - Scan outcome tests distinguishing scan failure, missing scanned directory and absent target
+      - Interruption, rerun, retained old published version and partially stored ID tests
+      - Report failure tests confirming unreported changes are re-detected after partial output or baseline update failure
+      - Referrer-less change recording and re-reporting when a referrer is later added
+      - Comparison baseline retention when a document leaves one of two keys
+      - Section addition, change, move and deletion reported separately
+      - Document lock concurrency tests for lock waiting, forced unlock and single lock holding
+      - Requirement-to-design mapping table linking FR and NFR items to design sections and acceptance criteria
     applicable_tasks:
-      - Creation of state transition tests based on the DES-004 transition table
-      - Creation of concurrency tests for document lock and ID issuance
-      - Creation of unit tests for deterministic processing such as Markdown parsing and comparison value
-      - Review of requirement to design coverage and acceptance verification mapping
-      - Creation of cross-cutting scenario tests for multi-key and failure handling
-      - Review of design verification completeness before approval
+      - Creation of state transition test cases from the DES-004 transition table
+      - Implementation of document lock concurrency tests
+      - Implementation of report failure and comparison baseline recovery tests
+      - Review of verification coverage in the requirement-to-design mapping
+      - Traceability review of FR and NFR items against design sections and acceptance criteria
     keywords:
-      - DES-004 transition table
+      - transition table
+      - acceptance criteria
       - document lock
-      - scan failure
-      - requirement coverage
-      - acceptance criteria AC
-      - cross-cutting scenario
+      - forced unlock
       - comparison baseline
-      - concurrent build
-      - state transition test
-      - U-020
+      - scan failure
+      - referrer-less change
+      - section change classification
+      - requirement traceability
+      - deterministic unit test
   docs/specs/design/DES-010-skill-composition.md:
-    title: DES-010 SKILL and Agent Composition
-    purpose: Defines the 7 SKILLs and 2 custom Agents of doc-link with their responsibilities, write scopes, per-SKILL sequences, detected states of check SKILLs, and follow-up actions after checks.
+    title: DES-010 SKILL and Custom Agent Composition
+    purpose: Defines the composition of doc-link into 7 SKILLs and 2 custom Agents, the responsibilities and sequence of each SKILL, and the data exchange rules with the custom Agents
     content_details:
-      - Seven SKILLs embed-dlid index-docs query-docs check-dlid check-links check-toc check-impact and two custom Agents toc-updater and query-worker with their responsibilities table
-      - All SKILLs are inheriting type running in the caller context and delegate processing to scripts without logic in SKILL.md
-      - "Write scope per SKILL: embed-dlid writes DLID to Markdown and lock rows, index-docs writes document info rows and ToC version, check-impact advances processed comparison baseline"
-      - Check SKILLs other than check-impact only detect and return results without rewriting management state
-      - Detected states and follow-up actions per check SKILL, e.g. check-links handles missing title DLID via embed-dlid and link fixes by the project management AI
-      - check-impact returns changed documents with direct referrers, the processed unit is the pair of changed document and referrer, and indirect referrers are excluded
-      - Use case diagram showing user, project management AI and upper skills calling operations and checks, with query-docs asking for rebuild choice
-      - Per-SKILL sequence diagrams for embed-dlid index-docs query-docs check-dlid check-links check-toc and check-impact
+      - Seven SKILLs embed-dlid index-docs query-docs check-dlid check-links check-toc check-impact with their kind and write scope to Markdown and managed state
+      - "Two custom Agents: toc-updater for per-document information generation and query-worker for read-only search, both launched by inheriting SKILLs"
+      - embed-dlid issuing DLIDs to frontmatter and section anchors, asking the user only to confirm the original when IDs are duplicated
+      - "index-docs flow: target confirmation, ID check, diff detection, per-document locked generation loop with toc-updater, then batch ToC version confirmation"
+      - query-docs pre-search check outcomes unbuilt, rebuild not needed, rebuild needed, or undecidable, with a two-choice rebuild confirmation
+      - Inspection SKILLs check-dlid, check-links, check-toc only detect and return results without changing managed state, each naming the follow-up action
+      - check-impact returns changed documents with direct referrers only and advances the processed baseline per (changed document, referrer) pair, excluding indirect referrers
+      - "Agent exchange: script-generated identifiers, request and result placed by script, read by absolute path, deleted after processing; toc-updater error value source_unreadable"
+      - query-worker results validated against the fixed ToC version, any unknown ID treated as an abnormal result
+      - Use case diagram with user, project management AI and upper skill as callers, and the query-docs rebuild choice leading to index-docs
     applicable_tasks:
       - Design review of doc-link SKILL and custom Agent composition
-      - Implementation of SKILL.md and script orchestration for embed-dlid index-docs and query-docs
-      - Implementation of check-dlid check-links check-toc and check-impact
-      - Verification of responsibility split between SKILLs custom Agents and scripts
-      - Review of per-SKILL execution sequences and follow-up actions after checks
+      - Implementation of SKILL.md and script boundaries for embed-dlid, index-docs, query-docs and the inspection SKILLs
+      - Modification of SKILL responsibilities or sequence diagrams in DES-010
+      - Review of data exchange between SKILLs and toc-updater or query-worker
+      - Verification of check-impact processed baseline behavior
+      - Creation of toc-updater or query-worker custom Agent definitions
     keywords:
-      - SKILL composition
-      - toc-updater
-      - query-worker
+      - DES-010
       - embed-dlid
       - index-docs
       - query-docs
-      - check-impact
+      - check-dlid
       - check-links
-      - inheriting SKILL
-      - processed comparison baseline
+      - check-toc
+      - check-impact
+      - toc-updater
+      - query-worker
   docs/specs/design/README.md:
     title: doc-link Design Document Structure
     purpose: Defines the composition of doc-link design documents, the subject each DES document covers, the rule that requirements and design must not conflict, and the open-item status that blocks confirmed specs.
@@ -345,97 +348,93 @@ docs:
       - design coverage
   docs/specs/requirement/REQ-001-overview.md:
     title: doc-link Requirements Overview
-    purpose: Defines the overall purpose, background, scope, responsibility boundaries, shared non-functional requirements, decisions and open issues for the doc-link plugin that replaces DocAdvisor
+    purpose: Defines overall purpose, common non-functional requirements, decisions, and open items for doc-link, the plugin replacing DocAdvisor with document-ID-based management and change impact notification
     content_details:
-      - Background limits of DocAdvisor path-based ToC keys and file-hash change detection
-      - Overall flow for ID assignment, ToC build, change impact notification and search (sections 3.1 and 3.2)
-      - In-scope and out-of-scope items, including Markdown only and no semantic impact judgment by scripts alone
-      - "Responsibility boundary: doc-link reports changes and references while the project management AI decides on fixes"
-      - DLID write boundary limited to doc_link_id, section anchor line and reference link title (NFR-004, D-031)
-      - Non-functional requirements NFR-001 to NFR-008 covering consistency, determinism, idempotency, diagnosability, resumption, scalability and generation/validation limit separation
-      - Error candidates and non-blocking detection items (sections 17.1 and 17.2)
-      - Decision log D-001 to D-044 covering IDs, ToC, search, references and notification
-      - Direct-reference-only impact propagation, with indirect impact detected one step at a time (D-043)
-      - Open issues U-001 to U-024 and their current recommendations
+      - Purpose of doc-link replacing DocAdvisor with document-ID-based identification and reference relationship management
+      - Responsibility boundary between doc-link and the project management AI, where doc-link only reports and the AI decides and edits
+      - Overall flow of initial ID assignment, ToC construction, document search, and change impact candidate notification
+      - Management key and management target specification given as an external desired state by the caller
+      - Non-functional requirements NFR-001 to NFR-008 covering ToC rebuild consistency, determinism, idempotency, and write boundary
+      - Write boundary limiting doc-link writes to the DLID in frontmatter, section anchor lines, and reference link title attributes
+      - Error candidates such as invalid key usage and failed ID assignment that stop normal completion
+      - Detection items such as missing reference targets and path mismatches that are recorded without blocking ToC confirmation
+      - Decision records D-001 to D-046 and open items U-001 to U-024 with their resolution status
     applicable_tasks:
       - Requirements review of the doc-link plugin
-      - Confirmation of scope and responsibility boundaries between doc-link and the project management AI
-      - Design of document ID, ToC and search components based on the requirements
-      - Checking the decision log (D-series) before design or implementation changes
-      - Verification of non-functional requirements for doc-link
+      - Design derivation for document ID, ToC, and reference features from the requirements
+      - Verification of decision and open item resolution status
+      - Responsibility boundary confirmation between doc-link and the project management AI
+      - Acceptance criteria creation for doc-link requirements
     keywords:
       - doc-link
       - DocAdvisor
-      - requirements overview
-      - DLID
-      - responsibility boundary
-      - decision log
-      - open issues
-      - ToC
-      - impact notification
-      - NFR
-  docs/specs/requirement/REQ-002-document-id.md:
-    title: doc-link Requirements Managed Documents and Document ID
-    purpose: Defines managed Markdown targets per management key and desired-state specification, and the rules for issuing, validating and assigning document IDs stored as doc_link_id in frontmatter
-    content_details:
-      - Management key as opaque key with desired-state target specification and DocAdvisor-compatible arguments such as --paths, --dirs, --exclude and --all
-      - Documents absent from the new target set leave the key ToC without scanning outside the target scope
-      - Rules forbidding guessing document type from key names, and rejecting --key all and target specification without a key
-      - doc_link_id frontmatter key with DLID- prefix and 12-character lowercase Crockford Base32 value part
-      - ID issuance only by the ID assignment operation, with collision check against existing IDs before saving
-      - Document ID never recomputed from body, filename, path, title or summary
-      - Missing, null, empty or unrecognized doc_link_id classified uniformly as document ID does not exist
-      - Duplicate ID detection and original candidate judgment by recorded path, creation time and recorded content hash
-      - ToC build confirmation stage that excludes documents without ID or with duplicate ID and reports them by path
-      - "ID assignment operation steps: issue IDs, write section anchors and add DLID to reference link titles"
-    applicable_tasks:
-      - Implementation of managed target resolution from a management key and target specification
-      - Implementation of document ID issuance and saving to frontmatter
-      - Implementation of document ID validation and duplicate detection
-      - Design and review of the ID assignment operation including duplicate resolution
-      - Review of acceptance criteria AC-012 to AC-030 for document ID and management key behavior
-    keywords:
-      - doc_link_id
-      - DLID
       - document ID
+      - DLID
       - management key
+      - ToC
+      - NFR-004
+      - D-031
+      - responsibility boundary
+      - impact notification
+  docs/specs/requirement/REQ-002-document-id.md:
+    title: doc-link Requirements for Managed Targets and Document ID
+    purpose: Defines managed document targets for doc-link, covering management key and desired-state target specification, and document ID format, issuance, validation, and the ID assignment operation.
+    content_details:
+      - Management key as an opaque key with independent ToC per key, never inferred from key name
+      - Target specification options such as --paths, --paths-file, --dirs, --exclude, and --all with rejection of ambiguous combinations
+      - Desired-state semantics where documents absent from the current target set are removed from that key only
+      - Document ID format with DLID- prefix and 12-character Crockford Base32 value from a 60-bit random number
+      - Storage of doc_link_id in Markdown frontmatter, issued only by the explicit ID assignment operation
+      - Validation classifying missing, null, empty, or unrecognized doc_link_id as no document ID
+      - Duplicate detection across managed keys and original candidate determination by path, creation time, and content hash
+      - ID assignment operation writing section DLID anchors and reference link titles for managed targets
+      - Document ID independence from content, path, title, and management key membership
+    applicable_tasks:
+      - Implementation of managed target specification parsing and validation
+      - Review of document ID issuance and frontmatter handling
+      - Design of duplicate document ID detection and original resolution
+      - Acceptance criteria creation for document ID behavior
+      - Verification of management key independence and desired-state reflection
+    keywords:
+      - DLID-
+      - doc_link_id
+      - Crockford Base32
+      - management key
+      - "--dirs-json"
+      - "--exclude-json"
       - desired state
       - ID assignment operation
       - duplicate ID
-      - Crockford Base32
-      - exclude pattern
-      - managed target
+      - frontmatter
   docs/specs/requirement/REQ-003-toc.md:
-    title: doc-link Requirements ToC Management
-    purpose: Defines the information the ToC and processed hash list must manage, change detection against the existing ToC, ToC build and update steps, and length limits for AI-generated summary fields
+    title: doc-link Requirements for ToC Management
+    purpose: Defines information that the ToC and processed hash list must manage, change detection against the ToC, and the ToC rebuild and update flow, including limits on AI-generated fields.
     content_details:
-      - Per-document ToC entry information including document ID, current path, title, purpose, content summary, applicable tasks, keywords, document hash, section information, references and inspection state
-      - Per-ToC metadata storing the management key and a normalized target specification re-interpretable at search time
-      - Processed hash list kept separately from the ToC, keyed by document ID and section DLID, updated only after change reports complete
-      - Change classification into new, body change, reference change, move or rename, removal from target and no change
-      - Logical content hash excluding frontmatter, section anchor lines, link target paths and DLIDs in link titles
-      - Section-level hash and change detection using section DLIDs
-      - "Build order: document ID confirmation, change set generation, then fetching only needed information and atomic ToC update"
-      - Reference inspection by actually searching the reference directory, recording not-found and inspection-impossible states without blocking
-      - "Length limits for AI-generated fields: purpose 200 characters and list fields of 10 items, with internal tolerance enforced only by the validator"
-      - Atomic ToC confirmation that discards partial results and keeps the last confirmed ToC
+      - Document entry fields such as document ID, current path, title, purpose, content summary, applicable tasks, keywords, document hash, and section info
+      - Section entry fields such as section DLID, heading, current position, and section-level logical content hash
+      - Reference entry fields such as referencing document ID, referenced document ID, reference position, and check status
+      - Processed hash list keyed by document ID or section DLID, independent of management key and kept until references are reported
+      - Logical content hash excluding frontmatter, section anchor lines, link target paths, title DLIDs, and blank lines before ATX headings
+      - Change kinds of new, body change, reference change, move or rename, removal from target, and unchanged
+      - AI-generated field limit L with purpose at 200 characters and arrays at 10 items, while internal tolerance H is hidden from the generator
+      - Rebuild order of ID confirmation, comparison with existing ToC, and change set update, committed atomically only on success
     applicable_tasks:
-      - Implementation of ToC entry schema and processed hash list
-      - Implementation of change detection between existing ToC and current documents
-      - Implementation of ToC build and rebuild with atomic confirmation
-      - Implementation of AI-generated summary fields and their validation limits
-      - Review of acceptance criteria AC-001, AC-002, AC-017, AC-018, AC-020, AC-026 and AC-027
+      - Design of ToC entry and processed hash list schema
+      - Implementation of logical content hash calculation rules
+      - Review of change detection classification into new, changed, moved, and removed documents
+      - Verification of AI-generated field length limits and tolerance validation
+      - Review of ToC rebuild ordering and atomic commit behavior
     keywords:
       - ToC
       - processed hash list
-      - change detection
       - logical content hash
       - change set
-      - update plan
-      - reference inspection
-      - field limit
-      - atomic confirmation
-      - moved or renamed
+      - internal tolerance limit
+      - reference check status
+      - ToC rebuild
+      - atomic commit
+      - move or rename detection
+      - AI-generated field limit
   docs/specs/requirement/REQ-004-search.md:
     title: "doc-link Requirements Specification: Document Search"
     purpose: "Defines requirements for document search in doc-link: ToC-based search by key, pre-search rebuild necessity checks, user choice between rebuilding or searching the existing ToC, search stop conditions on failure, and the contents of search results."
@@ -468,34 +467,35 @@ docs:
       - D-026
       - D-027
   docs/specs/requirement/REQ-005-references.md:
-    title: "doc-link Requirements Specification: References and Change Notification"
-    purpose: Defines requirements for DLID-based references in Markdown link titles, link checks by real directory search, stale path notices, section references, and change impact candidate notices to the project management AI.
+    title: "doc-link Requirements: References and Change Notification"
+    purpose: Defines requirements for DLID-based document references, link verification by directory search, path correction notification, change impact candidate listing and notification, and integrity checks for the doc-link plugin
     content_details:
-      - "FR-007 formal reference: the title attribute of a standard Markdown link ends with a DLID, which may identify a document or a section (D-032)"
-      - Reference validity does not depend on the target sharing the management key or being managed by doc-link
-      - "FR-009 link checks: DLID present in title, file with that DLID found in the specified directory, link path matches current path, relative path resolves from the source; results recorded as not found in directory or unverifiable (D-025)"
-      - FR-010 stale path notice sent to the project management AI only when the current path is confirmed by real directory search; doc-link never edits link definitions
-      - "Section reference option C: an anchor with the section DLID placed before the heading only for externally referenced sections, with the section ranging to the next heading of same or higher level (D-033, D-035)"
-      - FR-013 change impact candidates by reverse lookup of extracted references, direct referrers only, with no judgement on whether repair is needed (D-043)
-      - "FR-014 notice fields: changed document ID, location, comparison values, referrer document ID and location, reference description, and scanned scope"
-      - "FR-015 change report management: DLID and hash of reported change, enumerated referrers and scope, report result"
-      - "FR-016 consistency checks: missing document ID, duplicate ID, broken reference, link without DLID title to a doc_link_id Markdown (D-042), ID and path mismatch, nonexistent section reference, ToC and file mismatch"
+      - Markdown reference notation with DLID in the link title attribute, where the last word of the title matches the DLID format and may target a document or section (FR-007, D-032)
+      - "Link verification by directory search: DLID present in title, file with that DLID found in the referenced directory, link path matches current path, relative path resolves from the referencing document (FR-009)"
+      - "Found, not-found, and unverifiable outcomes: a completed search without the DLID is recorded as absent from the specified directory, and an unsearchable directory is recorded as unverifiable (FR-009, D-025)"
+      - Path correction notification to the project management AI only when the current path is confirmed by directory search; doc-link never rewrites link definitions (FR-010)
+      - Section reference via a DLID anchor line placed before each heading, with section scope running to the next heading of the same or higher level (13.1, D-033, D-035)
+      - Change impact candidates by reverse lookup of extracted references; indirect dependencies are excluded and detected one level at a time (FR-013, D-043)
+      - "Change impact notification fields: changed document ID and location, compared hashes, referrer ID and location, reference text, and scanned scope (FR-014)"
+      - "Change report management: reported DLID and hash, enumerated referrers and scope, and report execution result, with AI judgement excluded from processed-state conditions (FR-015)"
+      - "Integrity check items: missing or duplicate IDs, broken references, missing title DLID, path mismatch, missing section, ToC and file mismatch, and not-found or unverifiable references (FR-016)"
+      - Acceptance criteria AC-003, AC-004, AC-006 to AC-009, and AC-028 covering path mismatch, path correction notification, impact listing, and directory-search verification
     applicable_tasks:
-      - Implementation of DLID-based reference parsing from Markdown link titles
-      - Implementation of link checks by real directory search (FR-009)
-      - Implementation of stale link path notification (FR-010)
-      - Implementation of change impact candidate listing and notification (FR-013, FR-014)
-      - Review of the section reference design and anchor placement (option C)
-      - Acceptance test creation for AC-003, AC-004, AC-006 to AC-009, and AC-028
-      - Implementation of consistency checks (FR-016)
+      - Requirements review of DLID-based reference notation and link title rules
+      - Implementation of link verification by referenced-directory search
+      - Implementation of path mismatch detection and path correction notification
+      - Design of section reference anchors and section scope
+      - Design of change impact candidate enumeration and notification
+      - Implementation of integrity checks for broken and unverifiable references
+      - Verification against acceptance criteria AC-003, AC-004, AC-006 to AC-009, and AC-028
     keywords:
       - DLID
-      - link title
-      - section reference
-      - change impact candidate
-      - stale link path
-      - directory search
-      - FR-009
-      - FR-013
-      - AC-028
-      - D-032
+      - title attribute DLID
+      - reference notation
+      - directory search verification
+      - path mismatch
+      - change impact candidates
+      - section reference anchor
+      - broken reference
+      - unverifiable reference
+      - integrity check

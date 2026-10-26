@@ -1,0 +1,21 @@
+# ToC checksums for key: specs
+# Auto-generated - do not edit
+generated_at: 2026-10-26T02:18:25Z
+file_count: 16
+checksums:
+  docs/specs/design/DES-001-system-overview.md: bc51ba822a0deb501cfeab214919b17d46eaca8ef8ecfe15a07a263aaa24b7d9
+  docs/specs/design/DES-002-execution-responsibilities.md: d5a50b37d5acc6c584dc00013178b301a306b92473eeab7b2ff60f48d1b3745c
+  docs/specs/design/DES-003-data-model.md: 36c6031c0952e13945ac77d513a11d514b7a3f1cbe7173436d64bf4411b6ee1f
+  docs/specs/design/DES-004-state-machines.md: f31b8d094bbec4b38ccc34e5f501415fbe7bae7a89a6ef5202bd7087a761af1a
+  docs/specs/design/DES-005-indexing.md: b424c041261375ce1409b908543b407338a07191226f64b624fbad70bb81a8b5
+  docs/specs/design/DES-006-search.md: 9a3b646b1fd165758ed72d2c2efc6448bcb0b014ba81c11845973c2df6450504
+  docs/specs/design/DES-007-references-impact.md: dfacc0629f81cf2a713afb3b839e86f7ef9abbbb3518de7230c06ce831b80b02
+  docs/specs/design/DES-008-content-rules.md: 7f03158eae594c46ca6f48bcc9015f015e65001f93d7d455e8c1cfff10b08d1e
+  docs/specs/design/DES-009-verification.md: e748cd35a80fd90bed9cbb77c321de5e09cb74865597be916d4f9447a2c17283
+  docs/specs/design/DES-010-skill-composition.md: 43b3cebff8d236dd2c549e721b9d9dec60872de176a6511af1c84911ff16af11
+  docs/specs/design/README.md: d914bfb6adc07ba803b5b28927fe3fe9344e5d3123f9d5a531989abd0fbbc1f0
+  docs/specs/requirement/REQ-001-overview.md: b3ccb9b5dc17457ebbdad72b681764e3ab4e86043ccdc3e06c3a881978a5a290
+  docs/specs/requirement/REQ-002-document-id.md: 1f9a07cfd223df6462d49e71886c085414fe6abd83581cad07248f65c9b618c0
+  docs/specs/requirement/REQ-003-toc.md: 5bb13ee9a7dbade4ff4410d6d8d15dac9bd1b33085b539be32a73f7568d72886
+  docs/specs/requirement/REQ-004-search.md: 447ce67d4523ab1cb97c716aa8a63823b7f5c61d7135646bc05b89eb5d0cb221
+  docs/specs/requirement/REQ-005-references.md: 11bf2758de398093670773dd8690cc839377e3d28d1221ab5cad305893d43e3a

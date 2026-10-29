@@ -1,7 +1,7 @@
 # DES-010 SKILL と Agent の構成
 
 **状態**: 承認済み\
-**更新日**: 2026-10-27\
+**更新日**: 2026-10-29\
 **根拠**: [要件総論][req-001]、[実行主体][des-002]
 
 <a id="sec-1"></a>
@@ -13,7 +13,7 @@ doc-link は次の 7 つの SKILL と 2 つのカスタム Agent で構成する
 | SKILL          | 種類 | 管理対象 Markdown への書き込み | 管理状態の書き換え                   | 対応する要件                                                                                   |
 | -------------- | ---- | ------------------------------ | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
 | `embed-dlid`   | 操作 | あり（DLID だけ、要件 D-031）  | なし                                 | [REQ-002 §9.2][req-002-sec-9-2]、FR-001、FR-002、D-029、D-033〜D-035                           |
-| `index-docs`   | 操作 | なし（要件 D-035）             | あり（文書情報行、ToC の版）         | FR-017、[REQ-002 §9.1][req-002-sec-9-1]、FR-003〜FR-005、FR-009、FR-010、FR-011、FR-012、D-036 |
+| `index-docs`   | 操作 | なし（要件 D-035）             | あり（文書情報、ToC の版）           | FR-017、[REQ-002 §9.1][req-002-sec-9-1]、FR-003〜FR-005、FR-009、FR-010、FR-011、FR-012、D-036 |
 | `query-docs`   | 照会 | なし                           | なし                                 | [REQ-004 §12][req-004-sec-12] FR-006                                                           |
 | `check-dlid`   | 検査 | なし                           | なし                                 | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-002 §9][req-002-sec-9] FR-002                       |
 | `check-links`  | 検査 | なし                           | なし                                 | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-005 §13][req-005-sec-13] FR-009                     |
@@ -128,14 +128,14 @@ sequenceDiagram
     participant PM as プロジェクト管理 AI
     participant Skill as embed-dlid
     participant Scripts as script 群
-    participant DB as 管理状態
+    participant State as 管理状態
     participant Docs as 管理対象 Markdown
     participant Index as index-docs
 
     PM->>Skill: ディレクトリ・パスを指定して起動
     Skill->>Scripts: 付与計画の作成
     Scripts->>Docs: doc_link_id・見出し・リンクを読み取る
-    Scripts->>DB: 既存の ID と照合する
+    Scripts->>State: 既存の ID と照合する
     Scripts-->>Skill: ID 未付与の文書、重複と原本候補、発行するセクション DLID
     opt ID の重複がある
         Skill->>User: 原本候補を示す
@@ -162,7 +162,7 @@ sequenceDiagram
     participant Skill as index-docs
     participant Scripts as script 群
     participant Agent as toc-updater
-    participant DB as 管理状態
+    participant State as 管理状態
     participant Docs as 管理対象 Markdown
     participant RefDirs as 参照先ディレクトリ
     participant Embed as embed-dlid
@@ -173,17 +173,17 @@ sequenceDiagram
     Scripts->>Docs: frontmatter を読み取る
     Scripts-->>Skill: ID 確定済み一覧と除外した文書
     Skill->>Scripts: 差分検出と更新計画
-    Scripts->>DB: 確定版と処理済み比較基準を読み取る
+    Scripts->>State: 確定版と処理済み比較基準を読み取る
     Scripts-->>Skill: 変更集合と生成対象
     loop 生成が必要な文書ごと
         Skill->>Agent: 文書情報の生成を依頼する
         Agent-->>Skill: 生成結果
-        Skill->>Scripts: 検証して文書情報行を確定する
-        Scripts->>DB: 文書情報行を書き込む
+        Skill->>Scripts: 検証して文書情報を確定する
+        Scripts->>State: 文書情報を書き込む
     end
     Skill->>Scripts: 参照検査と候補の検査・確定
     Scripts->>RefDirs: 指定ディレクトリを実走査する
-    Scripts->>DB: ToC の版を一括して確定する
+    Scripts->>State: ToC の版を一括して確定する
     Scripts-->>Skill: 確定結果と参照検査結果
     Skill-->>PM: 確定結果、参照検査結果、ID 未付与・重複で除外した文書
     Note over PM,Impact: 後工程
@@ -240,14 +240,14 @@ sequenceDiagram
     participant PM as プロジェクト管理 AI
     participant Skill as check-dlid
     participant Scripts as script 群
-    participant DB as 管理状態
+    participant State as 管理状態
     participant Docs as 管理対象 Markdown
     participant Embed as embed-dlid
 
     PM->>Skill: 対象を指定して起動
     Skill->>Scripts: 文書 ID を検査する
     Scripts->>Docs: frontmatter とアンカー行を読み取る
-    Scripts->>DB: 既存の ID と照合する
+    Scripts->>State: 既存の ID と照合する
     Scripts-->>Skill: ID 未付与の文書と見出し、重複する DLID と該当パス
     Skill-->>PM: 検出結果
     Note over PM,Embed: 後工程
@@ -291,13 +291,13 @@ sequenceDiagram
     participant PM as プロジェクト管理 AI
     participant Skill as check-toc
     participant Scripts as script 群
-    participant DB as 管理状態
+    participant State as 管理状態
     participant Docs as 管理対象 Markdown
     participant Index as index-docs
 
     PM->>Skill: 管理キー
     Skill->>Scripts: ToC と現物を照合する
-    Scripts->>DB: 確定版を読み取る
+    Scripts->>State: 確定版を読み取る
     Scripts->>Docs: 対象文書のハッシュを計算する
     Scripts-->>Skill: 新規、離脱、移動、内容変更の一覧、または判定不能
     Skill-->>PM: 検出結果
@@ -316,7 +316,7 @@ sequenceDiagram
     participant PM as プロジェクト管理 AI
     participant Skill as check-impact
     participant Scripts as script 群
-    participant DB as 管理状態
+    participant State as 管理状態
     participant Docs as 管理対象 Markdown
     participant Index as index-docs
 
@@ -327,9 +327,9 @@ sequenceDiagram
         Skill-->>PM: index-docs の実行を案内する
     else ToC が最新
         Skill->>Scripts: 未報告の変更と参照元を列挙する
-        Scripts->>DB: 処理済み比較基準と参照関係を読み取る
+        Scripts->>State: 処理済み比較基準と参照関係を読み取る
         Scripts->>Docs: 現在のハッシュを計算する
-        Scripts->>DB: 報告する組の処理済み比較基準を進める
+        Scripts->>State: 報告する組の処理済み比較基準を進める
         Scripts-->>Skill: 変更された文書ごとの参照元の一覧
         Skill-->>PM: 変更影響候補
         Note over PM,Index: 後工程
@@ -344,7 +344,7 @@ sequenceDiagram
 
 ## 4. カスタム Agent との受け渡し
 
-SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ受け渡し規約][exchange-rules] に従う。運ぶのは script が生成した識別値だけで、置き場は識別値から script が決める。依頼と結果は script が書き、書き終えてから公開する。結果は Agent が値を script へ渡し、script が書く。読む側は script から絶対パスを受け取って直接読む。終了の値は文字列で、正常は `"0"` とする。成否は script が判定する。処理が終わったら、依頼と結果を削除する。
+SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ受け渡し規約][exchange-rules] に従う。運ぶのは script が生成した識別値だけで、置き場は `.temp/doc-link/<skill>/` の下で、識別値から script が決める（[DES-002 §4][des-002-sec-4]）。依頼と結果は script が書き、書き終えてから公開する。結果は Agent が値を script へ渡し、script が書く。読む側は script から絶対パスを受け取って直接読む。終了の値は文字列で、正常は `"0"` とする。成否は script が判定する。処理が終わったら、依頼と結果を削除する。
 
 | 項目                               | `toc-updater`（情報生成）                                                                                   | `query-worker`（検索）                                                                            |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -354,7 +354,7 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 | エラー値                           | `"source_unreadable"`（対象文書を読めなかった）                                                             | なし（空集合）                                                                                    |
 | script の検査                      | `L`・`H` による長さの検証（[DES-008 §4][des-008-sec-4]）                                                    | 返った文書 ID とセクションの DLID が、固定した ToC の版にあること。無い ID を含む結果は異常とする |
 | 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                              | 検索を失敗として返す                                                                              |
-| 削除する時点                       | 文書情報行を確定した後、または構築の終了時                                                                  | `query-docs` が結果を返した後                                                                     |
+| 削除する時点                       | 文書情報を確定した後、または構築の終了時                                                                    | `query-docs` が結果を返した後                                                                     |
 
 [req-001]: ../requirement/REQ-001-overview.md
 [des-002]: DES-002-execution-responsibilities.md
@@ -387,3 +387,4 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [des-007-sec-2]: DES-007-references-impact.md#sec-2
 [des-007-sec-3]: DES-007-references-impact.md#sec-3
 [exchange-rules]: ../../rules/agent_data_exchange_rules.md
+[des-002-sec-4]: DES-002-execution-responsibilities.md#sec-4

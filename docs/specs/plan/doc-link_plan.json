@@ -1,0 +1,1052 @@
+{
+  "requirements_traceability": [
+    {
+      "requirement_id": "FR-001",
+      "title": "文書 ID の発行と読み取り",
+      "design_id": "DES-008",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-002",
+      "title": "文書 ID の検証",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-003",
+      "title": "文書の移動・改名の認識",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-004",
+      "title": "ToC の構築と再構築",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-005",
+      "title": "文書情報の生成",
+      "design_id": "DES-008",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-006",
+      "title": "文書検索",
+      "design_id": "DES-006",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-007",
+      "title": "文書 ID を使用した参照",
+      "design_id": "DES-008",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-008",
+      "title": "参照関係の抽出",
+      "design_id": "DES-007",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-009",
+      "title": "ID 付きリンクの検査",
+      "design_id": "DES-007",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-010",
+      "title": "参照パス修正情報の通知",
+      "design_id": "DES-007",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-011",
+      "title": "文書全体の変更検出",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-012",
+      "title": "セクション単位の変更検出",
+      "design_id": "DES-008",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-013",
+      "title": "変更影響候補の特定",
+      "design_id": "DES-007",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-014",
+      "title": "変更影響候補の通知",
+      "design_id": "DES-007",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-015",
+      "title": "変更報告の管理",
+      "design_id": "DES-007",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-016",
+      "title": "不整合検査",
+      "design_id": "DES-010",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "FR-017",
+      "title": "管理キーと管理対象指定の受領",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-001",
+      "title": "ToC 再構築の一貫性",
+      "design_id": "DES-004",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-002",
+      "title": "決定性",
+      "design_id": "DES-008",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-003",
+      "title": "冪等性",
+      "design_id": "DES-004",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-004",
+      "title": "管理対象文書への書き込み境界",
+      "design_id": "DES-002",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-005",
+      "title": "診断可能性",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-006",
+      "title": "中断後の再実行",
+      "design_id": "DES-004",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-007",
+      "title": "スケーラビリティ",
+      "design_id": "DES-005",
+      "status": "pending"
+    },
+    {
+      "requirement_id": "NFR-008",
+      "title": "生成指示と検証基準の分離",
+      "design_id": "DES-008",
+      "status": "pending"
+    }
+  ],
+  "design_traceability": [
+    {
+      "design_id": "DES-001",
+      "requirement_ids": [],
+      "task_ids": [
+        "TASK-010",
+        "TASK-016",
+        "TASK-019",
+        "TASK-022",
+        "TASK-023"
+      ]
+    },
+    {
+      "design_id": "DES-002",
+      "requirement_ids": [
+        "NFR-004"
+      ],
+      "task_ids": [
+        "TASK-001",
+        "TASK-007",
+        "TASK-009",
+        "TASK-010",
+        "TASK-013",
+        "TASK-016",
+        "TASK-019"
+      ]
+    },
+    {
+      "design_id": "DES-003",
+      "requirement_ids": [],
+      "task_ids": [
+        "TASK-007",
+        "TASK-012",
+        "TASK-015",
+        "TASK-022"
+      ]
+    },
+    {
+      "design_id": "DES-004",
+      "requirement_ids": [
+        "NFR-001",
+        "NFR-003",
+        "NFR-006"
+      ],
+      "task_ids": [
+        "TASK-010",
+        "TASK-015",
+        "TASK-022"
+      ]
+    },
+    {
+      "design_id": "DES-005",
+      "requirement_ids": [
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-011",
+        "FR-017",
+        "NFR-005",
+        "NFR-007"
+      ],
+      "task_ids": [
+        "TASK-006",
+        "TASK-008",
+        "TASK-010",
+        "TASK-012",
+        "TASK-014",
+        "TASK-015",
+        "TASK-016"
+      ]
+    },
+    {
+      "design_id": "DES-006",
+      "requirement_ids": [
+        "FR-006"
+      ],
+      "task_ids": [
+        "TASK-017",
+        "TASK-018",
+        "TASK-019"
+      ]
+    },
+    {
+      "design_id": "DES-007",
+      "requirement_ids": [
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-013",
+        "FR-014",
+        "FR-015"
+      ],
+      "task_ids": [
+        "TASK-003",
+        "TASK-011",
+        "TASK-015",
+        "TASK-021",
+        "TASK-022"
+      ]
+    },
+    {
+      "design_id": "DES-008",
+      "requirement_ids": [
+        "FR-001",
+        "FR-005",
+        "FR-007",
+        "FR-012",
+        "NFR-002",
+        "NFR-008"
+      ],
+      "task_ids": [
+        "TASK-001",
+        "TASK-002",
+        "TASK-003",
+        "TASK-004",
+        "TASK-005",
+        "TASK-007",
+        "TASK-009",
+        "TASK-010",
+        "TASK-012",
+        "TASK-013",
+        "TASK-014",
+        "TASK-015",
+        "TASK-016"
+      ]
+    },
+    {
+      "design_id": "DES-009",
+      "requirement_ids": [],
+      "task_ids": [
+        "TASK-010",
+        "TASK-015",
+        "TASK-022",
+        "TASK-023"
+      ]
+    },
+    {
+      "design_id": "DES-010",
+      "requirement_ids": [
+        "FR-016"
+      ],
+      "task_ids": [
+        "TASK-010",
+        "TASK-016",
+        "TASK-018",
+        "TASK-019",
+        "TASK-020",
+        "TASK-021",
+        "TASK-022"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "TASK-001",
+      "title": "プラグインの骨格と DLID の認識・発行",
+      "priority": 95,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。plugins/doc-link/ の骨格（plugin.json は新規プラグインの初期 version のみ、marketplace への登録、共通 scripts/・agents/ の置き場、tests/doc-link/ の置き場）を作る。共通 script として、frontmatter の doc_link_id とアンカー行の DLID の認識（認識できない値はすべて「文書 ID が存在しない」に統一）と、DES-008 §1 の発行仕様による DLID の発行を実装する（DES-003 §1、要件 D-028）。PEP 723 の依存宣言とロックは uv_usage_rules.md に従って作る（戦略書 R-9）。",
+      "acceptance_criteria": [
+        "plugins/doc-link/.claude-plugin/plugin.json と marketplace の登録が存在し、plugin.json の version は新規プラグインの初期値である",
+        "PEP 723 の依存宣言の追加とロックが uv_usage_rules.md に従っており、ロックファイルが script と一緒に commit されている",
+        "発行した DLID が DES-008 §1 の発行仕様の形式を満たすことを単体テストで確認している",
+        "認識できない doc_link_id の値（型違い・長さ違い・不正文字・空）がすべて「文書 ID が存在しない」として返ることを単体テストで確認している",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/design/DES-002-execution-responsibilities.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-002",
+      "title": "Markdown 解析: 見出し・アンカー行・セクション範囲",
+      "priority": 94,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [
+        "TASK-001"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。frontmatter は本文から切り出して PyYAML で解析し（TASK-001 の認識を使い、同じ役割の実装を並べない）、frontmatter を除いた本文を markdown-it-py で解析して見出し・アンカー行・セクション範囲を抽出する共通 script を実装する（DES-008 §1・§2）。行番号は元の文書の行番号で返す。コードブロック・HTML ブロック内の見出し様の行を見出しとして扱わないこと、frontmatter を解析できない文書を区別して返すことを含む。",
+      "acceptance_criteria": [
+        "見出しごとに、見出しの行番号・レベル・テキスト・直前のアンカー行の DLID（無ければ無し）・セクション範囲を返すことを単体テストで確認している",
+        "コードブロック・HTML ブロック内の見出し様の行が見出しとして返らないことを単体テストで確認している",
+        "frontmatter を解析できない文書が、解析できないこととして区別されて返ることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "frontmatter の区切りと中身が見出しとして返らず、本文の見出しの行番号が元の文書の行番号と一致することを単体テストで確認している",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-003",
+      "title": "リンクの抽出と解析規則 1〜10",
+      "priority": 93,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [
+        "TASK-002"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。インラインリンクとリファレンスリンク定義から、title の最後の語が DLID であるものを参照として取り出す共通 script を実装する。DES-008 §2 の解析規則 1〜10 に従う。記載位置（行）、参照先 DLID、相対パス、フラグメントを返す（DES-007 §1、要件 D-032）。",
+      "acceptance_criteria": [
+        "DES-008 §2 の解析規則 1〜10 の各規則について、規則ごとに 1 件以上の単体テストがあり成功する",
+        "title に DLID の無いリンクが参照として返らず、title に DLID の無い Markdown へのリンクとして別に返ることを単体テストで確認している",
+        "日本語を含むパスとフラグメントがデコードされた値で返ることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/design/DES-007-references-impact.md",
+        "docs/specs/requirement/REQ-005-references.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-004",
+      "title": "GitHub と同じ規則でのアンカー生成",
+      "priority": 93,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [
+        "TASK-002"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。見出しの文字列から GitHub と同じ規則でアンカーを生成する共通 script を実装する（DES-008 §2）。同じ文書内の同名見出しの連番付けを含む。embed-dlid の参照先の特定と check-links のフラグメント判定が共有する唯一の実装とする（戦略書 R-2）。",
+      "acceptance_criteria": [
+        "英字の大文字小文字、空白、記号、日本語、同名見出しの連番のそれぞれについて単体テストがあり、期待するアンカーと一致する",
+        "アンカー生成の実装が plugins/doc-link/ の中に 1 つだけ存在する",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-005",
+      "title": "文書とセクションの内容ハッシュ",
+      "priority": 93,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [
+        "TASK-002"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。DES-008 §3 の規則で文書全体とセクションの内容ハッシュを SHA-256 で算出する共通 script を実装する（要件 FR-011・FR-012）。",
+      "acceptance_criteria": [
+        "本文・見出し・リンクの表示文字列・リンク先・title・DLID の追加のそれぞれでハッシュが変わることを単体テストで確認している",
+        "セクション範囲の外だけを変えた場合に、そのセクションのハッシュが変わらないことを単体テストで確認している",
+        "同じ入力から同じハッシュが得られることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "対象指定の引数の検証と展開",
+      "priority": 93,
+      "status": "pending",
+      "design_id": "DES-005",
+      "depends_on": [
+        "TASK-001"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。DES-005 §2 の 1・2 に従い、対象指定の引数の組み合わせを検証し、ディレクトリ・パターンを具体的な Markdown 一覧へ展開して除外を適用する共通 script を実装する。正規化した指定を返す（要件 D-020）。§2 の 1 の組み合わせ規則は index-docs の入力に適用する。embed-dlid（管理キーを受け取らない、DES-005 §2.1、要件 D-041）とは §2 の 2 の展開だけを共有する。",
+      "acceptance_criteria": [
+        "DES-005 §2 の 1 に列挙された組み合わせの規則のそれぞれについて、受理する例と拒否する例の単体テストがあり成功する",
+        "引数が無いときに --all として扱われることを単体テストで確認している",
+        "展開結果に指定外の実体が含まれず、除外が適用されることを単体テストで確認している",
+        "管理キーを伴わないディレクトリ・パス・グロブと除外の指定（embed-dlid の入力）を、§2 の 1 の組み合わせ規則を適用せずに展開できることを単体テストで確認している",
+        "拒否時の終了コードと標準出力が script_error_output_rules.md に従うことを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/script_error_output_rules.md",
+        "docs/rules/uv_usage_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-007",
+      "title": "JSON 管理状態のスキーマと読み書き",
+      "priority": 92,
+      "status": "pending",
+      "design_id": "DES-003",
+      "depends_on": [
+        "TASK-001"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。DES-003 §2 の全論理情報（文書情報、キー別の版、参照記述、参照検査結果、処理済み比較基準、構築実行）を収める JSON の物理スキーマを決め、.doc-link/ 配下の読み書きを行う共通 script を実装する（戦略書 R-4）。ファイルの分け方は DES-002 §4（文書 ID ごと、キーごと、処理済み比較基準は 1 ファイル）。書き込みは .temp/doc-link/<skill>/ の一時ファイルから os.replace で置き換える（DES-005 §5）。同じ内容から同じバイト列を出力し、内容が変わらないファイルは書き換えない。",
+      "acceptance_criteria": [
+        "DES-003 §2 の論理情報のそれぞれがスキーマのどこに収まるかを script の docstring に記載している",
+        "同じ入力から同じバイト列が出力されることを単体テストで確認している",
+        "内容が変わらないファイルの更新時刻が変わらないことを単体テストで確認している",
+        "一時ファイルが .temp/doc-link/<skill>/ の中だけに作られ、プロジェクトの外に作られないことを単体テストで確認している",
+        "全キーの DLID を読み取りで列挙できることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/design/DES-002-execution-responsibilities.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-008",
+      "title": "embed-dlid の付与計画",
+      "priority": 90,
+      "status": "pending",
+      "design_id": "DES-005",
+      "depends_on": [
+        "TASK-003",
+        "TASK-004",
+        "TASK-006",
+        "TASK-007"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。DES-005 §2.1 の 1〜4 に従い、書き込みを行わずに付与計画を作る script を実装する。重複する DLID の検出と原本候補の提示（管理状態に記録されたパスとの一致）、文書 ID の無い文書、セクションの DLID の無い見出し、title に DLID の無いリンクへ加える参照先の DLID（参照先を一つに特定できないもの、参照先の見出しが対象外の文書にありセクションの DLID が無いものは、参照先の文書を対象に含めて再実行するよう報告）を計画として返す（要件 D-029・D-033・D-034・D-042）。 重複の検出と原本候補の判定（照合）は、embed-dlid と check-dlid が共有するプラグイン共通の script として作る。",
+      "acceptance_criteria": [
+        "文書 ID とセクションの DLID の重複（同じ文書の中を含む）について、原本候補が示されることを単体テストで確認している",
+        "原本候補を一つに絞れない場合に、利用者の指定が必要であることが計画に示されることを単体テストで確認している",
+        "参照先を一つに特定できないリンクと、参照先の見出しが対象外の文書にありセクションの DLID が無いリンクが、DLID を加える対象に含まれず報告されることを単体テストで確認している",
+        "対象外の文書の doc_link_id、または既存のセクションの DLID を指すリンクには DLID が加わる計画になり、参照先の文書は書き込み対象に含まれないことを単体テストで確認している",
+        "付与計画の作成で管理対象 Markdown と管理状態が変更されないことを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/requirement/REQ-005-references.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/script_error_output_rules.md",
+        "docs/rules/uv_usage_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-009",
+      "title": "embed-dlid の書き込みと再解析検証",
+      "priority": 89,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [
+        "TASK-008"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。付与計画に従い、frontmatter の doc_link_id、アンカー行、リンクの title への DLID を行単位の文字列操作で書き込み、再解析して差分が DLID だけであることを検証し、違えば取り消して報告する script を実装する（DES-008 §1・§2、要件 D-031、戦略書 R-1）。複製側への再発行では、その文書のセクションの DLID もあわせて再発行する。",
+      "acceptance_criteria": [
+        "アンカー行の前後の空行の規則が DES-008 の定めどおりであることを単体テストで確認している",
+        "既存 title の末尾への追記で、囲み記号が保持されることを単体テストで確認している",
+        "コードブロック・HTML ブロックに書き込まないことを単体テストで確認している",
+        "frontmatter を解析できない文書が書き込まれず、報告されることを単体テストで確認している",
+        "DLID 以外の差分を検出した場合に書き込みが取り消され、文書が元のバイト列に戻ることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-010",
+      "title": "embed-dlid の遷移 E-01〜E-07 と SKILL",
+      "priority": 88,
+      "status": "pending",
+      "design_id": "DES-004",
+      "depends_on": [
+        "TASK-009"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 1。ID 付与操作の状態機械 E-01〜E-07（DES-004 §5）を script に実装し、結果（書き込んだ文書・位置・DLID と書き込めなかった文書、発行済みの報告）を返す（要件 D-040）。embed-dlid の SKILL.md を作り、起動を書き込みの承認とし、重複の原本確定だけを利用者に確認する流れを script の呼び出しとして書く（DES-010 §3.1）。",
+      "acceptance_criteria": [
+        "DES-004 §5 の E-01〜E-07 の全行、ガード不成立、表に無いイベントのそれぞれについて単体テストがあり成功する（DES-009 §1）",
+        "途中失敗の後の再実行で、書き込み済みの DLID が既存として照合し直されることを単体テストで確認している",
+        "SKILL.md にロジックがインラインで書かれておらず、script の呼び出しだけで構成されている",
+        "SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "本リポジトリの docs/ の写しに embed-dlid を実行し、git diff の差分が DLID だけであることを目視で確認した結果を報告している（本物の docs/ には書き込まない）",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-004-state-machines.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-009-verification.md",
+        "docs/specs/design/DES-001-system-overview.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/claude_code_reference.md",
+        "docs/rules/script_error_output_rules.md",
+        "docs/rules/uv_usage_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-011",
+      "title": "参照先ディレクトリの実走査による参照検査",
+      "priority": 85,
+      "status": "pending",
+      "design_id": "DES-007",
+      "depends_on": [
+        "TASK-003",
+        "TASK-004",
+        "TASK-006"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 2。DES-007 §1 に従い、参照ごとに記載パスのディレクトリを実走査して参照先を検査する共通 script を実装する。管理状態を入力に取らない（戦略書 R-7、要件 D-021）。結果は一致、パス不一致（確認できた現在のパス）、指定ディレクトリ内に不在、フラグメント不一致（届く現在のアンカー）のいずれかとし、同じ DLID が複数見つかった場合は現在のパスを推定せず重複診断とする。指定ディレクトリ自体が存在しない場合と読めない場合も「指定ディレクトリ内に不在」とする（DES-007 §1、要件 D-025、FR-009・FR-010）。index-docs と check-links が共有する。",
+      "acceptance_criteria": [
+        "一致、パス不一致、フラグメント不一致のそれぞれについて単体テストがあり成功する",
+        "参照先がディレクトリ内に無い場合、ディレクトリ自体が無い場合、ディレクトリを読めない場合の 3 つの入力が、いずれも「指定ディレクトリ内に不在」として返ることを単体テストで確認している",
+        "script の入力に管理状態が含まれないことを単体テストで確認している",
+        "パス不一致の結果に現在のパスが、フラグメント不一致の結果に現在のアンカーが含まれることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "走査で同じ DLID の候補が複数見つかった場合に、パス不一致として現在のパスを返さず重複診断になることを単体テストで確認している",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-007-references-impact.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/requirement/REQ-005-references.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-012",
+      "title": "index-docs の対象確定・ID 確認・変更集合の確定",
+      "priority": 84,
+      "status": "pending",
+      "design_id": "DES-005",
+      "depends_on": [
+        "TASK-003",
+        "TASK-005",
+        "TASK-006",
+        "TASK-007"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 2。AI を呼ばない段階として、対象確定、ID 確認（ID 未付与・重複の除外と報告、読み取り失敗は障害、要件 D-036）、変更集合の確定（新規・対象離脱・パス変更・内容ハッシュ変更・参照記述と物理パスの変更、索引更新対象と未報告の変更の区別）を行う script を実装する（DES-005 §2・§3、DES-004 §3 の該当段階）。",
+      "acceptance_criteria": [
+        "初回（全件が新規）の変更集合が単体テストの期待値と一致する",
+        "パスだけ・本文・参照・離脱が併存する再構築の変更集合が単体テストの期待値と一致する（AC-025・AC-026）",
+        "ID 未付与・重複の文書が除外されて報告され、処理が続くことを単体テストで確認している",
+        "読み取りに失敗した文書がある場合に障害として後続へ進まないことを単体テストで確認している",
+        "ToC に反映済みでも比較基準が旧値なら未報告の変更として残ることを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-004-state-machines.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/script_error_output_rules.md",
+        "docs/rules/uv_usage_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-013",
+      "title": "toc-updater と AI 出力の検証器",
+      "priority": 84,
+      "status": "pending",
+      "design_id": "DES-008",
+      "depends_on": [
+        "TASK-007"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 2。カスタム Agent toc-updater の定義、SKILL と Agent の受け渡しの script（置き場は .temp/doc-link/<skill>/、agent_data_exchange_rules.md）、DES-008 §4 の検証契約に従う AI 出力の検証器を実装する（DES-008 §4、DES-010 §4、要件 D-044）。H・係数・余白は検証器の中に閉じ、Agent の定義・依頼・再試行メッセージに含めない（戦略書 R-5、NFR-008）。",
+      "acceptance_criteria": [
+        "検証器が L+1〜H を受理し H+1 を拒否することを単体テストで確認している（AC-010）",
+        "toc-updater の定義・依頼・再試行メッセージに H・係数・余白が含まれないことを機械的に検査する単体テストがあり成功する（AC-011）",
+        "受け渡しのファイルが .temp/doc-link/<skill>/ の中だけに作られることを単体テストで確認している",
+        "受け渡しの形式が agent_data_exchange_rules.md に従っている",
+        "plugins/doc-link/agents/ の全カスタム Agent の frontmatter（name・description・tools・model）を検査する単体テストがあり成功する（claude_code_authoring_guide.md「カスタム Agent」）",
+        "toc-updater の Role 制約（他 Agent の起動・親タスクの引き継ぎ・allowlist 外への書き込みの禁止、起動 prompt を親の指示として解釈しないこと）を検証する単体テストがあり成功する",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "toc-updater の定義と配布物から docs/specs/・docs/rules/ を参照していない",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-002-execution-responsibilities.md",
+        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/rules/agent_data_exchange_rules.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/claude_code_reference.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-014",
+      "title": "更新計画と必要情報の取得",
+      "priority": 83,
+      "status": "pending",
+      "design_id": "DES-005",
+      "depends_on": [
+        "TASK-012",
+        "TASK-013"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 2。変更種別から更新計画を作り、再利用できる文書情報（文書 ID と内容ハッシュが一致する検証済みの情報）は再利用し、生成が必要な文書だけを toc-updater への依頼とする script を実装する（DES-005 §4、要件 NFR-007）。タイトルは最初の H1 見出しのテキストとし、H1 が無い文書だけ生成を依頼する（DES-008 §4）。",
+      "acceptance_criteria": [
+        "パスだけが変わった文書と変更の無い文書が生成依頼に含まれないことを単体テストで確認している（AC-002）",
+        "同じ文書 ID・内容ハッシュの文書情報がある文書を別キーへ追加しても生成依頼に含まれないことを単体テストで確認している（AC-029）",
+        "H1 がある文書のタイトルが最初の H1 のテキストになり、H1 が無い文書だけタイトルの生成を依頼することを単体テストで確認している",
+        "指定されていないキーの ToC を読まず書かないことを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-015",
+      "title": "候補の検査と一括確定（B-01〜B-09・P-01〜P-03）",
+      "priority": 82,
+      "status": "pending",
+      "design_id": "DES-004",
+      "depends_on": [
+        "TASK-011",
+        "TASK-014"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 2。構築実行の状態機械 B-01〜B-09（DES-004 §3）と ToC 公開版の P-01〜P-03（DES-004 §2）を script に実装する。候補の検査（ID の一意性、対象集合との対応、参照と逆参照の対応、必須フィールド）、文書情報の文書ごとの確定、キー別の索引状態の一括公開、失敗時の旧確定版と旧比較基準の保持、失敗診断の返却を行う（DES-005 §4〜§6）。構築からは処理済み比較基準へ書かない（戦略書 R-6）。 正規化した管理対象指定を版に保存する（要件 D-020、DES-003 §2）。",
+      "acceptance_criteria": [
+        "B-01〜B-09 と P-01〜P-03 の全行、ガード不成立、表に無いイベントのそれぞれについて単体テストがあり成功する（DES-009 §1）",
+        "各段階の失敗で旧確定版が維持され、それまでに確定した文書情報が戻されないことを単体テストで確認している",
+        "構築が処理済み比較基準のファイルを変更しないことを単体テストで確認している（AC-020）",
+        "キー A の構築がキー B の ToC を変更しないことを単体テストで確認している（AC-021）",
+        "構築が管理対象 Markdown を変更しないことを単体テストで確認している（AC-030）",
+        "参照検査の不一致・不在が確定を妨げないことを単体テストで確認している（AC-028）",
+        "確定した版に、正規化した管理対象指定が再展開できる形で保存されることを単体テストで確認している（D-020）",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-004-state-machines.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/design/DES-009-verification.md",
+        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/script_error_output_rules.md",
+        "docs/rules/uv_usage_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-016",
+      "title": "index-docs の SKILL",
+      "priority": 80,
+      "status": "pending",
+      "design_id": "DES-010",
+      "depends_on": [
+        "TASK-010",
+        "TASK-015"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 2。index-docs の SKILL.md を作り、script の段階の呼び出しと toc-updater の起動を DES-010 §3.2 のシーケンスどおりに書く。AI を含む実行は手動のテストとし、TASK-010 で DLID を付けた docs/ の写しで一度通す。",
+      "acceptance_criteria": [
+        "SKILL.md にロジックがインラインで書かれておらず、script の呼び出しと Agent の起動だけで構成されている",
+        "SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "DLID を付けた docs/ の写しで index-docs を実行し、ToC が確定したこと、変更の無い 2 回目の実行で toc-updater が起動されないことを確認した結果を報告している",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-002-execution-responsibilities.md",
+        "docs/specs/design/DES-001-system-overview.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/claude_code_reference.md",
+        "docs/rules/agent_data_exchange_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-017",
+      "title": "検索前検査の script",
+      "priority": 75,
+      "status": "pending",
+      "design_id": "DES-006",
+      "depends_on": [
+        "TASK-012",
+        "TASK-015"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 3。DES-006 §1 に従い、未構築／再構築不要／再構築必要／判定不能を区別し、再構築の規模（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、AI 生成が必要な件数）を返す script を実装する（要件 D-027）。check-toc と query-docs が共有する（DES-010 §1.2）。変更集合の算出は TASK-012 の script を使う。 現在の対象一覧は、版に保存した正規化済みの指定を再展開して求め、新しい完全な指定が渡された場合はそれを優先する（DES-006 §1、要件 D-020）。 結果には、変更種別（新規・離脱・移動・内容変更・ID 未付与・ID 重複）ごとの文書の一覧（文書 ID・パス）を含め、判定不能のときは判定できなかった対象と原因を返す（DES-010 §3.6、DES-006 §1、要件 FR-016・D-026・NFR-005）。 AI 生成が必要かの判定は TASK-014 の script を使う。",
+      "acceptance_criteria": [
+        "4 つの結果のそれぞれについて単体テストがあり成功する",
+        "frontmatter を解析できない文書が ID 未付与として数えられ、判定不能にならないことを単体テストで確認している",
+        "対象ディレクトリの消失が再構築必要となり、判定不能にならないことを単体テストで確認している",
+        "規模の各件数が単体テストの期待値と一致する",
+        "検査で ToC と比較基準のファイルが変更されないことを単体テストで確認している",
+        "指定が渡されない場合に、版に保存した指定を再展開して現在の対象一覧を求めることを単体テストで確認している",
+        "新しい完全な指定が渡された場合に、保存した指定よりそれを優先することを単体テストで確認している",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "再構築必要のとき、変更種別ごとの文書 ID とパスの一覧が単体テストの期待値と一致する",
+        "判定不能のとき、判定できなかった対象と原因が返ることを単体テストで確認している",
+        "別キーに同じ文書 ID・内容ハッシュの文書情報がある文書が、AI 生成が必要な件数に含まれないことを単体テストで確認している",
+        "CLAUDE.md の単体テストのコマンドがすべて成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-006-search.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/requirement/REQ-004-search.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/script_error_output_rules.md",
+        "docs/rules/uv_usage_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-018",
+      "title": "check-toc の SKILL",
+      "priority": 72,
+      "status": "pending",
+      "design_id": "DES-010",
+      "depends_on": [
+        "TASK-017"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 3。check-toc の SKILL.md を作り、TASK-017 の script を呼び出して結果と検出後にすべきこと（index-docs の実行）を返す流れを書く（DES-010 §1.2・§3.6）。",
+      "acceptance_criteria": [
+        "SKILL.md にロジックがインラインで書かれておらず、TASK-017 の script の呼び出しだけで構成されている",
+        "SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-006-search.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/claude_code_reference.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-019",
+      "title": "query-docs と query-worker",
+      "priority": 73,
+      "status": "pending",
+      "design_id": "DES-006",
+      "depends_on": [
+        "TASK-016",
+        "TASK-017"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 3。query-docs の SKILL.md、カスタム Agent query-worker の定義、版で固定した ToC の写しを .temp/doc-link/<skill>/ に置いて渡す script、返った結果の検査（版に無い ID を含む結果は失敗）を実装する（DES-006 §2、DES-010 §3.3・§4）。既存版のまま検索する場合は、キー別の索引状態に旧版を、文書情報に最新のものを使う（要件 D-024）。AI を含む検索は手動のテストとする。",
+      "acceptance_criteria": [
+        "AC-019 の各分岐（再構築不要でそのまま検索、再構築後に検索、既存版のまま検索、判定不能で停止、未構築）について、script の単体テストがあり成功する",
+        "「再構築後に検索」を選び構築が失敗した場合に、旧版で検索せず失敗を返すことを単体テストで確認している（DES-006 §1）",
+        "既存版のまま検索しても ToC と比較基準のファイルが変更されないことを単体テストで確認している",
+        "版に無い ID を含む結果が失敗として扱われることを単体テストで確認している",
+        "ToC の写しが .temp/doc-link/<skill>/ の中だけに作られることを単体テストで確認している",
+        "SKILL.md にロジックがインラインで書かれておらず、SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "DLID を付けた docs/ の写しの ToC で query-docs を実行し、使用した版と鮮度が結果に添えられることを確認した結果を報告している",
+        "query-worker の Role 制約（読み取り専用、他 Agent の起動・親タスクの引き継ぎの禁止、起動 prompt を親の指示として解釈しないこと）を検証する単体テストがあり成功する",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-006-search.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-002-execution-responsibilities.md",
+        "docs/specs/design/DES-001-system-overview.md",
+        "docs/specs/requirement/REQ-004-search.md",
+        "docs/rules/agent_data_exchange_rules.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/claude_code_reference.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-020",
+      "title": "check-dlid",
+      "priority": 65,
+      "status": "pending",
+      "design_id": "DES-010",
+      "depends_on": [
+        "TASK-008"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 4。文書 ID が無い文書、セクションの DLID の無い見出し、文書 ID とセクションの DLID の重複（同じ文書の中を含む）を検出する check-dlid の script と SKILL.md を作る（DES-010 §1.2・§3.4）。DLID の認識と照合は TASK-001・TASK-008 の script を再利用し、同じ役割の実装を並べない。",
+      "acceptance_criteria": [
+        "FR-016 のうち check-dlid が担う各項目について単体テストがあり成功する",
+        "検査で管理対象 Markdown と管理状態が変更されないことを単体テストで確認している",
+        "DLID の認識・照合の実装を新設せず、既存の script を呼び出している",
+        "SKILL.md にロジックがインラインで書かれておらず、SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/requirement/REQ-005-references.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-021",
+      "title": "check-links",
+      "priority": 65,
+      "status": "pending",
+      "design_id": "DES-007",
+      "depends_on": [
+        "TASK-011"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 4。壊れた参照、ID とパスの不一致、存在しないセクションへの参照、フラグメント不一致、参照先ディレクトリでの不在、title に DLID の無い Markdown へのリンクを検出する check-links の script と SKILL.md を作る（DES-007 §4、DES-010 §1.2・§3.5）。参照検査は TASK-011 の script を再利用する。",
+      "acceptance_criteria": [
+        "FR-016 のうち check-links が担う各項目について単体テストがあり成功する（AC-003・AC-004）",
+        "パス不一致に現在のパスが、フラグメント不一致に現在のアンカーが添えられることを単体テストで確認している",
+        "検査で管理対象 Markdown と管理状態が変更されないことを単体テストで確認している",
+        "SKILL.md にロジックがインラインで書かれておらず、SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-007-references-impact.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/requirement/REQ-005-references.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-022",
+      "title": "check-impact と処理済み比較基準（N-01〜N-05）",
+      "priority": 62,
+      "status": "pending",
+      "design_id": "DES-007",
+      "depends_on": [
+        "TASK-015",
+        "TASK-017"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 4。ToC が最新のときだけ未報告の変更とその直接の参照元を返し、返した (変更された文書またはセクション, 参照元) の組の処理済み比較基準を同じ操作で進める check-impact の script と SKILL.md を作る（DES-007 §2・§3、DES-004 §6、DES-010 §3.7、要件 D-038）。ToC が古ければ TASK-017 の検査結果を返す。セクションの追加と変更の区別、ToC に無くなったセクションの基準の除去、どのキーにも所属しなくなった文書の基準の除去（要件 D-046）を含む。",
+      "acceptance_criteria": [
+        "N-01〜N-05 の全行、ガード不成立、表に無いイベントのそれぞれについて単体テストがあり成功する",
+        "比較基準を進められなかった場合に報告せず、次回に同じ変更が報告されることを単体テストで確認している",
+        "参照元なしの記録と、後から参照元が加わった場合の報告を単体テストで確認している",
+        "片方のキーからの離脱では基準が残り、全キーから離脱すると除去されることを単体テストで確認している",
+        "セクションの DLID を指す参照元が、そのセクションが変わった場合だけ含まれることを単体テストで確認している（AC-007）",
+        "AC-006・AC-008・AC-009 のそれぞれについて単体テストがあり成功する",
+        "SKILL.md にロジックがインラインで書かれておらず、SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-007-references-impact.md",
+        "docs/specs/design/DES-004-state-machines.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-009-verification.md",
+        "docs/specs/requirement/REQ-005-references.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
+      ]
+    },
+    {
+      "task_id": "TASK-023",
+      "title": "横断シナリオの統合テスト",
+      "priority": 55,
+      "status": "pending",
+      "design_id": "DES-009",
+      "depends_on": [
+        "TASK-010",
+        "TASK-016",
+        "TASK-018",
+        "TASK-019",
+        "TASK-020",
+        "TASK-021",
+        "TASK-022"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 4。DES-009 §3 の横断シナリオ 1〜7 を、DLID を付けた docs/ の写しで通す。AI を呼ばない部分は tests/doc-link/ の統合テストとして自動化し、AI を含む部分は手動で実行して結果を報告する。",
+      "acceptance_criteria": [
+        "DES-009 §3 の横断シナリオ 1〜7 のうち AI を呼ばない部分が統合テストとして存在し成功する",
+        "AI を含む部分について、シナリオごとの実行結果を報告している",
+        "本物の docs/ が変更されていない",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-009-verification.md",
+        "docs/specs/design/DES-001-system-overview.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/rules/implementation_guidelines.md"
+      ]
+    }
+  ]
+}

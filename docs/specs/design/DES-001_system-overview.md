@@ -82,12 +82,12 @@ sequenceDiagram
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方、変更報告の比較基準の単位、参照先を読めない場合の確定可否は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録し、要件変更が必要なら要件書にも反映する。
 
-[req-001]: ../requirement/REQ-001-overview.md
+[req-001]: ../requirement/REQ-001_overview.md
 [readme]: README.md
-[des-002]: DES-002-execution-responsibilities.md
-[des-010]: DES-010-skill-composition.md
-[des-004]: DES-004-state-machines.md
-[des-007]: DES-007-references-impact.md
-[des-005]: DES-005-indexing.md
-[des-003]: DES-003-data-model.md
-[des-006]: DES-006-search.md
+[des-002]: DES-002_execution-responsibilities.md
+[des-010]: DES-010_skill-composition.md
+[des-004]: DES-004_state-machines.md
+[des-007]: DES-007_references-impact.md
+[des-005]: DES-005_indexing.md
+[des-003]: DES-003_data-model.md
+[des-006]: DES-006_search.md

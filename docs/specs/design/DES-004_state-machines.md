@@ -128,8 +128,8 @@ ID 付与操作（`embed-dlid`）の実行ごとの状態は次の通り。管�
 | N-04 | 記録済み       | 報告の全体を結果の JSON として返した                 | 完了             | —                                                                             |
 | N-05 | 開始／列挙済み | 当該段階の処理が失敗した                             | 失敗             | 比較基準は旧値のまま。報告を返さず、エラーの JSON を返す                      |
 
-[req-003]: ../requirement/REQ-003-toc.md
-[req-005-sec-14]: ../requirement/REQ-005-references.md#sec-14
-[des-009]: DES-009-verification.md
-[des-008]: DES-008-content-rules.md
-[des-007-sec-3]: DES-007-references-impact.md#sec-3
+[req-003]: ../requirement/REQ-003_toc.md
+[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14
+[des-009]: DES-009_verification.md
+[des-008]: DES-008_content-rules.md
+[des-007-sec-3]: DES-007_references-impact.md#sec-3

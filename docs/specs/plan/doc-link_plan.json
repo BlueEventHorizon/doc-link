@@ -1,159 +1,33 @@
 {
   "requirements_traceability": [
     {
-      "requirement_id": "FR-001",
-      "title": "文書 ID の発行と読み取り",
-      "design_id": "DES-008",
+      "requirement_id": "REQ-001",
+      "title": "総論",
+      "design_id": "DES-004",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-002",
-      "title": "文書 ID の検証",
+      "requirement_id": "REQ-002",
+      "title": "管理対象と文書 ID",
       "design_id": "DES-005",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-003",
-      "title": "文書の移動・改名の認識",
+      "requirement_id": "REQ-003",
+      "title": "ToC 管理",
       "design_id": "DES-005",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-004",
-      "title": "ToC の構築と再構築",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-005",
-      "title": "文書情報の生成",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-006",
+      "requirement_id": "REQ-004",
       "title": "文書検索",
       "design_id": "DES-006",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-007",
-      "title": "文書 ID を使用した参照",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-008",
-      "title": "参照関係の抽出",
+      "requirement_id": "REQ-005",
+      "title": "参照と変更通知",
       "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-009",
-      "title": "ID 付きリンクの検査",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-010",
-      "title": "参照パス修正情報の通知",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-011",
-      "title": "文書全体の変更検出",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-012",
-      "title": "セクション単位の変更検出",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-013",
-      "title": "変更影響候補の特定",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-014",
-      "title": "変更影響候補の通知",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-015",
-      "title": "変更報告の管理",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-016",
-      "title": "不整合検査",
-      "design_id": "DES-010",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-017",
-      "title": "管理キーと管理対象指定の受領",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-018",
-      "title": "DLID の解決",
-      "design_id": "DES-006",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-001",
-      "title": "ToC 再構築の一貫性",
-      "design_id": "DES-004",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-002",
-      "title": "決定性",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-003",
-      "title": "冪等性",
-      "design_id": "DES-004",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-004",
-      "title": "管理対象文書への書き込み境界",
-      "design_id": "DES-002",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-005",
-      "title": "診断可能性",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-006",
-      "title": "中断後の再実行",
-      "design_id": "DES-004",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-007",
-      "title": "スケーラビリティ",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-008",
-      "title": "生成指示と検証基準の分離",
-      "design_id": "DES-008",
       "status": "pending"
     }
   ],
@@ -172,7 +46,7 @@
     {
       "design_id": "DES-002",
       "requirement_ids": [
-        "NFR-004"
+        "REQ-001"
       ],
       "task_ids": [
         "TASK-001",
@@ -198,9 +72,7 @@
     {
       "design_id": "DES-004",
       "requirement_ids": [
-        "NFR-001",
-        "NFR-003",
-        "NFR-006"
+        "REQ-001"
       ],
       "task_ids": [
         "TASK-010",
@@ -211,13 +83,9 @@
     {
       "design_id": "DES-005",
       "requirement_ids": [
-        "FR-002",
-        "FR-003",
-        "FR-004",
-        "FR-011",
-        "FR-017",
-        "NFR-005",
-        "NFR-007"
+        "REQ-001",
+        "REQ-002",
+        "REQ-003"
       ],
       "task_ids": [
         "TASK-006",
@@ -232,8 +100,8 @@
     {
       "design_id": "DES-006",
       "requirement_ids": [
-        "FR-006",
-        "FR-018"
+        "REQ-002",
+        "REQ-004"
       ],
       "task_ids": [
         "TASK-017",
@@ -245,12 +113,8 @@
     {
       "design_id": "DES-007",
       "requirement_ids": [
-        "FR-008",
-        "FR-009",
-        "FR-010",
-        "FR-013",
-        "FR-014",
-        "FR-015"
+        "REQ-003",
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-003",
@@ -263,12 +127,10 @@
     {
       "design_id": "DES-008",
       "requirement_ids": [
-        "FR-001",
-        "FR-005",
-        "FR-007",
-        "FR-012",
-        "NFR-002",
-        "NFR-008"
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-001",
@@ -299,7 +161,7 @@
     {
       "design_id": "DES-010",
       "requirement_ids": [
-        "FR-016"
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-010",
@@ -333,10 +195,10 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/design/DES-003-data-model.md",
-        "docs/specs/design/DES-002-execution-responsibilities.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/design/DES-003_data-model.md",
+        "docs/specs/design/DES-002_execution-responsibilities.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -364,8 +226,8 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/design/DES-003_data-model.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -392,9 +254,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/design/DES-007-references-impact.md",
-        "docs/specs/requirement/REQ-005-references.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/design/DES-007_references-impact.md",
+        "docs/specs/requirement/REQ-005_references.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -420,7 +282,7 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/design/DES-008_content-rules.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -447,8 +309,8 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/requirement/REQ-003_toc.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -477,8 +339,8 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/script_error_output_rules.md",
         "docs/rules/uv_usage_rules.md"
@@ -508,10 +370,10 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-003-data-model.md",
-        "docs/specs/design/DES-002-execution-responsibilities.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-006-search.md",
+        "docs/specs/design/DES-003_data-model.md",
+        "docs/specs/design/DES-002_execution-responsibilities.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-006_search.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -543,10 +405,10 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
-        "docs/specs/requirement/REQ-005-references.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
+        "docs/specs/requirement/REQ-005_references.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/script_error_output_rules.md",
         "docs/rules/uv_usage_rules.md"
@@ -575,9 +437,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -606,11 +468,11 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-004-state-machines.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-009-verification.md",
-        "docs/specs/design/DES-001-system-overview.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/design/DES-004_state-machines.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-009_verification.md",
+        "docs/specs/design/DES-001_system-overview.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/claude_code_reference.md",
@@ -643,9 +505,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-007-references-impact.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/requirement/REQ-005-references.md",
+        "docs/specs/design/DES-007_references-impact.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/requirement/REQ-005_references.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -677,11 +539,11 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-004-state-machines.md",
-        "docs/specs/design/DES-003-data-model.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
-        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-004_state-machines.md",
+        "docs/specs/design/DES-003_data-model.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
+        "docs/specs/requirement/REQ-003_toc.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/script_error_output_rules.md",
         "docs/rules/uv_usage_rules.md"
@@ -712,10 +574,10 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-002-execution-responsibilities.md",
-        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-002_execution-responsibilities.md",
+        "docs/specs/requirement/REQ-003_toc.md",
         "docs/rules/agent_data_exchange_rules.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/claude_code_reference.md",
@@ -747,9 +609,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/requirement/REQ-003_toc.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -781,11 +643,11 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-004-state-machines.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-003-data-model.md",
-        "docs/specs/design/DES-009-verification.md",
-        "docs/specs/requirement/REQ-003-toc.md",
+        "docs/specs/design/DES-004_state-machines.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-003_data-model.md",
+        "docs/specs/design/DES-009_verification.md",
+        "docs/specs/requirement/REQ-003_toc.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/script_error_output_rules.md",
         "docs/rules/uv_usage_rules.md"
@@ -812,10 +674,10 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-002-execution-responsibilities.md",
-        "docs/specs/design/DES-001-system-overview.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-002_execution-responsibilities.md",
+        "docs/specs/design/DES-001_system-overview.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/claude_code_reference.md",
@@ -852,9 +714,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-006-search.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/requirement/REQ-004-search.md",
+        "docs/specs/design/DES-006_search.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/requirement/REQ-004_search.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/script_error_output_rules.md",
         "docs/rules/uv_usage_rules.md"
@@ -879,8 +741,8 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-006-search.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-006_search.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/claude_code_reference.md",
@@ -914,11 +776,11 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-006-search.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-002-execution-responsibilities.md",
-        "docs/specs/design/DES-001-system-overview.md",
-        "docs/specs/requirement/REQ-004-search.md",
+        "docs/specs/design/DES-006_search.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-002_execution-responsibilities.md",
+        "docs/specs/design/DES-001_system-overview.md",
+        "docs/specs/requirement/REQ-004_search.md",
         "docs/rules/agent_data_exchange_rules.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/claude_code_reference.md",
@@ -949,10 +811,10 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-005-indexing.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/requirement/REQ-005-references.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-005_indexing.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/requirement/REQ-005_references.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/uv_usage_rules.md",
@@ -981,9 +843,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-007-references-impact.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/requirement/REQ-005-references.md",
+        "docs/specs/design/DES-007_references-impact.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/requirement/REQ-005_references.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/uv_usage_rules.md",
@@ -1016,12 +878,12 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-007-references-impact.md",
-        "docs/specs/design/DES-004-state-machines.md",
-        "docs/specs/design/DES-003-data-model.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-009-verification.md",
-        "docs/specs/requirement/REQ-005-references.md",
+        "docs/specs/design/DES-007_references-impact.md",
+        "docs/specs/design/DES-004_state-machines.md",
+        "docs/specs/design/DES-003_data-model.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-009_verification.md",
+        "docs/specs/requirement/REQ-005_references.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/uv_usage_rules.md",
@@ -1054,9 +916,9 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-009-verification.md",
-        "docs/specs/design/DES-001-system-overview.md",
-        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-009_verification.md",
+        "docs/specs/design/DES-001_system-overview.md",
+        "docs/specs/design/DES-010_skill-composition.md",
         "docs/rules/implementation_guidelines.md"
       ]
     },
@@ -1086,12 +948,12 @@
       ],
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
-        "docs/specs/design/DES-006-search.md",
-        "docs/specs/design/DES-010-skill-composition.md",
-        "docs/specs/design/DES-002-execution-responsibilities.md",
-        "docs/specs/design/DES-003-data-model.md",
-        "docs/specs/design/DES-008-content-rules.md",
-        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/specs/design/DES-006_search.md",
+        "docs/specs/design/DES-010_skill-composition.md",
+        "docs/specs/design/DES-002_execution-responsibilities.md",
+        "docs/specs/design/DES-003_data-model.md",
+        "docs/specs/design/DES-008_content-rules.md",
+        "docs/specs/requirement/REQ-002_document-id.md",
         "docs/rules/claude_code_authoring_guide.md",
         "docs/rules/claude_code_reference.md",
         "docs/rules/implementation_guidelines.md",

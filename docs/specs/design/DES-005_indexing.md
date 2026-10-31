@@ -68,9 +68,9 @@ ToC の反映済みハッシュと現物を比較して**索引更新対象**を
 
 ToC 確定だけでは処理済み比較基準を進めない。比較基準は、`check-impact` が報告を返すときに進める（[DES-007 §3][des-007-sec-3]、要件 D-038）。失敗時は段階、対象 ID・パス、原因、公開版の有無、未報告の変更を返す。再実行時は確定版・比較基準・現物から再判定し、旧版に取り込まれた要約を不必要に繰り返さない。
 
-[req-002]: ../requirement/REQ-002-document-id.md
-[req-003]: ../requirement/REQ-003-toc.md
-[des-004]: DES-004-state-machines.md
-[des-007-sec-3]: DES-007-references-impact.md#sec-3
-[des-002-sec-4]: DES-002-execution-responsibilities.md#sec-4
-[req-002-sec-6-1]: ../requirement/REQ-002-document-id.md#sec-6-1
+[req-002]: ../requirement/REQ-002_document-id.md
+[req-003]: ../requirement/REQ-003_toc.md
+[des-004]: DES-004_state-machines.md
+[des-007-sec-3]: DES-007_references-impact.md#sec-3
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4
+[req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#sec-6-1

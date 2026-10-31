@@ -54,7 +54,7 @@
 
 現時点で未決の関係はない。文書 ID の発行方式と一意性は要件 D-028／D-030 で決定した（要件 U-016）。
 
-[req-003-sec-7]: ../requirement/REQ-003-toc.md#sec-7
+[req-003-sec-7]: ../requirement/REQ-003_toc.md#sec-7
 [readme]: README.md
-[des-002-sec-4]: DES-002-execution-responsibilities.md#sec-4
-[des-010-sec-4]: DES-010-skill-composition.md#sec-4
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4

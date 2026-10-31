@@ -225,12 +225,12 @@ ToC の構築・再構築と文書検索を実行しても、管理対象 Markdo
 
 文書の DLID とセクションの DLID を渡した場合、それぞれ現在のパスが返り、セクションには見出しとアンカーが添えられること。文書を移動した後、ToC を再構築する前は「記録されたパスに無い」が返り、移動前のパスを現在のパスとして返さないこと。ToC を再構築した後は、同じ DLID から移動後のパスが返ること。管理状態に記録の無い DLID には「記録が無い」が返ること。解決の前後で、管理対象 Markdown、ToC および管理状態が変わらないこと（D-047）。
 
-[req-001]: REQ-001-overview.md
-[req-002]: REQ-002-document-id.md
-[req-003]: REQ-003-toc.md
-[req-004]: REQ-004-search.md
-[req-005]: REQ-005-references.md
-[req-002-sec-9]: REQ-002-document-id.md#sec-9
-[req-002-sec-9-1]: REQ-002-document-id.md#sec-9-1
-[req-002-sec-8]: REQ-002-document-id.md#sec-8
-[req-002-sec-9-2]: REQ-002-document-id.md#sec-9-2
+[req-001]: REQ-001_overview.md
+[req-002]: REQ-002_document-id.md
+[req-003]: REQ-003_toc.md
+[req-004]: REQ-004_search.md
+[req-005]: REQ-005_references.md
+[req-002-sec-9]: REQ-002_document-id.md#sec-9
+[req-002-sec-9-1]: REQ-002_document-id.md#sec-9-1
+[req-002-sec-8]: REQ-002_document-id.md#sec-8
+[req-002-sec-9-2]: REQ-002_document-id.md#sec-9-2

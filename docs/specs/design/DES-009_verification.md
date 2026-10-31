@@ -51,12 +51,12 @@
 
 要件の未決事項は、すべて決定済みである。設計書はレビューを経て承認済みであり、実装計画の根拠とする確定仕様である。
 
-[req-001]: ../requirement/REQ-001-overview.md
-[des-004]: DES-004-state-machines.md
-[des-005]: DES-005-indexing.md
-[des-008]: DES-008-content-rules.md
-[des-007]: DES-007-references-impact.md
-[des-006]: DES-006-search.md
-[des-010]: DES-010-skill-composition.md
-[des-003]: DES-003-data-model.md
-[des-002]: DES-002-execution-responsibilities.md
+[req-001]: ../requirement/REQ-001_overview.md
+[des-004]: DES-004_state-machines.md
+[des-005]: DES-005_indexing.md
+[des-008]: DES-008_content-rules.md
+[des-007]: DES-007_references-impact.md
+[des-006]: DES-006_search.md
+[des-010]: DES-010_skill-composition.md
+[des-003]: DES-003_data-model.md
+[des-002]: DES-002_execution-responsibilities.md

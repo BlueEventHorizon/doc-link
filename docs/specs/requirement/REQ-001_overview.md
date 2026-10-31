@@ -364,11 +364,11 @@ ToC に記録し、必要に応じて通知する状態の候補を次に示す�
 
 要件の未決事項はすべて決定済みであり、設計書は承認済みである。次は設計書から実装計画を作り、受け入れ条件をテスト仕様へ具体化する。
 
-[req-001]: REQ-001-overview.md
-[req-002]: REQ-002-document-id.md
-[req-003]: REQ-003-toc.md
-[req-004]: REQ-004-search.md
-[req-005]: REQ-005-references.md
-[req-003-sec-7-4]: REQ-003-toc.md#sec-7-4
-[req-002-sec-9]: REQ-002-document-id.md#sec-9
-[req-003-sec-11]: REQ-003-toc.md#sec-11
+[req-001]: REQ-001_overview.md
+[req-002]: REQ-002_document-id.md
+[req-003]: REQ-003_toc.md
+[req-004]: REQ-004_search.md
+[req-005]: REQ-005_references.md
+[req-003-sec-7-4]: REQ-003_toc.md#sec-7-4
+[req-002-sec-9]: REQ-002_document-id.md#sec-9
+[req-003-sec-11]: REQ-003_toc.md#sec-11

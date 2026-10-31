@@ -35,8 +35,8 @@ script は確定版と入力キーに基づき、検索に使う ToC と版・�
 
 ToC、管理状態、管理対象 Markdown には書き込まない。
 
-[req-004]: ../requirement/REQ-004-search.md
-[req-002-sec-9]: ../requirement/REQ-002-document-id.md#sec-9
-[des-003-sec-2]: DES-003-data-model.md#sec-2
-[des-008-sec-1]: DES-008-content-rules.md#sec-1
-[des-005]: DES-005-indexing.md
+[req-004]: ../requirement/REQ-004_search.md
+[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9
+[des-003-sec-2]: DES-003_data-model.md#sec-2
+[des-008-sec-1]: DES-008_content-rules.md#sec-1
+[des-005]: DES-005_indexing.md

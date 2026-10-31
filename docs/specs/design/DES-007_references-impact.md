@@ -49,7 +49,7 @@ ToC の確定だけでは処理済み比較基準を進めない（要件 D-038�
 
 不整合検査は ID 欠落・重複、壊れた参照、title に DLID の無いリンク、パス不一致、ToC と現物の差、未処理影響を一覧化する操作として扱う。検査内容ごとに `check-dlid`、`check-links`、`check-toc`、`check-impact` の SKILL に分ける（[DES-010][des-010]）。管理状態を書き換えるのは、報告を返すときに処理済み比較基準を進める `check-impact` だけである（§3）。ID の付与は ID 付与操作だけが行うので、検査は管理対象 Markdown を変更しない（要件 D-035）。検出事項に重要度の分類は設けない。検出事項ごとの扱い（ToC の確定を妨げるか、検出後の作業）は、要件 D-025・D-036 と [DES-010][des-010] が定める。「存在しないセクション」は、リンク先パスの文書は存在するが、title のセクションの DLID を持つアンカー行がその文書にも指定ディレクトリ内の他の文書にも無いことで判定する（§1、要件 D-033）。
 
-[req-005]: ../requirement/REQ-005-references.md
-[des-010]: DES-010-skill-composition.md
-[des-010-sec-1-2]: DES-010-skill-composition.md#sec-1-2
-[des-008-sec-2]: DES-008-content-rules.md#sec-2
+[req-005]: ../requirement/REQ-005_references.md
+[des-010]: DES-010_skill-composition.md
+[des-010-sec-1-2]: DES-010_skill-composition.md#sec-1-2
+[des-008-sec-2]: DES-008_content-rules.md#sec-2

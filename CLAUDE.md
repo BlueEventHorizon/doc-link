@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装計画段階**にある。要件定義書と設計書は承認済み。`plugins/` や `tests/` 配下の実装コードはまだ存在せず、`docs/` 配下の仕様書・ルール文書のみが追跡対象。テストと整形の確認はローカルで行い、CI は置かない。
 
-doc-link が実現しようとしている内容（パスでなく文書 ID による恒久的な文書管理、参照関係の機械的把握、変更影響の通知）は `docs/specs/requirement/REQ-001-overview.md` の「1. 文書の目的」「3. 目的」に要約がある。
+doc-link が実現しようとしている内容（パスでなく文書 ID による恒久的な文書管理、参照関係の機械的把握、変更影響の通知）は `docs/specs/requirement/REQ-001_overview.md` の「1. 文書の目的」「3. 目的」に要約がある。
 
 ## コマンド
 

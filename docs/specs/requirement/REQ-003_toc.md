@@ -436,21 +436,21 @@ ToC に現在ハッシュが反映された後、変更影響候補の報告前�
 
 参照情報だけが変更された文書（内容ハッシュが同じもの）では参照関係を更新し、要約情報を再利用すること。
 
-[req-001]: REQ-001-overview.md
-[req-002]: REQ-002-document-id.md
-[req-003]: REQ-003-toc.md
-[req-004]: REQ-004-search.md
-[req-005]: REQ-005-references.md
-[des-003]: ../design/DES-003-data-model.md
-[req-002-sec-6-2]: REQ-002-document-id.md#sec-6-2
-[req-003-sec-10-1]: REQ-003-toc.md#sec-10-1
-[req-005-sec-13-1]: REQ-005-references.md#sec-13-1
-[req-003-sec-10-1-3]: REQ-003-toc.md#sec-10-1-3
-[req-003-sec-7-5]: REQ-003-toc.md#sec-7-5
-[req-002-sec-9-1]: REQ-002-document-id.md#sec-9-1
-[req-003-sec-10]: REQ-003-toc.md#sec-10
-[req-003-sec-7-4]: REQ-003-toc.md#sec-7-4
-[req-003-sec-10-2]: REQ-003-toc.md#sec-10-2
-[req-001-sec-3-2]: REQ-001-overview.md#sec-3-2
-[req-001-sec-3-1]: REQ-001-overview.md#sec-3-1
-[req-003-sec-10-1-2]: REQ-003-toc.md#sec-10-1-2
+[req-001]: REQ-001_overview.md
+[req-002]: REQ-002_document-id.md
+[req-003]: REQ-003_toc.md
+[req-004]: REQ-004_search.md
+[req-005]: REQ-005_references.md
+[des-003]: ../design/DES-003_data-model.md
+[req-002-sec-6-2]: REQ-002_document-id.md#sec-6-2
+[req-003-sec-10-1]: REQ-003_toc.md#sec-10-1
+[req-005-sec-13-1]: REQ-005_references.md#sec-13-1
+[req-003-sec-10-1-3]: REQ-003_toc.md#sec-10-1-3
+[req-003-sec-7-5]: REQ-003_toc.md#sec-7-5
+[req-002-sec-9-1]: REQ-002_document-id.md#sec-9-1
+[req-003-sec-10]: REQ-003_toc.md#sec-10
+[req-003-sec-7-4]: REQ-003_toc.md#sec-7-4
+[req-003-sec-10-2]: REQ-003_toc.md#sec-10-2
+[req-001-sec-3-2]: REQ-001_overview.md#sec-3-2
+[req-001-sec-3-1]: REQ-001_overview.md#sec-3-1
+[req-003-sec-10-1-2]: REQ-003_toc.md#sec-10-1-2

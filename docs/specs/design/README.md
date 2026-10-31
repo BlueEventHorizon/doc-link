@@ -26,14 +26,14 @@
 
 要件の未決事項はすべて決定済みであり、保存方式は JSON ファイルに決定済みである（[DES-002 §4][des-002-sec-4]）。要件定義書と設計書はレビューを経て承認済みである。
 
-[des-001]: DES-001-system-overview.md
-[des-002]: DES-002-execution-responsibilities.md
-[des-003]: DES-003-data-model.md
-[des-004]: DES-004-state-machines.md
-[des-005]: DES-005-indexing.md
-[des-006]: DES-006-search.md
-[des-007]: DES-007-references-impact.md
-[des-008]: DES-008-content-rules.md
-[des-009]: DES-009-verification.md
-[des-010]: DES-010-skill-composition.md
-[des-002-sec-4]: DES-002-execution-responsibilities.md#sec-4
+[des-001]: DES-001_system-overview.md
+[des-002]: DES-002_execution-responsibilities.md
+[des-003]: DES-003_data-model.md
+[des-004]: DES-004_state-machines.md
+[des-005]: DES-005_indexing.md
+[des-006]: DES-006_search.md
+[des-007]: DES-007_references-impact.md
+[des-008]: DES-008_content-rules.md
+[des-009]: DES-009_verification.md
+[des-010]: DES-010_skill-composition.md
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4

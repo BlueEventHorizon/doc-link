@@ -47,8 +47,8 @@ Markdown の構造（コードブロック、見出し、リンクの URL・titl
 
 タイトルは文書の最初の H1 見出しのテキストとする。H1 が無い文書のタイトルは `toc-updater` が生成する。目的・内容概要・適用作業・キーワード、および生成するタイトルは、`toc-updater` が対象文書の本文を読んで生成する（[DES-010 §4][des-010-sec-4]）。生成 AI に渡す上限はフィールド別の `L` のみとする。script の検証器は `H = floor(L × 1.3)` を用い、`L` 超・`H` 以下を受理し、`H` 超を拒否する。生成 AI が参照するプロンプト・ルール・再試行メッセージに `H` や余白の存在を含めない。`L` の値と文字数の数え方は要件 D-044 に従う。配列のフィールドは要素数を `L`・`H` で検証する。検証器のエラーを生成 AI へ戻す場合も実際の拒否境界を開示しない。
 
-[req-002]: ../requirement/REQ-002-document-id.md
-[req-003]: ../requirement/REQ-003-toc.md
-[req-005]: ../requirement/REQ-005-references.md
-[des-007-sec-1]: DES-007-references-impact.md#sec-1
-[des-010-sec-4]: DES-010-skill-composition.md#sec-4
+[req-002]: ../requirement/REQ-002_document-id.md
+[req-003]: ../requirement/REQ-003_toc.md
+[req-005]: ../requirement/REQ-005_references.md
+[des-007-sec-1]: DES-007_references-impact.md#sec-1
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4

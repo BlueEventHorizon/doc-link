@@ -21,7 +21,7 @@ Markdown では、標準のリンク（インラインリンク、またはリ�
 
 詳細は[ID 確認処理][req-id]を参照する。
 
-[req-id]: ../requirement/REQ-002-document-id.md#sec-9-1 "DLID-4m8q2x7k3p9r"
+[req-id]: ../requirement/REQ-002_document-id.md#sec-9-1 "DLID-4m8q2x7k3p9r"
 ```
 
 この記法では、DLID が参照先の論理的な同一性を表し、リンク先のパスが参照先として指定された物理的な配置を表す。リンクの表示文字列とリンク先は人間が読むためのものとしてそのまま残す。パスが現在も正しいかは実際のディレクトリ検索で検査する。
@@ -170,9 +170,9 @@ doc-link は参照元の修正要否を判断せず、理由や修正案を生�
 
 参照先ディレクトリを検索できない場合は不在とし、保存済みの ToC やデータベースの情報だけで参照を正しいと判定しないこと。参照先の管理キーへの所属有無によって判定を変えず、検査結果は検索後に保存すること。
 
-[req-001]: REQ-001-overview.md
-[req-002]: REQ-002-document-id.md
-[req-003]: REQ-003-toc.md
-[req-004]: REQ-004-search.md
-[req-005]: REQ-005-references.md
-[req-005-sec-13-1]: REQ-005-references.md#sec-13-1
+[req-001]: REQ-001_overview.md
+[req-002]: REQ-002_document-id.md
+[req-003]: REQ-003_toc.md
+[req-004]: REQ-004_search.md
+[req-005]: REQ-005_references.md
+[req-005-sec-13-1]: REQ-005_references.md#sec-13-1

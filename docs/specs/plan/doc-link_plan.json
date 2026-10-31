@@ -103,6 +103,12 @@
       "status": "pending"
     },
     {
+      "requirement_id": "FR-018",
+      "title": "DLID の解決",
+      "design_id": "DES-006",
+      "status": "pending"
+    },
+    {
       "requirement_id": "NFR-001",
       "title": "ToC 再構築の一貫性",
       "design_id": "DES-004",
@@ -175,7 +181,8 @@
         "TASK-010",
         "TASK-013",
         "TASK-016",
-        "TASK-019"
+        "TASK-019",
+        "TASK-024"
       ]
     },
     {
@@ -225,12 +232,14 @@
     {
       "design_id": "DES-006",
       "requirement_ids": [
-        "FR-006"
+        "FR-006",
+        "FR-018"
       ],
       "task_ids": [
         "TASK-017",
         "TASK-018",
-        "TASK-019"
+        "TASK-019",
+        "TASK-024"
       ]
     },
     {
@@ -299,7 +308,8 @@
         "TASK-019",
         "TASK-020",
         "TASK-021",
-        "TASK-022"
+        "TASK-022",
+        "TASK-024"
       ]
     }
   ],
@@ -308,7 +318,7 @@
       "task_id": "TASK-001",
       "title": "プラグインの骨格と DLID の認識・発行",
       "priority": 95,
-      "status": "pending",
+      "status": "in_progress",
       "design_id": "DES-008",
       "depends_on": [],
       "group_id": null,
@@ -485,13 +495,14 @@
       ],
       "group_id": null,
       "build_check": "per_task",
-      "description": "フェーズ 1。DES-003 §2 の全論理情報（文書情報、キー別の版、参照記述、参照検査結果、処理済み比較基準、構築実行）を収める JSON の物理スキーマを決め、.doc-link/ 配下の読み書きを行う共通 script を実装する（戦略書 R-4）。ファイルの分け方は DES-002 §4（文書 ID ごと、キーごと、処理済み比較基準は 1 ファイル）。書き込みは .temp/doc-link/<skill>/ の一時ファイルから os.replace で置き換える（DES-005 §5）。同じ内容から同じバイト列を出力し、内容が変わらないファイルは書き換えない。",
+      "description": "フェーズ 1。DES-003 §2 の全論理情報（文書情報、キー別の版、参照記述、参照検査結果、処理済み比較基準、構築実行）を収める JSON の物理スキーマを決め、.doc-link/ 配下の読み書きを行う共通 script を実装する（戦略書 R-4）。ファイルの分け方は DES-002 §4（文書 ID ごと、キーごと、処理済み比較基準は 1 ファイル）。書き込みは .temp/doc-link/<skill>/ の一時ファイルから os.replace で置き換える（DES-005 §5）。同じ内容から同じバイト列を出力し、内容が変わらないファイルは書き換えない。 DLID の解決（DES-006 §3）が引けるよう、文書情報に現在パスを持たせ、キー別の版のセクションエントリにセクションの DLID と所属する文書 ID を持たせる（戦略書 R-4）。",
       "acceptance_criteria": [
         "DES-003 §2 の論理情報のそれぞれがスキーマのどこに収まるかを script の docstring に記載している",
         "同じ入力から同じバイト列が出力されることを単体テストで確認している",
         "内容が変わらないファイルの更新時刻が変わらないことを単体テストで確認している",
         "一時ファイルが .temp/doc-link/<skill>/ の中だけに作られ、プロジェクトの外に作られないことを単体テストで確認している",
         "全キーの DLID を読み取りで列挙できることを単体テストで確認している",
+        "文書 ID から文書情報の現在パスを、セクションの DLID から全キーの版に記録された所属する文書 ID を、読み取りで引けることを単体テストで確認している",
         "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
         "CLAUDE.md の単体テストのコマンドがすべて成功する"
       ],
@@ -500,6 +511,7 @@
         "docs/specs/design/DES-003-data-model.md",
         "docs/specs/design/DES-002-execution-responsibilities.md",
         "docs/specs/design/DES-005-indexing.md",
+        "docs/specs/design/DES-006-search.md",
         "docs/rules/implementation_guidelines.md",
         "docs/rules/uv_usage_rules.md",
         "docs/rules/script_error_output_rules.md"
@@ -1046,6 +1058,45 @@
         "docs/specs/design/DES-001-system-overview.md",
         "docs/specs/design/DES-010-skill-composition.md",
         "docs/rules/implementation_guidelines.md"
+      ]
+    },
+    {
+      "task_id": "TASK-024",
+      "title": "resolve-dlid の解決 script と SKILL",
+      "priority": 74,
+      "status": "pending",
+      "design_id": "DES-006",
+      "depends_on": [
+        "TASK-002",
+        "TASK-007",
+        "TASK-015"
+      ],
+      "group_id": null,
+      "build_check": "per_task",
+      "description": "フェーズ 3。DES-006 §3 の手順 1〜4 に従い、DLID の並びから DLID ごとの解決結果（解決済み・記録されたパスに無い・記録が無い）を返す script と、resolve-dlid の SKILL.md を実装する（要件 FR-018・D-047、DES-010 §1.1・§3.8、DES-002 §2「DLID の解決」）。管理キーと対象指定は受け取らず、ディレクトリを走査しない（戦略書 R-11）。DLID の認識は TASK-001、見出しとアンカー行の読み取りは TASK-002、管理状態の読み取りは TASK-007 の script を使う。管理状態・ToC・管理対象 Markdown に書き込まない（DES-004 §1）。",
+      "acceptance_criteria": [
+        "AC-031 の各分岐（文書の DLID の解決、セクションの DLID の解決と見出し・アンカーの付与、移動後・再構築前の「記録されたパスに無い」、再構築後の移動先パス、記録の無い DLID）について単体テストがあり成功する",
+        "移動後・再構築前に、移動前のパスを解決済みとして返さないことを単体テストで確認している",
+        "所属する文書の記録がキーごとに異なるセクションの DLID について、一致した候補だけが返り、どれも一致しなければ記録されたパスがすべて添えられることを単体テストで確認している（DES-006 §3 の 1・3）",
+        "ファイルを読めない DLID に原因が返り、管理状態を読めないときに全体が失敗して原因が返ることを単体テストで確認している",
+        "解決の前後で .doc-link/ と管理対象 Markdown のバイト列が変わらないことを単体テストで確認している",
+        "SKILL.md にロジックがインラインで書かれておらず、SKILL.md と配布物から docs/specs/・docs/rules/ を参照していない",
+        "このタスクで作る script の PEP 723 の依存宣言とロックが uv_usage_rules.md に従っている",
+        "CLAUDE.md の単体テストのコマンドがすべて成功し、dprint check が成功する"
+      ],
+      "required_reading": [
+        "docs/specs/plan/doc-link_strategy.md",
+        "docs/specs/design/DES-006-search.md",
+        "docs/specs/design/DES-010-skill-composition.md",
+        "docs/specs/design/DES-002-execution-responsibilities.md",
+        "docs/specs/design/DES-003-data-model.md",
+        "docs/specs/design/DES-008-content-rules.md",
+        "docs/specs/requirement/REQ-002-document-id.md",
+        "docs/rules/claude_code_authoring_guide.md",
+        "docs/rules/claude_code_reference.md",
+        "docs/rules/implementation_guidelines.md",
+        "docs/rules/uv_usage_rules.md",
+        "docs/rules/script_error_output_rules.md"
       ]
     }
   ]

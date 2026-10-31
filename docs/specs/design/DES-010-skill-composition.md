@@ -1,20 +1,21 @@
 # DES-010 SKILL と Agent の構成
 
 **状態**: 承認済み\
-**更新日**: 2026-10-30\
+**更新日**: 2026-10-31\
 **根拠**: [要件総論][req-001]、[実行主体][des-002]
 
 <a id="sec-1"></a>
 
 ## 1. 構成
 
-doc-link は次の 7 つの SKILL と 2 つのカスタム Agent で構成する。SKILL はいずれも呼び出し元（プロジェクト管理 AI）のコンテキストで実行する継承型とする（[DES-002 §3][des-002-sec-3]）。各 SKILL は処理を script に委ね、SKILL.md にロジックを書かない。
+doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する。SKILL はいずれも呼び出し元（プロジェクト管理 AI）のコンテキストで実行する継承型とする（[DES-002 §3][des-002-sec-3]）。各 SKILL は処理を script に委ね、SKILL.md にロジックを書かない。
 
 | SKILL          | 種類 | 管理対象 Markdown への書き込み | 管理状態の書き換え                   | 対応する要件                                                                                   |
 | -------------- | ---- | ------------------------------ | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
 | `embed-dlid`   | 操作 | あり（DLID だけ、要件 D-031）  | なし                                 | [REQ-002 §9.2][req-002-sec-9-2]、FR-001、FR-002、D-029、D-033〜D-035                           |
 | `index-docs`   | 操作 | なし（要件 D-035）             | あり（文書情報、ToC の版）           | FR-017、[REQ-002 §9.1][req-002-sec-9-1]、FR-003〜FR-005、FR-009、FR-010、FR-011、FR-012、D-036 |
 | `query-docs`   | 照会 | なし                           | なし                                 | [REQ-004 §12][req-004-sec-12] FR-006                                                           |
+| `resolve-dlid` | 照会 | なし                           | なし                                 | [REQ-002 §9][req-002-sec-9] FR-018、D-047                                                      |
 | `check-dlid`   | 検査 | なし                           | なし                                 | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-002 §9][req-002-sec-9] FR-002                       |
 | `check-links`  | 検査 | なし                           | なし                                 | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-005 §13][req-005-sec-13] FR-009                     |
 | `check-toc`    | 検査 | なし                           | なし                                 | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-003 §10][req-003-sec-10] FR-011                     |
@@ -51,6 +52,10 @@ doc-link は次の 7 つの SKILL と 2 つのカスタム Agent で構成する
 - 検索前に再構築の要否を検査し、必要なら再構築の規模を示して利用者に二択を確認する（要件: [REQ-004 §12][req-004-sec-12]／設計: [DES-006 §1][des-006-sec-1]）
 - 確定版から文書を検索し、使用した版と鮮度を添えて返す（要件: [REQ-004 §12][req-004-sec-12]／設計: [DES-006 §2][des-006-sec-2]）
 
+`resolve-dlid`
+
+- 渡された DLID ごとに、管理状態に記録されたパスを、その文書が今もその DLID を持つことを確かめてから返す。セクションの DLID には見出しとアンカーを添える。確かめられない DLID には記録されたパスに無いことを、記録の無い DLID にはそのことを返す（要件: [REQ-002 §9][req-002-sec-9] FR-018／設計: [DES-006 §3][des-006-sec-3]）
+
 <a id="sec-1-2"></a>
 
 ### 1.2 検査の SKILL の責務
@@ -85,6 +90,7 @@ flowchart LR
         UC1["文書に DLID を付与する<br>embed-dlid"]
         UC2["ToC を構築・再構築する<br>index-docs"]
         UC3["文書を検索する<br>query-docs"]
+        UC4["DLID から現在のパスを得る<br>resolve-dlid"]
         subgraph CHK["検査"]
             UC5["文書 ID を検査する<br>check-dlid"]
             UC6["参照を検査する<br>check-links"]
@@ -99,17 +105,20 @@ flowchart LR
     PM --> UC1
     PM --> UC2
     PM --> UC3
+    PM --> UC4
     PM --> CHK
     Caller --> UC1
     Caller --> UC2
     Caller --> UC3
+    Caller --> UC4
     Caller --> CHK
     UC3 -. "利用者が再構築を選んだとき" .-> UC2
+    UC4 -. "記録されたパスに無いとき" .-> UC2
     UC5 -. "検出したとき" .-> UC1
     UC7 -. "不一致があるとき" .-> UC2
 ```
 
-ユーザーは `embed-dlid` で重複する ID の原本を確定し、`query-docs` で再構築の二択を選ぶ。検査の SKILL は、プロジェクト管理 AI と上位スキルのどちらからも呼び出せる。上位スキルは呼び出し元のコンテキストで実行されるので、検査の結果は同じプロジェクト管理 AI に届く。たとえば上位スキルは、検索の前に再構築が必要かを `check-toc` で判断できる。
+ユーザーは `embed-dlid` で重複する ID の原本を確定し、`query-docs` で再構築の二択を選ぶ。検査の SKILL は、プロジェクト管理 AI と上位スキルのどちらからも呼び出せる。上位スキルは呼び出し元のコンテキストで実行されるので、検査の結果は同じプロジェクト管理 AI に届く。たとえば上位スキルは、検索の前に再構築が必要かを `check-toc` で判断できる。上位スキルは文書を DLID で記録しておき、読む時点で `resolve-dlid` から現在のパスを得る。
 
 <a id="sec-3"></a>
 
@@ -341,6 +350,38 @@ sequenceDiagram
     end
 ```
 
+<a id="sec-3-8"></a>
+
+### 3.8 resolve-dlid
+
+```mermaid
+sequenceDiagram
+    participant Caller as 上位スキル・プロジェクト管理 AI
+    participant Skill as resolve-dlid
+    participant Scripts as script 群
+    participant State as 管理状態
+    participant Docs as 管理対象 Markdown
+    participant Index as index-docs
+
+    Caller->>Skill: DLID の並び
+    Skill->>Scripts: 解決を依頼する
+    Scripts->>State: 記録されたパスと所属する文書を読み取る
+    alt 管理状態を読み取れない
+        Scripts-->>Skill: 失敗と原因
+        Skill-->>Caller: 失敗と原因を返す
+    else 読み取れた
+        loop DLID ごと
+            Scripts->>Docs: 記録されたパスの文書を読み、DLID を照合する
+        end
+        Scripts-->>Skill: DLID ごとの解決結果
+        Skill-->>Caller: 解決済み（パス、セクションは見出しとアンカー）、記録されたパスに無い、記録が無いのいずれか
+        Note over Caller,Index: 後工程
+        opt 記録されたパスに無い DLID がある
+            Caller->>Index: ToC を再構築する
+        end
+    end
+```
+
 <a id="sec-4"></a>
 
 ## 4. カスタム Agent との受け渡し
@@ -377,6 +418,7 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [des-002-sec-3]: DES-002-execution-responsibilities.md#sec-3
 [des-008-sec-4]: DES-008-content-rules.md#sec-4
 [des-006-sec-2]: DES-006-search.md#sec-2
+[des-006-sec-3]: DES-006-search.md#sec-3
 [des-005-sec-2-1]: DES-005-indexing.md#sec-2-1
 [des-008-sec-1]: DES-008-content-rules.md#sec-1
 [des-005-sec-2]: DES-005-indexing.md#sec-2

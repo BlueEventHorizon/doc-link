@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクトの状態
 
-本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装計画段階**にある。要件定義書と設計書は承認済み。`plugins/` や `tests/` 配下の実装コードはまだ存在せず、`docs/` 配下の仕様書・ルール文書のみが追跡対象。テストと整形の確認はローカルで行い、CI は置かない。
+本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装段階**にある。要件定義書と設計書は承認済みで、実装計画は `docs/specs/plan/doc-link_plan.json` にある。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行い、CI は置かない。
 
 doc-link が実現しようとしている内容（パスでなく文書 ID による恒久的な文書管理、参照関係の機械的把握、変更影響の通知）は `docs/specs/requirement/REQ-001_overview.md` の「1. 文書の目的」「3. 目的」に要約がある。
 
@@ -16,7 +16,7 @@ dprint check
 # 整形を適用
 dprint fmt
 
-# 単体テスト（tests/ が作成されたら）
+# 単体テスト
 uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-py python -m unittest discover -s tests -p 'test_*.py'
 ```
 
@@ -37,7 +37,7 @@ uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-p
 - 実装（`plugins/` 配下の script・SKILL.md）を書く段階になったら [docs/rules/implementation_guidelines.md][implementation_guidelines] に従う。特に以下は MANDATORY:
   - Python script は `uv run` で実行し、依存は PEP 723 で宣言する。外部依存は PyYAML と markdown-it-py のみ許容（それ以外は標準ライブラリ）。Python と依存は最新の安定版を使う。外部コマンド呼び出しは Bash
   - Node.js を使わない（ツール・パッケージ・GitHub Actions のアクションを含む）
-  - `plugins/` 配下の `.py` にはテスト必須（`tests/{plugin}/{skill}/` に配置、`test_*.py` 命名）
+  - `plugins/` 配下の `.py` にはテスト必須（`tests/{plugin}/{skill}/` に配置、プラグイン共通の `scripts/` のテストは `tests/{plugin}/scripts/`、`test_*.py` 命名）
   - SKILL.md にロジックをインライン記述しない。独立スクリプトを呼び出す形にする
   - 配布物（SKILL.md / agents / commands / 配布物内蔵 docs）から本リポジトリの `docs/specs/` `docs/rules/` を参照しない
   - バージョン関連ファイル（`plugin.json` の version、CHANGELOG 等）は作業 PR で編集しない。更新は `/forge:update-version` のみ

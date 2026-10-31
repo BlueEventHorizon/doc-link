@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (rules)
   key: rules
-  generated_at: 2026-10-26T07:57:01Z
+  generated_at: 2026-10-31T13:13:37Z
   file_count: 6
 
 docs:
@@ -103,37 +103,39 @@ docs:
       - background Agent
   docs/rules/implementation_guidelines.md:
     title: Implementation Guidelines
-    purpose: "Defines rules for implementing doc-link plugin scripts and SKILL.md: language and dependency choice, testing, file placement, temporary files, fallback handling, and version-file limits."
+    purpose: Defines rules for implementing doc-link plugin scripts and SKILL.md, covering language and dependencies, tests, file placement, temporary files, distribution boundaries, and fallback handling.
     content_details:
-      - "Language choice: Python for data transform and parsing, Bash for external commands, file operations and pipes"
-      - Python standard library first; only PyYAML and markdown-it-py are approved external dependencies
-      - Python scripts run via uv run with PEP 723 inline metadata; Node.js is prohibited
-      - Tests under tests/{plugin}/{skill}/test_{module}.py using unittest; AI-judgment tests kept separate as manual
-      - SKILL.md must not hold inline script logic; it calls standalone scripts via CLAUDE_SKILL_DIR
-      - Single-skill assets go under skills/{skill}/, shared assets under plugin-root scripts/ and docs/; no direct reference into another skill directory
-      - Temporary files written with the Write tool to .temp/doc-link/<skill>/ with session ID in name; no shell heredocs and no fixed names
-      - Distributed files (SKILL.md, agents, commands, bundled docs) must not reference development-only spec or design IDs or paths
-      - Other components are reached only through public SKILL argument and output contracts, never by calling their scripts directly
-      - Unused code is deleted without commented-out remnants; fallbacks only with explained recovery; version files not edited in routine work
+      - Python for data transformation and parsing, Bash for external commands and file operations, and Node.js is prohibited
+      - Python run via uv run with PEP 723 inline metadata, and only PyYAML and markdown-it-py are approved external dependencies
+      - Python scripts need unittest tests at tests/{plugin}/{skill}/test_{module}.py, and AI-judgment tests are kept separate as manual tests
+      - SKILL.md must not contain inline logic and instead calls independent scripts via CLAUDE_SKILL_DIR or CLAUDE_PLUGIN_ROOT
+      - Scripts go in skills/{skill}/scripts when one skill uses them and in plugin-root scripts when shared, and cross-skill direct references are forbidden
+      - Temporary files are written with the Write tool to .temp/doc-link/<skill>/<name>_${CLAUDE_SESSION_ID}.md, never via shell heredoc, trap EXIT, or the mktemp default
+      - Distribution files (SKILL.md, agents, commands, bundled docs) must not reference development-only docs by path or spec ID
+      - Interfaces to other components are limited to the arguments and output contract published in SKILL.md, and internal scripts are never called directly
+      - Fallbacks are allowed only with an explainable recovery, otherwise errors are reported explicitly instead of silent default substitution
+      - Version files (plugin.json version, marketplace.json, CHANGELOG, git tags) are not edited during regular work
     applicable_tasks:
-      - Implementing doc-link plugin scripts
-      - Implementing or modifying SKILL.md files
-      - Creating tests for Python scripts under plugins
-      - Deciding script placement and file layout
-      - Reviewing script language selection and dependency additions
-      - Reviewing fallback and error-handling design in scripts or SKILL procedures
-      - Reviewing temporary file handling in SKILL procedures
+      - Implementation of doc-link plugin Python scripts
+      - Implementation of doc-link SKILL.md files
+      - Creation of unittest tests for doc-link Python scripts
+      - Review of script language and dependency choices
+      - Decision on placement of scripts, docs, and shared assets
+      - Modification of temporary file handling in SKILL procedures
+      - Review of fallback and error handling in scripts
+      - Review of distribution-facing files for development doc references
+      - Handling of version files during feature or fix work
     keywords:
       - PEP 723
       - uv run
       - PyYAML
       - markdown-it-py
-      - unittest
-      - test_*.py
+      - SKILL.md
       - CLAUDE_SKILL_DIR
+      - unittest
+      - plugin.json
       - .temp/doc-link
-      - Node.js
-      - plugin.json version
+      - fallback
   docs/rules/script_error_output_rules.md:
     title: Script Error Output Rules
     purpose: Defines how plugin Python scripts return exit codes and error output, fixing the shared meaning of codes 0 to 2, requiring codes 3 and above to be declared in each script docstring, and specifying the JSON error format on stdout.

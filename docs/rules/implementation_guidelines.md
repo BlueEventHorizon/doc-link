@@ -41,6 +41,7 @@ doc-link プラグインのスクリプト（Python / Bash）と SKILL.md を実
 | 利用者のローカルのスクリプト | 対象外             | 配布物ではない                                   |
 
 - テストは `tests/{plugin}/{skill}/` に置き、`test_{module}.py` と命名する
+- プラグイン直下の `scripts/` に置く共通スクリプトのテストは `tests/{plugin}/scripts/` に置く。`scripts` という名前のスキルは作らない
 - テストは次のコマンドで実行する
 
 ```bash

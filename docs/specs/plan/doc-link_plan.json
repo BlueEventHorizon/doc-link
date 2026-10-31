@@ -180,7 +180,7 @@
       "task_id": "TASK-001",
       "title": "プラグインの骨格と DLID の認識・発行",
       "priority": 95,
-      "status": "in_progress",
+      "status": "completed",
       "design_id": "DES-008",
       "depends_on": [],
       "group_id": null,

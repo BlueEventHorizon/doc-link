@@ -1,7 +1,7 @@
 # DES-010 SKILL と Agent の構成
 
 **状態**: 承認済み\
-**更新日**: 2026-10-29\
+**更新日**: 2026-10-30\
 **根拠**: [要件総論][req-001]、[実行主体][des-002]
 
 <a id="sec-1"></a>
@@ -100,6 +100,7 @@ flowchart LR
     PM --> UC2
     PM --> UC3
     PM --> CHK
+    Caller --> UC1
     Caller --> UC2
     Caller --> UC3
     Caller --> CHK
@@ -120,7 +121,7 @@ flowchart LR
 
 ### 3.1 embed-dlid
 
-起動を書き込みの承認とし、重複する ID の原本の確定以外では利用者に確認しない（要件 D-040）。対象は呼び出し元が指定したディレクトリ・パス・グロブと除外で決める（要件 D-041）。
+起動を書き込みの承認とし、重複する ID の原本の確定以外では利用者に確認しない（要件 D-040）。対象は `index-docs` と同じ管理キーと管理対象指定で決める（要件 D-041）。
 
 ```mermaid
 sequenceDiagram
@@ -132,7 +133,7 @@ sequenceDiagram
     participant Docs as 管理対象 Markdown
     participant Index as index-docs
 
-    PM->>Skill: ディレクトリ・パスを指定して起動
+    PM->>Skill: 管理キーと管理対象指定を渡して起動
     Skill->>Scripts: 付与計画の作成
     Scripts->>Docs: doc_link_id・見出し・リンクを読み取る
     Scripts->>State: 既存の ID と照合する

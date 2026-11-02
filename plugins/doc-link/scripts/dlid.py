@@ -16,8 +16,8 @@ DLID は、固定プレフィックス `DLID-` と、小文字の Crockford Base
 - 発行: `secrets` による 60 ビットの暗号論的乱数を 12 文字で表し、`DLID-` を
   前置する。値に文書の意味を持たせず、発行時に既存の ID と照合しない（D-028、D-030）。
 
-frontmatter の切り出しと PyYAML による解析、アンカー行の抽出は本部品の範囲外であり、
-呼び出し側が解析後の値を `recognize_dlid` に渡す。
+frontmatter の切り出しと解析、アンカー行の抽出は本部品の範囲外であり（`markdown_parse`
+が行う）、呼び出し側が取り出した値を `recognize_dlid` に渡す。
 """
 
 import re
@@ -49,7 +49,8 @@ def recognize_dlid(value: object) -> str | None:
     """値を DLID として認識する。
 
     Args:
-        value: PyYAML で解析した後の frontmatter の `doc_link_id` の値、または
+        value: frontmatter の最上位のキーだけを読む最小限の解析（`markdown_parse`）で
+            取り出した `doc_link_id` の値、または
             アンカー行の id 属性の文字列。キーが欠落しているときは None を渡す。
 
     Returns:

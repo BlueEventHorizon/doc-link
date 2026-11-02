@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (rules)
   key: rules
-  generated_at: 2026-10-31T13:13:37Z
+  generated_at: 2026-11-02T03:25:59Z
   file_count: 6
 
 docs:
@@ -103,39 +103,37 @@ docs:
       - background Agent
   docs/rules/implementation_guidelines.md:
     title: Implementation Guidelines
-    purpose: Defines rules for implementing doc-link plugin scripts and SKILL.md, covering language and dependencies, tests, file placement, temporary files, distribution boundaries, and fallback handling.
+    purpose: Defines rules for implementing the doc-link plugin scripts (Python and Bash) and SKILL.md, covering language choice, allowed dependencies, test placement, script and file placement, temporary files, error fallback, and version file handling
     content_details:
-      - Python for data transformation and parsing, Bash for external commands and file operations, and Node.js is prohibited
-      - Python run via uv run with PEP 723 inline metadata, and only PyYAML and markdown-it-py are approved external dependencies
-      - Python scripts need unittest tests at tests/{plugin}/{skill}/test_{module}.py, and AI-judgment tests are kept separate as manual tests
-      - SKILL.md must not contain inline logic and instead calls independent scripts via CLAUDE_SKILL_DIR or CLAUDE_PLUGIN_ROOT
-      - Scripts go in skills/{skill}/scripts when one skill uses them and in plugin-root scripts when shared, and cross-skill direct references are forbidden
-      - Temporary files are written with the Write tool to .temp/doc-link/<skill>/<name>_${CLAUDE_SESSION_ID}.md, never via shell heredoc, trap EXIT, or the mktemp default
-      - Distribution files (SKILL.md, agents, commands, bundled docs) must not reference development-only docs by path or spec ID
-      - Interfaces to other components are limited to the arguments and output contract published in SKILL.md, and internal scripts are never called directly
-      - Fallbacks are allowed only with an explainable recovery, otherwise errors are reported explicitly instead of silent default substitution
-      - Version files (plugin.json version, marketplace.json, CHANGELOG, git tags) are not edited during regular work
+      - "Language choice table: Python for data transformation and parsing, Bash for external commands and file operations, Node.js is not used"
+      - Python dependencies limited to PyYAML and markdown-it-py, other libraries require user approval
+      - Python scripts run via uv run with PEP 723 inline metadata declaring dependencies
+      - Test placement under tests/{plugin}/{skill}/test_{module}.py and tests/{plugin}/scripts/ for shared scripts, with AI-judgment tests kept separate as manual
+      - SKILL.md must not contain inline script logic and must call independent scripts via CLAUDE_SKILL_DIR or CLAUDE_PLUGIN_ROOT
+      - "Script placement rule: skills/{skill}/scripts/ for single-skill assets, plugin-root scripts/ for shared assets, no direct reference into another skill directory"
+      - Temporary files written with the Write tool to .temp/doc-link/<skill>/ with session ID in the name, never via shell heredoc or echo
+      - Distributed files (SKILL.md, agents, commands, bundled docs) must not reference development-only docs by path or spec ID
+      - Unused code is deleted rather than commented out or marked deprecated
+      - Fallbacks only when the recovery is explainable, otherwise report the error explicitly
+      - Version files such as plugin.json version and CHANGELOG are not edited in normal work
     applicable_tasks:
       - Implementation of doc-link plugin Python scripts
-      - Implementation of doc-link SKILL.md files
-      - Creation of unittest tests for doc-link Python scripts
-      - Review of script language and dependency choices
-      - Decision on placement of scripts, docs, and shared assets
-      - Modification of temporary file handling in SKILL procedures
-      - Review of fallback and error handling in scripts
-      - Review of distribution-facing files for development doc references
-      - Handling of version files during feature or fix work
+      - Implementation of doc-link SKILL.md and Bash scripts
+      - Creation of unit tests for doc-link Python scripts
+      - Decision on script placement and dependency addition for doc-link
+      - Review of doc-link implementation against implementation rules
+      - Design of temporary file handling in doc-link SKILL procedures
     keywords:
       - PEP 723
       - uv run
       - PyYAML
       - markdown-it-py
-      - SKILL.md
-      - CLAUDE_SKILL_DIR
       - unittest
-      - plugin.json
+      - CLAUDE_SKILL_DIR
+      - CLAUDE_PLUGIN_ROOT
       - .temp/doc-link
       - fallback
+      - plugin.json version
   docs/rules/script_error_output_rules.md:
     title: Script Error Output Rules
     purpose: Defines how plugin Python scripts return exit codes and error output, fixing the shared meaning of codes 0 to 2, requiring codes 3 and above to be declared in each script docstring, and specifying the JSON error format on stdout.
@@ -170,32 +168,32 @@ docs:
       - SKILL.md caller
   docs/rules/uv_usage_rules.md:
     title: uv Usage Rules
-    purpose: Defines how Python scripts are run and their dependencies managed with uv, covering PEP 723 declarations, adding, locking and upgrading dependencies, the three-day publication wait, and the Python version policy.
+    purpose: Defines rules for running Python scripts with uv and managing their dependencies, Python versions, and lock files, including a 3-day cooldown that excludes newly published package versions to guard against hijacked releases
     content_details:
-      - Run Python scripts with uv run, never the system python3
-      - Declare dependencies and the Python version per script via PEP 723 inline metadata
-      - Add dependencies with uv add --script --bounds lower and remove them with uv remove --script
-      - Never hand-write dependency version numbers, since they become known-vulnerable lower bounds
-      - Lock with uv lock --script and run with uv run --locked; commit the lock file with the script
-      - Check outdated dependencies with uv tree --script --outdated and upgrade with --upgrade or --upgrade-package
-      - Add, lock and upgrade with --exclude-newer 3 days to skip versions published less than three days ago
-      - Urgent security fixes may use --exclude-newer-package after checking the change and publisher
+      - Python scripts run only via uv run, never with the system python3 directly
+      - Dependencies and Python version declared per script with PEP 723 inline metadata
+      - Dependencies added with uv add --script --bounds lower and removed with uv remove --script, versions never hand-written
+      - Lock file created with uv lock --script and committed together with the script
+      - Execution uses uv run --locked with the 3-day exclude-newer cutoff, and --locked is never dropped
+      - Outdated dependency check with uv tree --script --outdated and upgrade with uv lock --upgrade or --upgrade-package
+      - 3-day cooldown excludes package versions published less than 3 days ago, with the reason and Renovate preset basis
+      - Urgent security fixes may use exclude-newer-package per package after verifying the change and publisher
       - requires-python lower bound follows the latest stable Python, checked with uv python list
-      - The three-day wait only guards against attacks discovered soon after publication
+      - "Known limit: the cooldown only defends against attacks discovered soon after publication"
     applicable_tasks:
-      - Running Python scripts in the doc-link plugin
-      - Adding or removing script dependencies
-      - Locking and upgrading script dependencies
-      - Setting requires-python for new scripts
-      - Reviewing dependency version pinning and publication wait settings
+      - Adding, removing, or upgrading dependencies of a Python script
+      - Creating or updating a script lock file
+      - Executing Python scripts in a plugin
+      - Deciding the Python version requirement of a script
+      - Reviewing supply chain safety of script dependencies
     keywords:
-      - uv
       - uv run
-      - PEP 723
       - uv add --script
-      - uv lock
+      - uv lock --script
       - "--locked"
       - "--exclude-newer"
-      - "--upgrade"
+      - "--exclude-newer-package"
+      - PEP 723
       - requires-python
+      - uv tree --outdated
       - uv python list

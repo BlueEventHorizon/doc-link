@@ -17,7 +17,7 @@ dprint check
 dprint fmt
 
 # 単体テスト
-uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-py python -m unittest discover -s tests -p 'test_*.py'
+uv run --python 3.15 --exclude-newer "3 days" --with markdown-it-py python -m unittest discover -s tests -p 'test_*.py'
 ```
 
 ## ドキュメント構成
@@ -34,6 +34,7 @@ uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-p
 ## 文書を書く・直すときのルール
 
 - 文書の記述スタイル（タグ・見出し・参照記法・履歴を置かない等）は、末尾の forge 規範ブロックと forge 同梱の文書スタイル指針に従う。
+- 仕様書では、用語集（`docs/specs/requirement/REQ-001_overview.md` の §4）の用語を `[用語]` の形で書く。新しい用語は用語集に定義してから使う。
 - 実装（`plugins/` 配下の script・SKILL.md）を書く段階になったら [docs/rules/implementation_guidelines.md][implementation_guidelines] に従う。特に以下は MANDATORY:
   - Python script は `uv run` で実行し、依存は PEP 723 で宣言する。外部依存は PyYAML と markdown-it-py のみ許容（それ以外は標準ライブラリ）。Python と依存は最新の安定版を使う。外部コマンド呼び出しは Bash
   - Node.js を使わない（ツール・パッケージ・GitHub Actions のアクションを含む）

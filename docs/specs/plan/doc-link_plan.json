@@ -179,7 +179,7 @@
       "task_id": "TASK-001",
       "title": "共通基盤の雛形（uv・PEP 723・テスト・fixture の置き場）",
       "priority": 99,
-      "status": "failed",
+      "status": "completed",
       "design_id": "DES-002",
       "depends_on": [],
       "group_id": null,

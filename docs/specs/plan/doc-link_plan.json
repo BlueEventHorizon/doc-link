@@ -205,7 +205,7 @@
       "task_id": "TASK-002",
       "title": "Markdown の読取り規則（frontmatter・見出しとセクション範囲・参照定義・アンカー）",
       "priority": 98,
-      "status": "pending",
+      "status": "failed",
       "design_id": "DES-008",
       "depends_on": [
         "TASK-001"
@@ -261,7 +261,7 @@
       "task_id": "TASK-004",
       "title": "対象指定の検証・展開・固定の除外・パスの正規化",
       "priority": 96,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-005",
       "depends_on": [
         "TASK-001"
@@ -289,7 +289,7 @@
       "task_id": "TASK-005",
       "title": "管理状態の保存層（`.doc-link/` の決定論的な JSON と置き換え）",
       "priority": 96,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-002",
       "depends_on": [
         "TASK-001"
@@ -448,7 +448,7 @@
       "task_id": "TASK-010",
       "title": "AI 出力の検証器（記述上限・内部許容上限の非開示）",
       "priority": 88,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-008",
       "depends_on": [
         "TASK-001"

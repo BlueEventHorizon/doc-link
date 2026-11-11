@@ -1,339 +1,33 @@
 {
   "requirements_traceability": [
     {
-      "requirement_id": "FR-001",
-      "title": "[文書 ID]の発行と読み取り",
-      "design_id": "DES-008",
+      "requirement_id": "REQ-001",
+      "title": "総論",
+      "design_id": "DES-002",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-002",
-      "title": "[文書 ID]の検証",
+      "requirement_id": "REQ-002",
+      "title": "Index 対象と[文書 ID]",
       "design_id": "DES-005",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-003",
-      "title": "文書の移動・改名の認識",
+      "requirement_id": "REQ-003",
+      "title": "[ToC]管理",
       "design_id": "DES-005",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-004",
-      "title": "[ToC]の構築と再構築",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-005",
-      "title": "[文書情報]の生成",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-006",
+      "requirement_id": "REQ-004",
       "title": "文書検索",
       "design_id": "DES-006",
       "status": "pending"
     },
     {
-      "requirement_id": "FR-007",
-      "title": "[文書 ID]を使用した参照",
+      "requirement_id": "REQ-005",
+      "title": "参照と変更通知",
       "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-008",
-      "title": "参照関係の抽出",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-009",
-      "title": "ID 付きリンクの検査",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-010",
-      "title": "参照パス修正情報の通知",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-011",
-      "title": "文書全体の変更検出",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-012",
-      "title": "セクション単位の変更検出",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-013",
-      "title": "変更影響候補の特定",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-014",
-      "title": "[変更影響候補の通知]",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-015",
-      "title": "変更報告の管理",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-016",
-      "title": "不整合検査",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-017",
-      "title": "[ToC 識別キー]と[Index 対象指定]の受領",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "FR-018",
-      "title": "[DLID]の解決",
-      "design_id": "DES-006",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-001",
-      "title": "[ToC]再構築の一貫性",
-      "design_id": "DES-003",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-002",
-      "title": "決定性",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-003",
-      "title": "冪等性",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-004",
-      "title": "[Index 対象文書]への書き込み境界",
-      "design_id": "DES-002",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-005",
-      "title": "診断可能性",
-      "design_id": "DES-002",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-006",
-      "title": "中断後の再実行",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-007",
-      "title": "スケーラビリティ",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "NFR-008",
-      "title": "生成指示と検証基準の分離",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-001",
-      "title": "文書移動",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-002",
-      "title": "パス変更時の再解析抑制",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-003",
-      "title": "参照パス不一致の検出",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-004",
-      "title": "参照パス修正情報の通知",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-005",
-      "title": "ID 重複",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-006",
-      "title": "変更影響候補の列挙",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-007",
-      "title": "セクション単位の限定",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-008",
-      "title": "Index 対象から外れた文書への参照",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-009",
-      "title": "[変更影響候補の通知]",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-010",
-      "title": "[AI 生成フィールド]の許容余白",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-011",
-      "title": "内部許容上限の非提示",
-      "design_id": "DES-008",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-012",
-      "title": "[文書 ID]が存在しない状態の統一",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-013",
-      "title": "[文書 ID]のシステム発行",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-014",
-      "title": "発行済み[文書 ID]の不変性",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-016",
-      "title": "[文書 ID]の非意味性",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-017",
-      "title": "[ToC]の再構築",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-018",
-      "title": "再構築失敗時の現在状態確定防止",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-019",
-      "title": "検索前の[ToC]再構築確認",
-      "design_id": "DES-006",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-020",
-      "title": "再構築と通知の独立",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-021",
-      "title": "[ToC 識別キー]ごとの desired state",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-022",
-      "title": "呼び出し元から対象指定を受け取る基本インターフェース",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-023",
-      "title": "[文書 ID]と[ToC 識別キー]の独立性",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-024",
-      "title": "外部設定との責務境界",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-025",
-      "title": "[文書 ID]確認の段階完了",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-026",
-      "title": "情報更新前の変更集合確定",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-027",
-      "title": "変更種別に応じた情報更新",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-028",
-      "title": "参照先ディレクトリ検索による検証",
-      "design_id": "DES-007",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-029",
-      "title": "同一文書の複数キー所属",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-030",
-      "title": "構築・検索による[Index 対象文書]の不変",
-      "design_id": "DES-005",
-      "status": "pending"
-    },
-    {
-      "requirement_id": "AC-031",
-      "title": "[DLID]の解決",
-      "design_id": "DES-006",
       "status": "pending"
     }
   ],
@@ -341,9 +35,8 @@
     {
       "design_id": "DES-001",
       "requirement_ids": [
-        "FR-017",
-        "AC-014",
-        "AC-018"
+        "REQ-002",
+        "REQ-003"
       ],
       "task_ids": [
         "TASK-013",
@@ -354,11 +47,7 @@
     {
       "design_id": "DES-002",
       "requirement_ids": [
-        "NFR-004",
-        "NFR-005",
-        "NFR-006",
-        "NFR-007",
-        "NFR-008"
+        "REQ-001"
       ],
       "task_ids": [
         "TASK-001",
@@ -370,9 +59,7 @@
     {
       "design_id": "DES-003",
       "requirement_ids": [
-        "NFR-001",
-        "NFR-002",
-        "NFR-003"
+        "REQ-001"
       ],
       "task_ids": [
         "TASK-005",
@@ -383,13 +70,9 @@
     {
       "design_id": "DES-004",
       "requirement_ids": [
-        "FR-002",
-        "FR-004",
-        "FR-005",
-        "NFR-005",
-        "AC-017",
-        "AC-018",
-        "AC-027"
+        "REQ-001",
+        "REQ-002",
+        "REQ-003"
       ],
       "task_ids": [
         "TASK-006",
@@ -401,38 +84,9 @@
     {
       "design_id": "DES-005",
       "requirement_ids": [
-        "FR-001",
-        "FR-002",
-        "FR-003",
-        "FR-004",
-        "FR-005",
-        "FR-011",
-        "FR-012",
-        "FR-017",
-        "NFR-001",
-        "NFR-002",
-        "NFR-003",
-        "NFR-006",
-        "NFR-007",
-        "AC-001",
-        "AC-002",
-        "AC-005",
-        "AC-012",
-        "AC-013",
-        "AC-014",
-        "AC-016",
-        "AC-017",
-        "AC-018",
-        "AC-020",
-        "AC-021",
-        "AC-022",
-        "AC-023",
-        "AC-024",
-        "AC-025",
-        "AC-026",
-        "AC-027",
-        "AC-029",
-        "AC-030"
+        "REQ-001",
+        "REQ-002",
+        "REQ-003"
       ],
       "task_ids": [
         "TASK-004",
@@ -447,10 +101,8 @@
     {
       "design_id": "DES-006",
       "requirement_ids": [
-        "FR-006",
-        "FR-018",
-        "AC-019",
-        "AC-031"
+        "REQ-002",
+        "REQ-004"
       ],
       "task_ids": [
         "TASK-015",
@@ -462,21 +114,8 @@
     {
       "design_id": "DES-007",
       "requirement_ids": [
-        "FR-007",
-        "FR-008",
-        "FR-009",
-        "FR-010",
-        "FR-013",
-        "FR-014",
-        "FR-015",
-        "FR-016",
-        "AC-003",
-        "AC-004",
-        "AC-006",
-        "AC-007",
-        "AC-008",
-        "AC-009",
-        "AC-028"
+        "REQ-003",
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-009",
@@ -487,18 +126,10 @@
     {
       "design_id": "DES-008",
       "requirement_ids": [
-        "FR-001",
-        "FR-003",
-        "FR-005",
-        "FR-007",
-        "FR-008",
-        "FR-009",
-        "FR-010",
-        "FR-011",
-        "FR-012",
-        "NFR-008",
-        "AC-010",
-        "AC-011"
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-002",
@@ -511,62 +142,11 @@
     {
       "design_id": "DES-009",
       "requirement_ids": [
-        "FR-001",
-        "FR-002",
-        "FR-003",
-        "FR-004",
-        "FR-005",
-        "FR-006",
-        "FR-007",
-        "FR-008",
-        "FR-009",
-        "FR-010",
-        "FR-011",
-        "FR-012",
-        "FR-013",
-        "FR-014",
-        "FR-015",
-        "FR-016",
-        "FR-017",
-        "FR-018",
-        "NFR-001",
-        "NFR-002",
-        "NFR-003",
-        "NFR-004",
-        "NFR-005",
-        "NFR-006",
-        "NFR-007",
-        "NFR-008",
-        "AC-001",
-        "AC-002",
-        "AC-003",
-        "AC-004",
-        "AC-005",
-        "AC-006",
-        "AC-007",
-        "AC-008",
-        "AC-009",
-        "AC-010",
-        "AC-011",
-        "AC-012",
-        "AC-013",
-        "AC-014",
-        "AC-016",
-        "AC-017",
-        "AC-018",
-        "AC-019",
-        "AC-020",
-        "AC-021",
-        "AC-022",
-        "AC-023",
-        "AC-024",
-        "AC-025",
-        "AC-026",
-        "AC-027",
-        "AC-028",
-        "AC-029",
-        "AC-030",
-        "AC-031"
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-022",
@@ -576,22 +156,10 @@
     {
       "design_id": "DES-010",
       "requirement_ids": [
-        "FR-001",
-        "FR-002",
-        "FR-003",
-        "FR-004",
-        "FR-005",
-        "FR-006",
-        "FR-009",
-        "FR-010",
-        "FR-011",
-        "FR-012",
-        "FR-013",
-        "FR-014",
-        "FR-015",
-        "FR-016",
-        "FR-017",
-        "FR-018"
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005"
       ],
       "task_ids": [
         "TASK-007",
@@ -611,7 +179,7 @@
       "task_id": "TASK-001",
       "title": "共通基盤の雛形（uv・PEP 723・テスト・fixture の置き場）",
       "priority": 99,
-      "status": "pending",
+      "status": "failed",
       "design_id": "DES-002",
       "depends_on": [],
       "group_id": null,

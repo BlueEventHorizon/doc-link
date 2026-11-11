@@ -1,0 +1,16 @@
+{
+  "name": "doc-link",
+  "owner": { "name": "k2moons" },
+  "metadata": {
+    "description": "Claude Code plugins for managing project documents by stable document IDs"
+  },
+  "plugins": [
+    {
+      "name": "doc-link",
+      "source": "./plugins/doc-link",
+      "description": "Index and search project Markdown by stable document IDs (DLIDs), track references between documents, and notify the documents affected by a change",
+      "author": { "name": "k2moons" },
+      "homepage": "https://github.com/BlueEventHorizon/doc-link"
+    }
+  ]
+}

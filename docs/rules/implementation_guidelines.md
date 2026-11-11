@@ -41,10 +41,11 @@ doc-link プラグインのスクリプト（Python / Bash）と SKILL.md を実
 | 利用者のローカルのスクリプト | 対象外             | 配布物ではない                                   |
 
 - テストは `tests/{plugin}/{skill}/` に置き、`test_{module}.py` と命名する
+- プラグイン直下の `scripts/` に置く共通スクリプトのテストは `tests/{plugin}/scripts/` に置く。`scripts` という名前のスキルは作らない
 - テストは次のコマンドで実行する
 
 ```bash
-uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-py python -m unittest discover -s tests -p 'test_*.py'
+uv run --python 3.15 --exclude-newer "3 days" --with markdown-it-py python -m unittest discover -s tests -p 'test_*.py'
 ```
 
 - テストを置くディレクトリの名前は、対象のスキル名と一致させる。スキルを改名したら、テストのディレクトリも同じ変更で改名する（片方だけ変えると、旧名のテストが新スキルを参照して静かに壊れる）
@@ -69,7 +70,7 @@ uv run --python 3.15 --exclude-newer "3 days" --with pyyaml --with markdown-it-p
 
 以下のスクリプトを実行して集計結果を得る:
 
-    uv run "${CLAUDE_SKILL_DIR}/scripts/aggregate.py" {入力パス}
+    uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/aggregate.py" {入力パス}
 ```
 
 ---

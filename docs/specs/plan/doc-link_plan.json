@@ -350,7 +350,7 @@
       "task_id": "TASK-007",
       "title": "embed-dlid: 書き込み・差分検証・取消し・結果報告と SKILL",
       "priority": 94,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-005",
       "depends_on": [
         "TASK-006"
@@ -384,7 +384,7 @@
       "task_id": "TASK-008",
       "title": "ID 確認と変更集合の確定",
       "priority": 88,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-005",
       "depends_on": [
         "TASK-003",

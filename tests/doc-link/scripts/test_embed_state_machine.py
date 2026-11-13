@@ -63,6 +63,33 @@ class AllowedTransitionsTest(unittest.TestCase):
                     state, sm.EVENT_FAIL, Facts(stage_failed=True), "E-06", sm.FAILED
                 )
 
+    def test_e05(self):
+        self.check(
+            sm.PLAN_CONFIRMED,
+            sm.EVENT_WRITE,
+            Facts(written_and_verified=True),
+            "E-05",
+            sm.DONE,
+        )
+
+    def test_e06_from_plan_confirmed(self):
+        for facts in (
+            Facts(stage_failed=True),
+            Facts(documents_unwritten=True),
+            Facts(written_and_verified=True, documents_unwritten=True),
+        ):
+            with self.subTest(facts=facts):
+                self.check(sm.PLAN_CONFIRMED, sm.EVENT_FAIL, facts, "E-06", sm.FAILED)
+
+    def test_e07(self):
+        self.check(
+            sm.FAILED,
+            sm.EVENT_RESTART,
+            Facts(rerun_requested=True),
+            "E-07",
+            sm.START,
+        )
+
     def test_e06_abandoned_while_awaiting_origin(self):
         self.check(
             sm.AWAITING_ORIGIN,
@@ -90,6 +117,16 @@ class RejectedTransitionsTest(unittest.TestCase):
             (sm.START, sm.EVENT_FAIL, Facts()),
             (sm.SCOPE_READY, sm.EVENT_FAIL, Facts(origin_abandoned=True)),
             (sm.START, sm.EVENT_FAIL, Facts(origin_abandoned=True)),
+            (sm.PLAN_CONFIRMED, sm.EVENT_WRITE, Facts()),
+            (sm.PLAN_CONFIRMED, sm.EVENT_WRITE, Facts(documents_unwritten=True)),
+            (
+                sm.PLAN_CONFIRMED,
+                sm.EVENT_WRITE,
+                Facts(written_and_verified=True, documents_unwritten=True),
+            ),
+            (sm.PLAN_CONFIRMED, sm.EVENT_FAIL, Facts()),
+            (sm.PLAN_CONFIRMED, sm.EVENT_FAIL, Facts(origin_abandoned=True)),
+            (sm.FAILED, sm.EVENT_RESTART, Facts()),
         ]
         for state, event, facts in cases:
             with self.subTest(state=state, event=event, facts=facts):
@@ -131,25 +168,50 @@ class RejectedTransitionsTest(unittest.TestCase):
             with self.subTest(state=state, event=event):
                 self.reject(state, event, full, sm.REJECT_NO_TRANSITION)
 
-    def test_transitions_owned_by_later_task_are_rejected(self):
+    def test_events_not_in_the_table_for_the_state_are_rejected(self):
         full = Facts(
             scope_expanded=True,
             reconciled=True,
             origin_confirmed=True,
             stage_failed=True,
             origin_abandoned=True,
+            written_and_verified=True,
+            documents_unwritten=True,
+            rerun_requested=True,
         )
-        for event in (
+        events = (
             sm.EVENT_EXPAND,
             sm.EVENT_RECONCILE,
             sm.EVENT_CONFIRM_ORIGIN,
+            sm.EVENT_WRITE,
             sm.EVENT_FAIL,
-            "write_done",
-            "restart",
-        ):
-            for state in (sm.PLAN_CONFIRMED, sm.DONE, sm.FAILED):
+            sm.EVENT_RESTART,
+        )
+        allowed = {
+            sm.START: {sm.EVENT_EXPAND, sm.EVENT_FAIL},
+            sm.SCOPE_READY: {sm.EVENT_RECONCILE, sm.EVENT_FAIL},
+            sm.AWAITING_ORIGIN: {sm.EVENT_CONFIRM_ORIGIN, sm.EVENT_FAIL},
+            sm.PLAN_CONFIRMED: {sm.EVENT_WRITE, sm.EVENT_FAIL},
+            sm.DONE: set(),
+            sm.FAILED: {sm.EVENT_RESTART},
+        }
+        for state, permitted in allowed.items():
+            for event in events:
+                if event in permitted:
+                    continue
                 with self.subTest(state=state, event=event):
                     self.reject(state, event, full, sm.REJECT_NO_TRANSITION)
+
+    def test_unknown_events_from_later_states_are_rejected(self):
+        for event in ("write_done", "bogus"):
+            for state in (sm.PLAN_CONFIRMED, sm.DONE, sm.FAILED):
+                with self.subTest(state=state, event=event):
+                    self.reject(
+                        state,
+                        event,
+                        Facts(written_and_verified=True, rerun_requested=True),
+                        sm.REJECT_NO_TRANSITION,
+                    )
 
     def test_default_facts_are_false(self):
         run = run_in(sm.START)
@@ -159,10 +221,10 @@ class RejectedTransitionsTest(unittest.TestCase):
 
     def test_table_can_be_extended(self):
         extra = sm.Transition(
-            "E-07", (sm.FAILED,), "restart", lambda s, f: True, "再実行", sm.START
+            "X-01", (sm.DONE,), "reopen", lambda s, f: True, "再開", sm.START
         )
-        run = sm.EmbedRun(sm.TRANSITIONS + (extra,), state=sm.FAILED)
-        run.apply("restart")
+        run = sm.EmbedRun(sm.TRANSITIONS + (extra,), state=sm.DONE)
+        run.apply("reopen")
         self.assertEqual(run.state, sm.START)
 
 
@@ -173,6 +235,22 @@ class FlowTest(unittest.TestCase):
         run.apply(sm.EVENT_RECONCILE, Facts(reconciled=True, duplicates_found=True))
         run.apply(sm.EVENT_CONFIRM_ORIGIN, Facts(origin_confirmed=True))
         self.assertEqual(run.state, sm.PLAN_CONFIRMED)
+
+    def test_path_to_done(self):
+        run = sm.EmbedRun()
+        run.apply(sm.EVENT_EXPAND, Facts(scope_expanded=True))
+        run.apply(sm.EVENT_RECONCILE, Facts(reconciled=True))
+        run.apply(sm.EVENT_WRITE, Facts(written_and_verified=True))
+        self.assertEqual(run.state, sm.DONE)
+
+    def test_failed_write_then_rerun_starts_over(self):
+        run = sm.EmbedRun()
+        run.apply(sm.EVENT_EXPAND, Facts(scope_expanded=True))
+        run.apply(sm.EVENT_RECONCILE, Facts(reconciled=True))
+        run.apply(sm.EVENT_FAIL, Facts(documents_unwritten=True))
+        self.assertEqual(run.state, sm.FAILED)
+        run.apply(sm.EVENT_RESTART, Facts(rerun_requested=True))
+        self.assertEqual(run.state, sm.START)
 
 
 if __name__ == "__main__":

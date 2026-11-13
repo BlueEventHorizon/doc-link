@@ -22,8 +22,16 @@ E-05 と計画確定からの E-06、再実行の E-07 は、書き込みの部�
   `no_transition`、ガード不成立は `guard_unmet` とする
 """
 
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 from dataclasses import dataclass
+
+from transition_table import (  # noqa: F401  再公開（既存の利用側が使う名前）
+    REJECT_GUARD_UNMET,
+    REJECT_NO_TRANSITION,
+    StateRun,
+    Transition,
+    TransitionRejected,
+)
 
 START = "開始"
 SCOPE_READY = "対象確定"
@@ -39,9 +47,6 @@ EVENT_WRITE = "write"
 EVENT_FAIL = "fail"
 EVENT_RESTART = "restart"
 
-REJECT_NO_TRANSITION = "no_transition"
-REJECT_GUARD_UNMET = "guard_unmet"
-
 
 @dataclass(frozen=True)
 class Facts:
@@ -56,16 +61,6 @@ class Facts:
     written_and_verified: bool = False
     documents_unwritten: bool = False
     rerun_requested: bool = False
-
-
-@dataclass(frozen=True)
-class Transition:
-    transition_id: str
-    sources: tuple[str, ...]
-    event: str
-    guard: Callable[[str, Facts], bool]
-    guard_text: str
-    target: str
 
 
 TRANSITIONS: tuple[Transition, ...] = (
@@ -140,34 +135,10 @@ TRANSITIONS: tuple[Transition, ...] = (
 )
 
 
-class TransitionRejected(Exception):
-    """表にない遷移、またはガード不成立。状態は変わらない。"""
-
-    def __init__(self, reason: str, state: str, event: str):
-        super().__init__(f"{reason}: 状態 {state} で事象 {event}")
-        self.reason = reason
-        self.state = state
-        self.event = event
-
-
-class EmbedRun:
+class EmbedRun(StateRun):
     """付与操作 1 回の状態。`apply` は表に従って遷移させ、拒否したときは状態を変えない。"""
 
     def __init__(
         self, transitions: Iterable[Transition] = TRANSITIONS, state: str = START
     ):
-        self._transitions = tuple(transitions)
-        self.state = state
-
-    def apply(self, event: str, facts: Facts | None = None) -> Transition:
-        facts = facts if facts is not None else Facts()
-        candidates = [
-            t for t in self._transitions if t.event == event and self.state in t.sources
-        ]
-        if not candidates:
-            raise TransitionRejected(REJECT_NO_TRANSITION, self.state, event)
-        for transition in candidates:
-            if transition.guard(self.state, facts):
-                self.state = transition.target
-                return transition
-        raise TransitionRejected(REJECT_GUARD_UNMET, self.state, event)
+        super().__init__(transitions, state, Facts)

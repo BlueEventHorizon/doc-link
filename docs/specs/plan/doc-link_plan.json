@@ -505,7 +505,7 @@
       "task_id": "TASK-012",
       "title": "[ToC 候補]の検査・一括公開と構築の状態遷移",
       "priority": 86,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-004",
       "depends_on": [
         "TASK-009",

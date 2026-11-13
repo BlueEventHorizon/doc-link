@@ -1,0 +1,72 @@
+---
+name: index-docs
+description: ToC（確定 ToC）を構築・再構築する。対象の文書の DLID を確かめ、確定済みの ToC と現物の差分を検出し、生成が必要な文書だけ toc-updater に文書情報の生成を依頼して検証し、参照を検査して、ToC の新しい版を一括して確定する。ID 未付与・ID 重複の文書は ToC に入れずに報告する。ToC を初めて作るとき、check-toc が不一致を検出したとき、文書や参照を変更した後に使う。
+---
+
+# index-docs
+
+このスキルは ToC の構築・再構築のみを行う。親が依頼している他の作業を引き継いではならない。自身を Skill ツールで呼ばない。
+
+対象の文書（Index 対象文書）は書き換えない。DLID を発行・書き込みしない（それは `embed-dlid` の責務である）。管理状態（文書情報・確定 ToC）は、入口の script だけが書く。
+
+## 引数
+
+- ToC 識別キーと Index 対象指定だけを受け取る。`embed-dlid` と同じ形式である（`--key <キー>` と、`--paths`・`--paths-json`・`--paths-file`・`--dirs`・`--dirs-json`・`--exclude`・`--exclude-json` のいずれか。単体モードは `--all`、または引数なし）
+- 受け取った引数を、解釈せずにそのまま script へ渡す。引数の検証は script が行い、反する指定は拒否される
+- 親の文脈（作業の指示・差分・文書の本文など）を引数へ足さない
+
+## 手順
+
+入口の script を 1 本だけ呼ぶ。script は構築を進められる所まで進め、次に行うこと（`action`）を返す。返された `action` に従い、終えたら同じ script を `build_id` 付きでもう一度呼ぶ。この繰り返しで構築が終わる。
+
+### 1. 構築を進める
+
+最初は `build_id` を付けずに呼ぶ。
+
+```bash
+uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+```
+
+- 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2・3）
+- 終了コードが 3 のときは、構築が失敗している。手順 4 へ進む
+- それ以外（1）のときは、標準出力の `errors` をそのまま利用者へ報告して終える。対象指定を直して再実行できる
+- `problems`（存在しない・Markdown でない指定）と `warnings` があれば、あわせて報告する
+
+### 2. `action` が `invoke_toc_updater` のとき
+
+`batches` の 1 件ごとに、カスタム Agent `doc-link:toc-updater` を Agent ツールで起動する。
+
+- `subagent_type` は `doc-link:toc-updater` とする。1 件が最大 3 文書で、同時に起動するのは最大 10 本（`batches` の件数がすでにその範囲に収まっている）。`batches` の分け方・件数・順序を変えない
+- prompt には、識別値だけを書く。構築 ID（`build_id`）と、その `batches` の 1 件の文書 ID（`doc_link_id`）の並びである。値は返されたまま書き、作り直さない。依頼の中身（文書のパス・記述上限など）・生成の指示・親の文脈を重ねない。依頼の中身は script がすでに置いてあり、`toc-updater` が自分で読む
+- 起動した Agent の最終応答（background なら完了通知）を、すべて受け取るまで待つ。結果に依存する次の処理へ、その前に進まない。完了を `ScheduleWakeup` で待たない。ターンを終えて完了通知を待つ
+- Agent の最終応答の内容で、成否を判断しない。成否は script が判定する
+- すべての Agent の完了を受け取ったら、`build_id` を付けて、同じ script をもう一度呼ぶ
+
+```bash
+uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" --build-id {build_id} {受け取った対象指定の引数}
+```
+
+- 返された `action` が再び `invoke_toc_updater` のときは、残りの生成対象の依頼である（`remaining_documents` が、前の回に含めなかった数）。この手順 2 を繰り返す
+- 終了コードの扱いは手順 1 と同じである
+
+### 3. `action` が `done` のとき
+
+[確定 ToC]が公開された。標準出力の JSON から、次を報告する。
+
+- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない）と、生成した文書（`generated_documents`）
+- 変更集合（`change_set`）の要点
+- 参照検査結果（`reference_check`）。`summary` の件数と、一致以外の `findings`
+- 除外した文書（`excluded`。ID 未付与は `missing`、ID 重複は `duplicate`）
+- `problems`・`warnings` があれば、あわせて報告する
+
+### 4. 構築が失敗したとき
+
+終了コードが 3 のときは、標準出力の `errors`・`stage`・`problems`（失敗した文書・フィールド・原因）・`confirmed_toc_present` をそのまま利用者へ報告する。
+
+- 候補は公開されておらず、旧い確定 ToC は変わっていない。確定済みの文書情報は戻らない
+- 自動で再試行しない。`toc-updater` へ生成のやり直しを頼まない。原因を直した後、利用者の指示で、`build_id` を付けずに手順 1 から再実行する
+
+### 5. 後工程を案内する
+
+- 除外した文書（ID 未付与・ID 重複）があるときは、`embed-dlid` で ID を付与・解消してから、`index-docs` をもう一度実行するよう案内する。除外した文書は ToC に入っていない
+- 構築が完了したときは、後工程として `check-impact` で変更の影響を検査するよう案内する

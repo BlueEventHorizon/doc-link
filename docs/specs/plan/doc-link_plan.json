@@ -571,7 +571,7 @@
       "task_id": "TASK-014",
       "title": "toc-updater の受け渡し・Agent 定義と index-docs の SKILL",
       "priority": 84,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-008",
       "depends_on": [
         "TASK-010",
@@ -639,7 +639,7 @@
       "task_id": "TASK-016",
       "title": "resolve-dlid（[DLID]の解決）",
       "priority": 78,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-006",
       "depends_on": [
         "TASK-005",
@@ -733,7 +733,7 @@
       "task_id": "TASK-019",
       "title": "check-impact（変更影響候補の列挙）",
       "priority": 76,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-007",
       "depends_on": [
         "TASK-009",
@@ -763,7 +763,7 @@
       "task_id": "TASK-020",
       "title": "query-docs の script（[ToC]の写しの固定・版と鮮度・返却 ID の検査・受け渡し）",
       "priority": 75,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-006",
       "depends_on": [
         "TASK-015"

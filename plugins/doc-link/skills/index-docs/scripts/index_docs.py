@@ -6,7 +6,7 @@
 # ///
 """[ToC]を構築・再構築する（index-docs の入口 script）。
 
-SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DES-004 の B-01〜B-07）を進められる所まで進め、
+SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は構築の段階（DES-004 の B-01〜B-07）を進められる所まで進め、
 次に SKILL が行うこと（`action`）を返す。SKILL はそれに従って動き、終えたら `advance` をもう一度呼ぶ。
 初回と再開を区別しない。今どの段階かは、前の呼び出しの自己申告ではなく、毎回、現物と管理状態（`.doc-link/`）から
 判定し直す。段階の前提は `build_state_machine`（`BuildSession`）のガードで検査し、許可されない遷移を拒否する。
@@ -17,9 +17,11 @@ SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DE
 
 ## 呼び出し方
 
-2 つのサブコマンドを持つ。どちらも `--project-root`（既定は現在のディレクトリ）と、`--key` と[Index 対象指定]
-（`--paths`・`--dirs`・`--exclude`・`--all` など。規則は `target_spec`）を取る。単体モード（`--all`・引数なし）の
-[ToC 識別キー]は、予約キー `all` である。
+4 つのサブコマンドを持つ。すべて `--project-root`（既定は現在のディレクトリ）を取る。`advance` と `submit` は、
+`--key` と[Index 対象指定]（`--paths`・`--dirs`・`--exclude`・`--all` など。規則は `target_spec`）も取る。
+単体モード（`--all`・引数なし）の[ToC 識別キー]は、予約キー `all` である。`request` と `deliver` は `toc-updater`
+（カスタム Agent）が呼ぶので、識別値（構築 ID と[文書 ID]）だけを取り、対象指定を取らない（記録した作業状態から
+読む）。
 
 - `advance [--build-id ID]`: 段階を進め、次の行動を返す。`--build-id` は、直前の `advance` が返した値をそのまま渡す
   （AI は組み立てない）。初回は付けない
@@ -29,6 +31,15 @@ SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DE
   唯一の入力である。AI を介さずに固定値を差し込むテストも、`toc-updater` の結果の受け取り（TASK-014）も、この入力を使う。
   値は引数のまま変形されず届く（改行・引用符・非 ASCII を含んでよい）。値が `-` で始まるときは、`--summary=-値` の
   形で渡す。H1 の見出しからタイトルを取れる文書は、`--title` を省いてよい（タイトルは見出しを優先する）
+- `request --build-id ID --doc-id DOC_ID [--doc-id DOC_ID]...`: `toc-updater` が、受け取った識別値（構築 ID と
+  [文書 ID]の並び）から、依頼のファイルの絶対パスを得る。標準出力は `{"path": …}` だけで、依頼の本文を載せない。
+  依頼は `advance` が `invoke_toc_updater` を返す前に、script が組み立てて置いて公開してある。依頼として公開されて
+  いない[文書 ID]の組には、パスを返さずに終了コード 1 で失敗する
+- `deliver --build-id ID --doc-id DOC_ID --exit-value V [--title T] [--purpose P] [--summary S]...
+  [--applicable-tasks A]... [--keywords K]...`: `toc-updater` が、1 文書分の生成結果と終了の値を渡す。終了の値は
+  文字列で、正常は `"0"`、エラー値は `"source_unreadable"`（対象文書を読めなかった）だけである。`"0"` のときだけ、
+  値を `submit` と同じ検証・保存（`_store_generated`）へ渡す。`"0"` 以外・定義に無い値・終了の値が無い（`--exit-value`
+  を付けない）ときは、その文書の生成失敗として、終了コード 3 で失敗する。成否の判定は script が行う
 
 ## `advance` が返す `action`
 
@@ -37,8 +48,9 @@ SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DE
   生成するフィールドごとの記述上限 `limits`（`L`）だけを持つ。内部許容上限・係数・余白は含まない。
   `remaining_documents` は、この回に含めなかった生成対象の数で、全部の完了後の `advance` が続きを返す。
   `await_completion` が真のとき、SKILL は起動した Agent の完了を待ってから、`build_id` を付けて `advance` を呼ぶ
-  （完了の待機は、この `action` に含まれる SKILL の動作である）。依頼の組み立て（置き場）は SKILL・Agent の定義の
-  範囲で、この script は持たない。依頼の元になる文書のパスと生成するフィールドは、`build_id` の作業状態に記録する
+  （完了の待機は、この `action` に含まれる SKILL の動作である）。依頼の中身（対象文書の絶対パスと `limits`）は、
+  この script が組み立てて置く（下の「`toc-updater` との受け渡し」）。依頼の元になる文書のパスと生成する
+  フィールドは、`build_id` の作業状態に記録する
 - `done`: [確定 ToC]を一括して公開した。確定結果（`version`・`published`）、変更集合、参照検査結果（`reference_check`）、
   除外した文書（`excluded`）を返す。同じ入力の再実行は、[確定 ToC]・[文書情報]を書き換えず（`published` が偽）、
   生成対象を出さない
@@ -62,6 +74,15 @@ SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DE
 現物から再判定して再開できる（識別値を付けずに `advance` を呼べばよい）。識別値を付けたのに作業状態が無い・
 [ToC 識別キー]か対象指定が合わないときは、前段の申告を信用せず、拒否する。
 
+## `toc-updater` との受け渡し
+
+`toc-updater` へ運ぶのは、識別値（構築 ID と[文書 ID]の並び。最大 3）だけである。依頼は、`advance` が `batches` の 1 件ごとに
+`.temp/doc-link/index-docs/<構築 ID>.exchange/` の下へ組み立てて置く。置き方は、一時ファイルへ書き終えてから 1 回の
+置き換えで公開する（組み立て途中のものを読ませない）。依頼の中身は `{"documents": [{"doc_link_id", "path"（絶対パス）,
+"limits"}]}` だけで、内部許容上限・係数・余白を含まない。生成結果の保存を終えた文書は、同じ場所に結果（`doc_link_id`・
+終了の値・保存の状態）を置く。この場所は、次の波の依頼を置くとき、および構築が終わったとき（完了・失敗）に、
+構築の作業状態といっしょにすべて削除する。
+
 ## 標準出力
 
 終了コード 0 のとき結果の JSON、それ以外（2 を除く）のときエラーの JSON（`errors` は自然文の配列）を返す。
@@ -71,10 +92,10 @@ SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DE
 
 | code | 意味                                                                                                                                                  |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0    | 操作が完了した（`advance` は次の行動を返した。`submit` は生成結果を保存した）                                                                         |
-| 1    | 区別のないエラー（対象指定の拒否、識別値・状態が合わない、段階の前提が満たされない、生成対象でない文書への `submit`）                                 |
+| 0    | 操作が完了した（`advance` は次の行動を返した。`submit`・`deliver` は生成結果を保存した。`request` は依頼のパスを返した）                              |
+| 1    | 区別のないエラー（対象指定の拒否、識別値・状態が合わない、段階の前提が満たされない、生成対象でない文書への `submit`・`deliver`、公開されていない依頼） |
 | 2    | 引数を受理できない（`argparse`）                                                                                                                      |
-| 3    | 構築が失敗した（B-08）。文書を読めない、[確定 ToC]・[文書情報]を読めない、生成結果が検証に通らない・届かない、候補の検査・公開の失敗。旧[確定 ToC]は残る |
+| 3    | 構築が失敗した（B-08）。文書を読めない、[確定 ToC]・[文書情報]を読めない、生成結果が検証に通らない・届かない、`deliver` の終了の値が `"0"` でない・無い、候補の検査・公開の失敗。旧[確定 ToC]は残る |
 
 ## 仕様の解釈（設計書が値や形式を定めていない点）
 
@@ -91,6 +112,13 @@ SKILL は、この script を 1 本だけ呼ぶ。script は構築の段階（DE
 - 検査の時点（`checked_at`）: 参照検査の結果と最終検査状態が、前回確定した[確定 ToC]と時点を除いて同じなら、前回の
   時点を引き継ぐ（再実行で不要な差分を作らない。NFR-003）。違えば、今回の時点（UTC、秒）を記録する
 - `reference_check` の `findings`: 一致（`match`）以外の参照の検査結果。件数は `summary` に分類ごとに持つ
+- 依頼の置き場と名前: `<構築 ID>.exchange/request-<符号化した、昇順に並べて "+" でつないだ[文書 ID]>.json`。
+  `toc-updater` が受け取る[文書 ID]の並びの順に依らず、同じ組は同じファイルに当たる。結果は
+  `result-<符号化した[文書 ID]>.json`。作業状態の `*.json` と分けて、サブディレクトリに置く
+- `deliver` の失敗（終了の値が `"0"` でない・無い、検証に通らない）は、`submit` の検証失敗と同じ、文書ごとの失敗の
+  ファイルに残し、次の `advance` が構築を失敗として報告する（B-04・B-08）。再試行・`toc-updater` への差し戻しはしない。
+  生成対象でなくなった文書（結果を受け取り済み）への `deliver` は、失敗を残さず拒否する
+- 終了の値の報告・拒否理由には、フィールド名と記述上限 `L` 以外の検証の境界を含めない
 """
 
 import argparse
@@ -100,6 +128,7 @@ import os
 import posixpath
 import re
 import secrets
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -128,6 +157,10 @@ EXIT_BUILD_FAILED = 3
 
 ACTION_INVOKE = "invoke_toc_updater"
 ACTION_DONE = "done"
+
+# `toc-updater` が渡す終了の値（文字列）。正常は "0"。エラー値は閉じた集合で、これだけである。
+EXIT_VALUE_NORMAL = "0"
+EXIT_VALUE_SOURCE_UNREADABLE = "source_unreadable"
 
 MAX_DOCUMENTS_PER_AGENT = 3
 MAX_CONCURRENT_AGENTS = 10
@@ -186,6 +219,26 @@ def build_parser() -> argparse.ArgumentParser:
     submit.add_argument("--applicable-tasks", action="append", default=None)
     submit.add_argument("--keywords", action="append", default=None)
     target_spec.add_target_arguments(submit)
+
+    request = subcommands.add_parser(
+        "request", help="toc-updater が、依頼のファイルの絶対パスを得る"
+    )
+    request.add_argument("--project-root", default=os.getcwd())
+    request.add_argument("--build-id", required=True)
+    request.add_argument("--doc-id", action="append", required=True)
+
+    deliver = subcommands.add_parser(
+        "deliver", help="toc-updater が、1 文書分の生成結果と終了の値を渡す"
+    )
+    deliver.add_argument("--project-root", default=os.getcwd())
+    deliver.add_argument("--build-id", required=True)
+    deliver.add_argument("--doc-id", required=True)
+    deliver.add_argument("--exit-value", default=None)
+    deliver.add_argument("--title", default=None)
+    deliver.add_argument("--purpose", default=None)
+    deliver.add_argument("--summary", action="append", default=None)
+    deliver.add_argument("--applicable-tasks", action="append", default=None)
+    deliver.add_argument("--keywords", action="append", default=None)
     return parser
 
 
@@ -207,6 +260,34 @@ def _failure_path(root: Path, build_id: str, doc_id: str) -> Path:
     )
 
 
+def _exchange_dir(root: Path, build_id: str) -> Path:
+    """`toc-updater` との受け渡し（依頼と結果）の置き場。構築の作業状態の `*.json` とは分ける。"""
+    return _work_dir(root) / f"{build_id}.exchange"
+
+
+def _clear_exchange(root: Path, build_id: str) -> None:
+    directory = _exchange_dir(root, build_id)
+    if directory.is_dir():
+        shutil.rmtree(directory)
+
+
+def _exchange_name(prefix: str, doc_ids: list[str]) -> str:
+    """識別値（[文書 ID]の並び）から、受け渡しのファイル名を決める。並びの順に依らない。"""
+    try:
+        encoded = state_store.encode_name("+".join(sorted(doc_ids)))
+    except state_store.StateStoreError as exc:
+        raise Rejected([f"[文書 ID]を受け渡しの名前にできない: {exc}"]) from exc
+    return f"{prefix}-{encoded}{state_store.FILE_SUFFIX}"
+
+
+def _request_path(root: Path, build_id: str, doc_ids: list[str]) -> Path:
+    return _exchange_dir(root, build_id) / _exchange_name("request", doc_ids)
+
+
+def _result_path(root: Path, build_id: str, doc_id: str) -> Path:
+    return _exchange_dir(root, build_id) / _exchange_name("result", [doc_id])
+
+
 def _build_files(root: Path, build_id: str) -> list[Path]:
     directory = _work_dir(root)
     if not directory.is_dir():
@@ -222,6 +303,7 @@ def _build_files(root: Path, build_id: str) -> list[Path]:
 def _remove_build(root: Path, build_id: str) -> None:
     for path in _build_files(root, build_id):
         path.unlink(missing_ok=True)
+    _clear_exchange(root, build_id)
 
 
 def _remove_old_builds(root: Path, toc_key: str) -> None:
@@ -250,10 +332,8 @@ def _write_work_file(root: Path, path: Path, value: dict) -> None:
         ) from exc
 
 
-def _load_build(
-    root: Path, build_id: str, toc_key: str, spec: target_spec.TargetSpec
-) -> dict:
-    """識別値に対応する作業状態を読み、[ToC 識別キー]・対象指定が合うことを確かめる。合わなければ拒否する。"""
+def _read_build(root: Path, build_id: str) -> dict:
+    """識別値に対応する作業状態を読む。無い・読めない・識別値が合わないときは拒否する。"""
     if _BUILD_ID.fullmatch(build_id) is None:
         raise Rejected([f"識別値の形式が正しくない: {build_id}"])
     path = _build_path(root, build_id)
@@ -265,12 +345,17 @@ def _load_build(
         ) from exc
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise Rejected([f"識別値の作業状態を読めない: {build_id}: {exc}"]) from exc
-    if (
-        not isinstance(build, dict)
-        or build.get("build_id") != build_id
-        or build.get("toc_key") != toc_key
-        or build.get("target_spec") != spec.to_dict()
-    ):
+    if not isinstance(build, dict) or build.get("build_id") != build_id:
+        raise Rejected([f"識別値の作業状態が合わない: {build_id}"])
+    return build
+
+
+def _load_build(
+    root: Path, build_id: str, toc_key: str, spec: target_spec.TargetSpec
+) -> dict:
+    """識別値に対応する作業状態を読み、[ToC 識別キー]・対象指定が合うことを確かめる。合わなければ拒否する。"""
+    build = _read_build(root, build_id)
+    if build.get("toc_key") != toc_key or build.get("target_spec") != spec.to_dict():
         raise Rejected(
             [f"識別値の構築と[ToC 識別キー]・対象指定が合わない: {build_id}"]
         )
@@ -389,6 +474,41 @@ def _check_generation_received(root, build: dict, targets) -> None:
         raise BuildFailed(STAGE_INFORMATION, problems)
 
 
+def _write_requests(root: Path, build_id: str, wave: list[list]) -> None:
+    """`toc-updater` への依頼を、`batches` の 1 件ごとに組み立てて置く。置き換えで公開し、途中のものを読ませない。
+
+    中身は、対象文書の絶対パスと記述上限 `L`（`limits`）だけである。
+    """
+    for batch in wave:
+        try:
+            path = _request_path(
+                root, build_id, [document.doc_link_id for document in batch]
+            )
+        except Rejected as exc:
+            raise BuildFailed(
+                STAGE_INFORMATION,
+                [
+                    toc_candidate.CandidateProblem(
+                        None, None, None, "; ".join(exc.errors)
+                    )
+                ],
+            ) from exc
+        _write_work_file(
+            root,
+            path,
+            {
+                "documents": [
+                    {
+                        "doc_link_id": document.doc_link_id,
+                        "path": str(root / document.path),
+                        "limits": document.limits,
+                    }
+                    for document in batch
+                ]
+            },
+        )
+
+
 def _issue_wave(root, toc_key, spec, session, build: dict | None, targets) -> dict:
     """生成対象の依頼（1 回に最大 10 件）を、作業状態に記録して、`invoke_toc_updater` の内容を返す。"""
     batches = _batches(targets)
@@ -404,6 +524,10 @@ def _issue_wave(root, toc_key, spec, session, build: dict | None, targets) -> di
         build_id = build["build_id"]
         generated = list(build["generated"])
     generated += [document.doc_link_id for document in wave_documents]
+    if build is not None:
+        # 前の波の依頼と結果は、[文書情報]を確定した後なので削除する。
+        _clear_exchange(root, build_id)
+    _write_requests(root, build_id, wave)
     _write_work_file(
         root,
         _build_path(root, build_id),
@@ -684,6 +808,88 @@ def _generated_result(args: argparse.Namespace) -> dict:
     return {name: value for name, value in values if value is not None}
 
 
+def _generation_failed(
+    root: Path,
+    build_id: str,
+    doc_id: str,
+    path: str | None,
+    kind: str | None,
+    failures: list[dict],
+) -> BuildFailed:
+    """その文書の生成失敗を、文書ごとのファイルに残し、構築の失敗（B-08）として返す。再試行しない。"""
+    _write_work_file(
+        root,
+        _failure_path(root, build_id, doc_id),
+        {
+            "doc_link_id": doc_id,
+            "path": path,
+            "kind": kind,
+            "failures": failures,
+        },
+    )
+    return BuildFailed(
+        STAGE_INFORMATION,
+        [
+            toc_candidate.CandidateProblem(doc_id, path, item["field"], item["reason"])
+            for item in failures
+        ],
+    )
+
+
+def _requested_target(
+    root, spec, toc_key, session, build: dict, doc_id: str, build_id: str
+):
+    """依頼に含めた生成対象の文書の計画を返す。
+
+    依頼に無い・生成対象でない文書は拒否する。生成の失敗を残した文書への再送も拒否する（再試行しない。
+    DES-004 B-08。失敗の記録を上書きせず、[文書情報]も保存しない）。
+    """
+    if doc_id not in {entry["doc_link_id"] for entry in build["documents"]}:
+        raise Rejected([f"識別値の依頼に含まれない文書の結果: {doc_id}"])
+    if _failure_path(root, build_id, doc_id).exists():
+        raise Rejected(
+            [
+                f"生成の失敗を記録した文書への再送は受け付けない（再試行しない）: {doc_id}"
+            ]
+        )
+    _, _, plan = _prepare(root, spec, toc_key, session, False)
+    target = next((d for d in plan.generation_targets if d.doc_link_id == doc_id), None)
+    if target is None:
+        raise Rejected([f"生成対象でない文書の結果: {doc_id}"])
+    return target
+
+
+def _store_generated(root, build_id: str, target, generated: dict):
+    """生成結果を検証器と[文書情報]の保存へ渡す。`submit` と `deliver` の共通の入力である。
+
+    検証に通らないときは、その文書の失敗を残して `BuildFailed` を送出する。
+    """
+    single = update_plan.UpdatePlan(documents=(target,), departed=())
+    (outcome,) = update_plan.store_generated(
+        root, SKILL, single, {target.doc_link_id: generated}
+    )
+    if outcome.status == update_plan.STATUS_FAILED:
+        raise _generation_failed(
+            root,
+            build_id,
+            outcome.doc_link_id,
+            outcome.path,
+            outcome.kind,
+            [item.to_dict() for item in outcome.failures],
+        )
+    return outcome
+
+
+def _stored(outcome) -> dict:
+    return {
+        "stored": {
+            "doc_link_id": outcome.doc_link_id,
+            "path": outcome.path,
+            "status": outcome.status,
+        }
+    }
+
+
 def submit(args: argparse.Namespace) -> int:
     root = Path(os.path.abspath(args.project_root))
     try:
@@ -693,56 +899,102 @@ def submit(args: argparse.Namespace) -> int:
     session = _session(root, toc_key)
     try:
         build = _load_build(root, args.build_id, toc_key, spec)
-        if args.doc_id not in {entry["doc_link_id"] for entry in build["documents"]}:
-            raise Rejected([f"識別値の依頼に含まれない文書の結果: {args.doc_id}"])
-        _, _, plan = _prepare(root, spec, toc_key, session, False)
-        target = next(
-            (d for d in plan.generation_targets if d.doc_link_id == args.doc_id), None
+        target = _requested_target(
+            root, spec, toc_key, session, build, args.doc_id, args.build_id
         )
-        if target is None:
-            raise Rejected([f"生成対象でない文書の結果: {args.doc_id}"])
-        single = update_plan.UpdatePlan(documents=(target,), departed=())
-        (outcome,) = update_plan.store_generated(
-            root, SKILL, single, {args.doc_id: _generated_result(args)}
-        )
-        if outcome.status == update_plan.STATUS_FAILED:
-            _write_work_file(
-                root,
-                _failure_path(root, args.build_id, args.doc_id),
-                {
-                    "doc_link_id": outcome.doc_link_id,
-                    "path": outcome.path,
-                    "kind": outcome.kind,
-                    "failures": [item.to_dict() for item in outcome.failures],
-                },
-            )
-            raise BuildFailed(
-                STAGE_INFORMATION,
-                [
-                    toc_candidate.CandidateProblem(
-                        outcome.doc_link_id, outcome.path, item.field, item.reason
-                    )
-                    for item in outcome.failures
-                ],
-            )
+        outcome = _store_generated(root, args.build_id, target, _generated_result(args))
     except Rejected as exc:
         return _rejected(session, exc.errors)
     except BuildFailed as failure:
         return _failed(root, toc_key, session, failure)
-    return _emit(
-        {
-            "stored": {
-                "doc_link_id": outcome.doc_link_id,
-                "path": outcome.path,
+    return _emit(_stored(outcome), script_output.EXIT_OK)
+
+
+def _exit_value_failure(exit_value: str | None) -> str | None:
+    """終了の値が正常でないときの理由を返す（正常なら `None`）。成否は script が判定する。"""
+    if exit_value == EXIT_VALUE_NORMAL:
+        return None
+    if exit_value is None:
+        return "exit value was not provided"
+    if exit_value == EXIT_VALUE_SOURCE_UNREADABLE:
+        return "source_unreadable: the source document could not be read"
+    return "exit value is not defined"
+
+
+def deliver(args: argparse.Namespace) -> int:
+    """`toc-updater` が、1 文書分の生成結果と終了の値を渡す。対象指定は、作業状態に記録したものを使う。"""
+    root = Path(os.path.abspath(args.project_root))
+    try:
+        build = _read_build(root, args.build_id)
+        spec = target_spec.TargetSpec.from_dict(build["target_spec"])
+        toc_key = build["toc_key"]
+        if not isinstance(toc_key, str):
+            raise Rejected([f"識別値の作業状態に[ToC 識別キー]が無い: {args.build_id}"])
+    except target_spec.TargetSpecError as exc:
+        return _rejected(bsm.BuildSession(), exc.errors)
+    except (KeyError, TypeError) as exc:
+        return _rejected(
+            bsm.BuildSession(),
+            [f"識別値の作業状態に対象指定が無い: {args.build_id}: {exc}"],
+        )
+    except Rejected as exc:
+        return _rejected(bsm.BuildSession(), exc.errors)
+    session = _session(root, toc_key)
+    try:
+        target = _requested_target(
+            root, spec, toc_key, session, build, args.doc_id, args.build_id
+        )
+        reason = _exit_value_failure(args.exit_value)
+        if reason is not None:
+            raise _generation_failed(
+                root,
+                args.build_id,
+                target.doc_link_id,
+                target.path,
+                None,
+                [{"field": None, "reason": reason}],
+            )
+        outcome = _store_generated(root, args.build_id, target, _generated_result(args))
+        _write_work_file(
+            root,
+            _result_path(root, args.build_id, args.doc_id),
+            {
+                "doc_link_id": args.doc_id,
+                "exit": EXIT_VALUE_NORMAL,
                 "status": outcome.status,
-            }
-        },
-        script_output.EXIT_OK,
-    )
+            },
+        )
+    except Rejected as exc:
+        return _rejected(session, exc.errors)
+    except BuildFailed as failure:
+        return _failed(root, toc_key, session, failure)
+    return _emit(_stored(outcome), script_output.EXIT_OK)
+
+
+def request(args: argparse.Namespace) -> int:
+    """`toc-updater` が、識別値（構築 ID と[文書 ID]の並び）から、依頼のファイルの絶対パスを得る。
+
+    依頼は script が書き終えて公開したものだけである。公開されていなければ、パスを返さずに失敗する。
+    """
+    root = Path(os.path.abspath(args.project_root))
+    try:
+        build = _read_build(root, args.build_id)
+        path = _request_path(root, build["build_id"], args.doc_id)
+        if not path.is_file():
+            raise Rejected([f"識別値に対応する依頼が公開されていない: {args.build_id}"])
+    except Rejected as exc:
+        return script_output.emit_error(exc.errors)
+    return script_output.emit_result({"path": str(path)})
 
 
 def execute(args: argparse.Namespace) -> int:
-    return advance(args) if args.command == "advance" else submit(args)
+    commands = {
+        "advance": advance,
+        "submit": submit,
+        "request": request,
+        "deliver": deliver,
+    }
+    return commands[args.command](args)
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -4,31 +4,31 @@
       "requirement_id": "REQ-001",
       "title": "総論",
       "design_id": "DES-002",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "requirement_id": "REQ-002",
       "title": "Index 対象と[文書 ID]",
       "design_id": "DES-005",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "requirement_id": "REQ-003",
       "title": "[ToC]管理",
       "design_id": "DES-005",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "requirement_id": "REQ-004",
       "title": "文書検索",
       "design_id": "DES-006",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "requirement_id": "REQ-005",
       "title": "参照と変更通知",
       "design_id": "DES-007",
-      "status": "pending"
+      "status": "completed"
     }
   ],
   "design_traceability": [
@@ -860,7 +860,7 @@
       "task_id": "TASK-023",
       "title": "配布物の適合の検査と要件対応の抜けの確認",
       "priority": 49,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-009",
       "depends_on": [
         "TASK-022"

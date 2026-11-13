@@ -538,7 +538,7 @@
       "task_id": "TASK-013",
       "title": "index-docs の入口 script（段階を進め、次の行動を返す）",
       "priority": 85,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-010",
       "depends_on": [
         "TASK-012"
@@ -604,7 +604,7 @@
       "task_id": "TASK-015",
       "title": "check-toc と検索前検査の共通の照合 script",
       "priority": 79,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-006",
       "depends_on": [
         "TASK-012",

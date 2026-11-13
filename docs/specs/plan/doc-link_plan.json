@@ -795,7 +795,7 @@
       "task_id": "TASK-021",
       "title": "query-docs の SKILL と query-worker の Agent 定義",
       "priority": 74,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-010",
       "depends_on": [
         "TASK-014",

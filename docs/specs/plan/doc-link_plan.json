@@ -232,7 +232,7 @@
       "task_id": "TASK-003",
       "title": "DLID の発行・認識と[内容ハッシュ]の算出",
       "priority": 97,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-008",
       "depends_on": [
         "TASK-002"

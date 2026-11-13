@@ -101,7 +101,7 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 
 - 段階の判定: 生成が必要な文書（`update_plan` の生成対象）が残っていれば、情報確定（B-04）に進まず、依頼を返す。
   残っていなければ、そのまま参照検査・候補の検査・公開まで進める
-- 失敗の段階（`stage`）: `id_confirmation`（文書を読めない。B-02）、`change_set`（[確定 ToC]・[文書情報]を読めない。B-03）、
+- 失敗の段階（`stage`）: `target_scope`（対象を展開できない。読めないディレクトリがある。B-01）、`id_confirmation`（文書を読めない。B-02）、`change_set`（[確定 ToC]・[文書情報]を読めない。B-03）、
   `update_plan`・`path_update`（B-04 の前）、`information`（生成結果が検証に通らない・届かない。B-04）、
   `reference_check`（参照元を読めない。B-05）、`candidate_assembly`・`candidate_validation`・`publish`（`toc_candidate`
   の段階。B-06・B-07）
@@ -165,6 +165,7 @@ EXIT_VALUE_SOURCE_UNREADABLE = "source_unreadable"
 MAX_DOCUMENTS_PER_AGENT = 3
 MAX_CONCURRENT_AGENTS = 10
 
+STAGE_SCOPE = "target_scope"
 STAGE_IDS = "id_confirmation"
 STAGE_CHANGES = "change_set"
 STAGE_PLAN = "update_plan"
@@ -396,6 +397,23 @@ def _change_problems(exc: cs.ChangeFailure) -> list[toc_candidate.CandidateProbl
 def _prepare(root, spec, toc_key, session: bsm.BuildSession, write_paths: bool):
     """対象確定（B-01）・ID 確認（B-02）・変更確定（B-03）と更新計画を行う。失敗は `BuildFailed`。"""
     expansion = target_spec.expand(spec, root)
+    unreadable = [
+        problem
+        for problem in expansion.problems
+        if problem.reason == target_spec.PROBLEM_UNREADABLE
+    ]
+    if unreadable:
+        # 読めないディレクトリの配下の文書は一覧に入らない。[Index 対象リスト]を確定できないので、構築を失敗にする
+        # （一覧に無い文書を、対象離脱として[確定 ToC]から除かない）
+        raise BuildFailed(
+            STAGE_SCOPE,
+            [
+                toc_candidate.CandidateProblem(
+                    None, problem.path, None, "ディレクトリを読めない"
+                )
+                for problem in unreadable
+            ],
+        )
     session.apply(bsm.EVENT_EXPAND_SCOPE, bsm.BuildFacts(scope_validated=True))
     try:
         changes = cs.build_change_set(root, toc_key, expansion.files)

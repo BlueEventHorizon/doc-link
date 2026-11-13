@@ -55,9 +55,9 @@ REQ-001 D-026・D-027・D-036・D-039 を実装する。`check-toc` と `query-d
 - 判定不能にするもの: [確定 ToC]が `missing` 以外の理由で読めない・壊れている、渡されていない保存済みの対象指定を
   解釈できない、対象指定を展開できない（`OSError`）、対象文書を読めない（UTF-8 でない・権限不足など）、変更集合や
   更新計画が必要とする[文書情報]を読めない。frontmatter の解析不能は ID 未付与として扱い、判定不能にしない。
-  対象ディレクトリ・対象ファイルの消失は、展開の `problems` に現れ、対象離脱として再構築必要にする
-- 限界: `target_spec.expand` は、走査中の個々のディレクトリの読み取り失敗（権限不足）を報告せず、そのディレクトリを
-  空として扱う。共用部品を書き換えないので、この照合はその失敗を判定不能にできない
+  対象ディレクトリ・対象ファイルの消失は、展開の `problems` に現れ、対象離脱として再構築必要にする。
+  走査中に読めなかったディレクトリ（権限不足など。展開の `problems` の `unreadable`）は、配下の文書が一覧に入らず、
+  対象離脱と区別できないので、判定不能にする（D-026）
 """
 
 from collections.abc import Iterable
@@ -260,6 +260,22 @@ def check_toc(
                     f"対象指定を展開できない: {exc}",
                     CAUSE_EXPANSION,
                 )
+            ],
+            **common,
+        )
+
+    unreadable = [
+        problem
+        for problem in expansion.problems
+        if problem.reason == target_spec_module.PROBLEM_UNREADABLE
+    ]
+    if unreadable:
+        # 読めないディレクトリの配下の文書は一覧に入らない。対象離脱や空として扱わず、判定不能にする（D-026）
+        return _undeterminable(
+            key,
+            [
+                Cause(problem.path, "ディレクトリを読めない", CAUSE_EXPANSION)
+                for problem in unreadable
             ],
             **common,
         )

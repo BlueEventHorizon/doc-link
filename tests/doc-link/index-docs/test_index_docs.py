@@ -448,6 +448,23 @@ class OldVersionKeptTest(Base):
         self.assertEqual(result["problems"][0]["path"], "docs/b.md")
         self.assertFalse((self.root / ".doc-link").exists())
 
+    def test_unreadable_directory_stops_the_build_and_keeps_the_old_toc(self):
+        if os.geteuid() == 0:
+            self.skipTest("root は権限で読めなくならない")
+        self.build("k", ALL)
+        toc_before = self.toc_bytes("k")
+        state_before = self.state_snapshot()
+        self.write("docs/locked/d.md", C_TEXT.replace(ID_C, "DLID-mnpqrstvwxyz"))
+        locked = self.root / "docs" / "locked"
+        locked.chmod(0o000)
+        self.addCleanup(locked.chmod, 0o755)
+        code, result = self.run_main("advance", "--key", "k", "--dirs", "docs")
+        self.assertEqual(code, index_docs.EXIT_BUILD_FAILED)
+        self.assertEqual(result["stage"], "target_scope")
+        self.assertEqual(result["problems"][0]["path"], "docs/locked")
+        self.assertEqual(self.toc_bytes("k"), toc_before)
+        self.assertEqual(self.state_snapshot(), state_before)
+
     def test_corrupt_confirmed_toc_stops_the_build(self):
         self.build("k", ALL)
         path = state_store.confirmed_toc_path(self.root, "k")

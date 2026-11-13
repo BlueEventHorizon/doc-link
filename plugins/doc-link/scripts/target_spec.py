@@ -56,6 +56,7 @@ PROBLEM_NOT_MARKDOWN = "not_markdown"
 PROBLEM_NOT_DIRECTORY = "not_directory"
 PROBLEM_NO_MATCH = "no_match"
 PROBLEM_EXCLUDED = "excluded"
+PROBLEM_UNREADABLE = "unreadable"
 
 _WILDCARD_CHARS = "*?["
 
@@ -364,11 +365,15 @@ def _has_fixed_excluded_dir(parts: list[str]) -> bool:
     return any(name in FIXED_EXCLUDED_DIR_NAMES for name in parts)
 
 
-def _walk(root: str, start: str) -> tuple[list[str], list[str]]:
+def _walk(
+    root: str, start: str, unreadable: list[str] | None = None
+) -> tuple[list[str], list[str]]:
     """`start`（ルート相対）の配下を、シンボリックリンクをたどって走査する。
 
     固定の除外に挙げた名前のディレクトリへは入らない。戻り値は（ディレクトリの一覧、
     Markdown ファイルの一覧）で、どちらもルート相対パス。循環するリンクは祖先に戻る分だけ打ち切る。
+    読めなかったディレクトリ（権限不足など）は、`unreadable` が渡されたときにそのパスを追加する
+    （黙って空として扱わない。配下の文書は一覧に入らないので、呼び出し側が判定できるようにする）。
     """
     dirs: list[str] = []
     files: list[str] = []
@@ -378,6 +383,8 @@ def _walk(root: str, start: str) -> tuple[list[str], list[str]]:
         try:
             entries = sorted(os.listdir(directory_abs))
         except OSError:
+            if unreadable is not None:
+                unreadable.append(relative)
             return
         for name in entries:
             entry_abs = os.path.join(directory_abs, name)
@@ -402,20 +409,25 @@ def expand(spec: TargetSpec, root: str | Path) -> Expansion:
     """正規化した指定を Markdown ファイルの一覧（ルート相対パス、ソート済み）へ展開する。
 
     存在しないパス・Markdown でないパスなどは `problems` に報告し、残りの処理を続ける。
+    走査中に読めなかったディレクトリ（権限不足など）も、`problems`（`unreadable`）に報告する。配下の文書は
+    一覧に入らないので、呼び出し側は、一覧が完全でないものとして扱う（対象離脱や空として扱わない）。
     同じ実体（シンボリックリンクの先を含む）は、辞書順で先のパス 1 つだけ数える。
     """
     root = os.path.abspath(root)
     result = Expansion()
     candidates: set[str] = set()
+    unreadable: list[str] = []
 
     if spec.mode == MODE_ALL:
-        _dirs, files = _walk(root, ".")
+        _dirs, files = _walk(root, ".", unreadable)
         candidates.update(files)
     else:
         for path in spec.paths:
             _add_direct_path(root, path, candidates, result)
         for entry in spec.dirs:
-            _add_dir_entry(root, entry, candidates, result)
+            _add_dir_entry(root, entry, candidates, result, unreadable)
+    for path in sorted(set(unreadable)):
+        result.problems.append(Problem(path, PROBLEM_UNREADABLE))
 
     candidates = _apply_exclude(spec.exclude, candidates, spec.paths, result)
     result.files = _dedupe_by_entity(root, sorted(candidates))
@@ -436,10 +448,14 @@ def _add_direct_path(
 
 
 def _add_dir_entry(
-    root: str, entry: str, candidates: set[str], result: Expansion
+    root: str,
+    entry: str,
+    candidates: set[str],
+    result: Expansion,
+    unreadable: list[str] | None = None,
 ) -> None:
     if _is_pattern(entry):
-        dirs, files = _walk(root, ".")
+        dirs, files = _walk(root, ".", unreadable)
         matched = False
         for directory in dirs:
             if _matches(entry, directory.split("/")):
@@ -459,7 +475,7 @@ def _add_dir_entry(
     elif entry != "." and _has_fixed_excluded_dir(entry.split("/")):
         return
     else:
-        candidates.update(_walk(root, entry)[1])
+        candidates.update(_walk(root, entry, unreadable)[1])
 
 
 def _apply_exclude(

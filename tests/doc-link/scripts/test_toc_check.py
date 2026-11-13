@@ -1,3 +1,4 @@
+import os
 import sys
 import tempfile
 import unittest
@@ -381,6 +382,20 @@ class UndeterminableTest(Base):
         result = toc_check.check_toc(self.root, KEY)
         self.assert_undeterminable(result)
         self.assertEqual([c.target for c in result.causes], ["docs/b.md"])
+
+    def test_unreadable_subdirectory_is_undeterminable_not_departure(self):
+        if os.geteuid() == 0:
+            self.skipTest("root は権限で読めなくならない")
+        spec = TargetSpec(mode=MODE_TARGETS, key=KEY, dirs=("docs",))
+        self.build(spec=spec)
+        self.write("docs/locked/c.md", C_TEXT)
+        locked = self.root / "docs" / "locked"
+        locked.chmod(0o000)
+        self.addCleanup(locked.chmod, 0o755)
+        result = toc_check.check_toc(self.root, KEY)
+        self.assert_undeterminable(result, toc_check.CAUSE_EXPANSION)
+        self.assertEqual([c.target for c in result.causes], ["docs/locked"])
+        self.assertEqual(result.documents, ())
 
     def test_missing_document_info_of_a_confirmed_document(self):
         self.build()

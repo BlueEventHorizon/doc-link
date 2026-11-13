@@ -2,6 +2,7 @@ import argparse
 import contextlib
 import io
 import json
+import os
 import shutil
 import sys
 import tempfile
@@ -368,6 +369,58 @@ class ExpansionTest(TreeTestCase):
                 "skip/f.md",
                 "top.md",
             ],
+        )
+
+
+class UnreadableDirectoryTest(TreeTestCase):
+    """権限不足で読めないディレクトリは、黙って空として扱わず `unreadable` として報告する。"""
+
+    def setUp(self):
+        super().setUp()
+        if os.geteuid() == 0:
+            self.skipTest("root は権限で読めなくならない")
+        self.make("docs/ok/a.md", "docs/locked/b.md", "docs/locked/deep/c.md")
+        self.locked = self.root / "docs" / "locked"
+        self.locked.chmod(0o000)
+        self.addCleanup(self.locked.chmod, 0o755)
+
+    def reasons(self, result):
+        return [(p.path, p.reason) for p in result.problems]
+
+    def test_all_mode_reports_the_unreadable_subdirectory(self):
+        result = self.files()
+        self.assertEqual(result.files, ["docs/ok/a.md"])
+        self.assertEqual(
+            self.reasons(result), [("docs/locked", target_spec.PROBLEM_UNREADABLE)]
+        )
+
+    def test_directory_entry_reports_the_unreadable_subdirectory(self):
+        result = self.files(key="k", dirs=["docs"])
+        self.assertEqual(result.files, ["docs/ok/a.md"])
+        self.assertEqual(
+            self.reasons(result), [("docs/locked", target_spec.PROBLEM_UNREADABLE)]
+        )
+
+    def test_directory_entry_that_is_itself_unreadable(self):
+        result = self.files(key="k", dirs=["docs/locked"])
+        self.assertEqual(result.files, [])
+        self.assertEqual(
+            self.reasons(result), [("docs/locked", target_spec.PROBLEM_UNREADABLE)]
+        )
+
+    def test_pattern_entry_reports_it_once(self):
+        result = self.files(key="k", dirs=["docs/*"])
+        self.assertEqual(
+            [r for r in self.reasons(result) if r[1] == target_spec.PROBLEM_UNREADABLE],
+            [("docs/locked", target_spec.PROBLEM_UNREADABLE)],
+        )
+
+    def test_readable_tree_has_no_unreadable_problem(self):
+        self.locked.chmod(0o755)
+        result = self.files()
+        self.assertEqual(result.problems, [])
+        self.assertEqual(
+            result.files, ["docs/locked/b.md", "docs/locked/deep/c.md", "docs/ok/a.md"]
         )
 
 

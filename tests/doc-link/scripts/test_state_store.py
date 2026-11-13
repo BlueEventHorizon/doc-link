@@ -115,6 +115,35 @@ class SaveLoadTest(StoreTestCase):
         self.assertEqual(files, ["k1.json", "k2.json"])
         self.assertEqual(state_store.list_toc_keys(self.root), ["k1", "k2"])
 
+    def test_confirmed_toc_with_empty_arrays_roundtrips(self):
+        # 参照が 1 件も無い文書集合など、空の配列を持つ[確定 ToC]も保存・読取りできる
+        empty = make_toc(
+            "empty",
+            documents=[],
+            sections=[],
+            references=[],
+            reverse_references=[],
+            last_checks=[],
+        )
+        state_store.save_confirmed_toc(self.root, SKILL, empty)
+        self.assertEqual(state_store.load_confirmed_toc(self.root, "empty"), empty)
+
+    def test_confirmed_toc_array_fields_must_be_lists(self):
+        for name in (
+            "documents",
+            "sections",
+            "references",
+            "reverse_references",
+            "last_checks",
+        ):
+            for bad in ("abc", None, {}, 0):
+                with self.subTest(field=name, value=bad):
+                    with self.assertRaises(state_store.StateStoreError) as ctx:
+                        state_store.save_confirmed_toc(
+                            self.root, SKILL, make_toc("bad", **{name: bad})
+                        )
+                    self.assertEqual(ctx.exception.kind, "invalid")
+
     def test_document_info_not_inside_toc_and_unknown_fields_rejected(self):
         with self.assertRaises(state_store.StateStoreError) as ctx:
             state_store.save_document_info(self.root, SKILL, make_info(extra="x"))

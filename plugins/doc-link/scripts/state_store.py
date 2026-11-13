@@ -169,6 +169,10 @@ def _is_object(value) -> bool:
     return isinstance(value, dict)
 
 
+def _is_list(value) -> bool:
+    return isinstance(value, list)
+
+
 # 各フィールドを (検査関数, 必須か) で表す。ここに無いフィールドは受け付けない。
 DOCUMENT_INFO_FIELDS = {
     "doc_link_id": _is_str,
@@ -223,11 +227,11 @@ CONFIRMED_TOC_FIELDS = {
     "toc_key": _is_str,
     "version": _is_version,
     "target_spec": _is_object,
-    "documents": list,
-    "sections": list,
-    "references": list,
-    "reverse_references": list,
-    "last_checks": list,
+    "documents": _is_list,
+    "sections": _is_list,
+    "references": _is_list,
+    "reverse_references": _is_list,
+    "last_checks": _is_list,
 }
 
 

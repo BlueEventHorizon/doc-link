@@ -475,7 +475,7 @@
       "task_id": "TASK-011",
       "title": "更新計画と[文書情報]の文書単位の保存",
       "priority": 87,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-005",
       "depends_on": [
         "TASK-005",
@@ -670,7 +670,7 @@
       "task_id": "TASK-017",
       "title": "check-dlid（[文書 ID]の検査）",
       "priority": 77,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-010",
       "depends_on": [
         "TASK-002",
@@ -704,7 +704,7 @@
       "task_id": "TASK-018",
       "title": "check-links（参照の検査）",
       "priority": 77,
-      "status": "pending",
+      "status": "completed",
       "design_id": "DES-007",
       "depends_on": [
         "TASK-009"

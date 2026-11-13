@@ -55,14 +55,12 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 - アンカーを作る見出しのテキストは、強調やコードなどの Markdown の記号を除いた表示文字列とする。行末の[セクション ID]を含む。
 - 英字を小文字にする。
 - 次の文字を取り除く。Unicode の Alphabetic 特性を持つ文字は取り除かない。
-  - Unicode 13.0.0 の一般カテゴリが、Other_Number、Close_Punctuation、Final_Punctuation、Initial_Punctuation、Open_Punctuation、Other_Punctuation の文字
+  - Unicode の一般カテゴリが、Other_Number、Close_Punctuation、Final_Punctuation、Initial_Punctuation、Open_Punctuation、Other_Punctuation の文字
   - 同じく、Dash_Punctuation の文字。ただし、半角ハイフン `-` は残す。
   - 同じく、Symbol 全般、Control、Private_Use、Format、Unassigned の文字
   - 同じく、Separator の文字。ただし、半角空白は残す。
 - 半角空白を `-` に置き換える。
 - 同じ文書の中で同じアンカーが重複するときは、2 つ目以降に `-1`、`-2` の順に連番を付ける。
-
-Unicode の版は 13.0.0 に固定する。実行する Python の Unicode の版と食い違う文字は、テストで差を確かめる。
 
 このアンカーは、`check-links` がフラグメントの到達先を確かめるとき（[DES-007 §1][des-007-sec-1]）と、[DLID]の解決がセクションへ届くアンカーを返すときに使う。doc-link はこのアンカーを文書に書き込まず、リンクの特定や書き換えにも使わない（要件 D-034、D-042）。
 

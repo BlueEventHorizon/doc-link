@@ -205,19 +205,19 @@
       "task_id": "TASK-002",
       "title": "Markdown の読取り規則（frontmatter・見出しとセクション範囲・参照定義・アンカー）",
       "priority": 98,
-      "status": "failed",
+      "status": "completed",
       "design_id": "DES-008",
       "depends_on": [
         "TASK-001"
       ],
       "group_id": null,
       "build_check": "per_task",
-      "description": "- frontmatter の判定と `doc_link_id` の認識を、DES-008 §1 に従って実装する（閉じる行のない frontmatter は frontmatter としない）\n- 見出し（ATX・setext・閉じの `#`）とセクションの範囲、見出しの行の末尾の[セクション ID]の読取りを実装する（DES-008 §1・§2）\n- コードブロック・HTML ブロック内の見出し、リンクを見出しとしない・リンクとしない規則を、DES-008 §2 の規則 1〜10 に従って実装する\n- リファレンスリンクの定義と title の抽出を実装する（title の末尾の語（[DLID]）とその直前の語を取り出すところまでを持つ。直前の語が記録語かの形式判定は TASK-003 が持つ。DES-007 §1・DES-008 §3）\n- 見出しのアンカー生成を、DES-008 §2 が定める固定の Unicode の版・規則で実装する。版の差が出る文字を実測し、Python 標準の `unicodedata` で足りない場合は実装を止めて、固定した文字表の持ち方を利用者に確認する\n- 固定の fixture 文書で、規則ごとの期待値をテストにする",
+      "description": "- frontmatter の判定と `doc_link_id` の認識を、DES-008 §1 に従って実装する（閉じる行のない frontmatter は frontmatter としない）\n- 見出し（ATX・setext・閉じの `#`）とセクションの範囲、見出しの行の末尾の[セクション ID]の読取りを実装する（DES-008 §1・§2）\n- コードブロック・HTML ブロック内の見出し、リンクを見出しとしない・リンクとしない規則を、DES-008 §2 の規則 1〜10 に従って実装する\n- リファレンスリンクの定義と title の抽出を実装する（title の末尾の語（[DLID]）とその直前の語を取り出すところまでを持つ。直前の語が記録語かの形式判定は TASK-003 が持つ。DES-007 §1・DES-008 §3）\n- 見出しのアンカー生成を、DES-008 §2 の規則で実装する。文字種別は Python 標準の `unicodedata` を使う\n- 固定の fixture 文書で、規則ごとの期待値をテストにする",
       "acceptance_criteria": [
         "frontmatter あり・なし・閉じる行なし・`doc_link_id` あり・なしの fixture で、DES-008 §1 の期待値と一致する",
         "ATX・setext・閉じの `#`・コードブロック内の見出し・HTML ブロック内の見出しの fixture で、見出し一覧とセクション範囲が期待値と一致する",
         "規則 1〜10 それぞれに少なくとも 1 つの fixture があり、markdown-it-py での解析結果が期待値と一致する",
-        "アンカー生成が、DES-008 §2 の規則から導いて fixture に書いた期待値と一致する（参照実装は Node.js 製のため実行しない）。Python 標準の `unicodedata` で規則を満たせない文字があるときは、実装を止めて利用者に確認している",
+        "アンカー生成が、DES-008 §2 の規則から導いて fixture に書いた期待値と一致する（参照実装は Node.js 製のため実行しない。文字種別は `unicodedata` を使う）",
         "テストが `tests/doc-link/scripts/` にあり `unittest discover` が成功し、`dprint check` が成功する"
       ],
       "required_reading": [

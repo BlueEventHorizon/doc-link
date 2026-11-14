@@ -196,9 +196,9 @@
       "required_reading": [
         "docs/specs/plan/doc-link_strategy.md",
         "docs/specs/design/DES-002_execution-responsibilities.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/uv_usage_rules.md",
-        "docs/rules/script_error_output_rules.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_uv_usage_rules.md",
+        "docs/rules/plugin_script_error_output_rules.md"
       ]
     },
     {
@@ -225,7 +225,7 @@
         "docs/specs/design/DES-008_content-rules.md",
         "docs/specs/design/DES-007_references-impact.md",
         "docs/specs/requirement/REQ-002_document-id.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -254,7 +254,7 @@
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/requirement/REQ-002_document-id.md",
         "docs/specs/requirement/REQ-003_toc.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -281,8 +281,8 @@
         "docs/specs/plan/doc-link_strategy.md",
         "docs/specs/design/DES-005_indexing.md",
         "docs/specs/requirement/REQ-002_document-id.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/script_error_output_rules.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_script_error_output_rules.md"
       ]
     },
     {
@@ -310,7 +310,7 @@
         "docs/specs/design/DES-002_execution-responsibilities.md",
         "docs/specs/design/DES-003_data-model.md",
         "docs/specs/design/DES-005_indexing.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -343,7 +343,7 @@
         "docs/specs/design/DES-003_data-model.md",
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/requirement/REQ-002_document-id.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -375,9 +375,9 @@
         "docs/specs/design/DES-008_content-rules.md",
         "docs/specs/design/DES-010_skill-composition.md",
         "docs/specs/requirement/REQ-002_document-id.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md",
-        "docs/rules/script_error_output_rules.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md",
+        "docs/rules/plugin_script_error_output_rules.md"
       ]
     },
     {
@@ -411,7 +411,7 @@
         "docs/specs/design/DES-008_content-rules.md",
         "docs/specs/requirement/REQ-002_document-id.md",
         "docs/specs/requirement/REQ-003_toc.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -441,7 +441,7 @@
         "docs/specs/design/DES-008_content-rules.md",
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/requirement/REQ-005_references.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -468,7 +468,7 @@
         "docs/specs/design/DES-002_execution-responsibilities.md",
         "docs/specs/requirement/REQ-003_toc.md",
         "docs/specs/requirement/REQ-001_overview.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -498,7 +498,7 @@
         "docs/specs/design/DES-003_data-model.md",
         "docs/specs/design/DES-004_state-machines.md",
         "docs/specs/requirement/REQ-003_toc.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -531,7 +531,7 @@
         "docs/specs/design/DES-003_data-model.md",
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/requirement/REQ-003_toc.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -563,8 +563,8 @@
         "docs/specs/design/DES-004_state-machines.md",
         "docs/specs/design/DES-002_execution-responsibilities.md",
         "docs/specs/design/DES-001_system-overview.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/script_error_output_rules.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_script_error_output_rules.md"
       ]
     },
     {
@@ -595,9 +595,9 @@
         "docs/specs/design/DES-002_execution-responsibilities.md",
         "docs/specs/requirement/REQ-003_toc.md",
         "docs/rules/agent_data_exchange_rules.md",
-        "docs/rules/claude_code_authoring_guide.md",
-        "docs/rules/claude_code_reference.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_claude_code_authoring_guide.md",
+        "docs/rules/plugin_claude_code_reference.md",
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -631,8 +631,8 @@
         "docs/specs/design/DES-005_indexing.md",
         "docs/specs/requirement/REQ-004_search.md",
         "docs/specs/requirement/REQ-005_references.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md"
       ]
     },
     {
@@ -662,8 +662,8 @@
         "docs/specs/design/DES-006_search.md",
         "docs/specs/design/DES-010_skill-composition.md",
         "docs/specs/requirement/REQ-002_document-id.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md"
       ]
     },
     {
@@ -696,8 +696,8 @@
         "docs/specs/design/DES-005_indexing.md",
         "docs/specs/requirement/REQ-002_document-id.md",
         "docs/specs/requirement/REQ-005_references.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md"
       ]
     },
     {
@@ -725,8 +725,8 @@
         "docs/specs/design/DES-010_skill-composition.md",
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/requirement/REQ-005_references.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md"
       ]
     },
     {
@@ -755,8 +755,8 @@
         "docs/specs/design/DES-010_skill-composition.md",
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/requirement/REQ-005_references.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md"
       ]
     },
     {
@@ -787,8 +787,8 @@
         "docs/specs/design/DES-010_skill-composition.md",
         "docs/specs/requirement/REQ-004_search.md",
         "docs/rules/agent_data_exchange_rules.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/script_error_output_rules.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_script_error_output_rules.md"
       ]
     },
     {
@@ -817,10 +817,10 @@
         "docs/specs/design/DES-010_skill-composition.md",
         "docs/specs/design/DES-006_search.md",
         "docs/specs/requirement/REQ-004_search.md",
-        "docs/rules/claude_code_authoring_guide.md",
-        "docs/rules/claude_code_reference.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md",
+        "docs/rules/plugin_claude_code_reference.md",
         "docs/rules/agent_data_exchange_rules.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -853,7 +853,7 @@
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/design/DES-001_system-overview.md",
         "docs/specs/design/DES-010_skill-composition.md",
-        "docs/rules/implementation_guidelines.md"
+        "docs/rules/plugin_implementation_guidelines.md"
       ]
     },
     {
@@ -881,9 +881,9 @@
         "docs/specs/design/DES-009_verification.md",
         "docs/specs/design/DES-001_system-overview.md",
         "docs/specs/design/DES-002_execution-responsibilities.md",
-        "docs/rules/implementation_guidelines.md",
-        "docs/rules/claude_code_authoring_guide.md",
-        "docs/rules/script_error_output_rules.md"
+        "docs/rules/plugin_implementation_guidelines.md",
+        "docs/rules/plugin_claude_code_authoring_guide.md",
+        "docs/rules/plugin_script_error_output_rules.md"
       ]
     }
   ]

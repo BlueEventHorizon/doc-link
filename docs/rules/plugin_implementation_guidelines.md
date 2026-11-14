@@ -1,6 +1,6 @@
-# 実装ガイドライン
+# プラグイン実装ガイドライン
 
-doc-link プラグインのスクリプト（Python / Bash）と SKILL.md を実装するときのルール。
+Claude Code プラグインのスクリプト（Python / Bash）と SKILL.md を実装するときの、プラグインに依らず使えるルール。
 
 ---
 
@@ -12,20 +12,8 @@ doc-link プラグインのスクリプト（Python / Bash）と SKILL.md を実
 | 外部コマンド呼び出し・ファイル操作・パイプ処理 | Bash   | シンプルで高速。Python 起動オーバーヘッドなし |
 | 両方の特性が必要                               | Python | Bash の複雑化を避ける                         |
 
-- Python スクリプトは標準ライブラリのみを基本とする。別ライブラリの使用はユーザーに許諾を取ること。本プロジェクトで許諾済みの外部依存は次の 2 つだけである
-  - PyYAML（標準ライブラリに YAML パーサーが無いため）
-  - markdown-it-py（CommonMark 準拠の Markdown パーサーが標準ライブラリに無いため）
-- Python スクリプトは `uv run` で実行し、依存は script ごとに PEP 723 のインラインメタデータで宣言する。利用者の環境に必要なのは uv だけであり、Python 本体と宣言した依存は uv が用意する。システムの `python3` の有無や版には依存しない
-- Python と依存は最新の安定版を使う。実行・依存の追加・ロック・更新の手順は [uv 利用ルール][uv_usage_rules] に従い、版番号を手で書かない
-- Node.js を使わない。Node.js で動くツール・パッケージ・GitHub Actions のアクションに依存しない
+- Python スクリプトは標準ライブラリのみを基本とする。利用者の環境に依存の導入を求めないためである。別ライブラリの使用はユーザに許諾を取ること。標準ライブラリに YAML パーサーが無いので、スクリプトが読み書きする設定は JSON にするか、必要な範囲だけを自前で読む
 - Bash スクリプトは外部コマンド（git, curl 等）の呼び出しに使ってよい
-
-```python
-# /// script
-# requires-python = ">=<最新の安定版>"
-# dependencies = ["markdown-it-py>=<uv add が書き込んだ下限>"]
-# ///
-```
 
 ---
 
@@ -40,16 +28,9 @@ doc-link プラグインのスクリプト（Python / Bash）と SKILL.md を実
 | SKILL.md                     | 例外               | AI の振る舞いの記述で、自動テストが難しい        |
 | 利用者のローカルのスクリプト | 対象外             | 配布物ではない                                   |
 
-- テストは `tests/{plugin}/{skill}/` に置き、`test_{module}.py` と命名する
-- プラグイン直下の `scripts/` に置く共通スクリプトのテストは `tests/{plugin}/scripts/` に置く。`scripts` という名前のスキルは作らない
-- テストは次のコマンドで実行する
-
-```bash
-uv run --python 3.15 --exclude-newer "3 days" --with markdown-it-py python -m unittest discover -s tests -p 'test_*.py'
-```
-
+- テストファイルは `test_{module}.py` と命名する
 - テストを置くディレクトリの名前は、対象のスキル名と一致させる。スキルを改名したら、テストのディレクトリも同じ変更で改名する（片方だけ変えると、旧名のテストが新スキルを参照して静かに壊れる）
-- AI の判断（Agent・SKILL の出力）を試すテストは、判定が揺れ、費用もかかる。自動で実行するテストに入れず、手動で実行するものとして分けて置く
+- AI の判断（Agent・SKILL の出力）を試すテストは、判定が揺れ、費用もかかる。CI のゲートに入れず、手動で実行するものとして分けて置く
 
 ---
 
@@ -70,7 +51,7 @@ uv run --python 3.15 --exclude-newer "3 days" --with markdown-it-py python -m un
 
 以下のスクリプトを実行して集計結果を得る:
 
-    uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/aggregate.py" {入力パス}
+    python3 "${CLAUDE_SKILL_DIR}/scripts/aggregate.py" {入力パス}
 ```
 
 ---
@@ -92,15 +73,15 @@ SKILL.md からの参照には `${CLAUDE_SKILL_DIR}` か `${CLAUDE_PLUGIN_ROOT}`
 
 ---
 
-## 一時ファイルは `.temp/doc-link/<skill>/` に `Write` ツールで書く [CRITICAL]
+## 一時ファイルは `.temp/<plugin>/<skill>/` に `Write` ツールで書く [CRITICAL]
 
 SKILL.md の手順でコマンドに渡す一時ファイル（Issue・PR の本文等）は、AI が `Write` ツールでプロジェクトルートの `.temp/<plugin>/<skill>/` に書く。ファイル名にはセッション ID を含める。
 
 ```text
-${CLAUDE_PROJECT_DIR}/.temp/doc-link/<skill>/<name>_${CLAUDE_SESSION_ID}.md
+${CLAUDE_PROJECT_DIR}/.temp/<plugin>/<skill>/<name>_${CLAUDE_SESSION_ID}.md
 ```
 
-`doc-link` の部分にはプラグイン名を直に書く（プラグイン名を置換するプレースホルダは無い）。プラグインの階層を挟むのは、別のプラグインの同名 skill と置き場を分け、`.temp/` が ignore されていない環境でも `.temp/<plugin>/` だけを ignore すれば済むようにするためである。
+`<plugin>` にはプラグイン名を直に書く（プラグイン名を置換するプレースホルダは無い）。プラグインの階層を挟むのは、別のプラグインの同名 skill と置き場を分け、`.temp/` が ignore されていない環境でも `.temp/<plugin>/` だけを ignore すれば済むようにするためである。
 
 1. 置き場を `mkdir -p` で作る
 2. `Write` ツールで内容をそのまま書く
@@ -119,14 +100,14 @@ ${CLAUDE_PROJECT_DIR}/.temp/doc-link/<skill>/<name>_${CLAUDE_SESSION_ID}.md
 
 ## 配布物は開発用の文書を参照しない [MANDATORY]
 
-利用者の環境で読まれるもの（SKILL.md / `agents/*.md` / `commands/*.md` / 配布物に含めた docs / templates）から、**開発リポジトリにだけ実在する文書**（仕様書・設計書・開発ルール）を参照しない。パスの直書きも、仕様 ID による出典表記も禁止する。利用者の環境に実体が無く、参照が解決できず、規範の根拠も検証できないからである。
+利用者の環境で読まれるもの（SKILL.md / `agents/*.md` / `commands/*.md` / 配布した docs / templates）から、**開発リポジトリにだけ実在する文書**（仕様書・設計書・開発ルール）を参照しない。パスの直書きも、仕様 ID による出典表記も禁止する。利用者の環境に実体が無く、参照が解決できず、規範の根拠も検証できないからである。
 
 ```text
 ❌ 複数文書間の優先順位は DES-028 §3.4.1 に従う
 ❌ 詳細は docs/specs/foo/design/DES-029... を参照
 ```
 
-- script（`.py` / `.sh`）のコメントと docstring、`scripts/` 配下の開発者向け README は対象外とする。基準は拡張子ではなく、誰が読むかである。SKILL.md は文脈へ注入され、内蔵 docs は SKILL から名指しで読まれるが、script のソースを開くのは実装を追う開発者だけである。実装の意図がどの決定に由来するかを実装のすぐ隣に残せる価値のほうが大きいので、script のコメントには実在する仕様 ID を書いてよい。template は利用者の環境へ入って読まれるため、対象に含める
+- script（`.py` / `.sh`）のコメントと docstring、`scripts/` 配下の開発者向け README は対象外とする。基準は拡張子ではなく、誰が読むかである。SKILL.md は文脈へ注入され、配布した docs は SKILL から名指しで読まれるが、script のソースを開くのは実装を追う開発者だけである。実装の意図がどの決定に由来するかを実装のすぐ隣に残せる価値のほうが大きいので、script のコメントには実在する仕様 ID を書いてよい。template は利用者の環境へ入って読まれるため、対象に含める
 - ID の体系や書式を示す抽象例は許容する。プレースホルダ番号（`DES-001`）や、対象プロジェクトの構造を示すプレースホルダのパス（`docs/specs/<feature>/design/*.md`）は、実在の文書を指さないため対象外である
 - 規範の根拠を示すには、規範の本文を参照元にそのまま書くか、配布物の中に別の文書を作って参照する。分量が小さく 1 箇所でしか使わないなら前者、分量が大きいか複数から使うなら後者が向く
 - 逆の向き（開発用の文書が、配布物の実装を参照する）は許容する
@@ -216,5 +197,3 @@ ${CLAUDE_PROJECT_DIR}/.temp/doc-link/<skill>/<name>_${CLAUDE_SESSION_ID}.md
 | 並行する変更の衝突の回避   | 複数の変更が同じバージョン行を編集すると、マージで衝突が頻発する |
 
 バージョン更新が必要だと判断したら、自分で上げず、ユーザーにリリースの手順の実行を提案する。
-
-[uv_usage_rules]: uv_usage_rules.md

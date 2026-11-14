@@ -5,8 +5,8 @@
 metadata:
   name: Document Search Index (rules)
   key: rules
-  generated_at: 2026-11-02T03:25:59Z
-  file_count: 6
+  generated_at: 2026-11-14T03:04:41Z
+  file_count: 7
 
 docs:
   docs/rules/agent_data_exchange_rules.md:
@@ -38,162 +38,196 @@ docs:
       - return value
       - custom Agent
       - SKILL caller
-  docs/rules/claude_code_authoring_guide.md:
-    title: Authoring Guide for SKILL and Custom Agent in doc-link
-    purpose: Defines the rules for authoring SKILLs and custom Agents in doc-link, including launch path selection, the inheritance-type SKILL execution model, multi-layer defense, Agent completion waiting, and confirmation of user decisions through AskUserQuestion.
+  docs/rules/doc-link_implementation_rules.md:
+    title: doc-link Implementation Rules
+    purpose: "Defines doc-link-specific implementation rules that override generic plugin_ rules: uv run Python with PyYAML and markdown-it-py only, no Node.js, inherited-type SKILLs, test layout, and the uv command form for scripts."
     content_details:
-      - "Launch path selection order: Bash subprocess, then general Agent, then custom Agent, then inheritance-type SKILL"
-      - Inheritance-type SKILL never uses context fork or agent fields and states that it performs only X
-      - Custom Agent is chosen when the same role serves several callers, a write boundary must be constrained, or the parent context grows large
-      - Custom Agent frontmatter holds name, description, tools and model, with negative prohibitions on launching other Agents and taking over parent tasks
-      - "Four-layer defense table: Agent boundary, Role constraint, allowlist via tools or allowed-tools, and physical deny in settings.json permissions"
-      - Fixed short names for launch paths, and subagent is never used alone
-      - subagent_type accepts only built-in or defined custom Agent names, and prompts carry no slash notation
-      - Wait for the final Agent response or completion notification, and do not wait with ScheduleWakeup
-      - Questions and confirmations use AskUserQuestion, and disallowed-tools is not used to block it
-      - disable-model-invocation is set for irreversible operations such as deploy, push, tag, or version update
+      - Priority table listing which generic plugin_ rules doc-link overrides (dependencies, config format, python3 call form, fork SKILL avoidance, test placement, exclude-newer placement)
+      - Python scripts run via uv run with per-script PEP 723 inline metadata; only PyYAML and markdown-it-py are external dependencies
+      - Adding any other dependency requires user approval
+      - External commands are invoked from Bash; Node.js and Node-based tools are prohibited, GitHub Actions excluded
+      - "All SKILLs are inherited type; context: fork and agent fields are not written; isolated-context work goes to custom Agents"
+      - Tests under tests/{plugin}/{skill}/ named test_{module}.py; shared plugin scripts tested under tests/{plugin}/scripts/; no skill named scripts
+      - "Test command: uv run --python 3.15 with exclude-newer 3 days, markdown-it-py, and unittest discover over tests"
+      - SKILL.md, Agent definitions and tests call scripts with uv run --locked and exclude-newer 3 days
     applicable_tasks:
-      - Creating a new SKILL or custom Agent in doc-link
-      - Choosing the launch path among Bash subprocess, general Agent, custom Agent, and inheritance-type SKILL
-      - Reviewing SKILL.md or agent definitions for Role constraint and allowlist layering
-      - Modifying frontmatter or invocation settings of an existing SKILL or custom Agent
-      - Reviewing user confirmation and Agent completion waiting in SKILL definitions
+      - Implementation of doc-link plugin Python scripts
+      - Adding an external dependency to a doc-link script
+      - Creation or modification of a doc-link SKILL or custom Agent
+      - Writing unit tests for doc-link scripts
+      - Writing uv run invocations in SKILL.md, Agent definitions or tests
+      - Compliance review of doc-link implementation against project rules
     keywords:
-      - inheritance-type SKILL
+      - PyYAML
+      - markdown-it-py
+      - uv run
+      - PEP 723
+      - exclude-newer
+      - unittest
+      - "context: fork"
+      - Node.js
+      - test_{module}.py
+      - inherited SKILL
+  docs/rules/plugin_claude_code_authoring_guide.md:
+    title: Claude Code Authoring Guide (SKILL and Custom Agent)
+    purpose: "Defines project-independent conventions for combining SKILLs and custom Agents: launch path selection, argument limits, custom Agent frontmatter, defense layers, self-invocation and wait rules."
+    content_details:
+      - "Naming: use launch path short names (inherited SKILL, fork SKILL, general-purpose Agent, custom Agent, Bash subprocess), not bare numbers or the word subagent alone"
+      - subagent_type accepts only built-in or defined custom Agent names; slash notation is not written in prompts
+      - "Launch path decision order: Bash subprocess, general-purpose Agent, custom Agent, then inherited SKILL"
+      - Custom Agents are chosen for one role used by several callers, a constant write boundary, or a growing parent context
+      - Inherited SKILL arguments stay minimal; parent context, issue bodies, diffs and full files are not passed
+      - Custom Agent frontmatter holds name, description, tools and model; prohibitions are written in negative form
+      - Writing Agents get scope limits, no unrelated refactor, syntax check after edits, and a recommended allowlist
+      - "Defense layers A to D: Agent boundary, role constraint, tools allowlist, physical deny in settings"
+      - SKILLs must not invoke themselves through the Skill tool; always-invoked SKILLs state this prohibition at the top
+      - Agent completion is awaited by ending the turn, not by ScheduleWakeup
+    applicable_tasks:
+      - Creation of a SKILL and custom Agent pair in a plugin
+      - Choosing a launch path among Bash subprocess, general-purpose Agent, custom Agent and inherited SKILL
+      - Review of SKILL.md and agents definition files against authoring conventions
+      - Writing custom Agent prohibitions and tools allowlist
+      - Designing argument passing for inherited SKILLs
+      - Modification of defense layer configuration for Agents
+    keywords:
       - custom Agent
+      - inherited SKILL
+      - fork SKILL
       - launch path
-      - context fork
-      - allowed-tools
-      - AskUserQuestion
-      - disable-model-invocation
       - subagent_type
+      - allowlist
+      - self-invocation
       - ScheduleWakeup
-      - Role constraint
-  docs/rules/claude_code_reference.md:
-    title: Claude Code Reference for SKILL, Plugin and Agent
-    purpose: Records the Claude Code behavior facts that doc-link SKILLs and Agents depend on, including the five launch path types, known context fork issues, subagent_type values, tool restriction scope, and Agent foreground or background rules, with their sources.
+      - defense layers
+      - argument passing
+  docs/rules/plugin_claude_code_reference.md:
+    title: Claude Code Reference (SKILL, Plugin and Agent)
+    purpose: "Collects project-independent Claude Code mechanics relied on when combining SKILLs and Agents in plugins: five launch path types, known context fork defects, subagent_type values, and Agent launch observations."
     content_details:
-      - Five launch path types with short names (inheritance-type SKILL, fork-type SKILL, general Agent, custom Agent, Bash subprocess) and their parent context and output
-      - "Known context fork issues from public GitHub issues #18394, #34164, #60720, #55592, #34328, #19751, #17283, #17351 and #68233 with Anthropic responses"
-      - "Valid subagent_type values: built-in Agent names and defined custom Agent names, with plugin Agents under the plugin name namespace"
-      - SKILL names, slash notation and file paths are invalid as subagent_type
-      - allowed-tools pre-approves tools only for the invoking turn, while disallowed-tools restriction clears on the next user message
-      - Agent foreground or background decision order, including fork mode and CLAUDE_CODE_DISABLE_BACKGROUND_TASKS
-      - Interactive Agent tool has no run_in_background argument, always runs in background, and returns results by completion notification
-      - Background subagents observed without AskUserQuestion, with the cause not confirmed
-      - Agent definition background true takes effect only when fork mode is OFF, and no SKILL frontmatter setting for launch mode is confirmed
-      - ScheduleWakeup is a scheduling tool for /loop dynamic mode, and the harness notifies background completion
+      - Five launch path types with short names, launch method, instruction source, parent context inheritance and output form
+      - Official source for fork SKILL behavior, dated 2026-09-26, stating a subagent does not see conversation history
+      - "Known context fork defects listed by official issue number with Anthropic response: fixed, not planned, duplicate or open"
+      - "Issue 17351: nested SKILL returns to main context instead of the caller, unresolved and OPEN"
+      - "Issue 68233: recursion guard misfires and blocks legitimate fork launches, not planned"
+      - subagent_type accepts built-in Agent names and defined custom Agent names only; plugin Agents use the plugin:name namespace
+      - Slash notation and file paths are invalid as subagent_type values
+      - "Observed: background Agents had no AskUserQuestion even when listed in tools, cause unconfirmed"
+      - "Observed: ScheduleWakeup is the /loop dynamic mode tool and background completion is notified by the harness"
+      - Each Claude Code behavior line carries a source line with date, version and source; vocabulary lines carry none
     applicable_tasks:
-      - Verifying Claude Code behavior before writing a SKILL or custom Agent in doc-link
-      - Choosing a launch path type for a new feature
-      - Judging whether a fork-type SKILL is usable given known issues
-      - Writing subagent_type values or plugin Agent names in SKILL definitions
-      - Reviewing tool restriction and Agent background or foreground assumptions in SKILL or agent definitions
-      - Updating Claude Code facts and their source records when behavior changes
+      - Deciding whether a fork SKILL may be used in a plugin
+      - Choosing subagent_type values for Agent invocation
+      - Investigating Claude Code behavior for SKILL and Agent launch
+      - Recording sources and verification dates for Claude Code behavior claims
+      - Reviewing launch path choice against known fork defects
+      - Diagnosing missing AskUserQuestion in background Agents
     keywords:
-      - Claude Code reference
-      - context fork
+      - "context: fork"
       - subagent_type
-      - allowed-tools
-      - disallowed-tools
-      - run_in_background
-      - fork mode
+      - plugin:name
+      - AskUserQuestion
       - ScheduleWakeup
       - launch path
       - background Agent
-  docs/rules/implementation_guidelines.md:
-    title: Implementation Guidelines
-    purpose: Defines rules for implementing the doc-link plugin scripts (Python and Bash) and SKILL.md, covering language choice, allowed dependencies, test placement, script and file placement, temporary files, error fallback, and version file handling
+      - Skill tool
+      - known defect
+      - source line
+  docs/rules/plugin_implementation_guidelines.md:
+    title: Plugin Implementation Guidelines
+    purpose: Defines plugin-agnostic rules for implementing plugin scripts (Python and Bash) and SKILL.md, covering script language and dependencies, test placement, script and document placement, temporary files, distribution references, version file handling, and removal of unused code.
     content_details:
-      - "Language choice table: Python for data transformation and parsing, Bash for external commands and file operations, Node.js is not used"
-      - Python dependencies limited to PyYAML and markdown-it-py, other libraries require user approval
-      - Python scripts run via uv run with PEP 723 inline metadata declaring dependencies
-      - Test placement under tests/{plugin}/{skill}/test_{module}.py and tests/{plugin}/scripts/ for shared scripts, with AI-judgment tests kept separate as manual
-      - SKILL.md must not contain inline script logic and must call independent scripts via CLAUDE_SKILL_DIR or CLAUDE_PLUGIN_ROOT
-      - "Script placement rule: skills/{skill}/scripts/ for single-skill assets, plugin-root scripts/ for shared assets, no direct reference into another skill directory"
-      - Temporary files written with the Write tool to .temp/doc-link/<skill>/ with session ID in the name, never via shell heredoc or echo
-      - Distributed files (SKILL.md, agents, commands, bundled docs) must not reference development-only docs by path or spec ID
-      - Unused code is deleted rather than commented out or marked deprecated
-      - Fallbacks only when the recovery is explainable, otherwise report the error explicitly
-      - Version files such as plugin.json version and CHANGELOG are not edited in normal work
+      - "Language split: Python for data transformation and parsing, Bash for external commands and file operations, standard library only by default"
+      - "Test rules: distributed .py files require tests named test_{module}.py, SKILL.md is exempt, AI-judgment tests run manually outside CI"
+      - "No inline scripts in SKILL.md: SKILL.md calls independent scripts via CLAUDE_SKILL_DIR or CLAUDE_PLUGIN_ROOT"
+      - "Placement: skills/{skill}/scripts and docs for single-skill assets, plugin-root scripts and docs for assets shared by two or more skills"
+      - Do not reference other skills internal directories; move shared assets to plugin root instead of copying
+      - "Temporary files: write with the Write tool to .temp/plugin/skill/ with session ID in name, no shell heredoc, no trap EXIT cleanup, no mktemp default directory"
+      - Distributed files (SKILL.md, agents, commands, distributed docs, templates) must not reference development-only specs, designs, or rules by path or ID
+      - Other components are reached only through the public SKILL argument and output contract, never by calling their scripts directly
+      - Unused code is deleted without deprecated markers or comments, with the reason in the commit message
+      - Fallbacks must have an explained recovery; otherwise report the error explicitly with information for the caller
     applicable_tasks:
-      - Implementation of doc-link plugin Python scripts
-      - Implementation of doc-link SKILL.md and Bash scripts
-      - Creation of unit tests for doc-link Python scripts
-      - Decision on script placement and dependency addition for doc-link
-      - Review of doc-link implementation against implementation rules
-      - Design of temporary file handling in doc-link SKILL procedures
+      - Implementation of plugin scripts in Python or Bash
+      - Authoring or modifying SKILL.md procedures
+      - Creating or placing tests for distributed plugin Python scripts
+      - Deciding where a plugin script or document should be placed
+      - Designing temporary file handling for SKILL.md procedures
+      - Reviewing plugin code for distributed-document reference violations
+      - Removing unused code or deprecated markers from a plugin
+      - Deciding whether a fallback is acceptable in plugin error handling
     keywords:
-      - PEP 723
-      - uv run
-      - PyYAML
-      - markdown-it-py
-      - unittest
+      - plugin implementation
+      - SKILL.md
+      - inline script
+      - test_{module}.py
       - CLAUDE_SKILL_DIR
-      - CLAUDE_PLUGIN_ROOT
-      - .temp/doc-link
+      - .temp
+      - Write tool
       - fallback
       - plugin.json version
-  docs/rules/script_error_output_rules.md:
+      - script placement
+  docs/rules/plugin_script_error_output_rules.md:
     title: Script Error Output Rules
-    purpose: Defines how plugin Python scripts return exit codes and error output, fixing the shared meaning of codes 0 to 2, requiring codes 3 and above to be declared in each script docstring, and specifying the JSON error format on stdout.
+    purpose: Specifies exit codes and error output for Claude Code plugin Python scripts, defining the shared meanings of 0, 1 and 2, requiring scripts that return 3 or higher to declare them in their docstring, and fixing stdout JSON with an errors array.
     content_details:
-      - "Exit codes: 0 completed, 1 unspecified error, 2 reserved for argparse argument rejection, 3 and above defined only by the script that returns them"
-      - Result content never changes the exit code; zero findings or zero targets still return 0
-      - Scripts returning codes 3 and above must declare the full code table including 0 in the module docstring
-      - Scripts returning only 0 to 2 need no declaration; wrappers pass through or collapse the codes they forward
-      - Callers branch on a value only when the producing docstring declares it; otherwise treat as an unspecified error
-      - Non-zero stdout is JSON with an errors array of natural-language strings, always an array even for one item
-      - Argparse exit 2 leaves stdout empty, so usage goes to stderr
+      - "Shared exit codes: 0 completed, 1 generic failure with no reason distinction, 2 reserved for argparse argument rejection"
+      - Scripts returning 3 or higher must declare the full exit code table in their module docstring, including 0
+      - Scripts without a declaration may return only 0, 1 or 2
+      - Wrappers that pass through other scripts exit codes must declare the passed value range or collapse to 0, 1, 2
+      - Zero findings or zero targets still return 0; result content goes in stdout JSON
+      - Callers may branch on a value only when the producing docstring declares it; otherwise treat as generic error and report
+      - "Stdout is JSON: result JSON on 0, error JSON with an errors array of natural-language strings on non-zero except exit code 2"
       - Diagnostics may go to stderr but error content must also appear in stdout JSON
-      - Hook scripts governed by the harness contract are exempt
-      - Rule applies to newly placed scripts; existing scripts are updated at revision time
+      - "Scope: applies to newly placed scripts only; harness-defined hook scripts follow the harness contract"
+      - Numeric values for 3 and above are chosen freely and must not encode categories by numeric ranges
     applicable_tasks:
-      - Implementing exit code handling in new plugin Python scripts
-      - Reviewing script exit codes and docstring declarations
-      - Designing JSON error output on stdout for scripts
-      - Writing caller logic that branches on script exit codes in SKILL.md
-      - Adding a wrapper script that forwards another script exit codes
-      - Reviewing error reporting of script failures
+      - Implementing a new Python script that returns exit codes or error output
+      - Declaring exit codes in a script module docstring
+      - Reviewing script exit code handling and error JSON output
+      - Writing caller logic in SKILL.md that branches on script exit codes
+      - Modifying a wrapper script that passes through another scripts exit codes
+      - Deciding whether a script should use exit code 2 via argparse
+      - Reviewing stdout and stderr contracts for plugin scripts
     keywords:
       - exit code
-      - argparse
       - errors array
-      - docstring declaration
       - stdout JSON
-      - stderr
-      - unspecified error
+      - argparse
+      - sys.exit
+      - module docstring
+      - exit code table
+      - script error output
       - wrapper script
-      - hook exemption
-      - SKILL.md caller
-  docs/rules/uv_usage_rules.md:
+      - generic error
+  docs/rules/plugin_uv_usage_rules.md:
     title: uv Usage Rules
-    purpose: Defines rules for running Python scripts with uv and managing their dependencies, Python versions, and lock files, including a 3-day cooldown that excludes newly published package versions to guard against hijacked releases
+    purpose: Defines rules for running Python scripts and managing their dependencies with uv, covering PEP 723 metadata versus pyproject.toml, locking, upgrades, the 3-day exclude-newer supply-chain guard, and Python version selection.
     content_details:
-      - Python scripts run only via uv run, never with the system python3 directly
-      - Dependencies and Python version declared per script with PEP 723 inline metadata
-      - Dependencies added with uv add --script --bounds lower and removed with uv remove --script, versions never hand-written
-      - Lock file created with uv lock --script and committed together with the script
-      - Execution uses uv run --locked with the 3-day exclude-newer cutoff, and --locked is never dropped
-      - Outdated dependency check with uv tree --script --outdated and upgrade with uv lock --upgrade or --upgrade-package
-      - 3-day cooldown excludes package versions published less than 3 days ago, with the reason and Renovate preset basis
-      - Urgent security fixes may use exclude-newer-package per package after verifying the change and publisher
-      - requires-python lower bound follows the latest stable Python, checked with uv python list
-      - "Known limit: the cooldown only defends against attacks discovered soon after publication"
+      - "Dependency declaration: standalone and distributed scripts use PEP 723 inline metadata, multi-script groups with shared modules and tests use pyproject.toml with package false"
+      - Run Python scripts with uv run, never bare python3, and put exclude-newer settings in the script tool.uv metadata
+      - Dependencies are added with uv add --script and --bounds lower, removed with uv remove --script, and version numbers are never typed by hand
+      - Lock with uv lock --script after adding dependencies, commit the lock file with the script, and verify with uv run --locked
+      - Check outdated dependencies with uv tree --outdated and upgrade with uv lock --upgrade or --upgrade-package
+      - "Supply-chain guard: exclude-newer 3 days in tool.uv, with per-package exclude-newer-package for urgent security fixes"
+      - requires-python lower bound follows the latest stable Python, chosen from uv python list excluding alpha beta and rc
+      - Distributed scripts cannot use pyproject.toml because end users have no project root, so every importing entry script declares shared dependencies
+      - Adding a dependency requires prior user permission under the implementation guidelines
     applicable_tasks:
-      - Adding, removing, or upgrading dependencies of a Python script
-      - Creating or updating a script lock file
-      - Executing Python scripts in a plugin
-      - Deciding the Python version requirement of a script
-      - Reviewing supply chain safety of script dependencies
+      - Running Python scripts through uv run in a plugin or project
+      - Adding, removing, or upgrading a Python script dependency
+      - Creating a PEP 723 inline metadata block for a script
+      - Choosing between PEP 723 metadata and pyproject.toml for a script group
+      - Updating or regenerating uv.lock for scripts
+      - Configuring exclude-newer supply-chain protection for dependencies
+      - Selecting the requires-python lower bound for a script
     keywords:
       - uv run
+      - PEP 723
       - uv add --script
       - uv lock --script
+      - uv.lock
       - "--locked"
-      - "--exclude-newer"
-      - "--exclude-newer-package"
-      - PEP 723
+      - exclude-newer
+      - exclude-newer-package
       - requires-python
-      - uv tree --outdated
-      - uv python list
+      - pyproject.toml

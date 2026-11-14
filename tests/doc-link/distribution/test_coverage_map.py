@@ -29,7 +29,7 @@ MANUAL_DIR = TESTS_ROOT / "manual"
 
 NO_COUNTERPART = "対応なし"
 # 対応なしと記録した AC。記録を直したときは、この一覧も同じ変更で直す
-KNOWN_GAPS = {"AC-016", "AC-023", "AC-024"}
+KNOWN_GAPS: set[str] = set()
 
 TEST_REFERENCE = re.compile(r"`([\w./-]+\.py)::(\w+)::(\w+)`")
 MANUAL_REFERENCE = re.compile(r"`([\w-]+_manual\.md)`")

@@ -1,6 +1,8 @@
+import inspect
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
@@ -21,6 +23,24 @@ class IssueTest(unittest.TestCase):
     def test_ten_thousand_are_unique(self):
         issued = {dlid.issue_dlid() for _ in range(10000)}
         self.assertEqual(len(issued), 10000)
+
+    def test_value_is_not_derived_from_document_attributes(self):
+        # 発行は文書の属性（本文・ファイル名・パス・タイトル・要約）を入力に持たず、値は乱数だけで決まる
+        self.assertEqual(inspect.signature(dlid.issue_dlid).parameters, {})
+        for number in (0, 1, (1 << dlid.DLID_BITS) - 1):
+            with self.subTest(number=number):
+                with mock.patch.object(dlid.secrets, "randbits", return_value=number):
+                    first = dlid.issue_dlid()
+                    second = dlid.issue_dlid()
+                self.assertEqual(first, second)
+                self.assertEqual(
+                    first,
+                    dlid.DLID_PREFIX
+                    + "".join(
+                        dlid.CROCKFORD_ALPHABET[(number >> (5 * i)) & 0x1F]
+                        for i in reversed(range(dlid.DLID_VALUE_LENGTH))
+                    ),
+                )
 
 
 class RecognitionTest(unittest.TestCase):

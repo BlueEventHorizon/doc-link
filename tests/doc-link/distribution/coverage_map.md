@@ -24,7 +24,8 @@
 
 ### AC-024
 
-- Forge が解決したキーと対象指定を直接渡すだけで構築できる → 対応なし（間接のみ）。構築・検査のテストは、`.doc_structure.yaml` を置かない一時のツリーへキーと対象指定を直接与えて通っている。外部設定を直接読まないことを確かめるテストは無い
+- Forge が解決したキーと対象指定を直接渡すだけで、外部設定ファイルが無くても構築・検査できる → `scenarios/test_external_config_absent.py::ExternalConfigAbsentTest::test_builds_and_checks_without_doc_structure_file`
+- `.doc_structure.yaml` を直接読み取らない → `distribution/test_no_external_config_reference.py::NoExternalConfigReferenceTest::test_distributed_files_do_not_refer_to_doc_structure`
 
 ## FR-001／002 [文書 ID]
 
@@ -50,11 +51,11 @@
 
 ### AC-016
 
-- [文書 ID]の値部分が、本文・ファイル名・パス・タイトル・要約から導出されず、再計算もされない → 対応なし（間接のみ）。`scripts/test_dlid.py::IssueTest::test_ten_thousand_are_unique` が、発行の値が重複しないことを確かめる。値が文書の属性から導出されないことを直接確かめるテストは無い
+- [文書 ID]の値部分が、本文・ファイル名・パス・タイトル・要約から導出されず、再計算もされない → `scripts/test_dlid.py::IssueTest::test_value_is_not_derived_from_document_attributes`、`scripts/test_dlid.py::IssueTest::test_ten_thousand_are_unique`
 
 ### AC-023
 
-- 文書をあるキーの対象から外して別のキーの対象に含めても、`doc_link_id` が変更されない → 対応なし（間接のみ）。`scripts/test_dlid_writer.py::ExactBytesTest::test_existing_ids_are_kept` が、付与済みの[文書 ID]が書き換わらないことを確かめ、`scenarios/test_scenario_5_multiple_keys.py::MultipleKeysScenarioTest::test_scenario_5_adding_to_another_key_does_not_request_generation` が、同じ[文書 ID]のまま別のキーへ加えられることを確かめる。キーの所属の変更を理由に[文書 ID]が変わらないことを直接確かめるテストは無い
+- 文書をあるキーの対象から外して別のキーの対象に含めても、`doc_link_id` が変更されない → `scenarios/test_scenario_5_multiple_keys.py::MultipleKeysScenarioTest::test_scenario_5_moving_a_document_between_keys_keeps_its_document_id`、`scenarios/test_scenario_5_multiple_keys.py::MultipleKeysScenarioTest::test_scenario_5_adding_to_another_key_does_not_request_generation`
 
 ### AC-025
 

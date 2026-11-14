@@ -87,6 +87,21 @@ class MultipleKeysScenarioTest(ScenarioBase):
         self.build_ok("two", KEYS["two"])
         self.assertEqual(self.requested, [ID_C])
 
+    def test_scenario_5_moving_a_document_between_keys_keeps_its_document_id(self):
+        self.build_ok("one", KEYS["one"])
+        b_before = self.read("docs/b.md")
+        # B を one の対象から外し、two の対象に含める。B の[文書 ID]は書き換わらない
+        self.build_ok("one", ["docs/a.md"])
+        self.build_ok("two", KEYS["two"])
+        self.assertEqual(self.read("docs/b.md"), b_before)
+        self.assertEqual(
+            [d["doc_link_id"] for d in self.toc("one")["documents"]], [ID_A]
+        )
+        self.assertEqual(
+            [d["doc_link_id"] for d in self.toc("two")["documents"]], [ID_B, ID_C]
+        )
+        self.assertEqual(self.resolve_one(ID_B)["path"], "docs/b.md")
+
     def test_scenario_5_both_keys_show_the_same_document_info(self):
         self.build_both()
         copies = {}

@@ -20,7 +20,7 @@ description: 対象の Markdown 文書の参照（title に DLID を持つリフ
 ### 1. 参照を検査する
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/check_links.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_links.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
 - 終了コードが 0 のときは、検査を完了した。検出事項があっても 0 である。手順 2 へ進む

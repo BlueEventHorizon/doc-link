@@ -6,9 +6,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 SKILL_DIR = PROJECT_ROOT / "plugins" / "doc-link" / "skills" / "check-toc"
 SKILL_MD = SKILL_DIR / "SKILL.md"
 
-COMMAND_PREFIX = (
-    'uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/'
-)
+COMMAND_PREFIX = 'uv run --locked "${CLAUDE_SKILL_DIR}/scripts/'
 
 
 def split_frontmatter(text):

@@ -3,6 +3,9 @@
 # dependencies = [
 #     "markdown-it-py>=4.2.0",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "3 days"
 # ///
 """実行環境（Python と markdown-it-py）が使えることを確かめ、版を JSON で返す。
 

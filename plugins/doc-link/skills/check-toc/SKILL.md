@@ -21,7 +21,7 @@ description: ToC（確定 ToC）が現物の文書に対して最新かを検査
 ### 1. 検査する
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/check_toc.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_toc.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON を読み、手順 2 へ進む。未構築・再構築不要・再構築必要は、どれも検査が完了しており、終了コードは 0 である

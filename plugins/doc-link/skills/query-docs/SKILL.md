@@ -27,7 +27,7 @@ description: タスクに関連する文書を ToC（確定 ToC）から探し�
 ### 1. 検索前検査をする
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-root "${CLAUDE_PROJECT_DIR}" --task={検索のタスク} {受け取った ToC 識別キーと対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-root "${CLAUDE_PROJECT_DIR}" --task={検索のタスク} {受け取った ToC 識別キーと対象指定の引数}
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2）
@@ -64,7 +64,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/query_docs
 - Agent を起動できなかったなど、手順 4 の `collect` を呼ばずに終えるときは、作業ファイルを削除する
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" cleanup --project-root "${CLAUDE_PROJECT_DIR}" --search-id {search_id}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" cleanup --project-root "${CLAUDE_PROJECT_DIR}" --search-id {search_id}
 ```
 
 ### 4. 結果を受け取る
@@ -72,7 +72,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/query_docs
 完了を受け取った後に呼ぶ。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" collect --project-root "${CLAUDE_PROJECT_DIR}" --search-id {search_id}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" collect --project-root "${CLAUDE_PROJECT_DIR}" --search-id {search_id}
 ```
 
 - 終了コードが 0 のときは、検査済みの結果が返る。手順 5 へ進む

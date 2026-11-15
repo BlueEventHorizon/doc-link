@@ -291,8 +291,6 @@ class EntryScriptWithUvTest(CheckLinksTestBase):
                 "uv",
                 "run",
                 "--locked",
-                "--exclude-newer",
-                "3 days",
                 str(self.SCRIPT),
                 *args,
             ],

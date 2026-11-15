@@ -24,7 +24,7 @@ description: ToC（確定 ToC）を構築・再構築する。対象の文書の
 最初は `build_id` を付けずに呼ぶ。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2・3）
@@ -43,7 +43,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/index_docs
 - すべての Agent の完了を受け取ったら、`build_id` を付けて、同じ script をもう一度呼ぶ
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" --build-id {build_id} {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" --build-id {build_id} {受け取った対象指定の引数}
 ```
 
 - 返された `action` が再び `invoke_toc_updater` のときは、残りの生成対象の依頼である（`remaining_documents` が、前の回に含めなかった数）。この手順 2 を繰り返す

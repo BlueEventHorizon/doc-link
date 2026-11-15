@@ -3,6 +3,9 @@
 # dependencies = [
 #     "markdown-it-py>=4.2.0",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "3 days"
 # ///
 """対象文書へ[DLID]を付与する（embed-dlid の入口 script）。
 

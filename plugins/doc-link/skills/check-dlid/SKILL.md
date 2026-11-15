@@ -20,7 +20,7 @@ description: 対象の Markdown 文書の DLID（文書 ID とセクション ID
 ### 1. 検査する
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/check_dlid.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_dlid.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON を読み、手順 2 へ進む。検出事項があっても終了コードは 0 である

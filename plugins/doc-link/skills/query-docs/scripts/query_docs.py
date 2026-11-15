@@ -3,6 +3,9 @@
 # dependencies = [
 #     "markdown-it-py>=4.2.0",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "3 days"
 # ///
 """文書を検索する（query-docs の入口 script）。検索前検査・[ToC]の写しの固定・`query-worker` との受け渡し・結果の検査。
 

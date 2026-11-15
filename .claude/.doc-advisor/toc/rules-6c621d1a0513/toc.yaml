@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (rules)
   key: rules
-  generated_at: 2026-11-14T03:04:41Z
+  generated_at: 2026-11-15T04:08:13Z
   file_count: 7
 
 docs:
@@ -40,34 +40,33 @@ docs:
       - SKILL caller
   docs/rules/doc-link_implementation_rules.md:
     title: doc-link Implementation Rules
-    purpose: "Defines doc-link-specific implementation rules that override generic plugin_ rules: uv run Python with PyYAML and markdown-it-py only, no Node.js, inherited-type SKILLs, test layout, and the uv command form for scripts."
+    purpose: Defines doc-link rules overriding generic plugin guidelines on uv-run Python execution, allowed dependencies (PyYAML, markdown-it-py), no Node.js, inherited-type SKILLs, and test layout.
     content_details:
-      - Priority table listing which generic plugin_ rules doc-link overrides (dependencies, config format, python3 call form, fork SKILL avoidance, test placement, exclude-newer placement)
-      - Python scripts run via uv run with per-script PEP 723 inline metadata; only PyYAML and markdown-it-py are external dependencies
-      - Adding any other dependency requires user approval
-      - External commands are invoked from Bash; Node.js and Node-based tools are prohibited, GitHub Actions excluded
-      - "All SKILLs are inherited type; context: fork and agent fields are not written; isolated-context work goes to custom Agents"
-      - Tests under tests/{plugin}/{skill}/ named test_{module}.py; shared plugin scripts tested under tests/{plugin}/scripts/; no skill named scripts
-      - "Test command: uv run --python 3.15 with exclude-newer 3 days, markdown-it-py, and unittest discover over tests"
-      - SKILL.md, Agent definitions and tests call scripts with uv run --locked and exclude-newer 3 days
+      - Priority table listing which generic plugin_ guideline items this document overrides (dependencies, config format, python3 invocation in SKILL.md, fork SKILL avoidance, test layout)
+      - Python scripts run via uv run with PEP 723 inline metadata so users need only uv
+      - Only external dependencies allowed are PyYAML and markdown-it-py; adding others requires user approval
+      - Node.js prohibited and tools or packages depending on it excluded; GitHub Actions out of scope
+      - All SKILLs are inherited-type; context fork attribute and agent field are not written; isolated processing goes to a custom Agent
+      - plugins/ .py files require tests at tests/{plugin}/{skill}/test_{module}.py
+      - Shared plugin-level scripts tested under tests/{plugin}/scripts; no skill named scripts
+      - Test command uses uv run --python 3.15 with --exclude-newer `3 days` and markdown-it-py, running unittest discover
     applicable_tasks:
-      - Implementation of doc-link plugin Python scripts
-      - Adding an external dependency to a doc-link script
-      - Creation or modification of a doc-link SKILL or custom Agent
-      - Writing unit tests for doc-link scripts
-      - Writing uv run invocations in SKILL.md, Agent definitions or tests
-      - Compliance review of doc-link implementation against project rules
+      - Implementation of doc-link plugin Python scripts and their dependency declaration
+      - Review of doc-link code for Node.js usage or unapproved external dependencies
+      - Creation of SKILL.md and custom Agent files under doc-link as inherited-type without fork
+      - Creation and placement of tests for doc-link plugin scripts
+      - Execution of the doc-link unittest suite
     keywords:
-      - PyYAML
-      - markdown-it-py
       - uv run
       - PEP 723
-      - exclude-newer
-      - unittest
-      - "context: fork"
+      - PyYAML
+      - markdown-it-py
       - Node.js
-      - test_{module}.py
       - inherited SKILL
+      - unittest discover
+      - tests/doc-link
+      - plugin_ guidelines
+      - doc-link_implementation_rules
   docs/rules/plugin_claude_code_authoring_guide.md:
     title: Claude Code Authoring Guide (SKILL and Custom Agent)
     purpose: "Defines project-independent conventions for combining SKILLs and custom Agents: launch path selection, argument limits, custom Agent frontmatter, defense layers, self-invocation and wait rules."

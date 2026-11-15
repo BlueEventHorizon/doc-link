@@ -675,8 +675,6 @@ class EntryScriptWithUvTest(Base):
                 "uv",
                 "run",
                 "--locked",
-                "--exclude-newer",
-                "3 days",
                 str(self.SCRIPT),
                 *args,
             ],

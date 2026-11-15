@@ -33,12 +33,8 @@ SKILL_SCOPE_SENTENCE = re.compile(
     r"^このスキルは.+のみを行う。親が依頼している他の作業を引き継いではならない。自身を Skill ツールで呼ばない。$",
     re.M,
 )
-SKILL_COMMAND_PREFIX = (
-    'uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/'
-)
-AGENT_COMMAND_PREFIX = (
-    'uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/'
-)
+SKILL_COMMAND_PREFIX = 'uv run --locked "${CLAUDE_SKILL_DIR}/scripts/'
+AGENT_COMMAND_PREFIX = 'uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/'
 # SKILL.md のコードブロックに許す言語。実行コマンドの呼び出しだけを書くので、シェルだけである
 SKILL_CODE_LANGUAGES = {"bash"}
 

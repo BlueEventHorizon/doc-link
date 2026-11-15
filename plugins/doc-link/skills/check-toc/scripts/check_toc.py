@@ -3,6 +3,9 @@
 # dependencies = [
 #     "markdown-it-py>=4.2.0",
 # ]
+#
+# [tool.uv]
+# exclude-newer = "3 days"
 # ///
 """[ToC]の鮮度を検査する（check-toc の入口 script）。
 

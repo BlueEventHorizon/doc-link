@@ -1,10 +1,11 @@
 """配布する script の実行環境（PEP 723 とロック・uv での起動）と、一時ファイルの置き場を検査する。
 
 - PEP 723 とロック: 入口 script（`__main__` で起動できる `.py`。`skills/<skill>/scripts/` と、
-  プラグイン共通の `scripts/` の入口）すべてに、`# /// script` ブロック（`requires-python` と `dependencies`）と、
-  隣の `<script>.py.lock` がある。依存の版番号を手で書いていないことは、検査の対象外である
+  プラグイン共通の `scripts/` の入口）すべてに、`# /// script` ブロック（`requires-python`・`dependencies`・
+  `[tool.uv]` の `exclude-newer = "3 days"`）と、隣の `<script>.py.lock` がある。SKILL.md・Agent の実行コマンドは
+  `--exclude-newer` を付けない（付け忘れで `--locked` が失敗するのを避けるため、メタデータだけに書く）。依存の版番号を手で書いていないことは、検査の対象外である
   （`uv add --bounds lower` の書き込みと手書きを、ファイルから区別できない）
-- uv での起動: 全入口 script を `uv run --locked --exclude-newer "3 days" <script> --help` で起動し、
+- uv での起動: 全入口 script を `uv run --locked <script> --help` で起動し、
   終了コード 0 で動くことを確かめる。uv が無い環境では skip し、理由を表示する。`--help` だけに絞り、並列にしない。
   SKILL.md の実行コマンドの形は `test_skill_agent_conformance` が確かめる
 - 一時ファイルの置き場: 配布物の `.py` が、システムの一時ディレクトリの既定（`tempfile` の `dir` の無い呼び出し、
@@ -77,6 +78,15 @@ class Pep723AndLockTest(unittest.TestCase):
                 self.assertIsNotNone(metadata, "# /// script ブロックが無い")
                 self.assertIsInstance(metadata.get("requires-python"), str)
                 self.assertIsInstance(metadata.get("dependencies"), list)
+                self.assertEqual(
+                    metadata.get("tool", {}).get("uv", {}).get("exclude-newer"),
+                    "3 days",
+                )
+
+    def test_skill_and_agent_commands_do_not_pass_exclude_newer(self):
+        for path in [*skill_md_files(), *agent_md_files()]:
+            with self.subTest(file=relative(path)):
+                self.assertNotIn("--exclude-newer", path.read_text(encoding="utf-8"))
 
     def test_every_entry_script_has_its_lock_file(self):
         for script in entry_scripts():
@@ -102,8 +112,6 @@ class UvRunHelpTest(unittest.TestCase):
                         "uv",
                         "run",
                         "--locked",
-                        "--exclude-newer",
-                        "3 days",
                         str(script),
                         "--help",
                     ],

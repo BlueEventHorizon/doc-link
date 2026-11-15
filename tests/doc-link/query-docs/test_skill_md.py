@@ -13,9 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 SKILL_DIR = PROJECT_ROOT / "plugins" / "doc-link" / "skills" / "query-docs"
 SKILL_MD = SKILL_DIR / "SKILL.md"
 
-COMMAND_PREFIX = (
-    'uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/'
-)
+COMMAND_PREFIX = 'uv run --locked "${CLAUDE_SKILL_DIR}/scripts/'
 # 配布物から開発用の文書を参照していないことを確かめる検索語（SKILL.md 全体が範囲）
 FORBIDDEN_REFERENCES = ("docs/specs", "docs/rules", "DES-", "REQ-", "ADR-", "D-0")
 

@@ -20,7 +20,7 @@ description: DLID（文書 ID・セクション ID）の並びから、管理状
 ### 1. 解決する
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/resolve_dlid.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った DLID の並び}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/resolve_dlid.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った DLID の並び}
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON を読み、手順 2 へ進む。記録されたパスに無い DLID や記録の無い DLID があっても終了コードは 0 である

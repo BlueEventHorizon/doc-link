@@ -20,7 +20,7 @@ description: 参照元の title に記録した内容ハッシュが、参照先
 ### 1. 変更影響候補を列挙する
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/check_impact.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_impact.py" --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON を読み、手順 2 へ進む。変更影響候補があっても、操作は完了しており、終了コードは 0 である

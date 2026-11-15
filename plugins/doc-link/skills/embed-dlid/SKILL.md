@@ -22,7 +22,7 @@ description: 対象の Markdown 文書へ DLID（文書 ID とセクション ID
 何も書き込まずに、付与計画を作る。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/embed_dlid.py" plan --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/embed_dlid.py" plan --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
 - 標準出力の JSON を読む。`needs_origin` が偽なら、手順 3 へ進む
@@ -41,7 +41,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/embed_dlid
 ### 3. 書き込む
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_SKILL_DIR}/scripts/embed_dlid.py" apply --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数} --origin {origin_args の 4 つの値}
+uv run --locked "${CLAUDE_SKILL_DIR}/scripts/embed_dlid.py" apply --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数} --origin {origin_args の 4 つの値}
 ```
 
 - `--origin` は、手順 2 で確定した重複ごとに 1 回ずつ足す。手順 2 を行わなかったときは足さない

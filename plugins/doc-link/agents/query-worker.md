@@ -34,7 +34,7 @@ prompt には、検索 ID だけが書かれている。検索 ID を作り直�
 受け取った検索 ID をそのまま script へ渡し、依頼のファイルの絶対パスを得る。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" request-path --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID}
+uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" request-path --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID}
 ```
 
 - 標準出力の `path` のファイルを Read で読む。パスを自分で組み立てない
@@ -63,7 +63,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/query-doc
 選んだ文書を、関連の強い順に 1 件ずつ渡す。並べた順が結果の並びになる。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" submit-item --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID} --doc-id {文書 ID} --reason '{関連理由}' --section-id {セクション ID}
+uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" submit-item --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID} --doc-id {文書 ID} --reason '{関連理由}' --section-id {セクション ID}
 ```
 
 - `--section-id` は、該当するセクションがあるときだけ付ける。複数あれば、セクションごとにオプションを繰り返す
@@ -75,7 +75,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/query-doc
 すべての `submit-item` の後に、終了の値を 1 回だけ渡す。関連する文書が 0 件でも渡す。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" submit-end --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID} --exit-value 0
+uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" submit-end --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID} --exit-value 0
 ```
 
 - 終了の値は文字列 `0` だけである。エラー値は無い（関連する文書が無いときは空の集合を意味する `0` を渡す）

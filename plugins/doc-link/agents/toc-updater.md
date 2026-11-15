@@ -36,7 +36,7 @@ prompt には、識別値だけが書かれている。
 受け取った識別値をそのまま script へ渡し、依頼のファイルの絶対パスを得る。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" request --project-root "${CLAUDE_PROJECT_DIR}" --build-id {構築 ID} --doc-id {文書 ID} [--doc-id {文書 ID} ...]
+uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" request --project-root "${CLAUDE_PROJECT_DIR}" --build-id {構築 ID} --doc-id {文書 ID} [--doc-id {文書 ID} ...]
 ```
 
 - 標準出力の `path` のファイルを Read で読む。パスを自分で組み立てない
@@ -61,7 +61,7 @@ uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/index-doc
 文書 1 件ごとに、確定した値と終了の値を script へ渡す。
 
 ```bash
-uv run --locked --exclude-newer "3 days" "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" deliver --project-root "${CLAUDE_PROJECT_DIR}" --build-id {構築 ID} --doc-id {文書 ID} --exit-value 0 --purpose '{目的}' --summary '{内容概要の 1 要素}' --summary '{内容概要の次の要素}' --applicable-tasks '{適用される作業の 1 要素}' --keywords '{キーワードの 1 要素}' --keywords '{キーワードの次の要素}'
+uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" deliver --project-root "${CLAUDE_PROJECT_DIR}" --build-id {構築 ID} --doc-id {文書 ID} --exit-value 0 --purpose '{目的}' --summary '{内容概要の 1 要素}' --summary '{内容概要の次の要素}' --applicable-tasks '{適用される作業の 1 要素}' --keywords '{キーワードの 1 要素}' --keywords '{キーワードの次の要素}'
 ```
 
 - 配列のフィールドは、要素ごとにオプションを繰り返す（`--summary`・`--applicable-tasks`・`--keywords`）。要素の数だけ書く

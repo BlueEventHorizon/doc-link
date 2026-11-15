@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクトの状態
 
-本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装段階**にある。要件定義書と設計書は承認済みで、実装計画は `docs/specs/plan/doc-link_plan.json` にある。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行い、CI は置かない。
+本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装段階**にある。要件定義書と設計書は承認済みで、実装計画は `docs/specs/plan/doc-link_plan.json` にある。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行う。
 
 doc-link が実現しようとしている内容（パスでなく文書 ID による恒久的な文書管理、参照関係の機械的把握、変更影響の通知）は `docs/specs/requirement/REQ-001_overview.md` の「1. 文書の目的」「3. 目的」に要約がある。
 
@@ -55,24 +55,27 @@ uv run --python 3.15 --exclude-newer "3 days" --with markdown-it-py python -m un
 
 - 文書の記述スタイル（タグ・見出し・参照記法・履歴を置かない等）は、末尾の forge 規範ブロックと forge 同梱の文書スタイル指針に従う。
 - 仕様書では、用語集（`docs/specs/requirement/REQ-001_overview.md` の §4）の用語を `[用語]` の形で書く。新しい用語は用語集に定義してから使う。
-- 実装（`plugins/` 配下の script・SKILL.md）を書く段階になったら [docs/rules/implementation_guidelines.md][implementation_guidelines] に従う。特に以下は MANDATORY:
-  - Python script は `uv run` で実行し、依存は PEP 723 で宣言する。外部依存は PyYAML と markdown-it-py のみ許容（それ以外は標準ライブラリ）。Python と依存は最新の安定版を使う。外部コマンド呼び出しは Bash
-  - Node.js を使わない（ツール・パッケージ・GitHub Actions のアクションを含む）
-  - `plugins/` 配下の `.py` にはテスト必須（`tests/{plugin}/{skill}/` に配置、プラグイン共通の `scripts/` のテストは `tests/{plugin}/scripts/`、`test_*.py` 命名）
+- 実装（`plugins/` 配下の script・SKILL.md）を書く段階になったら、[docs/rules/doc-link_implementation_rules.md][doc_link_implementation_rules]（doc-link 固有。汎用の規範文書に優先する）と、汎用の規範文書に従う。特に以下は MANDATORY:
+  - Python script は `uv run` で実行し、依存は PEP 723 で宣言する。外部依存は PyYAML と markdown-it-py のみ許容。版番号を手で書かない
+  - Node.js を使わない（ツール・パッケージ。GitHub Actions のアクションは対象外）
+  - `plugins/` 配下の `.py` にはテスト必須（配置とコマンドは doc-link 実装ルール）
   - SKILL.md にロジックをインライン記述しない。独立スクリプトを呼び出す形にする
   - 配布物（SKILL.md / agents / commands / 配布物内蔵 docs）から本リポジトリの `docs/specs/` `docs/rules/` を参照しない
   - バージョン関連ファイル（`plugin.json` の version、CHANGELOG 等）は作業 PR で編集しない。更新は `/forge:update-version` のみ
-- uv による実行・依存の追加・ロック・更新は [docs/rules/uv_usage_rules.md][uv_usage_rules] に従う（版番号を手で書かない）。
-- SKILL とカスタム Agent の組み方は [docs/rules/claude_code_authoring_guide.md][claude_code_authoring_guide]、依拠する Claude Code の事実は [docs/rules/claude_code_reference.md][claude_code_reference] に従う。
+- 汎用の規範文書は次のとおり。
+  - 実装: [plugin_implementation_guidelines.md][plugin_implementation_guidelines]
+  - uv による実行・依存の追加・ロック・更新: [plugin_uv_usage_rules.md][plugin_uv_usage_rules]
+  - SKILL とカスタム Agent の組み方: [plugin_claude_code_authoring_guide.md][plugin_claude_code_authoring_guide]、依拠する Claude Code の事実: [plugin_claude_code_reference.md][plugin_claude_code_reference]
+  - script の終了コード・標準出力の契約: [plugin_script_error_output_rules.md][plugin_script_error_output_rules]（`0`/`1`/`2` は全 script 共通、`3` 以上は script 自身の docstring で宣言）
 - SKILL とカスタム Agent の間の一過性データの受け渡しは [docs/rules/agent_data_exchange_rules.md][agent_data_exchange_rules] に従う。
-- script の終了コード・標準出力の契約は [docs/rules/script_error_output_rules.md][script_error_output_rules] に従う（`0`/`1`/`2` は全 script 共通、`3` 以上は script 自身の docstring で宣言）。
 
-[implementation_guidelines]: docs/rules/implementation_guidelines.md
-[uv_usage_rules]: docs/rules/uv_usage_rules.md
-[claude_code_authoring_guide]: docs/rules/claude_code_authoring_guide.md
-[claude_code_reference]: docs/rules/claude_code_reference.md
+[doc_link_implementation_rules]: docs/rules/doc-link_implementation_rules.md
+[plugin_implementation_guidelines]: docs/rules/plugin_implementation_guidelines.md
+[plugin_uv_usage_rules]: docs/rules/plugin_uv_usage_rules.md
+[plugin_claude_code_authoring_guide]: docs/rules/plugin_claude_code_authoring_guide.md
+[plugin_claude_code_reference]: docs/rules/plugin_claude_code_reference.md
+[plugin_script_error_output_rules]: docs/rules/plugin_script_error_output_rules.md
 [agent_data_exchange_rules]: docs/rules/agent_data_exchange_rules.md
-[script_error_output_rules]: docs/rules/script_error_output_rules.md
 
 <!-- FORGE_ONBOARDING_START hash=6a3a278b2d31 -->
 

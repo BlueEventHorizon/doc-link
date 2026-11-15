@@ -73,4 +73,4 @@ script は同じ内容から常に同じバイト列を出力する（UTF-8、�
 [des-006-sec-3]: DES-006_search.md#sec-3
 [des-005-sec-5]: DES-005_indexing.md#sec-5
 [des-007-sec-3]: DES-007_references-impact.md#sec-3
-[implementation-guidelines]: ../../rules/implementation_guidelines.md
+[implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md

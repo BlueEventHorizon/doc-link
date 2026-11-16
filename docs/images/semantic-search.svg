@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 290" width="900" height="290" font-family="system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans CJK JP', sans-serif">
+  <title>タスクに関連する文書を探す流れ。ToC が最新かを検査し、AI が ToC を読んで意味で関連を判断し、関連理由と該当セクションを添えて返す</title>
+  <defs>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#0d9488"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="290" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="450" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">タスクを伝えるだけで、関連する文書が見つかる</text>
+
+  <!-- 1 -->
+  <rect x="24" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#5eead4" stroke-width="2"/>
+  <circle cx="104" cy="76" r="15" fill="#0d9488"/>
+  <text x="104" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">1</text>
+  <text x="104" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">タスクを伝える</text>
+  <text x="104" y="140" text-anchor="middle" font-size="13" fill="#475569">作業の記述を渡す</text>
+  <text x="104" y="160" text-anchor="middle" font-size="13" fill="#475569">例：リンク切れを</text>
+  <text x="104" y="180" text-anchor="middle" font-size="13" fill="#475569">直したい</text>
+
+  <line x1="186" y1="138" x2="252" y2="138" stroke="#0d9488" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- 2 -->
+  <rect x="254" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#5eead4" stroke-width="2"/>
+  <circle cx="334" cy="76" r="15" fill="#0d9488"/>
+  <text x="334" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">2</text>
+  <text x="334" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">鮮度を検査</text>
+  <text x="334" y="140" text-anchor="middle" font-size="13" fill="#475569">ToC が現物の</text>
+  <text x="334" y="160" text-anchor="middle" font-size="13" fill="#475569">文書と一致するか</text>
+  <text x="334" y="180" text-anchor="middle" font-size="13" fill="#475569">確かめる</text>
+
+  <line x1="416" y1="138" x2="482" y2="138" stroke="#0d9488" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- 3 -->
+  <rect x="484" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#0d9488" stroke-width="3"/>
+  <circle cx="564" cy="76" r="15" fill="#0d9488"/>
+  <text x="564" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">3</text>
+  <text x="564" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0d9488">意味で選ぶ</text>
+  <text x="564" y="140" text-anchor="middle" font-size="13" fill="#475569">AI が全文書の目的・</text>
+  <text x="564" y="160" text-anchor="middle" font-size="13" fill="#475569">概要・適用作業を読み、</text>
+  <text x="564" y="180" text-anchor="middle" font-size="13" fill="#475569">関連を判断する</text>
+
+  <line x1="646" y1="138" x2="712" y2="138" stroke="#0d9488" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- 4 -->
+  <rect x="714" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#5eead4" stroke-width="2"/>
+  <circle cx="794" cy="76" r="15" fill="#0d9488"/>
+  <text x="794" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">4</text>
+  <text x="794" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">関連文書を返す</text>
+  <text x="794" y="140" text-anchor="middle" font-size="13" fill="#475569">文書 ID・関連理由・</text>
+  <text x="794" y="160" text-anchor="middle" font-size="13" fill="#475569">該当セクションを</text>
+  <text x="794" y="180" text-anchor="middle" font-size="13" fill="#475569">添えて返す</text>
+
+  <rect x="24" y="226" width="850" height="44" rx="10" fill="#f0fdfa" stroke="#99f6e4"/>
+  <text x="449" y="254" text-anchor="middle" font-size="15" font-weight="700" fill="#0f766e">キーワードが一致しなくても、タスクに関連する文書が見つかる</text>
+</svg>

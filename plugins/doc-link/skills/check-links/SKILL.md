@@ -51,7 +51,7 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_links.py" --project-root "${C
 
 検出事項があるときは、`guidance` の内容をそのまま案内する。修正は呼び出し元（プロジェクト管理 AI）が行う。
 
-- title に DLID の無いリンクには、検出事項の `suggested_title`（参照先の内容ハッシュと DLID）を title に書く。`suggested_title` が無いものは、`suggested_title_unavailable_reason` が示す原因（`fragment_unresolved`: フラグメントが参照先のどのアンカーにも解決しない、`heading_without_dlid`: 解決した見出しに DLID が無い）を直してから、再度検査する。インラインリンクは、リファレンスリンクの定義に書き換える
+- title に DLID の無いリンクには、検出事項の `suggested_title`（参照先の内容ハッシュと DLID）を title に書く。`suggested_title` が無いものは、`suggested_title_unavailable_reason` が示す理由に応じて、どのセクションを指す参照にするかを決めてから、再度検査する。`fragment_unresolved` は、フラグメントが参照先のどの見出し・アンカーにも一致しないことを示す（リンクは壊れておらず、参照先の文書を開く。見出しのアンカーは、見出しに DLID を埋め込むと変わる）。セクションを指す参照にするなら、フラグメントを現在の見出しのアンカーへ直す。文書を指す参照にするなら、フラグメントを外す。`heading_without_dlid` は、解決した見出しに DLID が無いことを示す。`embed-dlid` で付与する。インラインリンクは、リファレンスリンクの定義に書き換える
 - パスの不一致には `current_path`、フラグメント不一致には `current_anchor` を使ってリンクを直す
 - 参照先が見つからない場合は、移動か削除かを判断する
 - 直した後は `index-docs` を実行する

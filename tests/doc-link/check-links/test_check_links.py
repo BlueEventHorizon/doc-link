@@ -15,6 +15,7 @@ SKILL_SCRIPTS_DIR = (
 sys.path.insert(0, str(SKILL_SCRIPTS_DIR))
 
 import check_links  # noqa: E402
+from content_hash import document_content_hash, section_content_hashes  # noqa: E402
 
 DOC_A = "DLID-0123456789ab"
 SEC_A1 = "DLID-abcdefghjkmn"
@@ -161,12 +162,101 @@ class CategoriesTest(CheckLinksTestBase):
         self.assertIn("ref", scope["directories"])
         self.assertTrue(scope["checked_at"])
         guidance = "\n".join(self.result["guidance"])
-        self.assertIn("resolve-dlid", guidance)
+        self.assertIn("suggested_title", guidance)
         self.assertIn("index-docs", guidance)
         self.assertIn("current_path", guidance)
 
     def test_writes_nothing(self):
         self.assertEqual(self.snapshot(), self.before)
+
+
+DOC_C = "DLID-3333333333cc"
+REF_C = f'---\ndoc_link_id: {DOC_C}\n---\n# Nodlid\n\n<a id="manual"></a>\n\ntext\n'
+
+
+class SuggestedTitleTest(CheckLinksTestBase):
+    """title に DLID の無いリンクへ添える、title に書く値（DES-007 §1、AC-032）。"""
+
+    def setUp(self):
+        super().setUp()
+        self.write("ref/a.md", REF_A)
+        self.write("ref/c.md", REF_C)
+
+    def findings_of(self, text):
+        self.write("src/m.md", text)
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        return {
+            f["target"]: f
+            for f in result["findings"]
+            if f["category"] == "link_without_dlid"
+        }, result
+
+    def test_document_link_gets_document_hash_and_document_id(self):
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/a.md\n")
+        expected = f"{document_content_hash(REF_A)} {DOC_A}"
+        self.assertEqual(found["../ref/a.md"]["suggested_title"], expected)
+
+    def test_heading_fragment_gets_section_hash_and_section_id(self):
+        anchor = "beta-dlid-pqrstvwxyz01"
+        found, _ = self.findings_of(f"# M\n\n[r]: ../ref/a.md#{anchor}\n")
+        # 見出しの出現順は Alpha, Beta なので、Beta は 2 番目
+        expected = f"{section_content_hashes(REF_A)[1]} {SEC_A2}"
+        self.assertEqual(found[f"../ref/a.md#{anchor}"]["suggested_title"], expected)
+
+    def test_explicit_anchor_fragment_gets_document_value(self):
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/c.md#manual\n")
+        expected = f"{document_content_hash(REF_C)} {DOC_C}"
+        self.assertEqual(found["../ref/c.md#manual"]["suggested_title"], expected)
+
+    def test_unresolved_fragment_has_reason_and_no_value(self):
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/a.md#nowhere\n")
+        finding = found["../ref/a.md#nowhere"]
+        self.assertNotIn("suggested_title", finding)
+        self.assertEqual(
+            finding["suggested_title_unavailable_reason"], "fragment_unresolved"
+        )
+
+    def test_heading_without_dlid_has_reason_and_no_value(self):
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/c.md#nodlid\n")
+        finding = found["../ref/c.md#nodlid"]
+        self.assertNotIn("suggested_title", finding)
+        self.assertEqual(
+            finding["suggested_title_unavailable_reason"], "heading_without_dlid"
+        )
+
+    def test_inline_link_gets_the_same_value(self):
+        found, _ = self.findings_of("# M\n\nsee [x](../ref/a.md).\n")
+        expected = f"{document_content_hash(REF_A)} {DOC_A}"
+        self.assertEqual(found["../ref/a.md"]["suggested_title"], expected)
+        self.assertEqual(found["../ref/a.md"]["kind"], "inline")
+
+    def test_value_comes_from_the_current_file_not_from_managed_state(self):
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/a.md\n")
+        before = found["../ref/a.md"]["suggested_title"]
+        self.write("ref/a.md", REF_A + "\nchanged\n")
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/a.md\n")
+        self.assertNotEqual(found["../ref/a.md"]["suggested_title"], before)
+        self.assertFalse((self.root / ".doc-link").exists())
+
+    def test_writing_the_value_makes_the_reference_formal_and_matched(self):
+        found, _ = self.findings_of("# M\n\n[r]: ../ref/a.md\n")
+        title = found["../ref/a.md"]["suggested_title"]
+        self.write("src/m.md", f'# M\n\n[r]: ../ref/a.md "{title}"\n')
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["findings"], [])
+        self.assertEqual(result["summary"]["matched_references"], 1)
+
+    def test_writing_the_section_value_makes_the_reference_matched(self):
+        anchor = "beta-dlid-pqrstvwxyz01"
+        found, _ = self.findings_of(f"# M\n\n[r]: ../ref/a.md#{anchor}\n")
+        title = found[f"../ref/a.md#{anchor}"]["suggested_title"]
+        self.write("src/m.md", f'# M\n\n[r]: ../ref/a.md#{anchor} "{title}"\n')
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["findings"], [])
+        self.assertEqual(result["summary"]["matched_references"], 1)
 
 
 class RecordWordTest(CheckLinksTestBase):

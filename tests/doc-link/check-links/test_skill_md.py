@@ -64,7 +64,8 @@ class SkillMdTest(unittest.TestCase):
 
     def test_states_that_it_writes_nothing_and_points_to_next_steps(self):
         self.assertIn("何も書き込まない", self.body)
-        self.assertIn("resolve-dlid", self.body)
+        self.assertIn("suggested_title", self.body)
+        self.assertIn("suggested_title_unavailable_reason", self.body)
         self.assertIn("index-docs", self.body)
 
     def test_does_not_ask_the_user(self):

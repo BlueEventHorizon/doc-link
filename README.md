@@ -4,9 +4,6 @@ Claude Code 用プラグイン `doc-link` の配布リポジトリ。
 
 doc-link は、プロジェクトの Markdown 文書をパスではなく恒久的な文書 ID（DLID）で管理する。文書の移動・改名に影響されずに索引（ToC）を保ち、タスクに関連する文書を検索し、文書間の参照関係を機械的に把握して、変更された文書を参照している文書をプロジェクト管理 AI へ通知する。DocAdvisor を置き換えることを目的とする。
 
-> [!NOTE]
-> 現在は実装中であり、利用できる SKILL はまだ無い。
-
 ## インストール
 
 Claude Code のセッションで、このリポジトリを marketplace として登録してから、プラグインを入れる。
@@ -43,6 +40,48 @@ claude plugin install doc-link@doc-link --scope project   # user | project | loc
 ### Codex CLI など、marketplace を使わない導入
 
 Codex CLI 向けや、marketplace を使わずにプロジェクトへ複製して導入する仕組みは、`/meta:generate-plugin-installer` で生成する。
+
+## 動作に必要なもの
+
+- [uv](https://docs.astral.sh/uv/)。SKILL が呼ぶ script は `uv run` で実行され、Python（3.15 以上）と依存（PyYAML・markdown-it-py）は uv が用意する
+
+## 使い方
+
+SKILL は `/doc-link:<名前>` で呼ぶ。対象の文書は、ToC を分ける単位の名前（`--key`）と、対象の指定（`--dirs` か `--paths`）で渡す。
+
+```text
+/doc-link:index-docs --key specs --dirs docs/specs/
+```
+
+### 文書を管理する
+
+| SKILL          | 役割                                                                    |
+| -------------- | ----------------------------------------------------------------------- |
+| `check-dlid`   | 文書 ID・セクション ID が無い箇所と、重複を検査する（何も書き込まない） |
+| `embed-dlid`   | 文書の frontmatter と見出し行の末尾へ DLID を付与する                   |
+| `index-docs`   | ToC を構築・再構築する                                                  |
+| `check-toc`    | ToC が現物の文書に対して最新かを検査する（何も書き込まない）            |
+| `query-docs`   | タスクに関連する文書を ToC から探す                                     |
+| `resolve-dlid` | DLID から、文書の現在のパスと内容ハッシュを得る（何も書き込まない）     |
+
+### 参照を管理する
+
+| SKILL          | 役割                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `check-links`  | title に DLID を持つ参照を検査し、DLID の無いリンクには title に書く値を示す（何も書き込まない）        |
+| `check-impact` | 変更された文書を参照している文書を返す。参照元の title に記録した内容ハッシュと、現在のハッシュを比べる |
+
+### 基本の流れ
+
+1. `embed-dlid` で、対象の文書に DLID を付ける
+2. `index-docs` で、ToC を作る
+3. `query-docs` で、作業に必要な文書を探す
+4. 参照を書いたあとは `check-links` で検査する
+5. 文書を変えたあとは `check-impact` で、影響を受ける参照元を確かめる
+
+### 書き込む範囲
+
+doc-link が利用者の文書へ書き込むのは DLID だけである（frontmatter の `doc_link_id` と、見出し行の末尾）。利用者の文書へ書き込む SKILL は `embed-dlid` だけである（`index-docs` は、ToC と管理状態を doc-link の保存先へ書く）。リンクや title は、利用者かプロジェクト管理 AI が書く。
 
 ## ライセンス
 

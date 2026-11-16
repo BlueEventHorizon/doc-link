@@ -9,7 +9,7 @@ doc-link は、プロジェクトの Markdown 文書の中から、タスクに�
 ## 特長
 
 - タスクの記述から、関連する文書を意味で探せる。キーワードが一致しなくても見つかる
-- 文書を移動・改名しても、同じ文書として追跡できる。索引を作り直さずに済む
+- 文書を移動・改名しても、DLID で同じ文書として追跡できる
 - 文書やセクションを変えたとき、それを参照している文書を機械的に特定できる
 - リンク切れ・ID の重複・索引の不整合を検出できる
 
@@ -62,7 +62,7 @@ Codex CLI 向けや、marketplace を使わずにプロジェクトへ複製し�
 
 ## 動作に必要なもの
 
-- [uv](https://docs.astral.sh/uv/)。SKILL が呼ぶ script は `uv run` で実行され、Python（3.15 以上）と依存（PyYAML・markdown-it-py）は uv が用意する
+- [uv](https://docs.astral.sh/uv/)。SKILL が呼ぶ script は `uv run` で実行され、Python（3.15 以上）と依存（markdown-it-py）は uv が用意する
 
 ## 使い方
 
@@ -71,6 +71,8 @@ SKILL は `/doc-link:<名前>` で呼ぶ。対象の文書は、ToC を分ける
 ```text
 /doc-link:index-docs --key specs --dirs docs/specs/
 ```
+
+ToC を作ったときの `--key` と対象の指定は、その ToC を使う SKILL（`query-docs`、`check-toc`、`check-impact` など）にも同じものを渡す。`--key` を省くと、別の ToC（予約キー `all`）を指す。
 
 ### 文書を管理する
 
@@ -96,7 +98,7 @@ SKILL は `/doc-link:<名前>` で呼ぶ。対象の文書は、ToC を分ける
 2. `index-docs` で、ToC を作る
 3. `query-docs` で、作業に必要な文書を探す
 4. 参照を書いたあとは `check-links` で検査する
-5. 文書を変えたあとは `check-impact` で、影響を受ける参照元を確かめる
+5. 文書を変えたあとは、`index-docs` で ToC を更新してから、`check-impact` で、影響を受ける参照元を確かめる（ToC が古いと、`check-impact` は影響の一覧を返さず、`index-docs` の実行を案内する）
 
 ### 書き込む範囲
 

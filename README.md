@@ -15,6 +15,10 @@ doc-link は、プロジェクトの Markdown 文書の中から、タスクに�
 
 ![タスクに関連する文書を探す流れ。ToC が最新かを検査し、AI が ToC を読んで意味で関連を判断し、関連理由と該当セクションを添えて返す](docs/images/semantic-search.svg)
 
+これらは、文書と見出しに付ける DLID を土台にしている。
+
+![DLID とは。文書の frontmatter に文書 ID、見出し行の末尾にセクション ID として付ける、恒久的な識別子](docs/images/what-is-dlid.svg)
+
 ![文書を移動・改名したときの違い。パスで管理するとリンク切れになり、DLID で管理すると同じ文書として追跡できる](docs/images/move-rename.svg)
 
 ![文書を変更したときの流れ。参照している文書を機械的に特定し、プロジェクト管理 AI へ通知し、修正が必要かを判断する](docs/images/change-impact.svg)

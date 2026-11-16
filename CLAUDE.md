@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクトの状態
 
-本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装段階**にある。要件定義書と設計書は承認済みで、実装計画は `docs/specs/plan/doc-link_plan.json` にある。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行う。
+本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装段階**にある。要件定義書と設計書は承認済みである。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行う。
 
 doc-link が実現しようとしている内容（パスでなく文書 ID による恒久的な文書管理、参照関係の機械的把握、変更影響の通知）は `docs/specs/requirement/REQ-001_overview.md` の「1. 文書の目的」「3. 目的」に要約がある。
 

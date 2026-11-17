@@ -116,6 +116,11 @@ class CategoriesTest(CheckLinksTestBase):
         self.assertEqual(finding["recorded_hash"], HASH)
         self.assertEqual(finding["line"], 12)
 
+    def test_every_finding_has_the_source_document_id(self):
+        self.assertEqual(self.one("path_mismatch")["source_doc_id"], DOC_MAIN)
+        for finding in self.result["findings"]:
+            self.assertEqual(finding["source_doc_id"], DOC_MAIN, finding)
+
     def test_fragment_mismatch_has_current_anchor(self):
         finding = self.one("fragment_mismatch")
         self.assertEqual(finding["dlid"], SEC_A2)
@@ -298,6 +303,7 @@ class SourceWithoutDocumentIdTest(CheckLinksTestBase):
             sorted(f["category"] for f in result["findings"]),
             ["absent", "link_without_dlid"],
         )
+        self.assertEqual([f["source_doc_id"] for f in result["findings"]], [None, None])
 
 
 class CleanTest(CheckLinksTestBase):

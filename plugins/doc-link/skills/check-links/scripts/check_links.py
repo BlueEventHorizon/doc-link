@@ -303,7 +303,40 @@ def _check_source(
     unverified: list[dict],
     directories: set[str],
 ) -> int:
-    """参照元 1 文書を検査する。一致した[正式な参照]の数を返す。"""
+    """参照元 1 文書を検査する。一致した[正式な参照]の数を返す。
+
+    この文書で見つけた検出事項と未検証には、参照元の[文書 ID]（`source_doc_id`。持たなければ `None`）
+    を添える（要件 FR-010 の通知項目）。
+    """
+    first_finding, first_unverified = len(findings), len(unverified)
+    matched = _check_references(
+        source,
+        document,
+        scanner=scanner,
+        targets=targets,
+        checked_at=checked_at,
+        findings=findings,
+        unverified=unverified,
+        directories=directories,
+    )
+    source_doc_id = document.frontmatter.doc_link_id
+    for item in findings[first_finding:] + unverified[first_unverified:]:
+        item["source_doc_id"] = source_doc_id
+    return matched
+
+
+def _check_references(
+    source: str,
+    document: MarkdownDocument,
+    *,
+    scanner: reference_check.DirectoryScanner,
+    targets: _Targets,
+    checked_at: str,
+    findings: list[dict],
+    unverified: list[dict],
+    directories: set[str],
+) -> int:
+    """参照元 1 文書の参照を検査する。一致した[正式な参照]の数を返す。"""
     matched = 0
     for reference in extract_from_document(document):
         result = reference_check.check_reference(

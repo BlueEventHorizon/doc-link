@@ -161,7 +161,7 @@ class _AnchorCollector(HTMLParser):
                 self.anchors.add(value)
 
 
-def _explicit_anchors(text: str) -> frozenset[str]:
+def explicit_anchors(text: str) -> frozenset[str]:
     lines = split_lines(text)
     frontmatter = read_frontmatter(lines)
     offset = frontmatter.body_start_line if frontmatter.present else 0
@@ -235,7 +235,7 @@ class DirectoryScanner:
                 path=path,
                 doc_id=document.frontmatter.doc_link_id,
                 headings=document.headings,
-                explicit_anchors=_explicit_anchors(text),
+                explicit_anchors=explicit_anchors(text),
             )
         return ScannedDirectory(
             directory,

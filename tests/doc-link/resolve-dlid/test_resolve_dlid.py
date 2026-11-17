@@ -222,6 +222,20 @@ class MovedDocumentTest(Base):
         self.root = saved
         self.assertEqual(item["status"], "not_at_recorded_path")
 
+    def test_symlink_to_a_file_outside_the_project_root_is_read(self):
+        outside = self.root / "outside"
+        outside.mkdir()
+        (outside / "x.md").write_bytes(doc_text(DOC_A).encode("utf-8"))
+        project = self.root / "project"
+        (project / "docs").mkdir(parents=True)
+        (project / "docs" / "x.md").symlink_to(outside / "x.md")
+        self.root, saved = project, self.root
+        self.save_info(DOC_A, "docs/x.md")
+        item, _ = self.one(DOC_A)
+        self.root = saved
+        self.assertEqual(item["status"], "resolved")
+        self.assertEqual(item["path"], "docs/x.md")
+
 
 class NoRecordTest(Base):
     def test_unrecorded_dlid(self):

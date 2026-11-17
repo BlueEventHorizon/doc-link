@@ -31,16 +31,16 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_links.py" --project-root "${C
 
 標準出力の JSON の `findings` を、`category` ごとにまとめて報告する。各検出事項には、参照元のパス（`source_path`）・行（`line`）・リンク先（`target`）・DLID（`dlid`）を示す。
 
-| category                | 意味                                                                        | 添える情報                                                     |
-| ----------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `path_mismatch`         | DLID とリンク先のパスが一致しない（同じ DLID の文書が別のパスで見つかった） | `current_path`（確認できた現在のパス）                         |
-| `fragment_mismatch`     | リンク先は一致するが、フラグメントが参照先のセクションへ解決しない          | `current_anchor`（そのセクションへ届く現在のアンカー）         |
-| `missing_section`       | リンク先の文書はあるが、title の DLID が指定ディレクトリのどこにも無い      | `target_doc_link_id`（その文書の現在の文書 ID。無ければ null） |
-| `absent`                | 指定ディレクトリ内に参照先が見つからない                                    | `absent_reason`                                                |
-| `duplicate`             | 同じ DLID が複数見つかり、現在のパスを一意に決められない                    | `duplicate_paths`                                              |
-| `unresolved`            | リンク先のパスを参照元から解決できない                                      | `unresolved_reason`                                            |
-| `link_without_dlid`     | `doc_link_id` を持つ Markdown を指すが、title に DLID が無い                | `kind`（`definition` か `inline`）、`target_doc_link_id`       |
-| `inline_link_with_dlid` | title に DLID を持つが、リファレンスリンクの定義でない                      | `recorded_hash`                                                |
+| category                | 意味                                                                        | 添える情報                                                                                                                                         |
+| ----------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `path_mismatch`         | DLID とリンク先のパスが一致しない（同じ DLID の文書が別のパスで見つかった） | `current_path`（確認できた現在のパス）                                                                                                             |
+| `fragment_mismatch`     | リンク先は一致するが、フラグメントが参照先のセクションへ解決しない          | `current_anchor`（そのセクションへ届く現在のアンカー）                                                                                             |
+| `missing_section`       | リンク先の文書はあるが、title の DLID が指定ディレクトリのどこにも無い      | `target_doc_link_id`（その文書の現在の文書 ID。無ければ null）                                                                                     |
+| `absent`                | 指定ディレクトリ内に参照先が見つからない                                    | `absent_reason`                                                                                                                                    |
+| `duplicate`             | 同じ DLID が複数見つかり、現在のパスを一意に決められない                    | `duplicate_paths`                                                                                                                                  |
+| `unresolved`            | リンク先のパスを参照元から解決できない                                      | `unresolved_reason`                                                                                                                                |
+| `link_without_dlid`     | `doc_link_id` を持つ Markdown を指すが、title に DLID が無い                | `kind`（`definition` か `inline`）、`target_doc_link_id`、`suggested_title`（title に書く値。書けないときは `suggested_title_unavailable_reason`） |
+| `inline_link_with_dlid` | title に DLID を持つが、リファレンスリンクの定義でない                      | `recorded_hash`                                                                                                                                    |
 
 - `absent` は、世界全体に参照先が無いことを意味しない。指定ディレクトリ内に見つからないことだけを示す。保存済みのデータから現在のパスを推測して補わない
 - `recorded_hash` が null のものは、title に内容ハッシュの記録が無い参照である。記録と参照先の現在ハッシュの比較は、このスキルでは行わない
@@ -51,7 +51,7 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_links.py" --project-root "${C
 
 検出事項があるときは、`guidance` の内容をそのまま案内する。修正は呼び出し元（プロジェクト管理 AI）が行う。
 
-- title に DLID の無いリンクには、参照先の DLID と、`resolve-dlid` で得た参照先の内容ハッシュを title に書く。インラインリンクは、リファレンスリンクの定義に書き換える
+- title に DLID の無いリンクには、検出事項の `suggested_title`（参照先の内容ハッシュと DLID）を title に書く。`suggested_title` が無いものは、`suggested_title_unavailable_reason` が示す理由に応じて、どのセクションを指す参照にするかを決めてから、再度検査する。`fragment_unresolved` は、フラグメントが参照先のどの見出し・アンカーにも一致しないことを示す（リンクは壊れておらず、参照先の文書を開く。見出しのアンカーは、見出しに DLID を埋め込むと変わる）。セクションを指す参照にするなら、フラグメントを現在の見出しのアンカーへ直す。文書を指す参照にするなら、フラグメントを外す。`heading_without_dlid` は、解決した見出しに DLID が無いことを示す。`embed-dlid` で付与する。インラインリンクは、リファレンスリンクの定義に書き換える
 - パスの不一致には `current_path`、フラグメント不一致には `current_anchor` を使ってリンクを直す
 - 参照先が見つからない場合は、移動か削除かを判断する
 - 直した後は `index-docs` を実行する

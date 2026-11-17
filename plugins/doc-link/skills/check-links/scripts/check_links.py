@@ -41,7 +41,12 @@
 [正式な参照]でないリンク
 
 - `link_without_dlid`: `doc_link_id` を持つ Markdown を指しているが、title に[DLID]の無いリンク（リファレンスリンクの
-  定義・インラインリンクのどちらも）。`kind` は `definition`・`inline`
+  定義・インラインリンクのどちらも）。`kind` は `definition`・`inline`。title に書く値 `suggested_title`
+  （`<内容ハッシュ> DLID-…`）を添える。値は検査時点の参照先の現物から決め（管理状態は読まない）、フラグメントが
+  見出しから生成されるアンカーに解決すればそのセクションの[セクション ID]と内容ハッシュ、フラグメントが無いか明示
+  アンカーに解決すれば参照先文書の[文書 ID]と内容ハッシュである。どちらにも解決しないとき（`fragment_unresolved`）と、
+  解決した見出しに[DLID]が無いとき（`heading_without_dlid`）は、`suggested_title` を添えず
+  `suggested_title_unavailable_reason` に理由を添える。値を文書へ書くのは[プロジェクト管理 AI]である
 - `inline_link_with_dlid`: [DLID]入りの title を持つが、リファレンスリンクの定義でないリンク（インラインリンク）
 
 検査できなかったもの
@@ -103,7 +108,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 import reference_check  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
-from content_hash import is_record_word  # noqa: E402
+from content_hash import (  # noqa: E402
+    document_content_hash,
+    is_record_word,
+    section_content_hashes,
+)
 from markdown_reader import (  # noqa: E402
     MarkdownDocument,
     has_scheme,
@@ -131,10 +140,14 @@ _GUIDANCE_FIX_LINKS = (
     "[プロジェクト管理 AI]が判断する"
 )
 _GUIDANCE_RESOLVE = (
-    "title に DLID の無いリンク（`link_without_dlid`）には、参照先の DLID と、`resolve-dlid` で得た参照先の"
-    '内容ハッシュを title に書く（`"<内容ハッシュ> DLID-…"`）。インラインリンク（`inline_link_with_dlid`）は、'
+    "title に DLID の無いリンク（`link_without_dlid`）には、検出事項の `suggested_title`（参照先の内容ハッシュと"
+    ' DLID）を title に書く（`"<内容ハッシュ> DLID-…"`）。`suggested_title` が無いものは'
+    " `suggested_title_unavailable_reason` に理由がある。インラインリンク（`inline_link_with_dlid`）は、"
     "リファレンスリンクの定義に書き換える"
 )
+
+REASON_FRAGMENT_UNRESOLVED = "fragment_unresolved"
+REASON_HEADING_WITHOUT_DLID = "heading_without_dlid"
 _GUIDANCE_INDEX = "リンクを直した後は `index-docs` を実行する"
 
 _FORMAL_CATEGORIES = frozenset(
@@ -172,6 +185,7 @@ class _Targets:
 
     def __post_init__(self) -> None:
         self._cache: dict[str, tuple[str, str | None]] = {}
+        self._texts: dict[str, str] = {}
 
     def resolve(self, source: str, link_path: str) -> str | None:
         """参照元を基準にリンク先を解決する。ルートの外に出るときは `None`。"""
@@ -200,7 +214,32 @@ class _Targets:
             text = Path(absolute).read_bytes().decode("utf-8")
         except (OSError, UnicodeDecodeError) as error:
             return "unreadable", str(error)
+        self._texts[target] = text
         return "read", read_document(text).frontmatter.doc_link_id
+
+    def suggested_title(self, target: str, fragment: str | None, doc_id: str) -> dict:
+        """title に書く値を、検査時点の現物から決める（DES-007 §1）。`doc_link_id` を読めたリンク先に使う。
+
+        フラグメントが見出しから生成されるアンカーに解決すればそのセクションの値、無いか明示アンカーに
+        解決すれば文書の値。どちらにも解決しないときと、解決した見出しに DLID が無いときは、値を返さず理由を返す。
+        """
+        text = self._texts[target]
+        document = read_document(text)
+        if fragment is not None:
+            for index, heading in enumerate(document.headings):
+                if heading.anchor != fragment:
+                    continue
+                if heading.section_id is None:
+                    return {
+                        "suggested_title_unavailable_reason": REASON_HEADING_WITHOUT_DLID
+                    }
+                value = section_content_hashes(text)[index]
+                return {"suggested_title": f"{value} {heading.section_id}"}
+            if fragment not in reference_check.explicit_anchors(text):
+                return {
+                    "suggested_title_unavailable_reason": REASON_FRAGMENT_UNRESOLVED
+                }
+        return {"suggested_title": f"{document_content_hash(text)} {doc_id}"}
 
 
 def _inline_links(document: MarkdownDocument):
@@ -328,6 +367,7 @@ def _check_source(
                     "category": CATEGORY_LINK_WITHOUT_DLID,
                     "kind": kind,
                     "target_doc_link_id": value,
+                    **targets.suggested_title(resolved, fragment, value),
                 }
             )
     return matched

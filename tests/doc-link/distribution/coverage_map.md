@@ -213,6 +213,14 @@
 - 失敗したとき、エラーの JSON を返し、通知しない → `check-impact/test_check_impact.py::FailureTest::test_undeterminable_is_an_error_without_candidates`、`check-impact/test_check_impact.py::FailureTest::test_broken_confirmed_toc_is_an_error`
 - 文書の[DLID]の参照は文書内のどこが変わっても返し、[セクション ID]の参照はそのセクションの範囲が変わったときだけ返す → `scripts/test_impact_candidates.py::ScopeOfChangeTest::test_document_reference_follows_any_change_section_reference_only_its_range`
 
+### AC-032
+
+- [DLID]の無いリンクへ、検査時点の現物から決めた title に書く値（文書の値・セクションの値）を添える → `check-links/test_check_links.py::SuggestedTitleTest::test_document_link_gets_document_hash_and_document_id`、`check-links/test_check_links.py::SuggestedTitleTest::test_heading_fragment_gets_section_hash_and_section_id`、`check-links/test_check_links.py::SuggestedTitleTest::test_explicit_anchor_fragment_gets_document_value`、`check-links/test_check_links.py::SuggestedTitleTest::test_inline_link_gets_the_same_value`
+- 保存済みの管理状態の記録を根拠にしない → `check-links/test_check_links.py::SuggestedTitleTest::test_value_comes_from_the_current_file_not_from_managed_state`
+- 値を添えられないとき、値を添えず理由を添える → `check-links/test_check_links.py::SuggestedTitleTest::test_unresolved_fragment_has_reason_and_no_value`、`check-links/test_check_links.py::SuggestedTitleTest::test_heading_without_dlid_has_reason_and_no_value`
+- 添えた値を書いた参照が正しい参照として判定される → `check-links/test_check_links.py::SuggestedTitleTest::test_writing_the_value_makes_the_reference_formal_and_matched`、`check-links/test_check_links.py::SuggestedTitleTest::test_writing_the_section_value_makes_the_reference_matched`
+- doc-link が文書へ書かない → `check-links/test_check_links.py::CategoriesTest::test_writes_nothing`
+
 ## NFR-001〜003 一貫性・決定性・冪等性
 
 - 同一入力の論理同値 → `scripts/test_state_store.py::DeterminismTest::test_same_bytes_regardless_of_order`、`scripts/test_toc_candidate.py::AssembleTest::test_deterministic`、`scripts/test_state_store.py::DeterminismTest::test_toc_set_lists_are_order_independent`

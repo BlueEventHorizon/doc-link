@@ -2,6 +2,7 @@ import contextlib
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -88,6 +89,15 @@ class Base(unittest.TestCase):
 
     def read(self, path):
         return (self.root / path).read_bytes().decode("utf-8")
+
+    def without_random_values(self, text):
+        """実行ごとに変わる値（構築 ID・一時ディレクトリのパス）を取り除く。
+
+        数字の語（260・300 など）が現れないことを検査するとき、ランダムな値に偶然その並びが含まれて
+        失敗しないようにするために使う。
+        """
+        text = text.replace(str(self.root), "<root>")
+        return re.sub(r"BUILD-[0-9a-f]+", "<build>", text)
 
     def docs_snapshot(self):
         return {
@@ -194,13 +204,14 @@ class FirstBuildTest(Base):
         )
         # H（200 -> 260、10 -> 13）・係数 1.3 が現れない
         self.assertFalse(found & {260, 13, 1.3})
-        text = json.dumps(result, ensure_ascii=False)
+        text = self.without_random_values(json.dumps(result, ensure_ascii=False))
         self.assertNotIn("1.3", text)
         # 作業状態にも含まれない
         work = (self.root / ".temp" / "doc-link" / "index-docs").glob("*.json")
         for path in work:
-            self.assertNotIn("1.3", path.read_text(encoding="utf-8"))
-            self.assertNotIn("260", path.read_text(encoding="utf-8"))
+            content = self.without_random_values(path.read_text(encoding="utf-8"))
+            self.assertNotIn("1.3", content)
+            self.assertNotIn("260", content)
 
     def test_fixed_values_confirm_the_toc(self):
         before = self.docs_snapshot()
@@ -405,7 +416,7 @@ class OldVersionKeptTest(Base):
         self.assertEqual(rejected["stage"], "information")
         self.assertEqual(rejected["problems"][0]["field"], "purpose")
         # 拒否理由に H・係数・余白・実際の長さが現れない
-        text = json.dumps(rejected, ensure_ascii=False)
+        text = self.without_random_values(json.dumps(rejected, ensure_ascii=False))
         self.assertNotIn("260", text)
         self.assertNotIn("300", text)
         self.assertNotIn("1.3", text)

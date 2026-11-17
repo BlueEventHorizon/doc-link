@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## プロジェクトの状態
+## プロジェクトの概要
 
-本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）の**実装段階**にある。要件定義書と設計書は承認済みで、実装計画は `docs/specs/plan/doc-link_plan.json` にある。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行う。
+本リポジトリは Claude Code 用プラグイン `doc-link`（仮称、既存の DocAdvisor を置き換える文書検索・索引管理プラグイン）である。プラグインの実装は `plugins/doc-link/`、テストは `tests/doc-link/` に置く。テストと整形の確認はローカルで行う。
 
 doc-link が実現しようとしている内容（パスでなく文書 ID による恒久的な文書管理、参照関係の機械的把握、変更影響の通知）は `docs/specs/requirement/REQ-001_overview.md` の「1. 文書の目的」「3. 目的」に要約がある。
 
@@ -47,7 +47,7 @@ uv run --python 3.15 --exclude-newer "3 days" --with markdown-it-py python -m un
 | `docs/specs/requirement/REQ-*`       | 要件定義書（正本: 実現する振る舞いと制約）。`REQ-001` が総論で全体の文書構成・決定事項・未決事項を持つ       |
 | `docs/specs/design/DES-*`            | 設計書（正本: どの主体・情報・状態・処理で実現するか）。構成は `docs/specs/design/README.md` の対応表を参照  |
 | `docs/rules/`                        | 本リポジトリの開発ルール（実装ガイドライン、SKILL・Agent の作成規約、script の出力規約、Agent との受け渡し） |
-| `docs/specs/adr/`, `docs/reference/` | 現時点では空                                                                                                 |
+| `docs/specs/adr/`, `docs/reference/` | 設計判断の記録（ADR）、参考資料                                                                              |
 
 要件と設計が食い違う場合、**設計だけで要件を上書きしない**。未決事項を解決するまで、該当する遷移・結果を確定仕様として扱わない（`docs/specs/design/README.md`「確定を妨げる判断待ち」参照）。
 

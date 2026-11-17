@@ -131,11 +131,18 @@ class _Documents:
         return self._cache[recorded_path]
 
     def _read(self, recorded_path: str):
-        root = self.root.resolve()
+        # 記録されたパスが、字面でプロジェクトの外へ出るときは読まない。
+        # プロジェクト内のパスがシンボリックリンクで外の実体を指すときは、読む
+        # （index-docs が同じ実体を読んで記録しており、確かめられなくなるため）。
+        normalized = os.path.normpath(recorded_path)
+        if (
+            os.path.isabs(normalized)
+            or normalized == os.pardir
+            or normalized.startswith(os.pardir + os.sep)
+        ):
+            return None
         try:
-            target = (root / recorded_path).resolve()
-            if not target.is_relative_to(root):
-                return None
+            target = self.root / normalized
             return read_document(target.read_bytes().decode("utf-8"))
         except (OSError, ValueError):
             return None

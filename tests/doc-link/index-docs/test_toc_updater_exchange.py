@@ -82,7 +82,7 @@ class RequestTest(ExchangeBase):
                     "keywords": 10,
                 },
             )
-        text = path.read_text(encoding="utf-8")
+        text = self.without_random_values(path.read_text(encoding="utf-8"))
         for word in FORBIDDEN:
             self.assertNotIn(word, text)
 
@@ -178,7 +178,7 @@ class DeliverTest(ExchangeBase):
         self.assertEqual(code, index_docs.EXIT_BUILD_FAILED, result)
         self.assertEqual(result["stage"], "information")
         self.assertEqual(result["problems"][0]["doc_link_id"], doc_id)
-        text = json.dumps(result, ensure_ascii=False)
+        text = self.without_random_values(json.dumps(result, ensure_ascii=False))
         for word in FORBIDDEN:
             self.assertNotIn(word, text)
 
@@ -237,7 +237,7 @@ class DeliverTest(ExchangeBase):
         code, result = self.deliver(build_id, ids[0], values=too_long)
         self.assertEqual(code, index_docs.EXIT_BUILD_FAILED, result)
         self.assertEqual(result["problems"][0]["field"], "purpose")
-        text = json.dumps(result, ensure_ascii=False)
+        text = self.without_random_values(json.dumps(result, ensure_ascii=False))
         for word in FORBIDDEN + ("300",):
             self.assertNotIn(word, text)
         code, result = self.advance("k", ALL, "--build-id", build_id)

@@ -69,7 +69,7 @@ import embed_plan  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
 from dlid import KIND_DOCUMENT, KIND_SECTION, DlidLocation  # noqa: E402
-from markdown_reader import FRONTMATTER_DELIMITER, read_document  # noqa: E402
+from markdown_reader import has_unclosed_frontmatter, read_document  # noqa: E402
 
 GUIDANCE_EMBED = (
     "[文書 ID]・[セクション ID]の無い箇所は、`embed-dlid` を実行して[DLID]を付与する"
@@ -114,14 +114,6 @@ def _duplicate_to_dict(report: embed_plan.DuplicateReport) -> dict:
     }
 
 
-def _is_unclosed_frontmatter(lines: tuple[str, ...]) -> bool:
-    """frontmatter として読まれなかった文書の先頭の空でない行が、frontmatter の区切りか。"""
-    for line in lines:
-        if line.strip() != "":
-            return line.strip() == FRONTMATTER_DELIMITER
-    return False
-
-
 def detect(root: Path, files: list[str]) -> dict:
     """対象文書を検査し、検出事項を返す。`embed_plan.PlanFailure` は呼び出し側へ伝える。"""
     plan = embed_plan.build_plan(root, files)
@@ -140,10 +132,7 @@ def detect(root: Path, files: list[str]) -> dict:
             missing_documents.append(
                 {
                     "path": item.path,
-                    "unclosed_frontmatter": (
-                        not document.frontmatter.present
-                        and _is_unclosed_frontmatter(document.lines)
-                    ),
+                    "unclosed_frontmatter": has_unclosed_frontmatter(document.lines),
                 }
             )
         elif item.kind == KIND_SECTION:

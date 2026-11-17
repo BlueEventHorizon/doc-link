@@ -95,7 +95,6 @@ STATUS_UNDETERMINABLE = "undeterminable"
 SPEC_SOURCE_GIVEN = "given"
 SPEC_SOURCE_SAVED = "saved"
 
-CAUSE_STATE = "state"
 CAUSE_TARGET_SPEC = "target_spec"
 CAUSE_EXPANSION = "expansion"
 

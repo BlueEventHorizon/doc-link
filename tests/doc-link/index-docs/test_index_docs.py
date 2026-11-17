@@ -337,7 +337,7 @@ class IdempotenceTest(Base):
         self.build("k", ALL)
         state_before = self.state_snapshot()
         with mock.patch.object(
-            index_docs, "_now", return_value="2099-01-01T00:00:00+00:00"
+            index_docs, "utc_now", return_value="2099-01-01T00:00:00+00:00"
         ):
             code, result = self.advance("k", ALL)
         self.assertEqual(code, 0)

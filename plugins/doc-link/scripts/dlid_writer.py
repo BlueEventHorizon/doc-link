@@ -77,6 +77,7 @@ from markdown_reader import (
     DOC_LINK_ID_KEY,
     FRONTMATTER_DELIMITER,
     MarkdownDocument,
+    has_unclosed_frontmatter,
     parse_markdown,
     read_document,
     read_frontmatter,
@@ -214,23 +215,12 @@ def _check_writable_document(text: str, target: Path) -> None:
             "文書の先頭",
             "UTF-8 の BOM で始まる文書には書き込まない（frontmatter を認識できない）",
         )
-    if _has_unclosed_frontmatter(text):
+    if has_unclosed_frontmatter(split_lines(text)):
         raise _Refused(
             "frontmatter", "frontmatter を閉じる行（`---`）が無いので書き込まない"
         )
     if not os.access(target, os.W_OK):
         raise _Refused("文書全体", "書き込み権限が無い（読み取り専用）")
-
-
-def _has_unclosed_frontmatter(text: str) -> bool:
-    """先頭の空行を除いた最初の行が `---` なのに、frontmatter として認識されない（閉じる行が無い）か。"""
-    lines = split_lines(text)
-    start = 0
-    while start < len(lines) and lines[start].strip() == "":
-        start += 1
-    if start >= len(lines) or lines[start].strip() != FRONTMATTER_DELIMITER:
-        return False
-    return not read_frontmatter(lines).present
 
 
 def _verify_file(target: Path, before_text: str, items: list[IssueItem]) -> list[str]:

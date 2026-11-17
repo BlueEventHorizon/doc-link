@@ -49,10 +49,10 @@ import os
 import posixpath
 import unicodedata
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
+from clock import utc_now
 from markdown_reader import (
     Heading,
     parse_markdown,
@@ -296,7 +296,7 @@ def check_reference(
     `source_path` は参照元の文書のプロジェクトルート相対パス。何も書き込まない。
     """
     scanner = scanner or DirectoryScanner(root)
-    when = checked_at or _now()
+    when = checked_at or utc_now()
     source = _relative_to_root(scanner.root, source_path)
 
     def result(**values) -> ReferenceCheckResult:
@@ -397,12 +397,8 @@ def check_document(
         raise ReferenceCheckError(
             f"参照元の文書を読めない: {source}: {error}"
         ) from error
-    when = checked_at or _now()
+    when = checked_at or utc_now()
     return [
         check_reference(root, source, reference, checked_at=when, scanner=scanner)
         for reference in extract_from_document(read_document(text))
     ]
-
-
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")

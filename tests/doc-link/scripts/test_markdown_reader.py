@@ -350,6 +350,27 @@ class LinkRulesTest(unittest.TestCase):
         self.assertEqual([link.line for link in doc.links], [0, 2, 4])
 
 
+class UnclosedFrontmatterTest(unittest.TestCase):
+    def unclosed(self, text):
+        return markdown_reader.has_unclosed_frontmatter(
+            markdown_reader.split_lines(text)
+        )
+
+    def test_opening_line_without_closing_line_is_unclosed(self):
+        self.assertTrue(self.unclosed("---\ntitle: x\n# T\n"))
+        self.assertTrue(self.unclosed("\n\n---\ntitle: x\n"))
+
+    def test_closed_missing_and_empty_frontmatter_are_not_unclosed(self):
+        self.assertFalse(self.unclosed("---\ntitle: x\n---\n# T\n"))
+        self.assertFalse(self.unclosed("# T\n"))
+        self.assertFalse(self.unclosed(""))
+        self.assertFalse(self.unclosed("\n\n"))
+
+    def test_accepts_a_tuple_of_lines(self):
+        lines = tuple(markdown_reader.split_lines("---\nx: 1\n"))
+        self.assertTrue(markdown_reader.has_unclosed_frontmatter(lines))
+
+
 class AnchorTest(unittest.TestCase):
     def anchors(self, text):
         return [h.anchor for h in read_document(text).headings]

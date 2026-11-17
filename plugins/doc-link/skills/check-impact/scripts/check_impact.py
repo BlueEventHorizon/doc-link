@@ -59,13 +59,13 @@
 import argparse
 import os
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
 import impact_candidates  # noqa: E402
+from clock import utc_now  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
 import toc_check  # noqa: E402
@@ -101,10 +101,6 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
-
-
 def _stale_output(check: toc_check.TocCheck) -> dict:
     output = check.to_dict()
     guidance = [
@@ -119,7 +115,7 @@ def _stale_output(check: toc_check.TocCheck) -> dict:
 
 
 def _impact_output(check: toc_check.TocCheck, root: Path) -> dict:
-    checked_at = _now()
+    checked_at = utc_now()
     result = impact_candidates.enumerate_impact(root, check.toc_key)
     guidance = [GUIDANCE_IMPACT] if result.changed_documents else []
     if check.excluded:

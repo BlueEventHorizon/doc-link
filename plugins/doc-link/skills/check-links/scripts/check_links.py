@@ -99,13 +99,13 @@ import posixpath
 import sys
 import unicodedata
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
 import reference_check  # noqa: E402
+from clock import utc_now  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
 from content_hash import (  # noqa: E402
@@ -167,10 +167,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--project-root", default=os.getcwd())
     target_spec.add_target_arguments(parser)
     return parser
-
-
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
 def _target(path: str, fragment: str | None) -> str:
@@ -428,7 +424,7 @@ def execute(args: argparse.Namespace) -> int:
     expansion = target_spec.expand(spec, root)
     scanner = reference_check.DirectoryScanner(root)
     targets = _Targets(str(root))
-    checked_at = _now()
+    checked_at = utc_now()
 
     findings: list[dict] = []
     unverified: list[dict] = []

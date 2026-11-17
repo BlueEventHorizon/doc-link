@@ -357,14 +357,18 @@ class ReadFailureTest(StoreTestCase):
             state_store.load_document_info(self.root, "ABCDEFGH1234")
         self.assertEqual(ctx.exception.kind, "unreadable")
 
-    def test_list_distinguishes_no_state_from_bad_entries(self):
+    def test_list_ignores_files_that_are_not_json(self):
         self.assertEqual(state_store.list_document_ids(self.root), [])
-        directory = self.root / ".doc-link" / "documents"
-        directory.mkdir(parents=True)
-        (directory / "stray.txt").write_text("x")
-        with self.assertRaises(state_store.StateStoreError) as ctx:
-            state_store.list_document_ids(self.root)
-        self.assertEqual(ctx.exception.kind, "corrupt")
+        state_store.save_document_info(self.root, SKILL, make_info("ID1"))
+        for directory in (
+            self.root / ".doc-link" / "documents",
+            self.root / ".doc-link" / "tocs",
+        ):
+            directory.mkdir(parents=True, exist_ok=True)
+            for name in (".DS_Store", "stray.txt", "x.json.orig"):
+                (directory / name).write_text("x")
+        self.assertEqual(state_store.list_document_ids(self.root), ["ID1"])
+        self.assertEqual(state_store.list_toc_keys(self.root), [])
 
 
 class FileNameMappingTest(StoreTestCase):

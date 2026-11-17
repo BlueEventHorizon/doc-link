@@ -34,7 +34,7 @@
   届く現在のアンカー（title が文書の[DLID]のときは `null`）
 - `missing_section`: 存在しないセクションへの参照（下の解釈を参照）
 - `absent`: 指定ディレクトリ内に見つからない。`absent_reason` に理由の区別
-  （`not_found`・`directory_missing`・`directory_unreadable`・`not_directory`・`directory_excluded`）
+  （`not_found`・`directory_missing`・`directory_unreadable`・`not_directory`）
 - `duplicate`: 同じ[DLID]が複数見つかった。`duplicate_paths` に見つけたもの
 - `unresolved`: リンク先パスを参照元から解決できない。`unresolved_reason` は `outside_root`・`not_markdown`
 

@@ -223,6 +223,18 @@ class FixedExclusionTest(TreeTestCase):
                     [{"path": entry, "reason": "fixed_excluded"}],
                 )
 
+    def test_scan_excluded_start_scans_the_designated_fixed_excluded_directory(self):
+        self.make("vendor/sub/s.md", "vendor/node_modules/n.md")
+        spec = self.parse(key="k", dirs=["vendor"])
+        result = target_spec.expand(spec, self.root, scan_excluded_start=True)
+        self.assertEqual(result.files, ["vendor/sub/s.md", "vendor/v.md"])
+        self.assertEqual(result.problems, [])
+
+    def test_scan_excluded_start_works_below_a_fixed_excluded_ancestor(self):
+        spec = self.parse(key="k", dirs=["docs/node_modules"])
+        result = target_spec.expand(spec, self.root, scan_excluded_start=True)
+        self.assertEqual(result.files, ["docs/node_modules/x.md"])
+
     def test_dirs_on_the_root_is_not_reported_as_fixed_excluded(self):
         self.assertEqual(self.files(key="k", dirs=["."]).problems, [])
 

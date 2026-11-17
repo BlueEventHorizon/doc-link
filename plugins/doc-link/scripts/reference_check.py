@@ -15,8 +15,8 @@ DES-007 §1、DES-009 §1 と REQ-005 FR-009・FR-010、REQ-001 D-025・D-048 �
 - `path_mismatch`: 同じ指定ディレクトリ内の別パスに、その[DLID]を持つ文書が一意に見つかった（`current_path`）
 - `fragment_mismatch`: 一致したが、フラグメントが到達先に解決しない（`current_anchor` に、その[DLID]の
   セクションへ届く現在のアンカー。title が文書の[DLID]のときは `None`）
-- `absent`: 指定ディレクトリ内に見つからない。指定ディレクトリ自体が無い・ディレクトリを読めない・ディレクトリでない・
-  固定の除外の対象であることも、いずれも不在として返す（`absent_reason` に区別を残す）
+- `absent`: 指定ディレクトリ内に見つからない。指定ディレクトリ自体が無い・ディレクトリを読めない・ディレクトリでない
+  ことも、いずれも不在として返す（`absent_reason` に区別を残す）
 - `duplicate`: 同じ[DLID]が複数見つかった。一意の現在パスを推定せず、`duplicate_paths` に見つけたものを並べる
 - `unresolved`: リンク先パスを参照元から解決できない（設計書が分類を定めていない入力。下の解釈を参照）
 
@@ -38,8 +38,9 @@ DES-007 §1、DES-009 §1 と REQ-005 FR-009・FR-010、REQ-001 D-025・D-048 �
 - 読めない・UTF-8 として復号できない文書は、走査から除き、`unreadable_files` に残す（結果の証拠）。
   その文書に[DLID]があっても、見つかったとは扱わない
 - `target_spec.expand` は、読めない下位ディレクトリを黙って飛ばす。指定ディレクトリ自体の読めなさだけを `absent` の
-  `directory_unreadable` として返し、下位ディレクトリの読めなさは検出しない。固定の除外の名前を含む指定ディレクトリは、
-  `expand` が展開しないので `directory_excluded` の不在とする。`*`・`?`・`[` を含む名前のディレクトリは、
+  `directory_unreadable` として返し、下位ディレクトリの読めなさは検出しない。固定の除外の名前の指定ディレクトリ
+  （`build` など）は、参照が明示しているので走査する。その配下の固定の除外の名前は走査しない（要件 D-055）。
+  `*`・`?`・`[` を含む名前のディレクトリは、
   `expand` がパターンとして扱うので、正しく扱えない
 - 走査の結果は、同じ `DirectoryScanner` の間は再利用する（同じ検査の中で同じディレクトリを何度も読まない）。
   検査の時点は、検査 1 回につき 1 つで、`checked_at`（呼び出し側から渡せる。省かれたら現在の UTC）
@@ -62,7 +63,6 @@ from markdown_reader import (
 )
 from references import FormalReference, extract_from_document
 from target_spec import (
-    FIXED_EXCLUDED_DIR_NAMES,
     MODE_TARGETS,
     TargetSpec,
     expand,
@@ -80,7 +80,6 @@ ABSENT_NOT_FOUND = "not_found"
 ABSENT_DIRECTORY_MISSING = "directory_missing"
 ABSENT_DIRECTORY_UNREADABLE = "directory_unreadable"
 ABSENT_NOT_DIRECTORY = "not_directory"
-ABSENT_DIRECTORY_EXCLUDED = "directory_excluded"
 
 UNRESOLVED_OUTSIDE_ROOT = "outside_root"
 UNRESOLVED_NOT_MARKDOWN = "not_markdown"
@@ -216,12 +215,12 @@ class DirectoryScanner:
             return ScannedDirectory(
                 directory, absent_reason=ABSENT_DIRECTORY_UNREADABLE
             )
-        if directory != "." and any(
-            name in FIXED_EXCLUDED_DIR_NAMES for name in directory.split("/")
-        ):
-            return ScannedDirectory(directory, absent_reason=ABSENT_DIRECTORY_EXCLUDED)
-
-        expansion = expand(TargetSpec(mode=MODE_TARGETS, dirs=(directory,)), self.root)
+        # 参照の明示するディレクトリそのものは、固定の除外の名前でも走査する（要件 D-055）
+        expansion = expand(
+            TargetSpec(mode=MODE_TARGETS, dirs=(directory,)),
+            self.root,
+            scan_excluded_start=True,
+        )
         documents: dict[str, ScannedDocument] = {}
         unreadable: list[str] = []
         for path in expansion.files:

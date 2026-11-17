@@ -418,8 +418,14 @@ def _walk(
     return dirs, files
 
 
-def expand(spec: TargetSpec, root: str | Path) -> Expansion:
+def expand(
+    spec: TargetSpec, root: str | Path, scan_excluded_start: bool = False
+) -> Expansion:
     """正規化した指定を Markdown ファイルの一覧（ルート相対パス、ソート済み）へ展開する。
+
+    `scan_excluded_start` が真のとき、`dirs` に指定したディレクトリそのものが固定の除外の名前（または
+    その配下）でも、そのディレクトリを走査する（配下の固定の除外の名前は、これまでどおり走査しない）。
+    参照の検査が、参照の明示するディレクトリを走査するときに使う（要件 D-055）。
 
     存在しないパス・Markdown でないパスなどは `problems` に報告し、残りの処理を続ける。
     走査中に読めなかったディレクトリ（権限不足など）も、`problems`（`unreadable`）に報告する。配下の文書は
@@ -438,7 +444,9 @@ def expand(spec: TargetSpec, root: str | Path) -> Expansion:
         for path in spec.paths:
             _add_direct_path(root, path, candidates, result)
         for entry in spec.dirs:
-            _add_dir_entry(root, entry, candidates, result, unreadable)
+            _add_dir_entry(
+                root, entry, candidates, result, unreadable, scan_excluded_start
+            )
     for path in sorted(set(unreadable)):
         result.problems.append(Problem(path, PROBLEM_UNREADABLE))
 
@@ -466,6 +474,7 @@ def _add_dir_entry(
     candidates: set[str],
     result: Expansion,
     unreadable: list[str] | None = None,
+    scan_excluded_start: bool = False,
 ) -> None:
     if _is_pattern(entry):
         dirs, files = _walk(root, ".", unreadable)
@@ -485,7 +494,11 @@ def _add_dir_entry(
         result.problems.append(Problem(entry, PROBLEM_MISSING))
     elif not os.path.isdir(absolute):
         result.problems.append(Problem(entry, PROBLEM_NOT_DIRECTORY))
-    elif entry != "." and _has_fixed_excluded_dir(entry.split("/")):
+    elif (
+        not scan_excluded_start
+        and entry != "."
+        and _has_fixed_excluded_dir(entry.split("/"))
+    ):
         # 指定されたディレクトリそのものが、固定除外の名前（またはその配下）である。黙って 0 件にしない
         result.problems.append(Problem(entry, PROBLEM_FIXED_EXCLUDED))
         return

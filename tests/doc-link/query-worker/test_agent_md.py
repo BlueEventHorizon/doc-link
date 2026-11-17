@@ -71,6 +71,13 @@ class AgentMdTest(unittest.TestCase):
         self.assertIn("全エントリを読む", self.body)
         self.assertIn("語句の一致で絞り込んで済ませない", self.body)
 
+    def test_selects_with_priority_on_not_missing_documents(self):
+        self.assertIn("取りこぼしを出さないことを優先する", self.body)
+        self.assertIn("関連するかどうか迷う文書は、選ぶ", self.body)
+        self.assertIn("明らかに無関係な文書だけを選ばない", self.body)
+        # 関連の薄さを理由に落とす旧い指示が戻らない
+        self.assertNotIn("関連の薄い文書を、件数を満たすために加えない", self.body)
+
     def test_does_not_refer_to_development_documents(self):
         for needle in FORBIDDEN_REFERENCES:
             with self.subTest(needle=needle):

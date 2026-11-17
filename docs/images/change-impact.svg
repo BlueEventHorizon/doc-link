@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 290" width="900" height="290" font-family="system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans CJK JP', sans-serif">
+  <title>文書を変更したときの流れ。参照している文書を機械的に特定し、プロジェクト管理 AI へ通知し、修正が必要かを判断する</title>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="290" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="450" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">文書を変えたら、影響を受ける文書が分かる</text>
+
+  <!-- 1 -->
+  <rect x="24" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="104" cy="76" r="15" fill="#2563eb"/>
+  <text x="104" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">1</text>
+  <text x="104" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">文書を変更</text>
+  <text x="104" y="140" text-anchor="middle" font-size="13" fill="#475569">文書または</text>
+  <text x="104" y="160" text-anchor="middle" font-size="13" fill="#475569">セクションを</text>
+  <text x="104" y="180" text-anchor="middle" font-size="13" fill="#475569">書き換える</text>
+
+  <line x1="186" y1="138" x2="252" y2="138" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 2 -->
+  <rect x="254" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="334" cy="76" r="15" fill="#2563eb"/>
+  <text x="334" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">2</text>
+  <text x="334" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">影響を特定</text>
+  <text x="334" y="140" text-anchor="middle" font-size="13" fill="#475569" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">check-impact</text>
+  <text x="334" y="160" text-anchor="middle" font-size="13" fill="#475569">記録したハッシュと</text>
+  <text x="334" y="180" text-anchor="middle" font-size="13" fill="#475569">現在値を比べる</text>
+
+  <line x1="416" y1="138" x2="482" y2="138" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 3 -->
+  <rect x="484" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="564" cy="76" r="15" fill="#2563eb"/>
+  <text x="564" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">3</text>
+  <text x="564" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">参照元を通知</text>
+  <text x="564" y="140" text-anchor="middle" font-size="13" fill="#475569">変更された文書を</text>
+  <text x="564" y="160" text-anchor="middle" font-size="13" fill="#475569">参照している文書を</text>
+  <text x="564" y="180" text-anchor="middle" font-size="13" fill="#475569">AI へ返す</text>
+
+  <line x1="646" y1="138" x2="712" y2="138" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 4 -->
+  <rect x="714" y="76" width="160" height="124" rx="12" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="794" cy="76" r="15" fill="#2563eb"/>
+  <text x="794" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">4</text>
+  <text x="794" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">修正を判断</text>
+  <text x="794" y="140" text-anchor="middle" font-size="13" fill="#475569">プロジェクト管理 AI が</text>
+  <text x="794" y="160" text-anchor="middle" font-size="13" fill="#475569">文脈から判断し、</text>
+  <text x="794" y="180" text-anchor="middle" font-size="13" fill="#475569">必要なら直す</text>
+
+  <rect x="24" y="226" width="850" height="44" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="449" y="254" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">参照元の修正漏れに、機械的に気づける</text>
+</svg>

@@ -1,0 +1,12 @@
+# version_config_version: 1.0
+
+targets:
+  - name: doc-link
+    version_file: plugins/doc-link/.claude-plugin/plugin.json
+    version_path: version
+
+git:
+  tag_format: "v{version}"
+  commit_message: "chore: bump {target} to {version}"
+  auto_tag: false
+  auto_commit: false

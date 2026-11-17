@@ -1,5 +1,7 @@
 # doc-link
 
+<img src="docs/images/logo.png" alt="doc-link のロゴ。青い髪の女性が、青い糸で 2 枚の文書を結んでいる。右に、鎖の記号と doc-link の文字" width="640">
+
 Claude Code 用プラグイン `doc-link` の配布リポジトリ。
 
 doc-link は、プロジェクトの Markdown 文書の中から、タスクに関連する文書を意味で探して返す。キーワードの一致ではなく、AI が各文書の目的・概要・適用作業・キーワードを読み、タスクとの関連を判断する（セマンティック検索）。

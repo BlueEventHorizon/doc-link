@@ -250,6 +250,13 @@ class FirstBuildTest(Base):
             self.assertNotIn("1.3", content)
             self.assertNotIn("260", content)
 
+    def test_values_starting_with_a_hyphen_are_accepted_when_joined_with_equals(self):
+        values = {**FIXED, "keywords": ["--backend", "-x", "k3", "k4", "k5"]}
+        code, result = self.build("k", ALL, values)
+        self.assertEqual(code, 0, result)
+        info = state_store.load_document_info(self.root, ID_A)
+        self.assertEqual(info["keywords"], ["--backend", "-x", "k3", "k4", "k5"])
+
     def test_fixed_values_confirm_the_toc(self):
         before = self.docs_snapshot()
         code, result = self.build("k", ALL)

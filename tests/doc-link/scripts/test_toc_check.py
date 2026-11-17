@@ -298,9 +298,9 @@ class ExcludedTest(Base):
         self.assertEqual(result.scale.departed, 0)
 
     def test_missing_id_outside_the_toc_does_not_make_it_stale(self):
-        self.build()
         self.write("docs/noid.md", "# No id\n")
         spec = TargetSpec(mode=MODE_TARGETS, key=KEY, paths=(*FILES, "docs/noid.md"))
+        self.build(spec=spec)
         result = toc_check.check_toc(self.root, KEY, spec)
         self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
         self.assertEqual([e.path for e in result.excluded], ["docs/noid.md"])
@@ -314,6 +314,49 @@ class ExcludedTest(Base):
         result = toc_check.check_toc(self.root, KEY, spec)
         self.assertEqual(result.status, toc_check.STATUS_REBUILD_NEEDED)
         self.assertEqual(result.scale.missing_id, 1)
+
+
+class TargetSpecChangeTest(Base):
+    def test_same_spec_is_not_a_change(self):
+        self.build()
+        result = toc_check.check_toc(self.root, KEY, SPEC)
+        self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
+        self.assertFalse(result.target_spec_changed)
+        self.assertIsNone(result.saved_target_spec)
+
+    def test_saved_spec_is_not_compared_with_itself(self):
+        self.build()
+        result = toc_check.check_toc(self.root, KEY)
+        self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
+        self.assertFalse(result.target_spec_changed)
+
+    def test_different_spec_with_the_same_documents_needs_a_rebuild(self):
+        self.build()
+        self.write("docs/empty/.keep", "")
+        spec = TargetSpec(
+            mode=MODE_TARGETS, key=KEY, paths=tuple(FILES), dirs=("docs/empty",)
+        )
+        result = toc_check.check_toc(self.root, KEY, spec)
+        self.assertEqual(result.status, toc_check.STATUS_REBUILD_NEEDED)
+        self.assertTrue(result.target_spec_changed)
+        self.assertEqual(
+            result.saved_target_spec,
+            state_store.load_confirmed_toc(self.root, KEY)["target_spec"],
+        )
+        self.assertEqual(result.documents, ())
+        self.assertEqual(result.scale.ai_generation, 0)
+        self.assertEqual(result.to_dict()["target_spec_changed"], True)
+
+    def test_a_rebuild_with_the_new_spec_ends_the_difference(self):
+        self.build()
+        self.write("docs/empty/.keep", "")
+        spec = TargetSpec(
+            mode=MODE_TARGETS, key=KEY, paths=tuple(FILES), dirs=("docs/empty",)
+        )
+        self.build(spec=spec)
+        result = toc_check.check_toc(self.root, KEY, spec)
+        self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
+        self.assertFalse(result.target_spec_changed)
 
 
 class DirectoryDisappearedTest(Base):
@@ -352,13 +395,16 @@ class UndeterminableTest(Base):
                 self.assert_undeterminable(result)
         self.assertTrue(path.exists())
 
-    def test_given_spec_is_used_even_if_the_saved_one_is_unparseable(self):
+    def test_given_spec_is_used_and_an_unparseable_saved_one_needs_a_rebuild(self):
         self.build()
         toc = state_store.load_confirmed_toc(self.root, KEY)
         toc["target_spec"] = {}
         state_store.save_confirmed_toc(self.root, "test", toc)
         result = toc_check.check_toc(self.root, KEY, SPEC)
-        self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
+        # 渡された指定で走査でき（判定不能にしない）、解釈できない保存済みの指定は、違うものとして扱う
+        self.assertEqual(result.status, toc_check.STATUS_REBUILD_NEEDED)
+        self.assertTrue(result.target_spec_changed)
+        self.assertEqual(result.documents, ())
 
     def test_corrupt_confirmed_toc(self):
         self.build()

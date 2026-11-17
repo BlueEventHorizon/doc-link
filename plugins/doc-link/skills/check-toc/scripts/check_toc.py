@@ -31,6 +31,7 @@
 - `excluded`・`excluded_in_toc`: ID 未付与・ID 重複で[確定 Index 対象リスト]に入れなかった文書と、そのうち[確定 ToC]に
   入っている文書（再構築すると[確定 ToC]から除かれる）
 - `counts`: 変更種別ごとの件数
+- `target_spec_changed`・`saved_target_spec`: 渡した対象指定が、保存した指定と違うか、違うときの保存済みの指定
 - `scale`: `rebuild_needed` のときの再構築の規模（`new`・`departed`・`path_changed`・`content_changed`・`missing_id`・
   `duplicate_id`・`ai_generation`）。それ以外は `null`
 - `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定など
@@ -72,6 +73,10 @@ GUIDANCE_REBUILD = (
     "[ToC]と現物に不一致がある。`index-docs` を実行して、[ToC]を再構築する"
     "（ユーザーまたはプロジェクト管理 AI が実行する）"
 )
+GUIDANCE_SPEC_CHANGED = (
+    "渡した対象指定が、[ToC]に保存した指定と違う。`index-docs` を実行して、新しい指定を保存する"
+    "（指定を保存しないと、指定を渡さない検索が、古い指定で走査する）"
+)
 GUIDANCE_EXCLUDED = (
     "ID 未付与・ID 重複の文書は[ToC]に入らない。`check-dlid` で確かめ、"
     "`embed-dlid` で解消してから、`index-docs` を実行する"
@@ -91,6 +96,8 @@ def _guidance(result: toc_check.TocCheck) -> list[str]:
         guidance.append(GUIDANCE_NOT_BUILT)
     elif result.status == toc_check.STATUS_REBUILD_NEEDED:
         guidance.append(GUIDANCE_REBUILD)
+        if result.target_spec_changed:
+            guidance.append(GUIDANCE_SPEC_CHANGED)
     if result.status != toc_check.STATUS_NOT_BUILT and result.excluded:
         guidance.append(GUIDANCE_EXCLUDED)
     return guidance

@@ -29,6 +29,8 @@ REQ-001 D-026・D-027・D-036・D-039 を実装する。`check-toc` と `query-d
 - `sections`: セクションごとの変更（`change_set.SectionChange`）
 - `excluded`: ID 未付与・ID 重複で[確定 Index 対象リスト]に入れなかった文書。`excluded_in_toc` は、そのうち
   [確定 ToC]に入っている[文書 ID]の文書
+- `target_spec_changed`: 渡された対象指定が、[確定 ToC]に保存した指定と違うか。`saved_target_spec` は、違うときの
+  保存済みの指定（違わないとき、渡されないときは `None`）
 - `counts`: 変更種別ごとの件数。`scale`: 再構築が必要なときの規模の件数
 - `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定など
 
@@ -39,6 +41,8 @@ REQ-001 D-026・D-027・D-036・D-039 を実装する。`check-toc` と `query-d
 - 照合は `change_set.build_change_set` の判定をそのまま使う。title の記録語（D-039）を除いた[内容ハッシュ]と
   参照記述の比較値で比べるので、記録語だけの書き換えは差にならない
 - 再構築必要の条件は、次のどれかがあること。
+  - 渡された対象指定が、保存した指定と違う（要件 REQ-003 §7）。文書に差が無くても、再構築すると新しい指定が
+    保存される。保存した指定が解釈できないときも、違うものとして扱う。規模の件数は、すべて 0 でありうる
   - 変更集合に、変更のある文書（新規・離脱・パス変更・内容変更・参照の違い）がある
   - セクションの変更がある
   - [確定 ToC]に入っている文書で、今回 ID 重複として除外されたものがある。再構築すると[確定 ToC]から除かれる。
@@ -144,6 +148,8 @@ class TocCheck:
     version: int | str | None = None
     spec_source: str | None = None
     target_spec: dict | None = None
+    target_spec_changed: bool = False
+    saved_target_spec: dict | None = None
     documents: tuple[DocumentChange, ...] = ()
     sections: tuple[SectionChange, ...] = ()
     excluded: tuple[ExcludedDocument, ...] = ()
@@ -161,6 +167,8 @@ class TocCheck:
             "version": self.version,
             "target_spec_source": self.spec_source,
             "target_spec": self.target_spec,
+            "target_spec_changed": self.target_spec_changed,
+            "saved_target_spec": self.saved_target_spec,
             "documents": [d.to_dict() for d in self.documents],
             "sections": [s.to_dict() for s in self.sections],
             "excluded": [e.to_dict() for e in self.excluded],
@@ -200,6 +208,14 @@ def _check_key_and_spec(toc_key: str, spec: TargetSpec | None) -> None:
         raise ValueError(
             f"対象指定が[ToC 識別キー]と対応しない: key={toc_key!r}, spec.mode={spec.mode!r}, spec.key={spec.key!r}"
         )
+
+
+def _same_target_spec(saved: object, given: TargetSpec) -> bool:
+    """渡された対象指定が、保存した指定と同じか。保存した指定を解釈できないときは、違うものとする。"""
+    try:
+        return TargetSpec.from_dict(saved).to_dict() == given.to_dict()
+    except (TargetSpecError, KeyError, TypeError, AttributeError):
+        return False
 
 
 def _count(documents: Iterable[DocumentChange], kind: str) -> int:
@@ -243,6 +259,9 @@ def check_toc(
                 version=toc["version"],
             )
         source = SPEC_SOURCE_SAVED
+    spec_changed = spec is not None and not _same_target_spec(
+        toc.get("target_spec"), spec
+    )
     common = {
         "version": toc["version"],
         "spec_source": source,
@@ -308,6 +327,8 @@ def check_toc(
     }
     result = {
         **common,
+        "target_spec_changed": spec_changed,
+        "saved_target_spec": toc.get("target_spec") if spec_changed else None,
         "documents": changed,
         "sections": change_set.sections,
         "excluded": change_set.excluded,
@@ -317,7 +338,7 @@ def check_toc(
         "warnings": tuple(expansion.warnings),
     }
 
-    if not (changed or change_set.sections or excluded_in_toc):
+    if not (changed or change_set.sections or excluded_in_toc or spec_changed):
         return TocCheck(status=STATUS_UP_TO_DATE, toc_key=key, **result)
 
     try:

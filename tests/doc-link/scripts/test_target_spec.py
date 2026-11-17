@@ -263,6 +263,45 @@ class ExpansionTest(TreeTestCase):
         result = self.files(key="k", dirs=["docs/de*"])
         self.assertEqual(result.files, ["docs/deep/b.md"])
 
+    def test_double_star_matches_zero_or_more_directories(self):
+        self.make(
+            "specs/design/a.md",
+            "specs/x/design/b.md",
+            "specs/x/y/design/c.md",
+            "specs/x/other/d.md",
+            "specs/e.md",
+        )
+        expected = [
+            "specs/design/a.md",
+            "specs/x/design/b.md",
+            "specs/x/y/design/c.md",
+        ]
+        for pattern in ("specs/**/design/", "**/design", "specs/**/design/**"):
+            with self.subTest(pattern=pattern):
+                result = self.files(key="k", dirs=[pattern])
+                self.assertEqual(result.files, expected)
+
+    def test_double_star_in_exclude_matches_zero_or_more_directories(self):
+        self.make(
+            "specs/design/a.md",
+            "specs/x/design/b.md",
+            "specs/x/y/design/c.md",
+            "specs/x/other/d.md",
+            "specs/e.md",
+        )
+        result = self.files(key="k", dirs=["specs"], exclude=["specs/**/design"])
+        self.assertEqual(result.files, ["specs/e.md", "specs/x/other/d.md"])
+        result = self.files(key="k", dirs=["specs"], exclude=["specs/**/y"])
+        self.assertEqual(
+            result.files,
+            [
+                "specs/design/a.md",
+                "specs/e.md",
+                "specs/x/design/b.md",
+                "specs/x/other/d.md",
+            ],
+        )
+
     def test_dirs_pattern_without_slash_matches_any_level(self):
         result = self.files(key="k", dirs=["draft*"])
         self.assertEqual(result.files, ["other/draft/e.md", "skip/draft.md"])

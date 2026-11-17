@@ -347,18 +347,30 @@ def _matches(pattern: str, parts: list[str]) -> bool:
 
     - `/` を含まない要素は、どの階層の名前とも照合する。ワイルドカードを含まない要素は
       ディレクトリ名とだけ照合し、ファイル名とは照合しない
-    - `/` を含む要素は、ルートからのパスと 1 階層ずつ照合し、一致したものの配下も一致とする
+    - `/` を含む要素は、ルートからのパスと 1 階層ずつ照合し、一致したものの配下も一致とする。
+      要素の `**` は、0 階層以上のディレクトリに一致する（`docs/**/design/` は `docs/design` と
+      `docs/a/b/design` の両方に一致する）
     """
     if "/" not in pattern:
         names = parts if _is_pattern(pattern) else parts[:-1]
         return any(fnmatch.fnmatchcase(name, pattern) for name in names)
-    pattern_parts = pattern.split("/")
-    if len(parts) < len(pattern_parts):
+    return _match_prefix(pattern.split("/"), parts)
+
+
+def _match_prefix(pattern_parts: list[str], parts: list[str]) -> bool:
+    """パターンの要素を、パスの先頭から 1 階層ずつ照合する。照合し終えたあとの配下は、一致とする。
+
+    要素が `**` のときは、0 階層以上のディレクトリに一致する。それ以外の要素は、1 階層の名前に
+    `fnmatch` で一致する。
+    """
+    if not pattern_parts:
+        return True
+    head, rest = pattern_parts[0], pattern_parts[1:]
+    if head == "**":
+        return any(_match_prefix(rest, parts[skip:]) for skip in range(len(parts) + 1))
+    if not parts:
         return False
-    return all(
-        fnmatch.fnmatchcase(name, expected)
-        for name, expected in zip(parts, pattern_parts)
-    )
+    return fnmatch.fnmatchcase(parts[0], head) and _match_prefix(rest, parts[1:])
 
 
 def _has_fixed_excluded_dir(parts: list[str]) -> bool:

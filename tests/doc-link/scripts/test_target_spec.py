@@ -214,6 +214,18 @@ class FixedExclusionTest(TreeTestCase):
         self.assertEqual(self.files(key="k", dirs=["vendor"]).files, [])
         self.assertEqual(self.files(key="k", dirs=["docs/node_modules"]).files, [])
 
+    def test_dirs_on_fixed_excluded_directory_is_reported(self):
+        for entry in ("vendor", "docs/node_modules"):
+            with self.subTest(entry=entry):
+                result = self.files(key="k", dirs=[entry])
+                self.assertEqual(
+                    [p.to_dict() for p in result.problems],
+                    [{"path": entry, "reason": "fixed_excluded"}],
+                )
+
+    def test_dirs_on_the_root_is_not_reported_as_fixed_excluded(self):
+        self.assertEqual(self.files(key="k", dirs=["."]).problems, [])
+
     def test_directly_specified_files_are_not_excluded(self):
         paths = [".git/g.md", "docs/node_modules/x.md", ".temp/t.md", "vendor/v.md"]
         result = self.files(key="k", paths=paths)

@@ -57,6 +57,7 @@ PROBLEM_NOT_DIRECTORY = "not_directory"
 PROBLEM_NO_MATCH = "no_match"
 PROBLEM_EXCLUDED = "excluded"
 PROBLEM_UNREADABLE = "unreadable"
+PROBLEM_FIXED_EXCLUDED = "fixed_excluded"
 
 _WILDCARD_CHARS = "*?["
 
@@ -485,6 +486,8 @@ def _add_dir_entry(
     elif not os.path.isdir(absolute):
         result.problems.append(Problem(entry, PROBLEM_NOT_DIRECTORY))
     elif entry != "." and _has_fixed_excluded_dir(entry.split("/")):
+        # 指定されたディレクトリそのものが、固定除外の名前（またはその配下）である。黙って 0 件にしない
+        result.problems.append(Problem(entry, PROBLEM_FIXED_EXCLUDED))
         return
     else:
         candidates.update(_walk(root, entry, unreadable)[1])

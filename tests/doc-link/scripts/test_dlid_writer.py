@@ -71,8 +71,19 @@ class ExactBytesTest(WriterTestBase):
     def test_atx_without_frontmatter(self):
         self.assertEqual(
             self.embed("# Title\n\nbody\n"),
-            f"---\ndoc_link_id: {D1}\n---\n# Title {D2}\n\nbody\n",
+            f"---\ndoc_link_id: {D1}\n---\n\n# Title {D2}\n\nbody\n",
         )
+
+    def test_new_frontmatter_is_followed_by_one_blank_line_only_when_needed(self):
+        # 先頭の行が空行なら、すでに空行があるので足さない
+        self.assertEqual(
+            self.embed("\n# T\n"), f"---\ndoc_link_id: {D1}\n---\n\n# T {D2}\n"
+        )
+        # 空行がなければ 1 行足す（frontmatter の直後に本文を置かない）
+        self.assertEqual(self.embed("text\n"), f"---\ndoc_link_id: {D1}\n---\n\ntext\n")
+
+    def test_empty_document_gets_only_the_three_frontmatter_lines(self):
+        self.assertEqual(self.embed(""), f"---\ndoc_link_id: {D1}\n---\n")
 
     def test_atx_with_closing_hashes_keeps_them_after_the_dlid(self):
         text = "---\ntitle: x\n---\n## Title ##\n\n## Other   ##   \n"
@@ -82,31 +93,33 @@ class ExactBytesTest(WriterTestBase):
         )
 
     def test_atx_empty_heading(self):
-        self.assertEqual(self.embed("##\n"), f"---\ndoc_link_id: {D1}\n---\n## {D2}\n")
+        self.assertEqual(
+            self.embed("##\n"), f"---\ndoc_link_id: {D1}\n---\n\n## {D2}\n"
+        )
 
     def test_setext_headings(self):
         text = "Title\n=====\n\nSub\nline two\n---\n"
         self.assertEqual(
             self.embed(text),
-            f"---\ndoc_link_id: {D1}\n---\nTitle {D2}\n=====\n\nSub\nline two {D3}\n---\n",
+            f"---\ndoc_link_id: {D1}\n---\n\nTitle {D2}\n=====\n\nSub\nline two {D3}\n---\n",
         )
 
     def test_setext_keeps_trailing_spaces_after_the_dlid(self):
         self.assertEqual(
             self.embed("Title  \n=====\n"),
-            f"---\ndoc_link_id: {D1}\n---\nTitle {D2}  \n=====\n",
+            f"---\ndoc_link_id: {D1}\n---\n\nTitle {D2}  \n=====\n",
         )
 
     def test_heading_in_code_block_is_not_written(self):
         text = "# T\n\n```\n# not a heading\n```\n\n    # indented code\n\n<div>\n# html block\n</div>\n"
         self.assertEqual(
             self.embed(text),
-            f"---\ndoc_link_id: {D1}\n---\n# T {D2}\n\n```\n# not a heading\n```\n\n    # indented code\n\n<div>\n# html block\n</div>\n",
+            f"---\ndoc_link_id: {D1}\n---\n\n# T {D2}\n\n```\n# not a heading\n```\n\n    # indented code\n\n<div>\n# html block\n</div>\n",
         )
 
     def test_without_frontmatter_creates_one_at_the_top(self):
         self.assertEqual(
-            self.embed("text only\n"), f"---\ndoc_link_id: {D1}\n---\ntext only\n"
+            self.embed("text only\n"), f"---\ndoc_link_id: {D1}\n---\n\ntext only\n"
         )
 
     def test_existing_unrecognised_value_is_replaced(self):
@@ -126,7 +139,7 @@ class ExactBytesTest(WriterTestBase):
     def test_crlf_is_kept(self):
         self.assertEqual(
             self.embed("# T\r\n\r\nbody\r\n"),
-            f"---\r\ndoc_link_id: {D1}\r\n---\r\n# T {D2}\r\n\r\nbody\r\n",
+            f"---\r\ndoc_link_id: {D1}\r\n---\r\n\r\n# T {D2}\r\n\r\nbody\r\n",
         )
         self.assertEqual(
             self.embed("---\r\nx: 1\r\n---\r\n# T\r\n", name="b.md"),
@@ -136,11 +149,11 @@ class ExactBytesTest(WriterTestBase):
     def test_cr_only_is_kept(self):
         self.assertEqual(
             self.embed("# T\rbody\r"),
-            f"---\rdoc_link_id: {D1}\r---\r# T {D2}\rbody\r",
+            f"---\rdoc_link_id: {D1}\r---\r\r# T {D2}\rbody\r",
         )
 
     def test_no_trailing_newline(self):
-        self.assertEqual(self.embed("# T"), f"---\ndoc_link_id: {D1}\n---\n# T {D2}")
+        self.assertEqual(self.embed("# T"), f"---\ndoc_link_id: {D1}\n---\n\n# T {D2}")
 
     def test_links_html_and_text_are_untouched(self):
         text = (
@@ -151,7 +164,7 @@ class ExactBytesTest(WriterTestBase):
         )
         self.assertEqual(
             self.embed(text),
-            f"---\ndoc_link_id: {D1}\n---\n# T {D2}\n\n"
+            f"---\ndoc_link_id: {D1}\n---\n\n# T {D2}\n\n"
             '<a id="x"></a>\n'
             '[inline](other.md "title") and [ref][r] <https://example.com>\n\n'
             f'[r]: other.md "{"a" * 64} {ID_C}"\n',
@@ -160,13 +173,13 @@ class ExactBytesTest(WriterTestBase):
     def test_utf8_text_is_kept(self):
         self.assertEqual(
             self.embed("# 見出し\n\n本文 ✓\n"),
-            f"---\ndoc_link_id: {D1}\n---\n# 見出し {D2}\n\n本文 ✓\n",
+            f"---\ndoc_link_id: {D1}\n---\n\n# 見出し {D2}\n\n本文 ✓\n",
         )
 
     def test_blockquote_heading(self):
         self.assertEqual(
             self.embed("> ## Quoted\n"),
-            f"---\ndoc_link_id: {D1}\n---\n> ## Quoted {D2}\n",
+            f"---\ndoc_link_id: {D1}\n---\n\n> ## Quoted {D2}\n",
         )
 
     def test_written_items_report_position_in_the_written_document(self):
@@ -176,8 +189,8 @@ class ExactBytesTest(WriterTestBase):
             [(i.kind, i.dlid, i.replaced, i.line, i.heading) for i in result.written],
             [
                 (KIND_DOCUMENT, D1, None, None, None),
-                (KIND_SECTION, D2, None, 4, f"T {D2}"),
-                (KIND_SECTION, D3, None, 6, f"U {D3}"),
+                (KIND_SECTION, D2, None, 5, f"T {D2}"),
+                (KIND_SECTION, D3, None, 7, f"U {D3}"),
             ],
         )
 
@@ -339,7 +352,9 @@ class PartialFailureTest(WriterTestBase):
         self.assertFalse(result.succeeded)
         self.assertEqual([f.path for f in result.failed], ["a.md"])
         self.assertEqual(self.read("a.md"), "# A\n")
-        self.assertEqual(self.read("b.md"), f"---\ndoc_link_id: {D3}\n---\n# B {D4}\n")
+        self.assertEqual(
+            self.read("b.md"), f"---\ndoc_link_id: {D3}\n---\n\n# B {D4}\n"
+        )
         self.assertEqual({i.path for i in result.written}, {"b.md"})
 
     def test_os_error_on_one_document_is_reported_per_document(self):
@@ -365,7 +380,9 @@ class PartialFailureTest(WriterTestBase):
             [(i.path, i.kind) for i in result.written],
             [("b.md", KIND_DOCUMENT), ("b.md", KIND_SECTION)],
         )
-        self.assertEqual(self.read("b.md"), f"---\ndoc_link_id: {D3}\n---\n# B {D4}\n")
+        self.assertEqual(
+            self.read("b.md"), f"---\ndoc_link_id: {D3}\n---\n\n# B {D4}\n"
+        )
 
     def test_unreadable_target_is_reported(self):
         self.write("a.md", "# A\n")
@@ -411,7 +428,7 @@ class IdempotenceAndFilesTest(WriterTestBase):
         self.assertTrue(link.is_symlink())
         self.assertEqual(
             real.read_text(encoding="utf-8"),
-            f"---\ndoc_link_id: {D1}\n---\n# T {D2}\n",
+            f"---\ndoc_link_id: {D1}\n---\n\n# T {D2}\n",
         )
 
     def test_failed_write_does_not_leave_temp_files(self):
@@ -504,7 +521,7 @@ class VerifyWrittenTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "a.md").write_text("# T\n", encoding="utf-8")
             plan = embed_plan.build_plan(tmp, ["a.md"], issue=fixed_issuer())
-        after = f"---\ndoc_link_id: {D1}\n---\n# T {D2}\n"
+        after = f"---\ndoc_link_id: {D1}\n---\n\n# T {D2}\n"
         self.assertEqual(
             dlid_writer.verify_written("# T\n", after, list(plan.items)), []
         )

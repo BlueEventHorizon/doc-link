@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (specs)
   key: specs
-  generated_at: 2026-11-16T16:47:00Z
+  generated_at: 2026-11-17T11:30:52Z
   file_count: 16
 
 docs:
@@ -136,194 +136,187 @@ docs:
       - Published state
       - pending original confirmation
   docs/specs/design/DES-005_indexing.md:
-    title: "DES-005 Indexing: Target Confirmation, DLID Assignment, and ToC Construction Design"
-    purpose: Defines the design for confirming index targets, validating and assigning DLIDs, building the ToC, determining change sets, and controlling write units and re-runs for indexing.
+    title: DES-005 Target Determination, DLID Assignment, and ToC Construction Design
+    purpose: Defines how indexing construction determines Index targets, assigns DLIDs and section IDs, classifies changes, plans AI generation, and publishes the ToC atomically per key.
     content_details:
-      - "Input, output, and execution boundary of indexing: ToC identification key, complete desired state, and last confirmed ToC"
-      - Argument combination rules for --key, --paths, --dirs, --exclude, --all, and --paths-file, with rejection of invalid combinations
-      - "Path normalization: NFC, dot and dot-dot resolution, case-insensitive .md check, excluding .temp, and symlink handling by project-internal path"
-      - "DLID assignment operation: duplicate detection, original candidate selection by registered path, and user confirmation when ambiguous"
-      - DLID generation as 60-bit random Crockford Base32 of 12 characters, with issued values never rolled back
-      - "Section ID issuance on every heading lacking one, written only to the target document's heading line"
-      - "Change set classification: new, removed from target, same-ID path change, content hash change, and reference description change"
+      - Argument combination rules for --key, the complete desired state, and the reserved key all single mode
+      - Directory pattern expansion where a slash-containing ** matches zero or more directory levels (D-052), and exclusion matching by name or path
+      - Fixed exclusion of .temp and other reserved directory names during all scans and dirs expansion, reported as problems when the named directory itself is excluded (D-054)
+      - Path normalization to NFC, rejection of paths escaping the project root, and case-insensitive .md detection with .markdown excluded
+      - DLID assignment operation issuing 12-character Crockford Base32 values from 60-bit random numbers, plus section IDs on every heading and duplicate-origin candidate listing
+      - "Change set categories: new, removed from target, same-ID path change, content hash change, and reference description or physical path change"
       - "Section-level change detection by section ID: added, removed, moved, heading changed, and body changed"
-      - Candidate validation and atomic publication of the ToC via temp file and os.replace, keeping the old ToC on failure
-      - Reuse of verified document information when content hash is unchanged, so AI regeneration happens only for new or changed documents
+      - Reuse of verified document information by document ID and content hash, with AI generation only for new or changed documents
+      - Candidate verification and atomic ToC publication via os.replace, keeping the previous confirmed ToC on failure
     applicable_tasks:
-      - Implementation of index target confirmation and argument validation
-      - Implementation of the DLID assignment operation and section ID issuance
-      - Implementation of ToC construction and change set determination
-      - Review of indexing design against REQ-002 and REQ-003 requirements
-      - Modification of section-level change detection logic
-      - Debugging of ToC rebuild, re-run, and partial failure behavior
+      - Implementation of the index construction pipeline for a key
+      - Modification of target specification expansion and exclusion logic
+      - Review of DLID assignment and section ID issuance rules
+      - Review of change set classification for ToC rebuild
+      - Implementation of atomic ToC publication and failure handling
+      - Verification of argument validation for --key and target specification options
     keywords:
-      - DES-005
-      - DLID
-      - indexing
-      - ToC construction
-      - section ID
-      - change set
-      - desired state
-      - os.replace
       - DLID assignment
-      - symlink
+      - section ID
+      - os.replace
+      - "--paths-json"
+      - "--dirs"
+      - "--exclude"
+      - desired state
+      - content hash
+      - change set
+      - reserved key all
   docs/specs/design/DES-006_search.md:
     title: DES-006 Document Search Design
-    purpose: Defines the design for pre-search freshness judgement of the confirmed ToC, the search result contract, the search AI input copy, and DLID resolution against recorded paths without writing.
+    purpose: Defines the pre-search judgment of whether a ToC rebuild is needed, the search result contract, the composition of the search AI input copy, and DLID resolution against recorded paths without writing any state.
     content_details:
-      - "Pre-search judgement with three outcomes: no rebuild needed, rebuild needed, and undeterminable, where undeterminable stops the search instead of falling back to the old version"
-      - User choice between rebuilding before search and searching the existing version when a rebuild is needed, with counts of new, removed, path changed, content changed, missing ID, and duplicate ID documents
-      - "Search result contract: document ID, recorded path, relevance reason, section, ToC identification key, ToC version, and freshness judgement"
-      - Composition of the search AI input copy from the confirmed ToC and latest document information, with paths and hashes excluded
-      - Search AI reads all entries of the copy and returns document IDs, while script attaches paths from the confirmed ToC
-      - "resolve-dlid input and output: per-DLID resolution with document and section lookup from management state"
-      - Resolution by matching doc_link_id in frontmatter and section ID at heading line end, returning content hashes only when recorded values agree
-      - Handling of recorded paths outside the project, symbolic links, and missing files as recorded path not found without exploration
-      - Search and DLID resolution never write to the ToC, management state, or index target documents
+      - Pre-search judgment classifying results as rebuild not needed, rebuild needed, or undecidable, where undecidable stops the search
+      - Two-choice user confirmation between rebuilding first or searching the existing version, with counts of new, removed, path changed, content changed, ID missing, and ID duplicate documents
+      - "Search result fields: document ID, recorded path, relevance reason, section, key, ToC version, and freshness judgment"
+      - Search AI input copy built from the confirmed ToC and document information, with titles, purposes, content details, applicable tasks, keywords, and section headings but no paths or hashes
+      - "resolve-dlid behavior: document DLID resolved through its recorded current path, section ID resolved through the owning document across all keys"
+      - Verification of DLID and section ID against the file at the recorded path, with the content hash taken from records and never computed from the current file
+      - Recorded paths that are absolute or start with parent traversal treated as invalid records and reported as not at the recorded path
+      - Resolution never writing to the ToC, management state, or Index target documents
     applicable_tasks:
-      - Implementation of search pre-check and rebuild-necessity judgement
-      - Implementation of search result contract and freshness reporting
+      - Implementation of the pre-search rebuild necessity judgment
+      - Modification of the search result contract and freshness reporting
       - Implementation of the search AI input copy composition
-      - Implementation of the resolve-dlid command
-      - Review of search design against REQ-004 and DLID resolution requirements
-      - Debugging of search failures, stale index results, and DLID resolution mismatches
+      - Implementation of the resolve-dlid command behavior
+      - Review of DLID resolution for moved or copied documents
+      - Review of search behavior when management state cannot be read
     keywords:
-      - DES-006
       - resolve-dlid
-      - search pre-check
       - search AI
+      - rebuild necessity
       - confirmed ToC
-      - DLID resolution
-      - freshness judgement
+      - freshness judgment
       - section ID
-      - recorded path
-      - input copy
-  docs/specs/design/DES-007_references-impact.md:
-    title: Reference Check and Change Impact Notice Design (DES-007)
-    purpose: Specifies formal reference extraction from DLID-bearing link titles, reference checks against scanned directories, reverse references, change impact candidates and the inconsistency check
-    content_details:
-      - Formal reference extraction from reference-link definitions whose title ends with a DLID, with an optional 64-character lowercase hex content hash before it
-      - Reference record kept as referring ID, location, referenced ID and relative link path, with the fragment excluded from identity decisions
-      - "Reference check outcomes: match, path mismatch within the directory, absence in the specified directory, and fragment mismatch resolved against the current anchor"
-      - Path mismatch fix target notified only when the same ID is confirmed by a real scan, never inferred from saved paths
-      - Value form for links without a DLID in the title, built from the document ID or section ID and the content hash read from the current file
-      - Reverse references built from scanned referrers, with change detection by comparing the title hash record against the current hash in the confirmed ToC
-      - Indirect referrers not listed, so indirect impact is detected one step at a time
-      - Change impact notice drawn from confirmed ToC reference relations, returning changed ID, location, current hash, referrer and scan scope without judgment or edits
-      - Notice state not held by doc-link, so the same reference is returned until the project management AI rewrites the title hash
-      - Inconsistency check split into check-dlid, check-links, check-toc and check-impact skills, none of which rewrite management state
-    applicable_tasks:
-      - Implementation of reference extraction and reference check against scanned directories
-      - Implementation of the change impact notice output to the project management AI
-      - Implementation of reverse reference and impact candidate listing
-      - Review of fragment resolution and fragment mismatch handling
-      - Implementation of the check-links, check-impact and check-toc inconsistency checks
-      - Modification of the title hash record rules for references
-    keywords:
-      - formal reference
-      - reference link definition
       - content hash
-      - current hash
-      - DLID title
+      - recorded path
+      - undecidable
+      - DLID resolution
+  docs/specs/design/DES-007_references-impact.md:
+    title: DES-007 Reference Check and Change Impact Candidate Notification
+    purpose: Specifies formal reference extraction from DLID-bearing link titles, directory-scan target checks, reverse references and change impact candidates from confirmed ToC hashes, and the consistency check scope.
+    content_details:
+      - Formal reference extraction from Markdown reference link definitions whose title ends with a DLID (D-032)
+      - Recorded content hash taken from the word before the DLID when it is 64 lowercase hex characters, otherwise recorded as no record
+      - Target check by real scan of the specified directory with results match, same ID at a different path, or absent (including nonexistent or unreadable directory)
+      - Fragment resolution against explicit anchor or heading-generated anchor, with fragment mismatch and a current anchor hint for section IDs
+      - Value form for link_without_dlid titles as content hash followed by DLID, taken from the current target content and not from stored ToC records
+      - Reverse references built only from referrers scanned in the confirmed ToC, limited to documents and sections of that ToC
+      - Change impact candidates by comparing the recorded content hash in the title with the current hash from the confirmed ToC, exact 64-character match, including records absent
+      - Change impact notification returning changed ID, location, current hash, recorded hash, referrer ID, location, reference text, and inspection scope, without indirect referrers
+      - Notification state kept outside doc-link, the same reference returned repeatedly until the project management AI corrects the title hash
+      - Consistency check categories (ID missing or duplicated, broken reference, link without DLID, path mismatch, ToC versus source difference) split across check-dlid, check-links, check-toc and check-impact with no write-back
+    applicable_tasks:
+      - Implementation of formal reference extraction from reference link titles
+      - Implementation of directory scan based reference target verification
+      - Implementation of reverse reference and change impact candidate derivation
+      - Review of change impact notification contents and repeat behavior
+      - Review of consistency check scope and reference inspection results
+      - Modification of check-impact or check-links reference handling
+    keywords:
+      - DLID
+      - formal reference
+      - content hash
+      - section ID
+      - reference link title
+      - link_without_dlid
       - fragment mismatch
       - reverse reference
-      - impact candidate
-      - check-links
+      - change impact candidate
       - check-impact
   docs/specs/design/DES-008_content-rules.md:
-    title: DES-008 Markdown Parsing, Comparison Values, and Generated Information Rules
-    purpose: Defines rules for reading and writing DLIDs in frontmatter and heading lines, Markdown reference and heading parsing with markdown-it-py, heading anchor generation, content hashes, and the length limits for AI-generated fields.
+    title: Rules for Markdown parsing, comparison values, and generated information
+    purpose: Defines rules for reading and writing document IDs (DLID) in frontmatter and headings, Markdown reference and heading parsing with markdown-it-py, SHA-256 content hash computation, and the rules for AI-generated ToC fields.
     content_details:
-      - Frontmatter boundary detection and minimal top-level parsing, with doc_link_id recognized only as DLID- followed by 12 lowercase Crockford Base32 characters
-      - DLID write positions limited to the doc_link_id field and heading line ends, with post-write markdown-it-py reparse verifying that only the intended DLID changed
-      - "Formal reference definition: reference link whose title ends with a DLID, with recorded content hash, path, and position"
-      - Section range from a heading to the next heading of same or higher level, identified by a trailing DLID in the heading text
-      - Ten CommonMark link resolution rules, including label normalization, first definition wins, and scheme URLs excluded
-      - GitHub-compatible heading anchor generation via github-slugger v2.0.0 rules, not written into documents
-      - Content hash as SHA-256 of raw UTF-8 bytes, excluding the recorded content hash token in reference titles
-      - Section content hash over the section range, independent of the issued section ID
-      - Document title from the first H1 with trailing section ID removed
-      - Length limit L for AI-generated fields with validator H equal to floor of L times 1.3, minimums of 5 content details, 1 applicable task, and 5 keywords
+      - Frontmatter delimiter detection and minimal top-level key parsing that tolerates YAML syntax errors
+      - "DLID recognition: DLID- prefix plus 12-character lowercase Crockford Base32, case-sensitive exact match"
+      - "Write scope: only the DLID is written to frontmatter doc_link_id and to the end of heading text, verified by re-parsing with markdown-it-py"
+      - Atomic write through a temporary file and os.replace, keeping file permissions and writing through symlinks to their target
+      - "Reference link rules following CommonMark: first definition wins, case-folded labels, scheme destinations excluded, inline links excluded"
+      - Heading section range from a heading to the next heading of same or higher level
+      - GitHub-compatible heading anchor generation with -1, -2 suffixes for duplicates
+      - Content hash as SHA-256 of UTF-8 bytes, excluding the hash word recorded in the reference title
+      - AI-generated field limits L with floor(L x 1.3) validation and minimum item counts of 5, 1, and 5
     applicable_tasks:
-      - Implementation of frontmatter and heading DLID reading and writing
-      - Implementation of Markdown reference and section parsing with markdown-it-py
-      - Implementation of heading anchor generation and its verification against GitHub rules
-      - Implementation of content hash calculation and its test vectors
-      - Review of AI-generated field limits and validation rules
-      - Debugging of DLID write-back verification and reference link resolution
+      - Implementation of DLID read and write logic for frontmatter and headings
+      - Implementation of Markdown reference and heading parsing with markdown-it-py
+      - Implementation of content hash computation and its test vectors
+      - Review of heading anchor generation against GitHub slugger rules
+      - Modification of AI-generated ToC field validation limits and minimum item counts
     keywords:
-      - DES-008
-      - markdown-it-py
       - DLID
       - doc_link_id
-      - section ID
       - content hash
-      - reference link title
+      - SHA-256
+      - markdown-it-py
       - github-slugger
-      - heading anchor
-      - AI-generated field
+      - section ID
+      - reference title
+      - Crockford Base32
+      - os.replace
   docs/specs/design/DES-009_verification.md:
-    title: Requirement Coverage and Design Verification
-    purpose: Defines test norms for state transitions and deterministic processing, maps each requirement to its primary design and verification points, and lists cross-cutting scenarios used for acceptance checks.
+    title: DES-009 Requirement Coverage and Design Verification
+    purpose: Defines test criteria for stateful and deterministic processing, maps requirements to primary design documents and verification points, and records the approval status of the requirements and design.
     content_details:
-      - "Transition-table test rule: each P, B, and E row is tested for next state and effect, while guard failures and unlisted events are rejected with the confirmed ToC unchanged"
-      - "Reference-missing rule: missing or unreadable reference directories are recorded as absent and still allow candidate confirmation"
-      - "check-impact test items: returns references whose recorded hash differs from the current hash, references without a recorded hash, and repeats until the record is rewritten"
-      - Editing only a recorded hash leaves the referring document hash unchanged and triggers no notification chain, including mutual references
-      - "check-links test items: reports inline links with a DLID in title and reads a record only when the word before the DLID is a 64-character lowercase hex string"
-      - Requirement-to-design mapping table covering FR-001 to FR-018 and NFR-001 to NFR-008 with primary design and key verification viewpoints
-      - "Move scenario: same DLID and content with a changed path updates the current path without regenerating the summary, and old paths in referrers are not auto-corrected"
-      - "Content change scenario: referrer records keep the old value and check-impact returns the reference on every run until the record is rewritten"
-      - "Multi-key scenario: the same DLID in keys A and B, updates to A do not rewrite B ToC, and verified AI information is reused when added to B"
-      - "Out-of-scope reference scenario: real directory scan outside the index target with recorded scope and time, without guessing move destinations"
+      - Test rule that the DES-004 transition table is the only list of allowed transitions, testing permitted transitions, guard failures, and rejected events with the confirmed ToC unchanged
+      - "Absent reference targets recorded as a result rather than a failure: missing or unreadable directories are recorded as absent and still confirmed"
+      - "check-impact test items: no writes, reporting references whose recorded hash differs from or lacks the current hash, and no repeated notice after the recorded hash is rewritten"
+      - check-impact test that changing a referenced document does not propagate notices through referrers, including mutually referencing documents
+      - "check-links test items: reporting inline links with DLID in title, and treating a preceding 64-character lowercase hex value as a record only when valid"
+      - Requirement-to-design mapping table covering document ID, change detection, ToC and summary, search, DLID resolution, impact notice, and consistency requirements
+      - Cross-cutting scenarios for initial build, move, content change, failure, multiple keys, out-of-scope reference, and later reference to section IDs
+      - "Approval status: all requirement open issues decided and the design documents approved after review"
     applicable_tasks:
-      - Creation of state transition tests from the DES-004 transition table
-      - Creation of unit tests for deterministic processing such as DLID recognition and hash comparison
-      - Review of requirement coverage against the design verification mapping
-      - Verification of check-impact and check-links behavior against acceptance criteria
-      - Modification of acceptance test scope when requirements or design change
+      - Creation of test cases for state transitions in the DES-004 transition table
+      - Review of requirement coverage against the design documents
+      - Implementation of check-impact and check-links verification tests
+      - Review of cross-cutting scenario coverage for initial build, move, and failure
+      - Verification of acceptance criteria mapping for AC items
+      - Review of design approval status before implementation
     keywords:
-      - state transition table
-      - acceptance criteria
-      - AC-006
+      - transition table
       - check-impact
       - check-links
+      - requirement coverage
+      - acceptance criteria
+      - cross-cutting scenario
       - recorded hash
-      - current hash
-      - DLID resolution
-      - multi-key isolation
-      - FR-013
+      - DES-004
+      - guard condition
+      - confirmed ToC
   docs/specs/design/DES-010_skill-composition.md:
-    title: SKILL and Custom Agent Composition
-    purpose: Defines the eight SKILLs and two custom Agents of doc-link, their write and state boundaries, per-SKILL responsibilities and sequences, and data exchange with toc-updater and query-worker.
+    title: DES-010 SKILL and Agent Composition
+    purpose: "Defines the composition of the 8 doc-link SKILLs and 2 custom Agents (toc-updater, query-worker), each SKILL's responsibilities and sequences, and the data exchange rules between SKILLs and Agents."
     content_details:
-      - Composition table of eight SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, check-dlid, check-links, check-toc, check-impact) with write and state-change columns, where all check SKILLs leave managed state unchanged
-      - "Two custom Agents: toc-updater generates information for up to 3 documents per launch, and query-worker performs read-only search over the confirmed ToC"
-      - "embed-dlid responsibilities: issue DLIDs to documents without one, issue section IDs to headings lacking one, and resolve duplicate IDs with the original confirmed by the user"
-      - "index-docs responsibilities: target confirmation, diff detection, toc-updater dispatch with result validation, real directory scan, and batch confirmation of ToC candidates"
-      - "check-impact result shape: changed documents with direct referrers, each showing recorded hash versus current hash, an empty list with scope when none, and indirect referrers excluded"
-      - "check-impact follow-up: the management AI judges and fixes referrers, rewrites the recorded hash only for checked references, and repeats until the report is empty"
-      - "check-links detection list: broken references, ID and path mismatch, missing section, unresolved fragment, missing target, and links with a DLID-less title"
-      - "check-toc detection: unbuilt state, new, removed, moved, and content-changed entries, with recorded hash compared excluding the title hash"
-      - "resolve-dlid outcomes: resolved path with content hash, DLID absent from recorded path, or no record, with failure when management state is unreadable"
-      - "Data exchange rules: the script writes requests and results under a per-skill directory in .temp, deletes them after completion, and treats a missing or undefined exit value as failure"
+      - 8 SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, check-dlid, check-links, check-toc, check-impact) classified as operation, query or inspection with their managed-state write scope
+      - Only index-docs rewrites managed state (document info and ToC version); inspection SKILLs only detect and return results, and check-impact does not rewrite anything
+      - toc-updater handles up to 3 documents from the same directory per launch and generates purpose, content overview, applicable tasks and keywords per document independently, with no verification data beyond the field limit L
+      - query-worker reads the whole confirmed ToC, selects relevant documents with reasons, is read-only and must not supplement IDs that do not exist
+      - "index-docs sequence: a single entry script drives the stages, toc-updater runs up to 10 launches concurrently, and the reference check and candidate confirmation run afterward"
+      - "check-impact sequence: a stale ToC returns the same result as check-toc, otherwise it lists changed documents with their direct referrers and the recorded and current content hashes"
+      - Inspection responsibility table for check-dlid, check-links, check-toc and check-impact with the detected states and the follow-up action for each
+      - "Agent data exchange: only script-generated identifiers under .temp/doc-link/<skill>/, with source_unreadable as the toc-updater error value and an empty set for query-worker errors"
     applicable_tasks:
-      - Implementation of SKILL and custom Agent boundaries for embed-dlid, index-docs, and query-docs
-      - Implementation of check SKILL detection logic for check-dlid, check-links, check-toc, and check-impact
-      - Modification of toc-updater or query-worker data exchange and result validation
-      - Review of write permissions and managed state changes per SKILL
-      - Creation of SKILL.md orchestration steps for the check-impact update loop
+      - Implementing SKILL.md files and their script invocations for doc-link
+      - Implementing toc-updater and query-worker custom Agent definitions
+      - Reviewing the responsibility boundaries between SKILLs and custom Agents
+      - Modifying the index-docs orchestration flow and its toc-updater dispatch limits
+      - Reviewing the detection and follow-up actions of the inspection SKILLs
+      - Verifying the Agent data exchange identifiers and error values
     keywords:
+      - SKILL composition
+      - toc-updater
+      - query-worker
       - embed-dlid
       - index-docs
       - check-impact
-      - check-links
       - resolve-dlid
-      - toc-updater
-      - query-worker
-      - data exchange
-      - concurrent dispatch
-      - referrer
+      - inspection SKILL
+      - Agent data exchange
   docs/specs/design/README.md:
     title: doc-link Design Document Structure
     purpose: Defines the doc-link design document set, the topic each design document covers, and the rule that requirements take precedence over design. Records that no pending decision blocks finalization.
@@ -357,100 +350,100 @@ docs:
       - requirement precedence
   docs/specs/requirement/REQ-001_overview.md:
     title: doc-link Requirements Specification - Overview
-    purpose: Defines the overall purpose, scope, responsibility boundary, common non-functional requirements, decisions and open issues of the doc-link plugin that replaces DocAdvisor
+    purpose: Defines the purpose, background, terms, scope, responsibility boundaries, common non-functional requirements, and decisions and open items of the doc-link plugin that replaces DocAdvisor.
     content_details:
-      - Background limits of DocAdvisor path-keyed ToC, such as path changes on move and non-unified reference styles
-      - Purpose of path-independent DLID-based document identity, reference tracking, change impact identification and notification
-      - Scope covering Markdown Index targets, DLID assignment operation, reference extraction, change detection and search
-      - Responsibility boundary where doc-link reports changes and referrers while the project management AI decides and performs document edits
-      - Write boundary where doc-link writes only doc_link_id in frontmatter and DLID at heading line ends, verified by re-parse
-      - Flow where DLID assignment precedes the initial ToC build and a ToC candidate becomes the confirmed ToC only after checks pass
-      - Search flow where searching a stale ToC returns a notice that it may not reflect current Index targets
-      - Key decisions D-031 D-035 D-036 D-038 D-039 D-043 on write scope, assignment, exclusion of unassigned or duplicate documents, notification condition, hash rule and direct references only
-      - Non-functional requirements NFR-001 to NFR-008 on rebuild consistency, determinism, idempotence, resumability and scalability
-      - Error candidates and non-blocking detections, with all open issues U-001 to U-024 resolved
+      - "Purpose of doc-link: DLID-based document identity, reference relationship tracking, and change impact notification replacing path-based DocAdvisor"
+      - "Overall flow: DLID assignment operation, then ToC construction, then search and change impact notification on the confirmed ToC"
+      - "Search flow: rebuild-necessity check, user choice between rebuilding the ToC or searching the existing ToC with a stale-result disclosure"
+      - Glossary of terms such as DLID, document ID, section ID, formal reference, ToC candidate, confirmed ToC, document information, and content hash
+      - "Scope: Markdown only, DLID writes, ID uniqueness check, reference extraction, change detection, and out-of-scope items such as script-based semantic impact analysis"
+      - "Responsibility boundary: doc-link reports changes and referrers mechanically while the project management AI decides and performs document edits"
+      - Non-functional requirements NFR-001 to NFR-008 covering ToC rebuild consistency, determinism, idempotence, write boundary, diagnosability, resumability, scalability, and separation of generation instructions from validation limits
+      - "Write boundary: only doc_link_id in frontmatter and section IDs at heading line ends may be written into target documents"
+      - Error candidates that stop processing and non-blocking findings recorded in the ToC such as unresolved reference targets
+      - Decisions D-001 to D-055 and open items U-001 to U-024 with their resolutions
     applicable_tasks:
-      - Requirements review of the doc-link overall specification
-      - Design planning that derives doc-link design and implementation plans from the overall requirements
-      - Verification of the responsibility boundary between doc-link and the project management AI
-      - Review of DLID assignment and Index target write-scope constraints
-      - Review of change impact notification and reference tracking requirements
-      - Confirmation of decision and open issue status for doc-link
+      - Requirements review of the doc-link plugin
+      - Design of doc-link ToC, document ID, and reference features
+      - Implementation scope confirmation for doc-link
+      - Responsibility boundary confirmation between doc-link and the project management AI
+      - Verification of decisions D-001 to D-055 and open items
+      - Impact analysis of changes to requirement documents REQ-002 to REQ-005
+      - Review of write-boundary rules for target documents
     keywords:
       - doc-link
       - DLID
       - document ID
       - ToC
-      - DocAdvisor replacement
       - change impact notification
       - reference tracking
-      - doc_link_id
-      - write boundary
+      - Index target
+      - section ID
   docs/specs/requirement/REQ-002_document-id.md:
     title: doc-link Requirements Specification - Index Targets and Document ID
-    purpose: Defines Index target specification and list confirmation, doc_link_id and section ID verification, DLID issuance and assignment, and DLID-to-path resolution for the doc-link plugin
+    purpose: Defines Index target specification and list confirmation, plus issuing, verification, and resolution of DLID document IDs and the DLID assignment operation for doc-link.
     content_details:
-      - Index target specification by opaque ToC identification key, with --key, --paths, --dirs, --exclude, and the reserved key all for single mode
-      - Fixed exclusion list for directory walks, excluding .git, .claude, .codex, .temp, node_modules, vendor, dist, build, target, coverage, __pycache__, .venv, and cache directories
-      - Rule that a key is a complete desired state, so entries missing from the new list are removed without searching outside the target range
-      - doc_link_id frontmatter key with the DLID- prefix and a 12-character lowercase Crockford Base32 value from a 60-bit random number
-      - Index target list confirmation (section 8) that rejects key-less target arguments, --all combined with targets, and key all given as --key all
-      - Document ID confirmation (section 9.1) that reads doc_link_id, reports documents without IDs or with duplicate IDs without stopping, and forms the confirmed target list
-      - Detection rules for missing document IDs, headings without section IDs, duplicate document IDs, and duplicate section IDs
-      - DLID resolution (FR-018) that returns the recorded current path and recorded content hash, and never searches outside recorded paths
-      - DLID assignment operation (section 9.2) that checks duplicates against all keys, issues IDs, writes section IDs to every heading, and reports written and unwritable documents
-      - Acceptance criteria AC-005 and AC-012 to AC-031 covering duplicate handling, ID immutability, non-meaning of ID values, multi-key membership, and no document change by ToC build or search
+      - "Index target options: --paths, --paths-json, --paths-file, --dirs, --dirs-json, --exclude, --exclude-json, and the --all single mode"
+      - Fixed exclusion names such as .git, .claude, node_modules, vendor, dist, build, and target applied to --all scans and --dirs expansion
+      - Rules that --key is required with target specs, --all cannot be combined with a target spec, and --key all is rejected
+      - The doc_link_id frontmatter key holding a DLID with the DLID- prefix and a 12-character lowercase Crockford Base32 value generated once
+      - "Verification states: missing document ID, heading without section ID, duplicate document ID, and duplicate section ID"
+      - "DLID assignment operation steps: check duplicates, issue new document IDs, and write section IDs at the end of every heading line"
+      - Duplicate resolution by choosing an original candidate that matches the recorded path, then reissuing a new DLID to the copy
+      - DLID resolution returning the current path and recorded content hash from the management state, with no search outside the record
+      - Document ID confirmation stage excluding documents without an ID or with a duplicate ID from the confirmed Index target list and reporting them
+      - "Acceptance criteria: DLID stays stable under body, filename, or path changes and is unaffected by ToC key membership changes"
     applicable_tasks:
-      - Implementation of Index target specification parsing and validation for doc-link
-      - Implementation of doc_link_id reading and missing or duplicate ID detection
-      - Implementation of the DLID assignment operation including ID issuance and frontmatter writing
-      - Implementation of DLID to current path resolution
-      - Review of Index target list confirmation behavior against the requirements
-      - Review of exclusion rules applied to all mode and directory expansion
-      - Designing acceptance tests for DLID assignment and duplicate handling
+      - Implementation of Index target specification parsing and validation
+      - Review of fixed exclusion rules for --all scans and --dirs expansion
+      - Implementation of DLID issuing and frontmatter writing
+      - Implementation of duplicate document ID and section ID detection
+      - Implementation of DLID resolution to the current path
+      - Review of DLID assignment operation behavior
+      - Design review of the document ID confirmation stage before ToC construction
     keywords:
-      - Index target specification
-      - doc_link_id
       - DLID
-      - DLID assignment operation
+      - doc_link_id
+      - Index target
+      - Index target list
+      - ToC identifier key
       - section ID
-      - duplicate document ID
-      - exclusion rule
-      - DLID resolution
+      - duplicate ID
       - Crockford Base32
-      - ToC identification key
+      - fixed exclusion
+      - "--dirs-json"
   docs/specs/requirement/REQ-003_toc.md:
-    title: doc-link Requirements Specification - ToC Management
-    purpose: Defines the information a ToC manages, limits on AI generated fields, change detection by document ID and hashes, and ToC build and rebuild with atomic confirmation for the doc-link plugin
+    title: "doc-link Requirements: ToC Management"
+    purpose: Specifies the information doc-link manages per ToC (document info, section and reference entries, AI field limits), change detection by content hash, and the ToC build and rebuild steps.
     content_details:
-      - "Document info per document: document ID, current path, title, purpose, content overview, applicable tasks, keywords, document hash, section info, references, and last inspection state"
-      - Section entries holding section ID, heading, current position, and a section hash computed from the section range
-      - Reference entries built from formal references, with referenced document ID, referenced section ID, title-recorded content hash, and inspection state
-      - "AI generated field limits: purpose 200 characters and arrays of at most 10 items, validated against an internal limit that is never disclosed to the generating AI"
-      - Normalized Index target specification stored per ToC so that search can re-interpret it and detect scope changes
-      - "Change categories: new, body change, reference change, move or rename, removed from Index target, and unchanged, which are not mutually exclusive"
-      - Content hash as SHA-256 of the original text with the title-recorded hash word and one following space removed
-      - "Rebuild order: document ID confirmation, change set creation, acquisition of only the needed information, then atomic confirmation of the ToC candidate"
-      - Reference inspection by actual search of the reference directory, where unsearchable directories are recorded as absent and never block confirmation
-      - Acceptance criteria AC-001, AC-002, AC-010, AC-011, AC-017, AC-018, AC-020, AC-026, and AC-027 covering moves without regeneration and no publication of partial state
+      - Document info items such as document ID, current path, title, purpose, summary, applicable tasks, keywords, and document hash
+      - Section entries keyed by section ID with a per-section hash computed from the original text
+      - Reference entries extracted from formal references, with referenced document and section IDs and the content hash recorded in the link title
+      - AI-generated field limits of 200 characters for purpose and 10 items for array fields, with the internal tolerance withheld from the generator
+      - Stored normalized index target specification per ToC so search can re-enumerate current documents and detect scope changes
+      - "Content hash rule: SHA-256 of the original text excluding the recorded hash word in reference titles"
+      - Change set classification into new, body change, reference change, move or rename, removal from index target, and unchanged
+      - Update plan that reuses unchanged information and regenerates AI fields only for new or body-changed documents
+      - Reference check against the designated reference directory, recording missing targets without blocking ToC confirmation
+      - ToC candidate validation and atomic confirmation, keeping the previous confirmed ToC on failure
     applicable_tasks:
-      - Implementation of the ToC data structure and per-key ToC storage for doc-link
-      - Implementation of change detection and change set classification
-      - Implementation of ToC candidate construction, validation, and atomic confirmation
-      - Implementation of AI generated field length validation with an internal limit
-      - Designing acceptance tests for ToC rebuild and failure handling
-      - Review of reference inspection rules against reference directory search
+      - Implementation of ToC build and rebuild using a change set and update plan
+      - Implementation of change detection comparing the confirmed ToC with current documents
+      - Implementation of AI-generated field validation against length limits
+      - Review of the ToC information model and per-entry fields
+      - Creation of acceptance tests for move detection, rebuild failure, and change set classification
+      - Implementation of reference checking and reverse reference generation
     keywords:
       - ToC
       - document info
       - content hash
+      - SHA-256
       - change set
+      - update plan
       - ToC candidate
-      - confirmed ToC
-      - AI generated field
+      - AI-generated fields
       - reference entry
-      - reflected hash
-      - ToC rebuild
+      - reverse reference
   docs/specs/requirement/REQ-004_search.md:
     title: doc-link Requirements Specification - Document Search
     purpose: "Defines requirements for document search (FR-006): ToC search by key, pre-search ToC rebuild check with user choice, stop on undeterminable rebuild need, and required search result fields."

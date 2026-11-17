@@ -214,6 +214,30 @@ class FixedExclusionTest(TreeTestCase):
         self.assertEqual(self.files(key="k", dirs=["vendor"]).files, [])
         self.assertEqual(self.files(key="k", dirs=["docs/node_modules"]).files, [])
 
+    def test_dirs_on_fixed_excluded_directory_is_reported(self):
+        for entry in ("vendor", "docs/node_modules"):
+            with self.subTest(entry=entry):
+                result = self.files(key="k", dirs=[entry])
+                self.assertEqual(
+                    [p.to_dict() for p in result.problems],
+                    [{"path": entry, "reason": "fixed_excluded"}],
+                )
+
+    def test_scan_excluded_start_scans_the_designated_fixed_excluded_directory(self):
+        self.make("vendor/sub/s.md", "vendor/node_modules/n.md")
+        spec = self.parse(key="k", dirs=["vendor"])
+        result = target_spec.expand(spec, self.root, scan_excluded_start=True)
+        self.assertEqual(result.files, ["vendor/sub/s.md", "vendor/v.md"])
+        self.assertEqual(result.problems, [])
+
+    def test_scan_excluded_start_works_below_a_fixed_excluded_ancestor(self):
+        spec = self.parse(key="k", dirs=["docs/node_modules"])
+        result = target_spec.expand(spec, self.root, scan_excluded_start=True)
+        self.assertEqual(result.files, ["docs/node_modules/x.md"])
+
+    def test_dirs_on_the_root_is_not_reported_as_fixed_excluded(self):
+        self.assertEqual(self.files(key="k", dirs=["."]).problems, [])
+
     def test_directly_specified_files_are_not_excluded(self):
         paths = [".git/g.md", "docs/node_modules/x.md", ".temp/t.md", "vendor/v.md"]
         result = self.files(key="k", paths=paths)
@@ -262,6 +286,45 @@ class ExpansionTest(TreeTestCase):
     def test_dirs_pattern_with_slash_matches_from_root(self):
         result = self.files(key="k", dirs=["docs/de*"])
         self.assertEqual(result.files, ["docs/deep/b.md"])
+
+    def test_double_star_matches_zero_or_more_directories(self):
+        self.make(
+            "specs/design/a.md",
+            "specs/x/design/b.md",
+            "specs/x/y/design/c.md",
+            "specs/x/other/d.md",
+            "specs/e.md",
+        )
+        expected = [
+            "specs/design/a.md",
+            "specs/x/design/b.md",
+            "specs/x/y/design/c.md",
+        ]
+        for pattern in ("specs/**/design/", "**/design", "specs/**/design/**"):
+            with self.subTest(pattern=pattern):
+                result = self.files(key="k", dirs=[pattern])
+                self.assertEqual(result.files, expected)
+
+    def test_double_star_in_exclude_matches_zero_or_more_directories(self):
+        self.make(
+            "specs/design/a.md",
+            "specs/x/design/b.md",
+            "specs/x/y/design/c.md",
+            "specs/x/other/d.md",
+            "specs/e.md",
+        )
+        result = self.files(key="k", dirs=["specs"], exclude=["specs/**/design"])
+        self.assertEqual(result.files, ["specs/e.md", "specs/x/other/d.md"])
+        result = self.files(key="k", dirs=["specs"], exclude=["specs/**/y"])
+        self.assertEqual(
+            result.files,
+            [
+                "specs/design/a.md",
+                "specs/e.md",
+                "specs/x/design/b.md",
+                "specs/x/other/d.md",
+            ],
+        )
 
     def test_dirs_pattern_without_slash_matches_any_level(self):
         result = self.files(key="k", dirs=["draft*"])

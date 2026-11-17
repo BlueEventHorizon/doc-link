@@ -57,6 +57,7 @@ PROBLEM_NOT_DIRECTORY = "not_directory"
 PROBLEM_NO_MATCH = "no_match"
 PROBLEM_EXCLUDED = "excluded"
 PROBLEM_UNREADABLE = "unreadable"
+PROBLEM_FIXED_EXCLUDED = "fixed_excluded"
 
 _WILDCARD_CHARS = "*?["
 
@@ -347,18 +348,30 @@ def _matches(pattern: str, parts: list[str]) -> bool:
 
     - `/` を含まない要素は、どの階層の名前とも照合する。ワイルドカードを含まない要素は
       ディレクトリ名とだけ照合し、ファイル名とは照合しない
-    - `/` を含む要素は、ルートからのパスと 1 階層ずつ照合し、一致したものの配下も一致とする
+    - `/` を含む要素は、ルートからのパスと 1 階層ずつ照合し、一致したものの配下も一致とする。
+      要素の `**` は、0 階層以上のディレクトリに一致する（`docs/**/design/` は `docs/design` と
+      `docs/a/b/design` の両方に一致する）
     """
     if "/" not in pattern:
         names = parts if _is_pattern(pattern) else parts[:-1]
         return any(fnmatch.fnmatchcase(name, pattern) for name in names)
-    pattern_parts = pattern.split("/")
-    if len(parts) < len(pattern_parts):
+    return _match_prefix(pattern.split("/"), parts)
+
+
+def _match_prefix(pattern_parts: list[str], parts: list[str]) -> bool:
+    """パターンの要素を、パスの先頭から 1 階層ずつ照合する。照合し終えたあとの配下は、一致とする。
+
+    要素が `**` のときは、0 階層以上のディレクトリに一致する。それ以外の要素は、1 階層の名前に
+    `fnmatch` で一致する。
+    """
+    if not pattern_parts:
+        return True
+    head, rest = pattern_parts[0], pattern_parts[1:]
+    if head == "**":
+        return any(_match_prefix(rest, parts[skip:]) for skip in range(len(parts) + 1))
+    if not parts:
         return False
-    return all(
-        fnmatch.fnmatchcase(name, expected)
-        for name, expected in zip(parts, pattern_parts)
-    )
+    return fnmatch.fnmatchcase(parts[0], head) and _match_prefix(rest, parts[1:])
 
 
 def _has_fixed_excluded_dir(parts: list[str]) -> bool:
@@ -405,8 +418,14 @@ def _walk(
     return dirs, files
 
 
-def expand(spec: TargetSpec, root: str | Path) -> Expansion:
+def expand(
+    spec: TargetSpec, root: str | Path, scan_excluded_start: bool = False
+) -> Expansion:
     """正規化した指定を Markdown ファイルの一覧（ルート相対パス、ソート済み）へ展開する。
+
+    `scan_excluded_start` が真のとき、`dirs` に指定したディレクトリそのものが固定の除外の名前（または
+    その配下）でも、そのディレクトリを走査する（配下の固定の除外の名前は、これまでどおり走査しない）。
+    参照の検査が、参照の明示するディレクトリを走査するときに使う（要件 D-055）。
 
     存在しないパス・Markdown でないパスなどは `problems` に報告し、残りの処理を続ける。
     走査中に読めなかったディレクトリ（権限不足など）も、`problems`（`unreadable`）に報告する。配下の文書は
@@ -425,7 +444,9 @@ def expand(spec: TargetSpec, root: str | Path) -> Expansion:
         for path in spec.paths:
             _add_direct_path(root, path, candidates, result)
         for entry in spec.dirs:
-            _add_dir_entry(root, entry, candidates, result, unreadable)
+            _add_dir_entry(
+                root, entry, candidates, result, unreadable, scan_excluded_start
+            )
     for path in sorted(set(unreadable)):
         result.problems.append(Problem(path, PROBLEM_UNREADABLE))
 
@@ -453,6 +474,7 @@ def _add_dir_entry(
     candidates: set[str],
     result: Expansion,
     unreadable: list[str] | None = None,
+    scan_excluded_start: bool = False,
 ) -> None:
     if _is_pattern(entry):
         dirs, files = _walk(root, ".", unreadable)
@@ -472,7 +494,13 @@ def _add_dir_entry(
         result.problems.append(Problem(entry, PROBLEM_MISSING))
     elif not os.path.isdir(absolute):
         result.problems.append(Problem(entry, PROBLEM_NOT_DIRECTORY))
-    elif entry != "." and _has_fixed_excluded_dir(entry.split("/")):
+    elif (
+        not scan_excluded_start
+        and entry != "."
+        and _has_fixed_excluded_dir(entry.split("/"))
+    ):
+        # 指定されたディレクトリそのものが、固定除外の名前（またはその配下）である。黙って 0 件にしない
+        result.problems.append(Problem(entry, PROBLEM_FIXED_EXCLUDED))
         return
     else:
         candidates.update(_walk(root, entry, unreadable)[1])

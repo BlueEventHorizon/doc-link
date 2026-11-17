@@ -34,7 +34,7 @@
   届く現在のアンカー（title が文書の[DLID]のときは `null`）
 - `missing_section`: 存在しないセクションへの参照（下の解釈を参照）
 - `absent`: 指定ディレクトリ内に見つからない。`absent_reason` に理由の区別
-  （`not_found`・`directory_missing`・`directory_unreadable`・`not_directory`・`directory_excluded`）
+  （`not_found`・`directory_missing`・`directory_unreadable`・`not_directory`）
 - `duplicate`: 同じ[DLID]が複数見つかった。`duplicate_paths` に見つけたもの
 - `unresolved`: リンク先パスを参照元から解決できない。`unresolved_reason` は `outside_root`・`not_markdown`
 
@@ -99,13 +99,13 @@ import posixpath
 import sys
 import unicodedata
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
 import reference_check  # noqa: E402
+from clock import utc_now  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
 from content_hash import (  # noqa: E402
@@ -167,10 +167,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--project-root", default=os.getcwd())
     target_spec.add_target_arguments(parser)
     return parser
-
-
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
 def _target(path: str, fragment: str | None) -> str:
@@ -303,7 +299,40 @@ def _check_source(
     unverified: list[dict],
     directories: set[str],
 ) -> int:
-    """参照元 1 文書を検査する。一致した[正式な参照]の数を返す。"""
+    """参照元 1 文書を検査する。一致した[正式な参照]の数を返す。
+
+    この文書で見つけた検出事項と未検証には、参照元の[文書 ID]（`source_doc_id`。持たなければ `None`）
+    を添える（要件 FR-010 の通知項目）。
+    """
+    first_finding, first_unverified = len(findings), len(unverified)
+    matched = _check_references(
+        source,
+        document,
+        scanner=scanner,
+        targets=targets,
+        checked_at=checked_at,
+        findings=findings,
+        unverified=unverified,
+        directories=directories,
+    )
+    source_doc_id = document.frontmatter.doc_link_id
+    for item in findings[first_finding:] + unverified[first_unverified:]:
+        item["source_doc_id"] = source_doc_id
+    return matched
+
+
+def _check_references(
+    source: str,
+    document: MarkdownDocument,
+    *,
+    scanner: reference_check.DirectoryScanner,
+    targets: _Targets,
+    checked_at: str,
+    findings: list[dict],
+    unverified: list[dict],
+    directories: set[str],
+) -> int:
+    """参照元 1 文書の参照を検査する。一致した[正式な参照]の数を返す。"""
     matched = 0
     for reference in extract_from_document(document):
         result = reference_check.check_reference(
@@ -395,7 +424,7 @@ def execute(args: argparse.Namespace) -> int:
     expansion = target_spec.expand(spec, root)
     scanner = reference_check.DirectoryScanner(root)
     targets = _Targets(str(root))
-    checked_at = _now()
+    checked_at = utc_now()
 
     findings: list[dict] = []
     unverified: list[dict] = []

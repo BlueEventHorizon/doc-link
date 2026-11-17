@@ -116,6 +116,11 @@ class CategoriesTest(CheckLinksTestBase):
         self.assertEqual(finding["recorded_hash"], HASH)
         self.assertEqual(finding["line"], 12)
 
+    def test_every_finding_has_the_source_document_id(self):
+        self.assertEqual(self.one("path_mismatch")["source_doc_id"], DOC_MAIN)
+        for finding in self.result["findings"]:
+            self.assertEqual(finding["source_doc_id"], DOC_MAIN, finding)
+
     def test_fragment_mismatch_has_current_anchor(self):
         finding = self.one("fragment_mismatch")
         self.assertEqual(finding["dlid"], SEC_A2)
@@ -298,6 +303,25 @@ class SourceWithoutDocumentIdTest(CheckLinksTestBase):
             sorted(f["category"] for f in result["findings"]),
             ["absent", "link_without_dlid"],
         )
+        self.assertEqual([f["source_doc_id"] for f in result["findings"]], [None, None])
+
+
+class NonReferenceLinksTest(CheckLinksTestBase):
+    def test_images_and_scheme_links_are_not_reported(self):
+        self.write("ref/a.md", REF_A)
+        self.write(
+            "src/i.md",
+            "# I\n\n"
+            "![figure](../ref/a.md) and ![site](https://example.com/a.png)\n\n"
+            "<https://example.com/a.md> and [web](https://example.com/a.md)\n\n"
+            "[real](../ref/a.md)\n",
+        )
+        code, result = self.run_main("--key", "k", "--paths", "src/i.md")
+        self.assertEqual(code, 0)
+        (finding,) = result["findings"]
+        self.assertEqual(finding["category"], "link_without_dlid")
+        self.assertEqual(finding["line"], 7)
+        self.assertEqual(finding["target"], "../ref/a.md")
 
 
 class CleanTest(CheckLinksTestBase):

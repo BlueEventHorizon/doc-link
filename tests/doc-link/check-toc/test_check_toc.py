@@ -134,12 +134,23 @@ class StatusTest(CheckTestBase):
         self.assertEqual(result["toc_key"], "all")
 
     def test_excluded_documents_guide_to_embed_dlid(self):
-        self.build()
         self.write("noid.md", "# No id\n")
+        self.build(paths=("a.md", "b.md", "noid.md"))
         code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "noid.md")
         self.assertEqual(code, 0)
         self.assertEqual(result["status"], "up_to_date")
         self.assertTrue(any("embed-dlid" in line for line in result["guidance"]))
+
+    def test_different_spec_needs_a_rebuild_with_guidance(self):
+        self.build()
+        self.write("c.md", "# No id\n")
+        code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "c.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["status"], "rebuild_needed")
+        self.assertTrue(result["target_spec_changed"])
+        self.assertEqual(result["saved_target_spec"]["paths"], ["a.md", "b.md"])
+        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
+        self.assertTrue(any("保存" in line for line in result["guidance"]))
 
 
 class ReadOnlyTest(CheckTestBase):

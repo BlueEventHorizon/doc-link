@@ -331,8 +331,12 @@ def _read_links(tokens: list[Token], offset: int) -> tuple[Link, ...]:
     for token in tokens:
         if token.type != "inline":
             continue
+        # 段落が複数行のとき、リンクの行は段落の先頭行に、それまでの改行の数を足したものである。
         line = (token.map[0] if token.map else 0) + offset
         for child in token.children or []:
+            if child.type in ("softbreak", "hardbreak"):
+                line += 1
+                continue
             if child.type != "link_open":
                 continue
             kind = "autolink" if child.markup == "autolink" else "link"

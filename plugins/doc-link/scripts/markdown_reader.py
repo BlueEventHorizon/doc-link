@@ -170,6 +170,17 @@ def read_frontmatter(lines: list[str]) -> Frontmatter:
     return Frontmatter(present=False)
 
 
+def has_unclosed_frontmatter(lines) -> bool:
+    """先頭の空行を除いた最初の行が `---` なのに、frontmatter として認識されない（閉じる行が無い）か。"""
+    lines = list(lines)
+    start = 0
+    while start < len(lines) and lines[start].strip() == "":
+        start += 1
+    if start >= len(lines) or lines[start].strip() != FRONTMATTER_DELIMITER:
+        return False
+    return not read_frontmatter(lines).present
+
+
 def _read_top_level_keys(lines: list[str]) -> dict[str, str | None]:
     keys: dict[str, str | None] = {}
     for line in lines:
@@ -331,8 +342,12 @@ def _read_links(tokens: list[Token], offset: int) -> tuple[Link, ...]:
     for token in tokens:
         if token.type != "inline":
             continue
+        # 段落が複数行のとき、リンクの行は段落の先頭行に、それまでの改行の数を足したものである。
         line = (token.map[0] if token.map else 0) + offset
         for child in token.children or []:
+            if child.type in ("softbreak", "hardbreak"):
+                line += 1
+                continue
             if child.type != "link_open":
                 continue
             kind = "autolink" if child.markup == "autolink" else "link"

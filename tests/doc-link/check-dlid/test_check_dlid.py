@@ -1,6 +1,7 @@
 import contextlib
 import io
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -215,6 +216,50 @@ class DetectionTest(CheckTestBase):
         self.assertEqual(code, 0)
         self.assertEqual(result["problems"], [{"path": "nope.md", "reason": "missing"}])
         self.assertEqual([d["path"] for d in result["missing_document_id"]], ["a.md"])
+
+    def test_unchecked_target_makes_the_result_not_clean(self):
+        self.write("a.md", DOC)
+        code, result = self.run_main("--key", "k", "--paths", "a.md", "nope.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["missing_document_id"], [])
+        self.assertFalse(result["clean"])
+        self.assertTrue(any("検査できていない" in line for line in result["guidance"]))
+
+    def test_directory_with_a_fixed_excluded_name_is_reported_and_not_clean(self):
+        self.write("docs/build/x.md", DOC)
+        code, result = self.run_main("--key", "k", "--dirs", "docs/build")
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            result["problems"], [{"path": "docs/build", "reason": "fixed_excluded"}]
+        )
+        self.assertFalse(result["clean"])
+
+    def test_unreadable_directory_makes_the_result_not_clean(self):
+        self.write("docs/ok.md", DOC)
+        self.write("docs/sub/x.md", DOC)
+        sub = self.root / "docs" / "sub"
+        sub.chmod(0)
+        self.addCleanup(sub.chmod, 0o755)
+        if os.access(sub, os.R_OK):
+            self.skipTest("権限を制限できない環境（root など）")
+        code, result = self.run_main("--key", "k", "--dirs", "docs")
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            result["problems"], [{"path": "docs/sub", "reason": "unreadable"}]
+        )
+        self.assertFalse(result["clean"])
+
+    def test_the_users_own_exclusion_does_not_make_the_result_not_clean(self):
+        self.write("docs/a.md", DOC)
+        self.write("docs/b.md", "# B\n")
+        code, result = self.run_main(
+            "--key", "k", "--paths", "docs/a.md", "docs/b.md", "--exclude", "docs/b.md"
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            result["problems"], [{"path": "docs/b.md", "reason": "excluded"}]
+        )
+        self.assertTrue(result["clean"])
 
     def test_all_mode_without_arguments(self):
         self.write("docs/a.md", "# T\n")

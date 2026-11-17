@@ -197,6 +197,13 @@ class ChoiceTest(QueryTestBase):
         self.assertEqual(code, 0)
         self.assertEqual(result["action"], "invoke_query_worker")
 
+    def test_reserved_key_all_is_rejected_without_target_arguments(self):
+        self.build()
+        code, result = self.run_main("prepare", "--task", TASK, "--key", "all")
+        self.assertEqual(code, 1)
+        self.assertNotIn("search_id", result)
+        self.assertTrue(any("予約語" in error for error in result["errors"]))
+
 
 class ExchangeTest(QueryTestBase):
     def start(self):

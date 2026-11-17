@@ -159,6 +159,43 @@ class Base(unittest.TestCase):
 ALL = ["docs/a.md", "docs/b.md", "docs/c.md"]
 
 
+class RestartAfterInterruptionTest(Base):
+    def work_files(self):
+        directory = self.root / ".temp" / "doc-link" / "index-docs"
+        return {p.name for p in directory.glob("BUILD-*.json")}
+
+    def test_restart_removes_only_the_old_build_of_the_same_key(self):
+        _, interrupted = self.advance("k", ALL)
+        _, other = self.advance("other", ALL)
+        self.assertEqual(
+            self.work_files(),
+            {f"{interrupted['build_id']}.json", f"{other['build_id']}.json"},
+        )
+        code, restarted = self.advance("k", ALL)
+        self.assertEqual(code, 0)
+        self.assertNotEqual(restarted["build_id"], interrupted["build_id"])
+        self.assertEqual(
+            self.work_files(),
+            {f"{restarted['build_id']}.json", f"{other['build_id']}.json"},
+        )
+
+    def test_unreadable_work_file_is_kept(self):
+        _, interrupted = self.advance("k", ALL)
+        path = (
+            self.root
+            / ".temp"
+            / "doc-link"
+            / "index-docs"
+            / f"{interrupted['build_id']}.json"
+        )
+        path.write_bytes(b"\xff not json")
+        _, restarted = self.advance("k", ALL)
+        self.assertEqual(
+            self.work_files(),
+            {f"{interrupted['build_id']}.json", f"{restarted['build_id']}.json"},
+        )
+
+
 class FirstBuildTest(Base):
     def test_first_advance_asks_for_generation_with_only_ids_and_limits(self):
         code, result = self.advance("k", ALL)
@@ -212,6 +249,13 @@ class FirstBuildTest(Base):
             content = self.without_random_values(path.read_text(encoding="utf-8"))
             self.assertNotIn("1.3", content)
             self.assertNotIn("260", content)
+
+    def test_values_starting_with_a_hyphen_are_accepted_when_joined_with_equals(self):
+        values = {**FIXED, "keywords": ["--backend", "-x", "k3", "k4", "k5"]}
+        code, result = self.build("k", ALL, values)
+        self.assertEqual(code, 0, result)
+        info = state_store.load_document_info(self.root, ID_A)
+        self.assertEqual(info["keywords"], ["--backend", "-x", "k3", "k4", "k5"])
 
     def test_fixed_values_confirm_the_toc(self):
         before = self.docs_snapshot()
@@ -293,7 +337,7 @@ class IdempotenceTest(Base):
         self.build("k", ALL)
         state_before = self.state_snapshot()
         with mock.patch.object(
-            index_docs, "_now", return_value="2099-01-01T00:00:00+00:00"
+            index_docs, "utc_now", return_value="2099-01-01T00:00:00+00:00"
         ):
             code, result = self.advance("k", ALL)
         self.assertEqual(code, 0)

@@ -62,7 +62,7 @@ class CheckImpactTestBase(unittest.TestCase):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(text.encode("utf-8"))
 
-    def build(self, a=None, b=None):
+    def build(self, a=None, b=None, extra_paths=()):
         """[文書情報]と[確定 ToC]を、index-docs が確定した状態として保存する。"""
         files = {
             "a.md": (ID_A, a if a is not None else a_text()),
@@ -84,7 +84,7 @@ class CheckImpactTestBase(unittest.TestCase):
                     "content_hash": document_content_hash(text),
                 },
             )
-        paths = list(files)
+        paths = [*files, *extra_paths]
         spec = TargetSpec(mode=MODE_TARGETS, key=KEY, paths=tuple(paths))
         cs = change_set.build_change_set(self.root, KEY, paths)
         results = {
@@ -187,8 +187,31 @@ class ImpactResultTest(CheckImpactTestBase):
         _, second = self.run_main(*ARGS)
         self.assertEqual(first["changed_documents"], second["changed_documents"])
 
+    def test_document_without_id_is_reported_as_excluded_with_guidance(self):
+        self.write("c.md", "# C\n\nno document id\n")
+        self.build(extra_paths=("c.md",))
+        code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "c.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["status"], "up_to_date")
+        (excluded,) = result["excluded"]
+        self.assertIn("c.md", json.dumps(excluded))
+        self.assertIn(check_impact.GUIDANCE_EXCLUDED, result["guidance"])
+        self.assertTrue(result["changed_documents"])
+
 
 class StaleTocTest(CheckImpactTestBase):
+    def test_stale_result_keeps_the_excluded_documents_and_their_guidance(self):
+        self.write("c.md", "# C\n\nno document id\n")
+        self.build(extra_paths=("c.md",))
+        self.write("b.md", b_text(intro="changed"))
+        code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "c.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["status"], "rebuild_needed")
+        self.assertNotIn("changed_documents", result)
+        self.assertEqual(len(result["excluded"]), 1)
+        self.assertIn(check_impact.GUIDANCE_EXCLUDED, result["guidance"])
+        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
+
     def test_changed_document_returns_the_check_toc_result_without_candidates(self):
         self.build()
         self.write("b.md", b_text(intro="changed"))

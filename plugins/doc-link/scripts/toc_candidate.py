@@ -34,7 +34,7 @@ B-08 にあたる。公開は B-07（候補検査済み → 完了）の処理�
 
 - `documents`: [確定 Index 対象リスト]の各文書の[文書 ID]と、変更集合から引き継いだ文書全体の[内容ハッシュ]
   （`DocumentChange.new_hash`。[反映済みハッシュ]）。ハッシュを再計算しない
-- `sections`: `change_set._current_sections`（[セクション ID]を持つ見出しごとの所属文書・位置・見出し・
+- `sections`: `change_set.current_sections`（[セクション ID]を持つ見出しごとの所属文書・位置・見出し・
   セクションの[内容ハッシュ]）と同じ値。同じ規則で現物から取るため、変更集合の判定と同じ書き方になる。
   同じ[セクション ID]が複数箇所にあるときは、change_set と同じく最初の出現を採る
 - `references`: 参照検査の結果（`reference_check.check_document` の返す `ReferenceCheckResult`）から作る。
@@ -89,7 +89,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import state_store
-from change_set import ChangeSet, ConfirmedDocument, _current_sections
+from change_set import ChangeSet, ConfirmedDocument, current_sections
 from markdown_reader import read_document
 from reference_check import STATUS_UNRESOLVED, ReferenceCheckResult
 from target_spec import TargetSpec
@@ -358,7 +358,7 @@ def assemble_candidate(
             {"doc_link_id": item.doc_link_id, "applied_hash": hashes[item.doc_link_id]}
         )
 
-    section_values = _current_sections(current)
+    section_values = current_sections(current)
     section_owner = {sid: value.doc_link_id for sid, value in section_values.items()}
     sections = [
         {

@@ -81,6 +81,18 @@ class AgentMdTest(unittest.TestCase):
         self.assertIn('index_docs.py" deliver', commands[1])
         self.assertTrue(SCRIPT.is_file())
 
+    def test_values_are_always_joined_to_the_option_name_with_equals(self):
+        # 値が `-` で始まっても引数の解析で失敗しないよう、条件なしに `=` でつなぐ
+        (deliver,) = re.findall(
+            r"^uv run .*index_docs.py\" deliver .*$", self.body, flags=re.MULTILINE
+        )
+        for option in ("purpose", "summary", "applicable-tasks", "keywords"):
+            with self.subTest(option=option):
+                self.assertIn(f"--{option}='", deliver)
+                self.assertNotIn(f"--{option} '", deliver)
+        self.assertIn("--title='", self.body)
+        self.assertNotIn("--title '", self.body)
+
     def test_does_not_write_results_to_files(self):
         self.assertIn("JSON を自分で組み立てない", self.body)
 

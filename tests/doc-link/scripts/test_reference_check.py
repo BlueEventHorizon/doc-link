@@ -136,12 +136,28 @@ class StatusTest(CheckBase):
         self.assertEqual(result.status, rc.STATUS_ABSENT)
         self.assertEqual(result.absent_reason, rc.ABSENT_DIRECTORY_UNREADABLE)
 
-    def test_fixed_excluded_directory_is_absent(self):
+    def test_directory_with_a_fixed_excluded_name_is_scanned_when_the_reference_names_it(
+        self,
+    ):
         self.write("docs/build/b.md", target_doc())
         self.write("docs/src.md", source_doc("build/b.md"))
         result = self.check()
+        self.assertEqual(result.status, rc.STATUS_MATCH)
+        self.assertEqual(result.current_path, "docs/build/b.md")
+
+    def test_moved_inside_a_fixed_excluded_designated_directory_is_found(self):
+        self.write("docs/build/sub/b.md", target_doc())
+        self.write("docs/src.md", source_doc("build/b.md"))
+        result = self.check()
+        self.assertEqual(result.status, rc.STATUS_PATH_MISMATCH)
+        self.assertEqual(result.current_path, "docs/build/sub/b.md")
+
+    def test_fixed_excluded_directory_below_the_designated_one_is_not_scanned(self):
+        self.write("docs/build/b.md", target_doc())
+        self.write("docs/src.md", source_doc("old.md"))
+        result = self.check()
         self.assertEqual(result.status, rc.STATUS_ABSENT)
-        self.assertEqual(result.absent_reason, rc.ABSENT_DIRECTORY_EXCLUDED)
+        self.assertEqual(result.absent_reason, rc.ABSENT_NOT_FOUND)
 
     def test_duplicate_does_not_guess_current_path(self):
         self.write("docs/b.md", target_doc())

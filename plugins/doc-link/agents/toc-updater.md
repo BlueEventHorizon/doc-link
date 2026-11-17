@@ -61,12 +61,12 @@ uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" 
 文書 1 件ごとに、確定した値と終了の値を script へ渡す。
 
 ```bash
-uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" deliver --project-root "${CLAUDE_PROJECT_DIR}" --build-id {構築 ID} --doc-id {文書 ID} --exit-value 0 --purpose '{目的}' --summary '{内容概要の 1 要素}' --summary '{内容概要の次の要素}' --applicable-tasks '{適用される作業の 1 要素}' --keywords '{キーワードの 1 要素}' --keywords '{キーワードの次の要素}'
+uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/index-docs/scripts/index_docs.py" deliver --project-root "${CLAUDE_PROJECT_DIR}" --build-id {構築 ID} --doc-id {文書 ID} --exit-value 0 --purpose='{目的}' --summary='{内容概要の 1 要素}' --summary='{内容概要の次の要素}' --applicable-tasks='{適用される作業の 1 要素}' --keywords='{キーワードの 1 要素}' --keywords='{キーワードの次の要素}'
 ```
 
 - 配列のフィールドは、要素ごとにオプションを繰り返す（`--summary`・`--applicable-tasks`・`--keywords`）。要素の数だけ書く
-- H1 の見出しが無い文書だけ、`--title '{タイトル}'` を足す
-- 値は、生成した文字列をそのまま渡す。要約・改変をしない。値は単一引用符で囲み、値の中の単一引用符は `'\''` と書く。値が `-` で始まるときは、`--summary='-値'` のように `=` でつなぐ
+- H1 の見出しが無い文書だけ、`--title='{タイトル}'` を足す
+- 値は、生成した文字列をそのまま渡す。要約・改変をしない。すべての値は、`--summary='値'` のように、オプション名と値を `=` でつなぎ、値を単一引用符で囲む（値が `-` で始まっても、この形なら引数の解析で失敗しない）。値の中の単一引用符は `'\''` と書く。引数の解析で失敗しても、値の文言を書き換えて渡し直さない（手順 3 の最後の規則に従う）
 - 終了の値は文字列で、書き出しを終えた文書は `0`。対象文書を読めなかった文書は `source_unreadable` とし、値のオプションを付けずに `--exit-value source_unreadable` だけを渡す。この 2 つ以外の値を渡さない
 - 成否は script が判定する。終了コードが 0 以外でも、再生成・再送・値の修正をしない。応答に終了コードと `errors` を書いて、残りの文書へ進む
 - script へ渡すのは 1 文書につき 1 回である。同じ文書の結果を渡し直さない

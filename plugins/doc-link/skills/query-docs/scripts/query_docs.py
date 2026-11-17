@@ -139,6 +139,13 @@ def _has_target_arguments(args: argparse.Namespace) -> bool:
 def _parse_search_target(args: argparse.Namespace, root: Path):
     """[ToC 識別キー]と、完全な対象指定（無ければ `None`）を返す。"""
     if not _has_target_arguments(args):
+        if args.key == target_spec.RESERVED_KEY:
+            # index-docs・check-toc と同じく、予約キーを --key に指定させない（要件 D-014）
+            raise search_prepare.SearchError(
+                [
+                    "--key all は予約語なので指定できない（既定の ToC は --key を省いて検索する）"
+                ]
+            )
         return (target_spec.RESERVED_KEY if args.key is None else args.key), None
     try:
         spec = target_spec.parse_namespace(args, root)

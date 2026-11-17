@@ -24,13 +24,16 @@
 
 終了コード 0 のとき結果の JSON、1 のときエラーの JSON（`errors` は自然文の配列）を返す。行番号は 1 始まり。
 
-- `clean`: 検出事項が 1 つも無いとき真
+- `clean`: 検出事項が 1 つも無く、指定された対象をすべて検査できたとき真。`problems` に、検査できなかった対象
+  （読めないディレクトリ・存在しない指定・除外名のディレクトリの指定など）があるときは、偽である。
+  利用者が `--exclude` で自分で除外したもの（`excluded`）は、検査の失敗ではないので、影響しない
 - `missing_document_id`: [文書 ID]が無い文書。`path`、`unclosed_frontmatter`
 - `missing_section_id`: [セクション ID]の無い見出し。`path`、`line`、`heading`
 - `duplicates`: 重複する[DLID]。`dlid`、`locations`（すべての該当箇所。`path`・`kind`・`line`・`heading`）、
   `recorded_paths`（管理状態に記録されたパス）、`candidates`（記録されたパスと一致する原本の候補）
 - `counts`: 上の 3 つの件数
-- `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定など。残りの対象は検査する
+- `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定、読めないディレクトリ、
+  除外名のディレクトリの指定（`fixed_excluded`）など。残りの対象は検査する
 - `guidance`: 検出後にすべきことの案内（自然文の配列）
 
 ## 仕様の解釈
@@ -66,7 +69,7 @@ import embed_plan  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
 from dlid import KIND_DOCUMENT, KIND_SECTION, DlidLocation  # noqa: E402
-from markdown_reader import FRONTMATTER_DELIMITER, read_document  # noqa: E402
+from markdown_reader import has_unclosed_frontmatter, read_document  # noqa: E402
 
 GUIDANCE_EMBED = (
     "[文書 ID]・[セクション ID]の無い箇所は、`embed-dlid` を実行して[DLID]を付与する"
@@ -75,6 +78,10 @@ GUIDANCE_EMBED = (
 GUIDANCE_DUPLICATE = (
     "重複する[DLID]は、`embed-dlid` の実行で、示された候補から利用者が原本を確定する。"
     "原本以外の箇所へ新しい[DLID]が発行される"
+)
+GUIDANCE_UNCHECKED = (
+    "`problems` の対象は検査できていない。指定や権限を直して、もう一度実行する"
+    "（検出事項が無くても、検査できていない対象があるので、[DLID]が揃っているとは言えない）"
 )
 GUIDANCE_UNCLOSED = (
     "`unclosed_frontmatter` が真の文書は、frontmatter の閉じる行が無いので、"
@@ -107,14 +114,6 @@ def _duplicate_to_dict(report: embed_plan.DuplicateReport) -> dict:
     }
 
 
-def _is_unclosed_frontmatter(lines: tuple[str, ...]) -> bool:
-    """frontmatter として読まれなかった文書の先頭の空でない行が、frontmatter の区切りか。"""
-    for line in lines:
-        if line.strip() != "":
-            return line.strip() == FRONTMATTER_DELIMITER
-    return False
-
-
 def detect(root: Path, files: list[str]) -> dict:
     """対象文書を検査し、検出事項を返す。`embed_plan.PlanFailure` は呼び出し側へ伝える。"""
     plan = embed_plan.build_plan(root, files)
@@ -133,10 +132,7 @@ def detect(root: Path, files: list[str]) -> dict:
             missing_documents.append(
                 {
                     "path": item.path,
-                    "unclosed_frontmatter": (
-                        not document.frontmatter.present
-                        and _is_unclosed_frontmatter(document.lines)
-                    ),
+                    "unclosed_frontmatter": has_unclosed_frontmatter(document.lines),
                 }
             )
         elif item.kind == KIND_SECTION:
@@ -185,6 +181,11 @@ def execute(args: argparse.Namespace) -> int:
         )
     result["problems"] = [problem.to_dict() for problem in expansion.problems]
     result["warnings"] = list(expansion.warnings)
+    if any(
+        problem.reason != target_spec.PROBLEM_EXCLUDED for problem in expansion.problems
+    ):
+        result["clean"] = False
+        result["guidance"].append(GUIDANCE_UNCHECKED)
     return script_output.emit_result(result)
 
 

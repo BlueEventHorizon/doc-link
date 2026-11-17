@@ -133,7 +133,6 @@ import re
 import secrets
 import shutil
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
@@ -141,6 +140,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
 import build_state_machine as bsm  # noqa: E402
 import change_set as cs  # noqa: E402
+from clock import utc_now  # noqa: E402
 import script_output  # noqa: E402
 import state_store  # noqa: E402
 import target_spec  # noqa: E402
@@ -588,10 +588,6 @@ def _issue_wave(root, toc_key, spec, session, build: dict | None, targets) -> di
     }
 
 
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
-
-
 def _previous_toc(root: Path, toc_key: str) -> dict | None:
     try:
         return state_store.load_confirmed_toc(root, toc_key)
@@ -668,7 +664,7 @@ def _candidate_failed(exc: toc_candidate.CandidateFailure) -> BuildFailed:
 def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
     """参照検査（B-05）・候補の検査（B-06）・一括公開（B-07）まで進める。"""
     session.apply(bsm.EVENT_ACQUIRE_INFO, bsm.BuildFacts(info_acquired=True))
-    now = _now()
+    now = utc_now()
     scanner = DirectoryScanner(root)
     results = {}
     problems: list[toc_candidate.CandidateProblem] = []

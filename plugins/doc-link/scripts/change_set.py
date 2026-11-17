@@ -435,7 +435,7 @@ def _recorded_references(toc: dict, doc_id: str) -> tuple[ReferenceValue, ...]:
     )
 
 
-def _current_sections(current) -> dict[str, SectionValue]:
+def current_sections(current) -> dict[str, SectionValue]:
     sections: dict[str, SectionValue] = {}
     for doc_id, (_, document, text) in current.items():
         hashes = section_content_hashes(text)
@@ -455,7 +455,7 @@ def _current_sections(current) -> dict[str, SectionValue]:
 
 
 def _section_changes(toc, current, excluded_ids) -> tuple[SectionChange, ...]:
-    now = _current_sections(current)
+    now = current_sections(current)
     before: dict[str, SectionValue] = {}
     if toc is not None:
         for entry in toc["sections"]:

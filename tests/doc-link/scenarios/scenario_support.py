@@ -46,7 +46,7 @@ FIXED = {
 }
 
 _DLID_AT_LINE_END = re.compile(r" DLID-[0-9a-z]{12}$", re.MULTILINE)
-_DLID_FRONTMATTER = re.compile(r"\A---\ndoc_link_id: DLID-[0-9a-z]{12}\n---\n")
+_DLID_FRONTMATTER = re.compile(r"\A---\ndoc_link_id: DLID-[0-9a-z]{12}\n---\n\n?")
 
 
 def doc_text(doc_id, title, body="", sec_id=None):
@@ -56,7 +56,10 @@ def doc_text(doc_id, title, body="", sec_id=None):
 
 
 def strip_dlids(text):
-    """付与された[DLID]（frontmatter の `doc_link_id` と、見出しの行末）だけを取り除く。"""
+    """付与された[DLID]（frontmatter の `doc_link_id` と、見出しの行末）だけを取り除く。
+
+    frontmatter を新設したときに、その後へ足す空行 1 行も、付与されたものとして取り除く。
+    """
     return _DLID_AT_LINE_END.sub("", _DLID_FRONTMATTER.sub("", text, count=1))
 
 

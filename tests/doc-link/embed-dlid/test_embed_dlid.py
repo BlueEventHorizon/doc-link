@@ -235,8 +235,8 @@ class ApplyCommandTest(EntryTestBase):
         text = self.read("a.md")
         doc_id = result["written"][0]["dlid"]
         section_id = result["written"][1]["dlid"]
-        self.assertEqual(text, f"---\ndoc_link_id: {doc_id}\n---\n# T {section_id}\n")
-        self.assertEqual(result["written"][1]["line"], 4)
+        self.assertEqual(text, f"---\ndoc_link_id: {doc_id}\n---\n\n# T {section_id}\n")
+        self.assertEqual(result["written"][1]["line"], 5)
 
     def test_apply_does_not_touch_management_state(self):
         self.write("a.md", "# T\n")

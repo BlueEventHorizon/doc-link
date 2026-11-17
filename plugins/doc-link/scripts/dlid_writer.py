@@ -37,7 +37,8 @@ DES-005 §2.1、DES-008 §1、REQ-001 D-031・NFR-004 を実装する。利用�
 - 改行コード（`\\n`・`\\r\\n`・`\\r`）は変えない。足す行の改行は、足す位置の隣の行（キーを足すときは frontmatter を
   開く行、新設するときは文書の最初の改行のある行）に合わせる。文書に改行が 1 つも無いときは `\\n` とする
 - frontmatter を新設する位置は、文書の先頭（先頭の空行より前）とする。新設する frontmatter は
-  `---`・`doc_link_id: <DLID>`・`---` の 3 行である
+  `---`・`doc_link_id: <DLID>`・`---` の 3 行である。文書の先頭の行が空行でないときは、その後に空行を
+  1 行足す（要件 D-031。frontmatter の直後に本文を置かない）
 - 既存の `doc_link_id` の行を置き換えるときは、その行全体を `doc_link_id: <DLID>` にする（古い値と、その行末の
   コメントは残らない。この行が[DLID]の位置であり、認識できない値を置き換える位置だからである）
 - 行末の空白: ATX 見出しは、見出しのテキストの直後に ` <DLID>` を挿入し、後続の空白・閉じの `#` はそのまま残す。
@@ -432,11 +433,14 @@ def _edit_frontmatter(
     value = f"{DOC_LINK_ID_KEY}: {item.dlid}"
     if not frontmatter.present:
         newline = _document_newline(lines)
-        lines[0:0] = [
+        new_lines = [
             FRONTMATTER_DELIMITER + newline,
             value + newline,
             FRONTMATTER_DELIMITER + newline,
         ]
+        if _needs_separator(lines):
+            new_lines.append(newline)
+        lines[0:0] = new_lines
     elif position.key_present:
         index = _find_key_line(document)
         if index is None:
@@ -446,6 +450,15 @@ def _edit_frontmatter(
     else:
         _, newline = _split_newline(lines[frontmatter.start_line])
         lines.insert(frontmatter.end_line, value + newline)
+
+
+def _needs_separator(lines: list[str]) -> bool:
+    """新設する frontmatter の後に、空行を 1 行足すか。
+
+    文書の先頭の行が空行でなければ足す（frontmatter の直後に本文を置かない。整形ツールが
+    frontmatter の直後に空行を求めるため）。文書が空、または先頭の行がすでに空行なら足さない。
+    """
+    return bool(lines) and _split_newline(lines[0])[0].strip() != ""
 
 
 def _written_items(
@@ -513,7 +526,7 @@ def _verify_lines(
     replaced_key_line: int | None = None
     if doc_item is not None:
         if not before.frontmatter.present:
-            inserted, insert_at = 3, 0
+            inserted, insert_at = (4 if _needs_separator(old) else 3), 0
         elif doc_item.position.key_present:
             replaced_key_line = _find_key_line(before)
         else:
@@ -572,13 +585,18 @@ def _verify_inserted_lines(
     inserted: int,
 ) -> list[str]:
     value = f"{DOC_LINK_ID_KEY}: {item.dlid}"
-    if inserted == 3:
+    if inserted in (3, 4):
         expected_newline = _split_newline(new[0])[1]
         expected = [FRONTMATTER_DELIMITER, value, FRONTMATTER_DELIMITER]
-        actual = [_split_newline(line)[0] for line in new[:3]]
-        newlines = {_split_newline(line)[1] for line in new[:3]}
+        if inserted == 4:
+            expected.append("")  # frontmatter の直後の空行
+        actual = [_split_newline(line)[0] for line in new[:inserted]]
+        newlines = {_split_newline(line)[1] for line in new[:inserted]}
         if actual != expected or newlines != {expected_newline} or not expected_newline:
-            return ["新設した frontmatter が `---`・doc_link_id・`---` の 3 行でない"]
+            return [
+                "新設した frontmatter が `---`・doc_link_id・`---`"
+                "（と、後の空行 1 行）でない"
+            ]
         return []
     assert insert_at is not None
     body, newline = _split_newline(new[insert_at])

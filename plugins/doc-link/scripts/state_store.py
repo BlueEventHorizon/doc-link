@@ -453,23 +453,20 @@ def _list_ids(directory: Path) -> list[str]:
         raise StateStoreError(
             KIND_UNREADABLE, f"ディレクトリを読めない: {directory}: {exc}", directory
         ) from exc
-    ids = []
-    for name in names:
-        if not name.endswith(FILE_SUFFIX):
-            raise StateStoreError(
-                KIND_CORRUPT,
-                f"想定外のファイル名: {directory / name}",
-                directory / name,
-            )
-        ids.append(decode_name(name[: -len(FILE_SUFFIX)]))
-    return ids
+    # 管理状態は `.json` のファイルだけで構成する。それ以外の名前（`.DS_Store`、エディタの
+    # 一時ファイルなど）は管理状態ではないので、読み飛ばす。
+    return [
+        decode_name(name[: -len(FILE_SUFFIX)])
+        for name in names
+        if name.endswith(FILE_SUFFIX)
+    ]
 
 
 def list_document_ids(project_root: Path) -> list[str]:
     """保存済みの[文書情報]の文書 ID を、ファイル名から昇順で返す。保存が一つも無ければ空。
 
     ディレクトリごと無いことと、ファイルが一つも無いことは同じ「保存なし」であり、読めない
-    ディレクトリや想定外の名前は失敗にする。
+    ディレクトリは失敗にする。`.json` でない名前のファイルは管理状態ではないので数えない。
     """
     return _list_ids(Path(project_root) / STATE_DIR_NAME / DOCUMENTS_DIR_NAME)
 

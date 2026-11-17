@@ -131,6 +131,26 @@ class FixTest(SearchTestBase):
         for entry in toc["documents"]:
             self.assertNotIn(entry["applied_hash"], copy_text)
 
+    def test_copy_is_written_without_indentation_and_with_short_lines(self):
+        payload = self.fix()
+        request_text = Path(sp.request_path(self.root, payload["search_id"])).read_text(
+            "utf-8"
+        )
+        copy_text = Path(json.loads(request_text)["toc_copy_path"]).read_text("utf-8")
+        copy = json.loads(copy_text)
+        lines = copy_text.splitlines()
+        # 字下げと、キーの後の空白が無い。
+        self.assertFalse([line for line in lines if line[:1].isspace()])
+        self.assertNotIn('": ', copy_text)
+        # 1 行にせず、1 要素ごとに改行する（worker が Read で読むため、行を長くしない）。
+        self.assertGreater(len(lines), len(copy["documents"]))
+        # 内容は、字下げのある書き方と同じで、字下げの分だけ小さい。
+        indented = json.dumps(copy, ensure_ascii=False, sort_keys=True, indent=2)
+        self.assertLess(len(copy_text), len(indented))
+        self.assertEqual(json.loads(indented), copy)
+        # 写し以外の作業ファイルは、管理状態と同じ書き方のままである。
+        self.assertTrue(request_text.startswith('{\n  "'))
+
     def test_version_is_fixed_even_if_toc_is_updated_afterwards(self):
         payload = self.fix()
         fixed_version = payload["toc_version"]

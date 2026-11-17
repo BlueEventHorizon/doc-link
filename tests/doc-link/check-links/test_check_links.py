@@ -306,6 +306,24 @@ class SourceWithoutDocumentIdTest(CheckLinksTestBase):
         self.assertEqual([f["source_doc_id"] for f in result["findings"]], [None, None])
 
 
+class NonReferenceLinksTest(CheckLinksTestBase):
+    def test_images_and_scheme_links_are_not_reported(self):
+        self.write("ref/a.md", REF_A)
+        self.write(
+            "src/i.md",
+            "# I\n\n"
+            "![figure](../ref/a.md) and ![site](https://example.com/a.png)\n\n"
+            "<https://example.com/a.md> and [web](https://example.com/a.md)\n\n"
+            "[real](../ref/a.md)\n",
+        )
+        code, result = self.run_main("--key", "k", "--paths", "src/i.md")
+        self.assertEqual(code, 0)
+        (finding,) = result["findings"]
+        self.assertEqual(finding["category"], "link_without_dlid")
+        self.assertEqual(finding["line"], 7)
+        self.assertEqual(finding["target"], "../ref/a.md")
+
+
 class CleanTest(CheckLinksTestBase):
     def test_no_findings_returns_empty_guidance(self):
         self.write("ref/a.md", REF_A)

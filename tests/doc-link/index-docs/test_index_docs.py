@@ -159,6 +159,43 @@ class Base(unittest.TestCase):
 ALL = ["docs/a.md", "docs/b.md", "docs/c.md"]
 
 
+class RestartAfterInterruptionTest(Base):
+    def work_files(self):
+        directory = self.root / ".temp" / "doc-link" / "index-docs"
+        return {p.name for p in directory.glob("BUILD-*.json")}
+
+    def test_restart_removes_only_the_old_build_of_the_same_key(self):
+        _, interrupted = self.advance("k", ALL)
+        _, other = self.advance("other", ALL)
+        self.assertEqual(
+            self.work_files(),
+            {f"{interrupted['build_id']}.json", f"{other['build_id']}.json"},
+        )
+        code, restarted = self.advance("k", ALL)
+        self.assertEqual(code, 0)
+        self.assertNotEqual(restarted["build_id"], interrupted["build_id"])
+        self.assertEqual(
+            self.work_files(),
+            {f"{restarted['build_id']}.json", f"{other['build_id']}.json"},
+        )
+
+    def test_unreadable_work_file_is_kept(self):
+        _, interrupted = self.advance("k", ALL)
+        path = (
+            self.root
+            / ".temp"
+            / "doc-link"
+            / "index-docs"
+            / f"{interrupted['build_id']}.json"
+        )
+        path.write_bytes(b"\xff not json")
+        _, restarted = self.advance("k", ALL)
+        self.assertEqual(
+            self.work_files(),
+            {f"{interrupted['build_id']}.json", f"{restarted['build_id']}.json"},
+        )
+
+
 class FirstBuildTest(Base):
     def test_first_advance_asks_for_generation_with_only_ids_and_limits(self):
         code, result = self.advance("k", ALL)

@@ -133,11 +133,11 @@ def _serialize_copy(value) -> bytes:
         text = json.dumps(
             value, ensure_ascii=False, sort_keys=True, indent=0, separators=(",", ":")
         )
-    except (TypeError, ValueError) as exc:
+        return (text + "\n").encode("utf-8")
+    except (TypeError, ValueError) as exc:  # UnicodeEncodeError は ValueError の下位
         raise state_store.StateStoreError(
             state_store.KIND_INVALID, f"JSON にできない内容: {exc}"
         ) from exc
-    return (text + "\n").encode("utf-8")
 
 
 def _write(root: Path, path: Path, value, *, compact: bool = False) -> None:

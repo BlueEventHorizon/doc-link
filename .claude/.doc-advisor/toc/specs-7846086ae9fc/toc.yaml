@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (specs)
   key: specs
-  generated_at: 2026-11-17T11:30:52Z
+  generated_at: 2026-11-18T03:14:59Z
   file_count: 16
 
 docs:
@@ -168,34 +168,34 @@ docs:
       - reserved key all
   docs/specs/design/DES-006_search.md:
     title: DES-006 Document Search Design
-    purpose: Defines the pre-search judgment of whether a ToC rebuild is needed, the search result contract, the composition of the search AI input copy, and DLID resolution against recorded paths without writing any state.
+    purpose: "Describes document search design: the pre-search ToC freshness check, the search result contract, the search AI candidate selection from a ToC copy, and DLID resolution by resolve-dlid"
     content_details:
-      - Pre-search judgment classifying results as rebuild not needed, rebuild needed, or undecidable, where undecidable stops the search
-      - Two-choice user confirmation between rebuilding first or searching the existing version, with counts of new, removed, path changed, content changed, ID missing, and ID duplicate documents
-      - "Search result fields: document ID, recorded path, relevance reason, section, key, ToC version, and freshness judgment"
-      - Search AI input copy built from the confirmed ToC and document information, with titles, purposes, content details, applicable tasks, keywords, and section headings but no paths or hashes
-      - "resolve-dlid behavior: document DLID resolved through its recorded current path, section ID resolved through the owning document across all keys"
-      - Verification of DLID and section ID against the file at the recorded path, with the content hash taken from records and never computed from the current file
-      - Recorded paths that are absolute or start with parent traversal treated as invalid records and reported as not at the recorded path
-      - Resolution never writing to the ToC, management state, or Index target documents
+      - Pre-search check classifying a confirmed ToC as rebuild-not-needed, rebuild-needed, or undeterminable by comparing IDs, paths, and comparison values
+      - Rebuild confirmation offering rebuild-then-search or search-existing-version, with counts of new, removed, path-changed, content-changed, unassigned-ID, and duplicate-ID documents
+      - "Search result contract: document ID, recorded path, relevance reason, section, ToC identification key, ToC version, and freshness judgment"
+      - "Search AI copy composition: document ID with title, purpose, content summary, applicable tasks, keywords; section IDs with headings; no paths, content hashes, reference relations, or check results"
+      - "resolve-dlid behavior: document DLID resolved via recorded current path, section DLID matched against trailing DLID of heading, with heading anchor and content hash"
+      - Recorded paths that are unreadable or mismatched reported as not at recorded path; symlinks resolved to real file; paths escaping project root rejected
+      - Undeterminable judgment treated as failure that stops search, never silently falling back to the old version
+      - Management state read failure fails the whole DLID resolution
     applicable_tasks:
-      - Implementation of the pre-search rebuild necessity judgment
-      - Modification of the search result contract and freshness reporting
-      - Implementation of the search AI input copy composition
-      - Implementation of the resolve-dlid command behavior
-      - Review of DLID resolution for moved or copied documents
-      - Review of search behavior when management state cannot be read
+      - Implementation of the document search pre-search check and rebuild decision
+      - Implementation of the search result contract and freshness reporting
+      - Implementation of search AI candidate selection from the ToC copy
+      - Implementation of resolve-dlid DLID resolution
+      - Review of rebuild confirmation behavior in document search
+      - Modification of failure handling for undeterminable search checks
     keywords:
       - resolve-dlid
-      - search AI
-      - rebuild necessity
+      - rebuild-needed
       - confirmed ToC
-      - freshness judgment
-      - section ID
-      - content hash
-      - recorded path
-      - undecidable
+      - ToC copy
+      - search AI
       - DLID resolution
+      - content hash
+      - section ID
+      - stale ToC
+      - existing version
   docs/specs/design/DES-007_references-impact.md:
     title: DES-007 Reference Check and Change Impact Candidate Notification
     purpose: Specifies formal reference extraction from DLID-bearing link titles, directory-scan target checks, reverse references and change impact candidates from confirmed ToC hashes, and the consistency check scope.
@@ -349,36 +349,35 @@ docs:
       - source of truth
       - requirement precedence
   docs/specs/requirement/REQ-001_overview.md:
-    title: doc-link Requirements Specification - Overview
-    purpose: Defines the purpose, background, terms, scope, responsibility boundaries, common non-functional requirements, and decisions and open items of the doc-link plugin that replaces DocAdvisor.
+    title: doc-link Requirements Overview
+    purpose: Defines the overall purpose, background, scope, responsibility boundaries, common non-functional requirements, decisions, and open issues of the doc-link plugin that replaces DocAdvisor with stable document IDs
     content_details:
-      - "Purpose of doc-link: DLID-based document identity, reference relationship tracking, and change impact notification replacing path-based DocAdvisor"
-      - "Overall flow: DLID assignment operation, then ToC construction, then search and change impact notification on the confirmed ToC"
-      - "Search flow: rebuild-necessity check, user choice between rebuilding the ToC or searching the existing ToC with a stale-result disclosure"
-      - Glossary of terms such as DLID, document ID, section ID, formal reference, ToC candidate, confirmed ToC, document information, and content hash
-      - "Scope: Markdown only, DLID writes, ID uniqueness check, reference extraction, change detection, and out-of-scope items such as script-based semantic impact analysis"
-      - "Responsibility boundary: doc-link reports changes and referrers mechanically while the project management AI decides and performs document edits"
-      - Non-functional requirements NFR-001 to NFR-008 covering ToC rebuild consistency, determinism, idempotence, write boundary, diagnosability, resumability, scalability, and separation of generation instructions from validation limits
-      - "Write boundary: only doc_link_id in frontmatter and section IDs at heading line ends may be written into target documents"
-      - Error candidates that stop processing and non-blocking findings recorded in the ToC such as unresolved reference targets
-      - Decisions D-001 to D-055 and open items U-001 to U-024 with their resolutions
+      - Purpose of doc-link as a DocAdvisor replacement managing documents by DLID instead of path
+      - Background limits of path-based DocAdvisor management and non-unified document references
+      - System-wide flow covering DLID assignment, ToC build, search, and change impact notification
+      - Scope of included items and early-phase exclusions such as non-Markdown files and DLID-only writes
+      - Responsibility boundary between doc-link and the project management AI
+      - Terminology table defining DLID, ToC, confirmed ToC, document information, and content hash
+      - Common non-functional requirements NFR-001 to NFR-008 for ToC consistency, determinism, idempotency, and write boundary
+      - Error candidates and non-blocking detection items for ToC confirmation
+      - Decisions D-001 to D-056 recording document ID, ToC key, search, and reference rules
+      - Open issues U-001 to U-024 and their resolutions
     applicable_tasks:
       - Requirements review of the doc-link plugin
-      - Design of doc-link ToC, document ID, and reference features
-      - Implementation scope confirmation for doc-link
-      - Responsibility boundary confirmation between doc-link and the project management AI
-      - Verification of decisions D-001 to D-055 and open items
-      - Impact analysis of changes to requirement documents REQ-002 to REQ-005
-      - Review of write-boundary rules for target documents
+      - Design creation based on doc-link requirements
+      - Scope and responsibility boundary confirmation for doc-link
+      - Lookup of doc-link terminology and decision IDs
+      - Implementation planning for doc-link ToC and document ID features
     keywords:
       - doc-link
+      - DocAdvisor replacement
       - DLID
       - document ID
       - ToC
       - change impact notification
-      - reference tracking
-      - Index target
-      - section ID
+      - responsibility boundary
+      - non-functional requirements
+      - project management AI
   docs/specs/requirement/REQ-002_document-id.md:
     title: doc-link Requirements Specification - Index Targets and Document ID
     purpose: Defines Index target specification and list confirmation, plus issuing, verification, and resolution of DLID document IDs and the DLID assignment operation for doc-link.
@@ -445,34 +444,34 @@ docs:
       - reference entry
       - reverse reference
   docs/specs/requirement/REQ-004_search.md:
-    title: doc-link Requirements Specification - Document Search
-    purpose: "Defines requirements for document search (FR-006): ToC search by key, pre-search ToC rebuild check with user choice, stop on undeterminable rebuild need, and required search result fields."
+    title: doc-link Requirements for Document Search
+    purpose: Defines requirements for searching task-related documents in doc-link, including the rule to prefer recall over precision, pre-search ToC rebuild confirmation, failure handling, and search result contents
     content_details:
-      - "FR-006 document search: search the ToC of the given --key, or the reserved key all single-mode ToC when omitted"
-      - "Pre-search ToC check: reinterpret the saved Index target specification to detect whether a rebuild is needed"
-      - "Rebuild choice: rebuild the ToC then search, or search the existing ToC without updating it"
-      - "Rebuild scale report: counts of new, removed, path-only changed, content changed, missing DocID, duplicate DocID documents, and AI summary generation count excluding reusable verified metadata (D-027)"
-      - "Failure stop: halt search with cause when rebuild need cannot be determined; existing-ToC search must not be offered (D-026)"
-      - "Existing-ToC search notice: reuse ToC structure but use latest per-document metadata (D-024)"
-      - "Search result fields: DocID, recorded ToC path, relevance reason, section, ToC state"
-      - AC-019 acceptance conditions for pre-search rebuild confirmation
+      - FR-006 document search that returns task-related documents and prioritizes not missing any document
+      - Search by --key for the keyed ToC, or the reserved key all for single mode
+      - Pre-search check of whether the ToC must be rebuilt, using the stored reinterpretable Index target specification
+      - User choice between rebuilding the ToC before searching and searching with the existing ToC
+      - Rebuild scale shown as counts of new, removed, path-only changed, content changed, missing-ID, and duplicate-ID documents plus AI summary count
+      - Stop with cause instead of offering the existing ToC when rebuild necessity cannot be determined
+      - Notice that an existing ToC may not reflect current Index target documents when searching without rebuild
+      - "Required search result fields: document ID, recorded path, reason for relevance, relevant section, and ToC state"
+      - AC-019 acceptance criteria for pre-search ToC rebuild confirmation
     applicable_tasks:
       - Implementation of the doc-link document search flow
-      - Review of the pre-search ToC rebuild confirmation behavior
-      - Modification of required search result fields
-      - Acceptance test creation for AC-019
-      - Design of failure handling when rebuild need cannot be determined
+      - Review of pre-search ToC rebuild confirmation behavior
+      - Design of search result structure and ToC state reporting
+      - Verification of search failure handling when rebuild necessity cannot be determined
     keywords:
+      - document search
       - FR-006
       - AC-019
-      - document search
-      - ToC rebuild confirmation
-      - "--key all"
-      - D-024
-      - D-026
-      - D-027
-      - stale ToC
+      - rebuild confirmation
+      - recall priority
+      - ToC state
+      - Index target specification
       - search result
+      - D-026
+      - D-056
   docs/specs/requirement/REQ-005_references.md:
     title: "doc-link Requirements: References and Change Notification"
     purpose: Defines requirements for DLID-based references, link inspection by directory search, path-mismatch notification, section references, change-impact notification, and inconsistency checks.

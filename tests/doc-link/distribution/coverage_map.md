@@ -167,7 +167,7 @@
 
 ### 検索 Agent の判断の手動確認
 
-- `query-worker` の関連文書の選択（全エントリを読む・存在しない ID を補わない）は自動実行しない → `query-worker_manual.md`（`manual/`）、自動側の枠は `query-worker/test_agent_md.py::AgentMdTest::test_reads_all_entries_without_keyword_filtering`、`query-worker/test_agent_md.py::ManualTest::test_manual_is_separate_from_automatic_tests`
+- `query-worker` の関連文書の選択（全エントリを読む・存在しない ID を補わない・取りこぼしを出さないことを優先し迷う文書は選ぶ）は自動実行しない → `query-worker_manual.md`（`manual/`）、自動側の枠は `query-worker/test_agent_md.py::AgentMdTest::test_reads_all_entries_without_keyword_filtering`、`query-worker/test_agent_md.py::AgentMdTest::test_selects_with_priority_on_not_missing_documents`、`query-worker/test_agent_md.py::ManualTest::test_manual_is_separate_from_automatic_tests`
 
 ## FR-018 [DLID]の解決
 

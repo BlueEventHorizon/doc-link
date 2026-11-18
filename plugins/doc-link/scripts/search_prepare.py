@@ -27,7 +27,8 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 検索 ID ごとに次のファイルを置く（すべて書き終えてから公開する。依頼は最後に公開する）。
 
 - `<ID>.toc.json`: [ToC]の写し。`documents` の配列で、要素は `doc_link_id`・`title`・`purpose`・`summary`（内容概要）・
-  `tasks`（適用作業）・`keywords`・`sections`（`section_id`・`heading` の配列）。パス・[内容ハッシュ]・参照関係・検査結果は入れない
+  `tasks`（適用作業）・`keywords`・`sections`（`section_id`・`heading` の配列）。パス・[内容ハッシュ]・参照関係・検査結果は入れない。
+  読む量を減らすため、字下げを持たない（要素ごとの改行は残す）。ほかのファイルは管理状態と同じ字下げを持つ
 - `<ID>.fixed.json`: script が固定して持つもの。`toc_key`・`toc_version`・`freshness`・文書ごとの記録されたパスとセクション
 - `<ID>.request.json`: 依頼。`search_id`・`task`・`toc_key`・`toc_copy_path`（写しの絶対パス）
 - `<ID>.item-<連番>.json`: Agent が渡した結果の 1 件（文書）
@@ -120,9 +121,29 @@ def _check_search_id(search_id: str) -> None:
         raise SearchError([f"検索 ID の形式が正しくない: {search_id}"])
 
 
-def _write(root: Path, path: Path, value) -> None:
+def _serialize_copy(value) -> bytes:
+    """写しのバイト列を返す。字下げとキーの後の空白を省く。
+
+    写しは worker が読むだけの作業ファイルであり、読む量を減らすために字下げを持たない。
+    1 行にはせず、要素ごとに改行する（worker は Read で読むため、1 行を長くしない）。
+    管理状態と共用する `state_store.serialize` は、差分を読みやすくするため字下げを持つ
+    ので、書き換えない。
+    """
     try:
-        state_store.write_if_changed(root, SKILL, path, state_store.serialize(value))
+        text = json.dumps(
+            value, ensure_ascii=False, sort_keys=True, indent=0, separators=(",", ":")
+        )
+        return (text + "\n").encode("utf-8")
+    except (TypeError, ValueError) as exc:  # UnicodeEncodeError は ValueError の下位
+        raise state_store.StateStoreError(
+            state_store.KIND_INVALID, f"JSON にできない内容: {exc}"
+        ) from exc
+
+
+def _write(root: Path, path: Path, value, *, compact: bool = False) -> None:
+    try:
+        data = _serialize_copy(value) if compact else state_store.serialize(value)
+        state_store.write_if_changed(root, SKILL, path, data)
     except state_store.StateStoreError as exc:
         raise SearchError([f"作業ファイルを書けない: {path}: {exc}"]) from exc
 
@@ -239,7 +260,7 @@ def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> di
         search_id = "SEARCH-" + secrets.token_hex(4)
 
     copy_path = _file(root, search_id, "toc")
-    _write(root, copy_path, copy)
+    _write(root, copy_path, copy, compact=True)
     _write(
         root,
         _file(root, search_id, "fixed"),

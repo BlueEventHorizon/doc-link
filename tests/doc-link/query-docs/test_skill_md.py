@@ -75,11 +75,15 @@ class SkillMdTest(unittest.TestCase):
             "initial_build_required",
             "confirm_rebuild",
             "invoke_query_worker",
-            "判定不能",
+            "終了コードが 1 のときは、検索を停止し",
         ):
             with self.subTest(needle=needle):
                 self.assertIn(needle, self.body)
         self.assertIn("旧版（既存の ToC）で検索する選択肢を出さない", self.body)
+
+    def test_does_not_define_the_meaning_of_exit_code_1(self):
+        # 1 は区別のないエラー。理由は script の表が持ち、SKILL は行動だけを書く
+        self.assertNotIn("終了コードが 1 のときは、判定不能", self.body)
 
     def test_asks_two_choices_with_scale_and_passes_choice(self):
         self.assertIn("AskUserQuestion", self.body)

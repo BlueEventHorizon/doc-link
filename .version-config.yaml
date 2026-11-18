@@ -5,6 +5,12 @@ targets:
     version_file: plugins/doc-link/.claude-plugin/plugin.json
     version_path: version
 
+changelog:
+  file: CHANGELOG.md
+  format: keep-a-changelog
+  git_log_auto: false
+  section_per_target: true
+
 git:
   tag_format: "v{version}"
   commit_message: "chore: bump {target} to {version}"

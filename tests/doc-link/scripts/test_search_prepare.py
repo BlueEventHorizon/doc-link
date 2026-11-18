@@ -151,6 +151,13 @@ class FixTest(SearchTestBase):
         # 写し以外の作業ファイルは、管理状態と同じ書き方のままである。
         self.assertTrue(request_text.startswith('{\n  "'))
 
+    def test_copy_that_cannot_be_encoded_is_a_search_error(self):
+        # 単独のサロゲートは UTF-8 にできない。契約外の例外にせず、SearchError にする。
+        path = self.root / ".temp" / "doc-link" / "query-docs" / "x.toc.json"
+        with self.assertRaises(sp.SearchError):
+            sp._write(self.root, path, {"documents": ["\ud800"]}, compact=True)
+        self.assertFalse(path.exists())
+
     def test_version_is_fixed_even_if_toc_is_updated_afterwards(self):
         payload = self.fix()
         fixed_version = payload["toc_version"]

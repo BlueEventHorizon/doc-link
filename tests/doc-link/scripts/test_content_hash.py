@@ -74,7 +74,6 @@ class DocumentHashTest(unittest.TestCase):
             "heading": doc().replace("# 題", "# 別題"),
             "link text": doc(link_text="別の表示"),
             "link dest": doc(dest="c.md"),
-            "title dlid": doc().replace(ID_B, "DLID-pqrstvwxyz01"),
             "dlid added": doc().replace("# 題", f"# 題 {ID_B}\n\n## 追加 {ID_A}\n# 題"),
         }
         for name, text in variants.items():
@@ -86,24 +85,52 @@ class DocumentHashTest(unittest.TestCase):
             document_content_hash(doc(record=H1)), document_content_hash(doc(record=H2))
         )
 
-    def test_first_record_does_not_change_hash(self):
+    def test_title_dlid_rewrite_does_not_change_hash(self):
+        # 参照先の付け替えは、参照記述の違いとして別に検出する。内容ハッシュには現れない。
         self.assertEqual(
-            document_content_hash(doc()), document_content_hash(doc(record=H1))
+            document_content_hash(doc()),
+            document_content_hash(doc().replace(ID_B, "DLID-pqrstvwxyz01")),
         )
-        self.assertEqual(document_content_hash(doc()), sha(doc()))
 
-    def test_record_removed_bytes_only(self):
-        text = doc(record=H1)
-        self.assertEqual(document_content_hash(text), sha(text.replace(f"{H1} ", "")))
+    def test_first_title_does_not_change_hash(self):
+        # title の無い定義と、title を書いた定義は、同じ値になる。
+        untitled = doc().replace(f' "{ID_B}"', "")
+        self.assertNotIn(ID_B, untitled)
+        for text in (doc(), doc(record=H1)):
+            with self.subTest(text=text):
+                self.assertEqual(
+                    document_content_hash(text), document_content_hash(untitled)
+                )
+        self.assertEqual(document_content_hash(untitled), sha(untitled))
 
-    def test_non_record_words_are_not_removed(self):
-        for word in ("A" * 64, "a" * 63, "a" * 65, "g" * 64):
-            with self.subTest(word=word):
-                text = doc(record=word)
+    def test_title_removed_bytes_only(self):
+        for text, title in (
+            (doc(record=H1), f' "{H1} {ID_B}"'),
+            (doc(), f' "{ID_B}"'),
+        ):
+            with self.subTest(title=title):
+                self.assertEqual(
+                    document_content_hash(text), sha(text.replace(title, ""))
+                )
+
+    def test_free_text_in_formal_title_is_removed(self):
+        text = f'[r]: b.md "説明 {H1} {ID_B}"\n'
+        self.assertEqual(document_content_hash(text), sha("[r]: b.md\n"))
+
+    def test_title_not_ending_in_dlid_is_not_removed(self):
+        for title in ("説明", H1, f"{ID_B} 後ろ"):
+            with self.subTest(title=title):
+                text = f'[r]: b.md "{title}"\n'
                 self.assertEqual(document_content_hash(text), sha(text))
                 self.assertNotEqual(
-                    document_content_hash(text), document_content_hash(doc())
+                    document_content_hash(text), document_content_hash("[r]: b.md\n")
                 )
+
+    def test_link_destination_change_alters_hash(self):
+        self.assertNotEqual(
+            document_content_hash(f'[r]: b.md "{ID_B}"\n'),
+            document_content_hash(f'[r]: c.md "{ID_B}"\n'),
+        )
 
     def test_inline_link_title_is_not_removed(self):
         text = f'[x](b.md "{H1} {ID_B}")\n'
@@ -114,16 +141,25 @@ class DocumentHashTest(unittest.TestCase):
     def test_title_quote_styles(self):
         for opener, closer in (("'", "'"), ("(", ")")):
             with self.subTest(opener=opener):
-                text = f"[r]: b.md {opener}{H1} {ID_B}{closer}\n"
+                title = f" {opener}{H1} {ID_B}{closer}"
+                text = f"[r]: b.md{title}\n"
                 self.assertEqual(
-                    document_content_hash(text), sha(text.replace(f"{H1} ", ""))
+                    document_content_hash(text), sha(text.replace(title, ""))
                 )
 
-    def test_unlocatable_record_is_not_removed(self):
-        text = f'[r]: b.md "{H1}  {ID_B}"\n'
-        self.assertEqual(document_content_hash(text), sha(text))
-        escaped = f'[r]: b.md "&#97;{"a" * 63} {ID_B}"\n'
-        self.assertEqual(document_content_hash(escaped), sha(escaped))
+    def test_title_on_the_next_line_is_removed(self):
+        text = f'[r]: b.md\n  "{H1} {ID_B}"\n'
+        self.assertEqual(document_content_hash(text), sha("[r]: b.md\n"))
+
+    def test_escaped_or_entity_title_is_removed(self):
+        for title in (f'"a\\" {H1} {ID_B}"', f'"&#97;{"a" * 63} {ID_B}"'):
+            with self.subTest(title=title):
+                text = f"[r]: b.md {title}\n"
+                self.assertEqual(document_content_hash(text), sha("[r]: b.md\n"))
+
+    def test_line_ending_after_title_is_kept(self):
+        text = f'[r]: b.md "{ID_B}"\r\n'
+        self.assertEqual(document_content_hash(text), sha("[r]: b.md\r\n"))
 
     def test_two_documents_referencing_each_other_do_not_chain(self):
         a1 = f'# A {ID_A}\n\n[b][r]\n\n[r]: b.md "{H1} {ID_B}"\n'
@@ -151,7 +187,8 @@ class SectionHashTest(unittest.TestCase):
         heading = document.headings[1]
         raw = "".join(document.lines[heading.start_line : heading.section_end_line])
         self.assertEqual(
-            section_content_hashes(text)[1], sha(raw.replace(f"{'c' * 64} ", ""))
+            section_content_hashes(text)[1],
+            sha(raw.replace(f' "{"c" * 64} {ID_B}"', "")),
         )
 
     def test_outside_change_keeps_hash(self):

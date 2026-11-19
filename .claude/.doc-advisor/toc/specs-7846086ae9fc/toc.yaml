@@ -5,7 +5,7 @@
 metadata:
   name: Document Search Index (specs)
   key: specs
-  generated_at: 2026-11-18T03:14:59Z
+  generated_at: 2026-11-19T03:09:06Z
   file_count: 16
 
 docs:
@@ -229,35 +229,37 @@ docs:
       - change impact candidate
       - check-impact
   docs/specs/design/DES-008_content-rules.md:
-    title: Rules for Markdown parsing, comparison values, and generated information
-    purpose: Defines rules for reading and writing document IDs (DLID) in frontmatter and headings, Markdown reference and heading parsing with markdown-it-py, SHA-256 content hash computation, and the rules for AI-generated ToC fields.
+    title: DES-008 Markdown Parsing, Comparison Values, and Generated Information Rules
+    purpose: Defines design rules for reading and writing DLIDs in Markdown, parsing reference links and heading sections, computing content hashes, and AI-generated ToC fields.
     content_details:
-      - Frontmatter delimiter detection and minimal top-level key parsing that tolerates YAML syntax errors
-      - "DLID recognition: DLID- prefix plus 12-character lowercase Crockford Base32, case-sensitive exact match"
-      - "Write scope: only the DLID is written to frontmatter doc_link_id and to the end of heading text, verified by re-parsing with markdown-it-py"
-      - Atomic write through a temporary file and os.replace, keeping file permissions and writing through symlinks to their target
-      - "Reference link rules following CommonMark: first definition wins, case-folded labels, scheme destinations excluded, inline links excluded"
-      - Heading section range from a heading to the next heading of same or higher level
-      - GitHub-compatible heading anchor generation with -1, -2 suffixes for duplicates
-      - Content hash as SHA-256 of UTF-8 bytes, excluding the hash word recorded in the reference title
-      - AI-generated field limits L with floor(L x 1.3) validation and minimum item counts of 5, 1, and 5
+      - Frontmatter delimiter detection and minimal top-level doc_link_id reading that tolerates YAML syntax errors
+      - "DLID format: 60-bit random value as 12-character lowercase Crockford Base32 with DLID- prefix, case-sensitive match"
+      - "Write rules: only the DLID is written to frontmatter doc_link_id and heading ends, verified by re-parsing with markdown-it-py, written via atomic os.replace that keeps permissions and symlink targets"
+      - "Reference link rules: CommonMark label matching, first definition wins, title whose last word is a DLID marks a formal reference, scheme URLs and images excluded"
+      - Heading section scope runs from the heading to the next heading of same or higher level, with the section ID taken from the trailing DLID
+      - Heading anchor generation equivalent to github-slugger v2.0.0, with duplicate suffixes -1, -2
+      - Content hash is SHA-256 of raw UTF-8 bytes without normalization, excluding the title of formal reference definitions
+      - Section content hash covers only the section range and is independent of the issued DLID and the ToC-recorded hash
+      - AI-generated field limits L with validator upper bound floor(L x 1.3) hidden from the model, minimum counts 5 / 1 / 5, values written in English
     applicable_tasks:
-      - Implementation of DLID read and write logic for frontmatter and headings
-      - Implementation of Markdown reference and heading parsing with markdown-it-py
+      - Implementation of DLID reading and writing in Markdown documents
+      - Implementation of reference link and heading section parsing with markdown-it-py
       - Implementation of content hash computation and its test vectors
-      - Review of heading anchor generation against GitHub slugger rules
-      - Modification of AI-generated ToC field validation limits and minimum item counts
+      - Implementation of heading anchor generation for check-links
+      - Review of ID assignment and write-back safety rules
+      - Modification of content hash exclusion rules for reference link titles
+      - Implementation of length and count validation for AI-generated ToC fields
     keywords:
       - DLID
       - doc_link_id
       - content hash
-      - SHA-256
+      - formal reference
+      - heading section ID
       - markdown-it-py
       - github-slugger
-      - section ID
-      - reference title
       - Crockford Base32
-      - os.replace
+      - frontmatter
+      - reference link title
   docs/specs/design/DES-009_verification.md:
     title: DES-009 Requirement Coverage and Design Verification
     purpose: Defines test criteria for stateful and deterministic processing, maps requirements to primary design documents and verification points, and records the approval status of the requirements and design.
@@ -350,34 +352,34 @@ docs:
       - requirement precedence
   docs/specs/requirement/REQ-001_overview.md:
     title: doc-link Requirements Overview
-    purpose: Defines the overall purpose, background, scope, responsibility boundaries, common non-functional requirements, decisions, and open issues of the doc-link plugin that replaces DocAdvisor with stable document IDs
+    purpose: Defines purpose, background, scope, responsibility boundaries, non-functional requirements, and decisions D-001 to D-056 for doc-link, the plugin replacing DocAdvisor with DLID-based document management.
     content_details:
-      - Purpose of doc-link as a DocAdvisor replacement managing documents by DLID instead of path
-      - Background limits of path-based DocAdvisor management and non-unified document references
-      - System-wide flow covering DLID assignment, ToC build, search, and change impact notification
-      - Scope of included items and early-phase exclusions such as non-Markdown files and DLID-only writes
-      - Responsibility boundary between doc-link and the project management AI
-      - Terminology table defining DLID, ToC, confirmed ToC, document information, and content hash
-      - Common non-functional requirements NFR-001 to NFR-008 for ToC consistency, determinism, idempotency, and write boundary
-      - Error candidates and non-blocking detection items for ToC confirmation
-      - Decisions D-001 to D-056 recording document ID, ToC key, search, and reference rules
-      - Open issues U-001 to U-024 and their resolutions
+      - Background limits of the path-based DocAdvisor ToC and the purpose of DLID-based document identification
+      - System-wide flow for initial setup, ToC construction, document search, and change impact notification
+      - Document search flow with ToC rebuild confirmation and selection between rebuilt or existing ToC (D-010)
+      - Glossary of DLID, document ID, section ID, formal reference, ToC candidate, confirmed ToC, content hash, and Index target terms
+      - Scope inclusion and exclusion list, with Markdown as the only index target format (D-006)
+      - Responsibility boundary where doc-link only notifies and Project Management AI decides and edits documents
+      - Write boundary limited to doc_link_id in frontmatter and section DLID at heading end (NFR-004, D-031)
+      - Non-functional requirements NFR-001 to NFR-008 for rebuild consistency, determinism, idempotence, and scalability
+      - DLID format as 60-bit random value in lowercase Crockford Base32 with 12 characters (D-028) and SHA-256 content hash rules (D-039)
+      - Open issue table U-001 to U-024 with recorded decisions
     applicable_tasks:
       - Requirements review of the doc-link plugin
-      - Design creation based on doc-link requirements
+      - Design creation for DLID-based document management
+      - Implementation planning for doc-link ToC construction and change notification
+      - Consistency verification of doc-link requirement decisions
       - Scope and responsibility boundary confirmation for doc-link
-      - Lookup of doc-link terminology and decision IDs
-      - Implementation planning for doc-link ToC and document ID features
     keywords:
       - doc-link
-      - DocAdvisor replacement
       - DLID
-      - document ID
-      - ToC
-      - change impact notification
-      - responsibility boundary
-      - non-functional requirements
-      - project management AI
+      - DocAdvisor replacement
+      - Index target
+      - ToC identification key
+      - Project Management AI
+      - content hash
+      - write boundary
+      - requirement overview
   docs/specs/requirement/REQ-002_document-id.md:
     title: doc-link Requirements Specification - Index Targets and Document ID
     purpose: Defines Index target specification and list confirmation, plus issuing, verification, and resolution of DLID document IDs and the DLID assignment operation for doc-link.
@@ -412,37 +414,35 @@ docs:
       - fixed exclusion
       - "--dirs-json"
   docs/specs/requirement/REQ-003_toc.md:
-    title: "doc-link Requirements: ToC Management"
-    purpose: Specifies the information doc-link manages per ToC (document info, section and reference entries, AI field limits), change detection by content hash, and the ToC build and rebuild steps.
+    title: doc-link Requirements for ToC Management
+    purpose: Specifies information required per ToC and per document, reference entry fields, AI-generated field limits, content hash change detection, and ToC rebuild and atomic confirmation requirements for doc-link.
     content_details:
-      - Document info items such as document ID, current path, title, purpose, summary, applicable tasks, keywords, and document hash
-      - Section entries keyed by section ID with a per-section hash computed from the original text
-      - Reference entries extracted from formal references, with referenced document and section IDs and the content hash recorded in the link title
-      - AI-generated field limits of 200 characters for purpose and 10 items for array fields, with the internal tolerance withheld from the generator
-      - Stored normalized index target specification per ToC so search can re-enumerate current documents and detect scope changes
-      - "Content hash rule: SHA-256 of the original text excluding the recorded hash word in reference titles"
-      - Change set classification into new, body change, reference change, move or rename, removal from index target, and unchanged
-      - Update plan that reuses unchanged information and regenerates AI fields only for new or body-changed documents
-      - Reference check against the designated reference directory, recording missing targets without blocking ToC confirmation
-      - ToC candidate validation and atomic confirmation, keeping the previous confirmed ToC on failure
+      - ToC information model covering document information, section entries, reference entries, and inspection state
+      - AI-generated field limits with purpose at 200 characters and arrays at 10 items, with internal tolerance kept out of generation instructions
+      - Change categories new, body change, reference change, move or rename, removal from index target, and unchanged
+      - Content hash as SHA-256 of original text, excluding the title of formal reference link definitions (D-039)
+      - Section-level change detection using per-section hashes (FR-012)
+      - Rebuild order of document ID check, change set creation, required information retrieval, and ToC update
+      - ToC candidate inspection and all-at-once confirmation with the previous confirmed ToC kept on failure
+      - Reference inspection by actually searching the designated directory, recording absence without blocking rebuild (D-025)
+      - Stored normalized Index target specification compared against new input to detect scope changes (D-053)
+      - Acceptance criteria AC-001, AC-002, AC-010, AC-011, AC-017, AC-018, AC-020, AC-026, and AC-027
     applicable_tasks:
-      - Implementation of ToC build and rebuild using a change set and update plan
-      - Implementation of change detection comparing the confirmed ToC with current documents
-      - Implementation of AI-generated field validation against length limits
-      - Review of the ToC information model and per-entry fields
-      - Creation of acceptance tests for move detection, rebuild failure, and change set classification
-      - Implementation of reference checking and reverse reference generation
+      - Requirements review of ToC construction and rebuild behavior
+      - Design of the ToC data model and change set creation
+      - Implementation of change detection and content hash calculation
+      - Implementation of AI-generated field limit validation
+      - Review of rebuild failure handling and atomic ToC confirmation
     keywords:
       - ToC
-      - document info
+      - document information
       - content hash
-      - SHA-256
-      - change set
-      - update plan
+      - change detection
+      - AI-generated field
       - ToC candidate
-      - AI-generated fields
-      - reference entry
-      - reverse reference
+      - confirmed ToC
+      - reference inspection
+      - index target specification
   docs/specs/requirement/REQ-004_search.md:
     title: doc-link Requirements for Document Search
     purpose: Defines requirements for searching task-related documents in doc-link, including the rule to prefer recall over precision, pre-search ToC rebuild confirmation, failure handling, and search result contents

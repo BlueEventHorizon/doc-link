@@ -215,6 +215,34 @@ class DocumentChangeTest(ChangeSetTestBase):
         self.assertTrue(self.doc_change(result, ID_A).unchanged)
         self.assertEqual(result.sections, ())
 
+    def test_retargeting_is_a_reference_change_without_content_change(self):
+        # title の DLID は内容ハッシュに含まれない。参照先の付け替えは、参照記述の違いとして検出される。
+        self.write(
+            "a.md", doc(ID_A, f"# A {S1}", "", '[r]: ./x.md "t DLID-00000000d001"')
+        )
+        self.commit(["a.md"])
+        self.write(
+            "a.md", doc(ID_A, f"# A {S1}", "", '[r]: ./x.md "t DLID-00000000d002"')
+        )
+        result = self.build(["a.md"])
+        self.assertEqual(
+            self.doc_change(result, ID_A).kinds, (change_set.CHANGE_REFERENCES,)
+        )
+        self.assertEqual(result.sections, ())
+
+    def test_first_title_is_a_reference_change_without_content_change(self):
+        # title の無い定義は[正式な参照]ではない。title を書くと参照が現れるが、内容ハッシュは変わらない。
+        self.write("a.md", doc(ID_A, f"# A {S1}", "", "[r]: ./x.md"))
+        self.commit(["a.md"])
+        self.write(
+            "a.md", doc(ID_A, f"# A {S1}", "", '[r]: ./x.md "t DLID-00000000d001"')
+        )
+        result = self.build(["a.md"])
+        self.assertEqual(
+            self.doc_change(result, ID_A).kinds, (change_set.CHANGE_REFERENCES,)
+        )
+        self.assertEqual(result.sections, ())
+
     def test_reference_line_shift_is_not_reference_change(self):
         self.write("a.md", doc(ID_A, "# A", "", '[r]: ./x.md "t DLID-00000000d001"'))
         self.commit(["a.md"])

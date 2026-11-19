@@ -1,4 +1,4 @@
-"""[内容ハッシュ]の算出と、title の記録語の形式判定を持つ共通モジュール。
+"""[内容ハッシュ]の算出（[正式な参照]の title を除く）と、title の記録語の形式判定を持つ共通モジュール。
 
 DES-008 §3・DES-009 §1 と REQ-001 D-039 を実装する。入口 script ではないので、PEP 723 とロックは持たない。
 文書の解析は `markdown_reader.read_document` の結果を使い、独自の正規表現でブロック構造を判定しない。
@@ -11,15 +11,14 @@ DES-008 §3・DES-009 §1 と REQ-001 D-039 を実装する。入口 script で�
 
 仕様の解釈（設計書が値や形式を定めていない点）
 
-- 記録語は、`ReferenceDefinition.preceding_word`（title の最後の語が DLID のときだけ値を持つ）が 64 桁の小文字
-  16 進のときだけ読む。大文字・63 桁・65 桁・16 進以外の文字を含む語は記録なしとする
-- 記録語を除く対象は、算出の範囲に開始行がある、リファレンスリンクの定義だけである。インラインリンクの title と、
-  定義でない文字列は除かない
-- 除く位置は、定義の行 `[start_line, end_line)` の原文から決める。原文で、定義の末尾に「64 桁の小文字 16 進の語、
-  空白 1 つ、DLID、title の閉じ（`"`・`'`・`)`）」が続く形（閉じのあとは空白だけ）を探し、その 16 進の語と直後の
-  空白 1 つを除く。16 進の語の直前は、空白か title の開き（`"`・`'`・`(`）でなければならない
-- 原文でこの形が見つからないとき（文字参照・エスケープで書かれた語、語と DLID の間が空白 1 つでない、など）は、
-  その定義からは何も除かない。推測で別の位置を除かない。このとき算出値は、記録を書き換えると変わる
+- 除く対象は、算出の範囲に開始行がある、[正式な参照]のリファレンスリンクの定義の title である
+  （`ReferenceDefinition.dlid` が値を持つ定義。title の最後の語が DLID のもの）。title の中身（記録語・DLID・
+  ほかの語）は問わず、title 全体を除く。インラインリンクの title と、DLID で終わらない title は除かない
+- 除く位置は、定義の行 `[start_line, end_line)` の原文から決める。原文で、定義の末尾に「空白（改行を含む）、
+  title の開き（`"`・`'`・`(`）、title、閉じ（`"`・`'`・`)`）、行末の空白」が続く形を探し、リンク先と title の間の
+  空白から閉じまでを除く。閉じのあとの空白（改行）は残す。title の中のバックスラッシュのエスケープは、1 文字の
+  まとまりとして読む
+- 原文でこの形が見つからないときは、その定義からは何も除かない。推測で別の位置を除かない
 """
 
 import hashlib
@@ -28,8 +27,9 @@ import re
 from markdown_reader import MarkdownDocument, ReferenceDefinition, read_document
 
 _RECORD_WORD_PATTERN = re.compile(r"[0-9a-f]{64}")
-_RECORD_IN_RAW_PATTERN = re.compile(
-    r"(?<![^\s\"'(])([0-9a-f]{64}) (?=DLID-[0-9a-hjkmnp-tv-z]{12}[\"')]\s*\Z)"
+_TITLE_IN_RAW_PATTERN = re.compile(
+    r"(?<=\S)(\s+(?:\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'|\((?:[^()\\]|\\.)*\)))\s*\Z",
+    re.DOTALL,
 )
 
 
@@ -49,13 +49,13 @@ def hash_bytes(data: bytes) -> str:
 
 
 def document_content_hash(text: str) -> str:
-    """文書全体の[内容ハッシュ]（記録語を除く）。"""
+    """文書全体の[内容ハッシュ]（[正式な参照]の title を除く）。"""
     document = read_document(text)
     return _hash_range(document, 0, len(document.lines))
 
 
 def section_content_hashes(text: str) -> list[str]:
-    """文書の見出しごと（出現順）のセクションの[内容ハッシュ]（記録語を除く）。"""
+    """文書の見出しごと（出現順）のセクションの[内容ハッシュ]（[正式な参照]の title を除く）。"""
     document = read_document(text)
     return [
         _hash_range(document, heading.start_line, heading.section_end_line)
@@ -72,9 +72,9 @@ def _hash_range(document: MarkdownDocument, start: int, end: int) -> str:
             continue
         if definition.start_line < cursor:
             continue
-        if not is_record_word(definition.preceding_word):
+        if definition.dlid is None:
             continue
-        span = _record_span(lines, definition)
+        span = _title_span(lines, definition)
         if span is None:
             continue
         first_offset, last_offset = span
@@ -86,12 +86,11 @@ def _hash_range(document: MarkdownDocument, start: int, end: int) -> str:
     return hash_bytes("".join(pieces).encode("utf-8"))
 
 
-def _record_span(
+def _title_span(
     lines: tuple[str, ...], definition: ReferenceDefinition
 ) -> tuple[int, int] | None:
     raw = "".join(lines[definition.start_line : definition.end_line])
-    matches = list(_RECORD_IN_RAW_PATTERN.finditer(raw))
-    if not matches:
+    match = _TITLE_IN_RAW_PATTERN.search(raw)
+    if match is None:
         return None
-    last = matches[-1]
-    return last.start(1), last.end()
+    return match.start(1), match.end(1)

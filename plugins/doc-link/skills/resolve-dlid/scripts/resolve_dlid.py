@@ -26,7 +26,7 @@
   - `resolved` のとき: `path`（記録されたパスで、現物の[DLID]と一致したもの）。`kind` が `section` なら
     `heading`（見出しの文字列。行末の[DLID]を含む。アンカーの元もこの文字列）と `anchor`
   - `not_at_recorded_path` のとき: `recorded_paths`（記録されたパスのすべて。現在の実体パスではない）
-  - `resolved` のとき: `content_hash`（[内容ハッシュ]。得られないときは `null`）と `content_hash_state`
+  - `resolved` のとき: `content_hash`（title に記録する形の[内容ハッシュ]＝先頭 12 桁。得られないときは `null`）と `content_hash_state`
     （`recorded`・`differs`・`unavailable`）
 
 ## 仕様の解釈
@@ -70,6 +70,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
 import script_output  # noqa: E402
 import state_store  # noqa: E402
+from content_hash import title_value  # noqa: E402
 from markdown_reader import is_dlid, read_document  # noqa: E402
 
 STATUS_RESOLVED = "resolved"
@@ -156,7 +157,7 @@ def _resolve_document(dlid: str, info: dict, documents: _Documents) -> dict:
         "kind": "document",
         "status": STATUS_RESOLVED,
         "path": info["path"],
-        "content_hash": recorded or None,
+        "content_hash": title_value(recorded) if recorded else None,
         "content_hash_state": HASH_RECORDED if recorded else HASH_UNAVAILABLE,
     }
 
@@ -187,6 +188,7 @@ def _resolve_section(
             content_hash, state = None, HASH_UNAVAILABLE
         else:
             (content_hash,) = hashes
+            content_hash = title_value(content_hash)
             state = HASH_RECORDED
         return {
             "dlid": dlid,

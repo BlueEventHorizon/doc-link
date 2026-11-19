@@ -112,6 +112,7 @@ from content_hash import (  # noqa: E402
     document_content_hash,
     is_record_word,
     section_content_hashes,
+    title_value,
 )
 from markdown_reader import (  # noqa: E402
     MarkdownDocument,
@@ -232,13 +233,15 @@ class _Targets:
                     return {
                         "suggested_title_unavailable_reason": REASON_HEADING_WITHOUT_DLID
                     }
-                value = section_content_hashes(text)[index]
+                value = title_value(section_content_hashes(text)[index])
                 return {"suggested_title": f"{value} {heading.section_id}"}
             if fragment not in reference_check.explicit_anchors(text):
                 return {
                     "suggested_title_unavailable_reason": REASON_FRAGMENT_UNRESOLVED
                 }
-        return {"suggested_title": f"{document_content_hash(text)} {doc_id}"}
+        return {
+            "suggested_title": f"{title_value(document_content_hash(text))} {doc_id}"
+        }
 
 
 def _inline_links(document: MarkdownDocument):

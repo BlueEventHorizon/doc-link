@@ -1,0 +1,39 @@
+{
+  "content_hash": "53b4f7321987a6a2c52f1440ed628957b19988bf980caa758a7698877ba50796",
+  "doc_link_id": "DLID-3f92k3tz4rew",
+  "keywords": [
+    "state machine",
+    "state transition",
+    "confirmed ToC",
+    "build run",
+    "rebuild",
+    "embed-dlid",
+    "DLID embedding",
+    "failure handling",
+    "duplicate original",
+    "transition table"
+  ],
+  "path": "docs/specs/design/DES-004_state-machines.md",
+  "purpose": "Design spec defining the state models and permitted transitions for ToC publication, ToC build/rebuild runs, and DLID embedding runs, as normative transition tables.",
+  "summary": [
+    "Separation of ToC publication state from build progress; rebuild-needed and missing-reference are judgments, not states",
+    "Stateless operations: search, DLID resolution, and checks never change management state",
+    "Confirmed ToC transitions P-01 to P-03 (unbuilt, published, failure keeps prior state)",
+    "Build run transitions B-01 to B-09 from started through scope, IDs, changes, data, refs, candidate, finished, failed",
+    "Failure handling: no candidate published, prior confirmed ToC kept, no automatic retry, document info not rolled back",
+    "Reference check result categories and freshness (match, path mismatch, absent in directory)",
+    "DLID embedding run transitions E-01 to E-07 including duplicate original confirmation and write-only-DLID rule",
+    "Mermaid state diagrams visualizing the tables; script rejects transitions not in the tables",
+    "State transition testing policy delegated to the verification design"
+  ],
+  "tasks": [
+    "Implementing ToC build or rebuild scripts",
+    "Implementing the embed-dlid DLID embedding operation",
+    "Writing state transition tests",
+    "Reviewing failure and retry behavior of builds",
+    "Deciding whether an operation may change management state",
+    "Designing error reports for failed build stages",
+    "Checking consistency between requirements and design transitions"
+  ],
+  "title": "DES-004 状態モデルと許可遷移"
+}

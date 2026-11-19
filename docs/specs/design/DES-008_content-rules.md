@@ -1,12 +1,16 @@
-# DES-008 Markdown 解析・比較値・生成情報の規則
+---
+doc_link_id: DLID-ywa6htx8vq09
+---
+
+# DES-008 Markdown 解析・比較値・生成情報の規則 DLID-mmbyse75p9rr
 
 **状態**: 承認済み\
-**更新日**: 2026-11-19\
+**更新日**: 2026-11-20\
 **根拠**: [ID 要件][req-002]、[ToC 要件][req-003]、[参照要件][req-005]
 
 <a id="sec-1"></a>
 
-## 1. [文書 ID]の読取りと書込み
+## 1. [文書 ID]の読取りと書込み DLID-cf1n0ndmf0fe
 
 frontmatter の区切りは次のように判定する。文書の先頭の空行を読み飛ばし、前後の空白を除くと `---` になる最初の行で始まり、次の同じ行で閉じる。閉じる行が無い文書は、frontmatter が無いものとして読む。frontmatter の中身は、最上位のキーだけを読む最小限の解析で読み、YAML の構文の誤りで frontmatter 全体を読めなくすることはしない。
 
@@ -16,7 +20,7 @@ frontmatter の `doc_link_id` から、システム発行の `DLID-` 付き固�
 
 <a id="sec-2"></a>
 
-## 2. Markdown 参照と位置
+## 2. Markdown 参照と位置 DLID-7d2f9n4a3vry
 
 Markdown の構造（コードブロック、見出し、リンクの URL・title、HTML ブロック）の解析は、次のとおりとする。
 
@@ -66,12 +70,13 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 <a id="sec-3"></a>
 
-## 3. 比較値とハッシュ
+## 3. 比較値とハッシュ DLID-2f452e4mna91
 
 [内容ハッシュ]は、原文の UTF-8 のバイト列の SHA-256 とする（要件 D-039）。
 
 - 正規化はしない。
 - 表記は、小文字の 16 進 64 文字とする。
+- title に記録する値は、先頭の 12 文字とする（要件 D-058）。記録と[現在ハッシュ]の比較は、[現在ハッシュ]の先頭 12 文字で行う。[ToC]に反映する値は、64 文字のままとする。
 - [正式な参照]（リンクの定義で、title の最後の語が[DLID]のもの）の title は、除いて計算する。
 - 除くのは、リンク先と title の間の空白から、title の閉じ（`"`・`'`・`)`）までである。
 - title の無い定義と、除いたあとの文字列が同じになる。
@@ -86,13 +91,13 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 <a id="sec-4"></a>
 
-## 4. [AI 生成フィールド]
+## 4. [AI 生成フィールド] DLID-7et3ryybpbag
 
 タイトルは文書の最初の H1 見出しのテキストから、行末の[セクション ID]を除いたものとする。H1 が無い文書のタイトルは `toc-updater` が生成する。目的・内容概要・適用作業・キーワード、および生成するタイトルは、`toc-updater` が対象文書の本文を読んで生成する（[DES-010 §4][des-010-sec-4]）。[情報生成 AI]に渡す上限はフィールド別の `L` のみとする。script の検証器は `H = floor(L × 1.3)` を用い、`L` 超・`H` 以下を受理し、`H` 超を拒否する。[情報生成 AI]が参照するプロンプト・ルール・再試行メッセージに `H` や余白の存在を含めない。`L` の値と文字数の数え方は要件 D-044 に従う。配列のフィールドは要素数を `L`・`H` で検証する。要素数の下限は、内容概要 5、適用作業 1、キーワード 5 とし、下回れば拒否する。生成する値は、文書の言語にかかわらず英語で書く。検証器のエラーを[情報生成 AI]へ戻す場合も実際の拒否境界を開示しない。
 
-[req-002]: ../requirement/REQ-002_document-id.md
-[req-003]: ../requirement/REQ-003_toc.md
-[req-005]: ../requirement/REQ-005_references.md
-[des-005-sec-3]: DES-005_indexing.md#sec-3
-[des-007-sec-1]: DES-007_references-impact.md#sec-1
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4
+[req-002]: ../requirement/REQ-002_document-id.md "85860fe69f58 DLID-bk29x4s8tadq"
+[req-003]: ../requirement/REQ-003_toc.md "40bbb7b52fec DLID-kxe3nxfgk491"
+[req-005]: ../requirement/REQ-005_references.md "90a2b4835b36 DLID-pc44gkb54821"
+[des-005-sec-3]: DES-005_indexing.md#sec-3 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-007-sec-1]: DES-007_references-impact.md#sec-1 "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "da86b37d3824 DLID-7e90gq3sdncc"

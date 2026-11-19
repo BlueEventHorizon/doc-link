@@ -1,12 +1,16 @@
-# DES-009 要件対応と設計検証
+---
+doc_link_id: DLID-xmg0jcmep2h2
+---
+
+# DES-009 要件対応と設計検証 DLID-7e6sqa5ehfep
 
 **状態**: 承認済み\
-**更新日**: 2026-11-19\
+**更新日**: 2026-11-20\
 **根拠**: [要件書群][req-001]、[状態モデル][des-004]
 
 <a id="sec-1"></a>
 
-## 1. テストの規範
+## 1. テストの規範 DLID-13qfqbvamwny
 
 状態を持つ処理は[DES-004 の遷移表][des-004]を唯一の許可遷移一覧とする。P-01〜P-03、B-01〜B-09、E-01〜E-07 の各行について、元状態・イベント・ガード成立で指定した次状態と効果になることを試す。同じ元状態でガード不成立、表にないイベント、別状態からのイベントを与えたときは拒否し、[確定 ToC]が変わらないことを試す。Mermaid 図は表と同じ遷移を可視化するだけであり、図にない暗黙の遷移を認めない。
 
@@ -27,13 +31,13 @@
 `check-links` は、次を試す。
 
 - [DLID]入りの title を持つインラインリンクを報告する。
-- title の[DLID]の直前の語が 64 桁の小文字 16 進のときだけ、記録として読む。それ以外は「記録なし」にする。
+- title の[DLID]の直前の語が title の記録語の形（要件 D-058）のときだけ、記録として読む。それ以外は「記録なし」にする。
 
 状態遷移でない決定論的処理は別に単体テストを持つ。対象指定の展開、Markdown 解析、ID 認識・発行・重複、[DLID]の解決、パス解決、ディレクトリ走査結果の分類、比較値、AI 出力検証、[ToC 候補]整合性を対象にする。
 
 <a id="sec-2"></a>
 
-## 2. 要件から設計・受け入れ検証への対応
+## 2. 要件から設計・受け入れ検証への対応 DLID-m4ccp38zt37g
 
 | 要件                                    | 主設計                                                     | 主な検証観点                                                                                                                                                                                                                                                                                                                    |
 | --------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -52,7 +56,7 @@
 
 <a id="sec-3"></a>
 
-## 3. 横断シナリオ
+## 3. 横断シナリオ DLID-7ppw4fp92v08
 
 1. 初回：DLID 付与操作 → 対象指定 → ID 確認 → 変更集合 → 必要情報 → 参照実走査 → [ToC]確定 → 検索可能。
 2. 移動：同じ ID・同じ内容でパスだけ変更し、要約を再生成せず[ToC]の現在パスを更新する。参照元の古いパスは自動修正しない。
@@ -64,16 +68,16 @@
 
 <a id="sec-4"></a>
 
-## 4. 承認状態
+## 4. 承認状態 DLID-btvr79v5ajpa
 
 要件の未決事項は、すべて決定済みである。設計書はレビューを経て承認済みである。
 
-[req-001]: ../requirement/REQ-001_overview.md
-[des-004]: DES-004_state-machines.md
-[des-005]: DES-005_indexing.md
-[des-008]: DES-008_content-rules.md
-[des-007]: DES-007_references-impact.md
-[des-006]: DES-006_search.md
-[des-010]: DES-010_skill-composition.md
-[des-003]: DES-003_data-model.md
-[des-002]: DES-002_execution-responsibilities.md
+[req-001]: ../requirement/REQ-001_overview.md "8418f83ba277 DLID-veg2nsjk8zw1"
+[des-004]: DES-004_state-machines.md "53b4f7321987 DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-008]: DES-008_content-rules.md "3d83f58b2ce6 DLID-ywa6htx8vq09"
+[des-007]: DES-007_references-impact.md "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-006]: DES-006_search.md "5e6990692aaa DLID-nnbgpzkkm5vq"
+[des-010]: DES-010_skill-composition.md "da86b37d3824 DLID-7e90gq3sdncc"
+[des-003]: DES-003_data-model.md "4708f535908f DLID-yqqrwtycr379"
+[des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"

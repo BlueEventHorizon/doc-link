@@ -21,7 +21,7 @@ import change_set  # noqa: E402
 import state_store  # noqa: E402
 import toc_candidate  # noqa: E402
 import toc_check  # noqa: E402
-from content_hash import document_content_hash  # noqa: E402
+from content_hash import document_content_hash, title_value  # noqa: E402
 from reference_check import check_document  # noqa: E402
 from target_spec import MODE_TARGETS, TargetSpec  # noqa: E402
 
@@ -95,10 +95,14 @@ class CheckImpactTestBase(unittest.TestCase):
         self.spec = spec
 
     def hashes(self):
+        """title に書く値（[確定 ToC]の完全なハッシュの先頭 12 桁）。"""
         toc = state_store.load_confirmed_toc(self.root, KEY)
         return (
-            {e["doc_link_id"]: e["applied_hash"] for e in toc["documents"]},
-            {e["section_id"]: e["content_hash"] for e in toc["sections"]},
+            {
+                e["doc_link_id"]: title_value(e["applied_hash"])
+                for e in toc["documents"]
+            },
+            {e["section_id"]: title_value(e["content_hash"]) for e in toc["sections"]},
         )
 
     def snapshot(self):

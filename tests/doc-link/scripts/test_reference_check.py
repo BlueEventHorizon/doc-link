@@ -9,6 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 
 import reference_check as rc  # noqa: E402
+from content_hash import RECORD_LENGTH  # noqa: E402
 from references import extract_references  # noqa: E402
 
 ID_SRC = "DLID-0123456789ab"
@@ -25,7 +26,7 @@ def target_doc(doc_id=ID_DOC, sec_id=ID_SEC, heading="概要"):
 def source_doc(dest, title_id=ID_DOC, fragment=""):
     return (
         f"# 参照元 {ID_SRC}\n\n[x][r]\n\n"
-        f'[r]: {dest}{fragment} "{"a" * 64} {title_id}"\n'
+        f'[r]: {dest}{fragment} "{"a" * RECORD_LENGTH} {title_id}"\n'
     )
 
 
@@ -56,7 +57,7 @@ class StatusTest(CheckBase):
         self.assertEqual(result.current_path, "docs/b.md")
         self.assertEqual(result.directory, "docs")
         self.assertEqual(result.checked_at, WHEN)
-        self.assertEqual(result.reference.recorded_hash, "a" * 64)
+        self.assertEqual(result.reference.recorded_hash, "a" * RECORD_LENGTH)
 
     def test_match_section_compares_owner_document_path(self):
         self.write("docs/b.md", target_doc())

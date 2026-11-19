@@ -10,7 +10,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 import change_set  # noqa: E402
 import state_store  # noqa: E402
 import toc_candidate  # noqa: E402
-from content_hash import document_content_hash, section_content_hashes  # noqa: E402
+from content_hash import RECORD_LENGTH, document_content_hash, section_content_hashes  # noqa: E402
 from reference_check import check_document  # noqa: E402
 from target_spec import MODE_TARGETS, TargetSpec  # noqa: E402
 
@@ -25,7 +25,7 @@ ID_F = "DLID-pqrstvwxyz04"
 S1 = "DLID-00000000s001"
 S2 = "DLID-00000000s002"
 S3 = "DLID-00000000s003"
-RECORD = "c" * 64
+RECORD = "c" * RECORD_LENGTH
 WHEN = "2026-11-13T00:00:00+00:00"
 FILES = ["docs/a.md", "docs/b.md"]
 SPEC = TargetSpec(mode=MODE_TARGETS, key=KEY, paths=tuple(FILES))

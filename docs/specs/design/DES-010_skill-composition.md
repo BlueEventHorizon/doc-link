@@ -1,4 +1,8 @@
-# DES-010 SKILL と Agent の構成
+---
+doc_link_id: DLID-7e90gq3sdncc
+---
+
+# DES-010 SKILL と Agent の構成 DLID-gf7dehdq4tpd
 
 **状態**: 承認済み\
 **更新日**: 2026-11-19\
@@ -6,7 +10,7 @@
 
 <a id="sec-1"></a>
 
-## 1. 構成
+## 1. 構成 DLID-154xfxg7rkzy
 
 doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する。SKILL はいずれも呼び出し元（[プロジェクト管理 AI]）のコンテキストで実行する継承型とする（[DES-002 §3][des-002-sec-3]）。各 SKILL は処理を script に委ね、SKILL.md にロジックを書かない。
 
@@ -30,7 +34,7 @@ doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する
 
 <a id="sec-1-1"></a>
 
-### 1.1 操作と照会の SKILL の責務
+### 1.1 操作と照会の SKILL の責務 DLID-qd4t2gvpvqfw
 
 `embed-dlid`
 
@@ -58,7 +62,7 @@ doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する
 
 <a id="sec-1-2"></a>
 
-### 1.2 検査の SKILL の責務
+### 1.2 検査の SKILL の責務 DLID-h9bg56gdypm5
 
 | SKILL          | 検出する状態                                                                                                                                                                                                                                                                                  | 検出事項の扱い（誰が、何で）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -85,7 +89,7 @@ doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する
 
 <a id="sec-2"></a>
 
-## 2. ユースケース
+## 2. ユースケース DLID-6tfvncts0q8x
 
 ```mermaid
 flowchart LR
@@ -127,13 +131,13 @@ flowchart LR
 
 <a id="sec-3"></a>
 
-## 3. SKILL ごとのシーケンス
+## 3. SKILL ごとのシーケンス DLID-av4127n5ws5j
 
 各 SKILL は自分の処理だけを行い、次の SKILL の実行を促さない（要件 D-057）。SKILL をどの順に使うかは、§3.9 の流れが定める。
 
 <a id="sec-3-1"></a>
 
-### 3.1 embed-dlid
+### 3.1 embed-dlid DLID-z9j2ys29jx12
 
 起動を書き込みの承認とし、重複する ID の原本の確定以外では利用者に確認しない（要件 D-040）。対象は `index-docs` と同じ[ToC 識別キー]と[Index 対象指定]で決める（要件 D-041）。
 
@@ -166,7 +170,7 @@ sequenceDiagram
 
 <a id="sec-3-2"></a>
 
-### 3.2 index-docs
+### 3.2 index-docs DLID-ryhengxjsv39
 
 SKILL は入口の script を 1 本だけ呼ぶ。入口の script は段階を進め、次に SKILL が行うこと（`toc-updater` の起動、起動した Agent の完了の待機、完了、エラー）を返す。SKILL はそれに従って動き、終えたら入口の script を再び呼ぶ。図の「script 群」は入口の script とその下の script を指す。`toc-updater` は、1 回の起動で最大 3 文書を受け持たせ、同時に最大 10 本を走らせる。この SKILL の前に行う工程（`check-dlid`・`embed-dlid`・`check-links`）は、§3.9 のとおり、[プロジェクト管理 AI]が `index-docs` の手順 0 として行う。
 
@@ -202,7 +206,7 @@ sequenceDiagram
 
 <a id="sec-3-3"></a>
 
-### 3.3 query-docs
+### 3.3 query-docs DLID-88bfc282eve1
 
 SKILL は、親の作業の指示をそのまま `query-worker` に渡さず、検索のタスクと考慮する観点に整えて渡す。親の指示に実装や編集の依頼が含まれていても、検索の依頼としてだけ渡す。
 
@@ -245,7 +249,7 @@ sequenceDiagram
 
 <a id="sec-3-4"></a>
 
-### 3.4 check-dlid
+### 3.4 check-dlid DLID-sxtd5pf1atkb
 
 ```mermaid
 sequenceDiagram
@@ -269,7 +273,7 @@ sequenceDiagram
 
 <a id="sec-3-5"></a>
 
-### 3.5 check-links
+### 3.5 check-links DLID-nwn04tk644ex
 
 ```mermaid
 sequenceDiagram
@@ -295,7 +299,7 @@ sequenceDiagram
 
 <a id="sec-3-6"></a>
 
-### 3.6 check-toc
+### 3.6 check-toc DLID-20xt1fpqm1k7
 
 ```mermaid
 sequenceDiagram
@@ -315,7 +319,7 @@ sequenceDiagram
 
 <a id="sec-3-7"></a>
 
-### 3.7 check-impact
+### 3.7 check-impact DLID-1nny3y551m4v
 
 ```mermaid
 sequenceDiagram
@@ -354,7 +358,7 @@ sequenceDiagram
 
 <a id="sec-3-8"></a>
 
-### 3.8 resolve-dlid
+### 3.8 resolve-dlid DLID-venmkyh8532z
 
 ```mermaid
 sequenceDiagram
@@ -389,7 +393,7 @@ sequenceDiagram
 
 <a id="sec-3-9"></a>
 
-### 3.9 運用の流れ（導入と変更後で共通）
+### 3.9 運用の流れ（導入と変更後で共通） DLID-7abvxracbbba
 
 要件 D-057 の流れを、通しの図で示す。この流れは `index-docs` を起点とし、[プロジェクト管理 AI]が `index-docs` の手順 0 として行う。各 SKILL の動きは §3.1〜§3.8 に従い、各 SKILL は次の SKILL の実行を促さない。導入は、この流れの初回である。変更後も、毎回 `check-dlid` から行う。[DLID]の無い文書は[ToC]に入らず、検索と参照の対象から外れるためである。
 
@@ -435,7 +439,7 @@ sequenceDiagram
 
 <a id="sec-4"></a>
 
-## 4. カスタム Agent との受け渡し
+## 4. カスタム Agent との受け渡し DLID-ytajmhsv2p1t
 
 SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ受け渡し規約][exchange-rules]に従う。運ぶのは script が生成した識別値だけで、置き場は `.temp/doc-link/<skill>/` の下で、識別値から script が決める（[DES-002 §4][des-002-sec-4]）。依頼と結果は script が書き、書き終えてから公開する。結果は Agent が値を script へ渡し、script が書く。読む側は script から絶対パスを受け取って直接読む。終了の値は文字列で、正常は `"0"` とする。成否は script が判定する。処理が終わったら、依頼と結果を削除する。
 
@@ -449,35 +453,35 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 | 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                              | 検索を失敗として返す                                                                                           |
 | 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                  | `query-docs` が結果を返した後                                                                                  |
 
-[req-001]: ../requirement/REQ-001_overview.md
-[des-002]: DES-002_execution-responsibilities.md
-[req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2
-[req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1
-[req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12
-[req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13
-[req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15
-[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9
-[req-003-sec-10]: ../requirement/REQ-003_toc.md#sec-10
-[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14
-[req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4
-[req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2
-[req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1
-[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19
-[req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8
-[req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4
-[des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3
-[des-008-sec-4]: DES-008_content-rules.md#sec-4
-[des-006-sec-2]: DES-006_search.md#sec-2
-[des-006-sec-3]: DES-006_search.md#sec-3
-[des-005-sec-2-1]: DES-005_indexing.md#sec-2-1
-[des-008-sec-1]: DES-008_content-rules.md#sec-1
-[des-005-sec-2]: DES-005_indexing.md#sec-2
-[des-005-sec-3]: DES-005_indexing.md#sec-3
-[des-005-sec-4]: DES-005_indexing.md#sec-4
-[des-007-sec-1]: DES-007_references-impact.md#sec-1
-[des-004-sec-3]: DES-004_state-machines.md#sec-3
-[des-006-sec-1]: DES-006_search.md#sec-1
-[des-007-sec-2]: DES-007_references-impact.md#sec-2
-[des-007-sec-3]: DES-007_references-impact.md#sec-3
-[exchange-rules]: ../../rules/agent_data_exchange_rules.md
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4
+[req-001]: ../requirement/REQ-001_overview.md "8418f83ba277 DLID-veg2nsjk8zw1"
+[des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
+[req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "85860fe69f58 DLID-bk29x4s8tadq"
+[req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "85860fe69f58 DLID-bk29x4s8tadq"
+[req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12 "d3a5a1cf16cb DLID-h96208rqr773"
+[req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13 "90a2b4835b36 DLID-pc44gkb54821"
+[req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15 "90a2b4835b36 DLID-pc44gkb54821"
+[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "85860fe69f58 DLID-bk29x4s8tadq"
+[req-003-sec-10]: ../requirement/REQ-003_toc.md#sec-10 "40bbb7b52fec DLID-kxe3nxfgk491"
+[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14 "90a2b4835b36 DLID-pc44gkb54821"
+[req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4 "40bbb7b52fec DLID-kxe3nxfgk491"
+[req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2 "40bbb7b52fec DLID-kxe3nxfgk491"
+[req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "90a2b4835b36 DLID-pc44gkb54821"
+[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "8418f83ba277 DLID-veg2nsjk8zw1"
+[req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "85860fe69f58 DLID-bk29x4s8tadq"
+[req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "40bbb7b52fec DLID-kxe3nxfgk491"
+[des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "90be2ac68a19 DLID-anz9vack2xzt"
+[des-008-sec-4]: DES-008_content-rules.md#sec-4 "3d83f58b2ce6 DLID-ywa6htx8vq09"
+[des-006-sec-2]: DES-006_search.md#sec-2 "5e6990692aaa DLID-nnbgpzkkm5vq"
+[des-006-sec-3]: DES-006_search.md#sec-3 "5e6990692aaa DLID-nnbgpzkkm5vq"
+[des-005-sec-2-1]: DES-005_indexing.md#sec-2-1 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-008-sec-1]: DES-008_content-rules.md#sec-1 "3d83f58b2ce6 DLID-ywa6htx8vq09"
+[des-005-sec-2]: DES-005_indexing.md#sec-2 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-005-sec-3]: DES-005_indexing.md#sec-3 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-005-sec-4]: DES-005_indexing.md#sec-4 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-007-sec-1]: DES-007_references-impact.md#sec-1 "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-004-sec-3]: DES-004_state-machines.md#sec-3 "53b4f7321987 DLID-3f92k3tz4rew"
+[des-006-sec-1]: DES-006_search.md#sec-1 "5e6990692aaa DLID-nnbgpzkkm5vq"
+[des-007-sec-2]: DES-007_references-impact.md#sec-2 "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-007-sec-3]: DES-007_references-impact.md#sec-3 "3d76a10e246f DLID-pr3jp4hzb8js"
+[exchange-rules]: ../../rules/agent_data_exchange_rules.md "590998804bef DLID-2g3cgnnry3bm"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "90be2ac68a19 DLID-anz9vack2xzt"

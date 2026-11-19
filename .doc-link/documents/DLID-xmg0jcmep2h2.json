@@ -1,0 +1,35 @@
+{
+  "content_hash": "9c461d1e907e5dbbfac7bc355431efbadc26c2d27aeb537214a11090aad43c3d",
+  "doc_link_id": "DLID-xmg0jcmep2h2",
+  "keywords": [
+    "test norms",
+    "requirement mapping",
+    "acceptance criteria",
+    "state transitions",
+    "scenarios",
+    "check-impact tests",
+    "check-links tests",
+    "verification",
+    "design approval"
+  ],
+  "path": "docs/specs/design/DES-009_verification.md",
+  "purpose": "Defines the testing norms, requirement-to-design-to-verification mapping, cross-cutting scenarios and approval status used to verify the doc-link design.",
+  "summary": [
+    "State-machine transition tables are the sole source of allowed transitions; guard failures and unlisted events must be rejected",
+    "Absent reference targets do not block candidate confirmation; interruption, rerun and multi-key isolation are tested",
+    "check-impact tests cover read-only behavior, hash comparison, repeated notification, and no cascading or endless notification",
+    "check-links tests cover inline links with DLID titles and recorded-hash word shape",
+    "Deterministic processing gets separate unit tests such as parsing, ID handling, path resolution, hashes and output validation",
+    "A table maps requirements to primary designs and main verification points including acceptance criteria",
+    "Seven cross-cutting scenarios: first build, move, content change, failure, multiple keys, out-of-scope reference, later reference",
+    "Approval status states all open requirement items are decided and the design has been reviewed and approved"
+  ],
+  "tasks": [
+    "Writing or reviewing tests for doc-link",
+    "Checking requirement coverage of the design",
+    "Planning acceptance and scenario verification",
+    "Verifying state transitions against the transition tables",
+    "Confirming design approval status"
+  ],
+  "title": "DES-009 要件対応と設計検証"
+}

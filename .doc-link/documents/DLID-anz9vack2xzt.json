@@ -1,0 +1,39 @@
+{
+  "content_hash": "90be2ac68a199c95439d50c73fb31262ea082e19ddcce90703e675556b3d7827",
+  "doc_link_id": "DLID-anz9vack2xzt",
+  "keywords": [
+    "responsibilities",
+    "write permissions",
+    "script operations",
+    "Skill",
+    "information generation AI",
+    "search AI",
+    "managed state",
+    ".doc-link",
+    "deterministic JSON",
+    "DLID assignment"
+  ],
+  "path": "docs/specs/design/DES-002_execution-responsibilities.md",
+  "purpose": "Defines which actors and scripts are responsible for each doc-link process, their write permissions and prohibitions, logical script operations, Skill-script connection rules, and managed-state storage.",
+  "summary": [
+    "Responsibility table for project AI, Skill, deterministic scripts, information-generating AI, search AI, and user, with write permissions",
+    "Logical script operations with inputs, success results, and side-effect or failure promises",
+    "Semantic relevance in search is judged by the read-only search AI reading the ToC",
+    "Skills run in the caller context; only the information-generating AI is separated into another context",
+    "Scripts reject disallowed transitions by checking versions and state, not self-reported prior success",
+    "The internal tolerance limit H is never disclosed to the information-generating AI",
+    "Impact candidates are enumerated mechanically; no fix judgments are made inside doc-link",
+    "Partial DLID-assignment failures keep already-written IDs and report per-document problems",
+    "All files stay inside the project; temporary files go under .temp/doc-link/<skill>/",
+    "Managed state is stored as deterministic JSON in .doc-link/: one file per document ID and one per ToC key"
+  ],
+  "tasks": [
+    "Designing or changing responsibility boundaries between AI, Skills, and scripts",
+    "Implementing doc-link scripts and their operations",
+    "Writing or modifying SKILL.md and custom Agent definitions",
+    "Implementing DLID assignment and its failure handling",
+    "Designing managed-state storage and merge behavior",
+    "Reviewing write permission compliance"
+  ],
+  "title": "DES-002 実行主体と処理責務"
+}

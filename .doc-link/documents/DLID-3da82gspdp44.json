@@ -1,0 +1,38 @@
+{
+  "content_hash": "e78b52333bede2b3d0442543f0f5108a2b8a9540802e57091f0eca491398c58b",
+  "doc_link_id": "DLID-3da82gspdp44",
+  "keywords": [
+    "system overview",
+    "system boundary",
+    "ToC build",
+    "DLID",
+    "change impact notification",
+    "invariants",
+    "write boundary",
+    "index-docs",
+    "check-impact",
+    "sequence diagram"
+  ],
+  "path": "docs/specs/design/DES-001_system-overview.md",
+  "purpose": "Defines the overall system design of doc-link: system boundary, operations and their connections, normal-case sequence, and common invariants, including what may be written to user documents.",
+  "summary": [
+    "System boundary: doc-link handles document IDs, ToC, search, DLID resolution, reference checks, and change-impact candidate notification",
+    "Only DLIDs may be written to target documents (frontmatter doc_link_id and heading-end section IDs); links and titles are never written",
+    "Table of operations with inputs, results handed downstream, and write boundaries",
+    "ToC build order: target fixation, ID check, change detection, info acquisition, reference check, candidate check, commit",
+    "Normal-case sequence diagram of index-docs followed by check-impact as a separate operation",
+    "Change-impact notification writes nothing; the project management AI rewrites the recorded content hash",
+    "Unreadable reference target directories are recorded as absent without blocking ToC commit",
+    "Six common invariants: ID independence, directory scan for references, no partial candidate exposure, no stored notification state, bounded reverse references, key isolation",
+    "Storage format and cross-key visibility are decided in individual designs"
+  ],
+  "tasks": [
+    "Understanding the overall doc-link architecture",
+    "Designing or revising doc-link operations and their boundaries",
+    "Implementing index-docs or check-impact flows",
+    "Checking what doc-link may write to user documents",
+    "Reviewing design consistency against common invariants",
+    "Deciding how a failure or notification should be handled in the ToC build flow"
+  ],
+  "title": "DES-001 システム全体設計"
+}

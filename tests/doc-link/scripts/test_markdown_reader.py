@@ -194,7 +194,7 @@ class ReferenceDefinitionTest(unittest.TestCase):
         return read_document(text).references
 
     def test_title_last_word_and_preceding_word(self):
-        hashed = "a" * 64
+        hashed = "a" * 12
         text = f'[x]: ./a.md "{hashed} {ID_A}"\n[y]: ./b.md "{ID_B}"\n[z]: ./c.md "note"\n[w]: ./d.md\n'
         defs = {d.label: d for d in self.definitions(text)}
         self.assertEqual((defs["X"].dlid, defs["X"].preceding_word), (ID_A, hashed))

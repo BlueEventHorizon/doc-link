@@ -17,6 +17,8 @@ from scenario_support import (  # noqa: E402
     strip_dlids,
 )
 
+from content_hash import title_value  # noqa: E402
+
 KEY = "k"
 PATHS = ["docs/a.md", "docs/b.md"]
 A_ORIGINAL = "# Alpha\n\nalpha body\n\n## Part\n\npart body\n"
@@ -164,7 +166,7 @@ class FirstTimeScenarioTest(ScenarioBase):
             (document["status"], document["kind"], document["path"]),
             ("resolved", "document", "docs/a.md"),
         )
-        self.assertEqual(document["content_hash"], info["content_hash"])
+        self.assertEqual(document["content_hash"], title_value(info["content_hash"]))
         section = self.resolve_one(section_part)
         self.assertEqual(
             (section["status"], section["kind"], section["path"]),

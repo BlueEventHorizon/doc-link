@@ -21,8 +21,10 @@ from scenario_support import (  # noqa: E402
     doc_text,
 )
 
+from content_hash import RECORD_LENGTH  # noqa: E402
+
 KEY = "k"
-OLD_RECORD = "c" * 64
+OLD_RECORD = "c" * RECORD_LENGTH
 
 
 def a_text(c_path="c.md", record=OLD_RECORD, target=ID_C):
@@ -193,7 +195,7 @@ class ContentChangeScenarioTest(ScenarioBase):
 
     def test_rewriting_a_record_does_not_change_the_referrer_hash(self):
         info_before = self.info(ID_A)
-        self.write("docs/a.md", a_text(record="d" * 64))
+        self.write("docs/a.md", a_text(record="d" * RECORD_LENGTH))
         code, fresh = self.check_toc(KEY, self.paths)
         self.assertEqual((code, fresh["status"]), (0, "up_to_date"))
         self.build_ok(KEY, self.paths)

@@ -6,6 +6,8 @@ DES-008 §3・DES-009 §1 と REQ-001 D-039 を実装する。入口 script で�
 このモジュールが持たないもの（別タスクの範囲）: [正式な参照]の抽出、[ToC]との照合、原本への書き込み。
 
 [内容ハッシュ]は、原文の UTF-8 バイト列の SHA-256 を小文字の 16 進 64 文字で表したもの。正規化はしない。
+title に記録するのは、その先頭 12 文字（REQ-001 D-058）。title に書く値は `title_value`、記録との比較は
+`record_matches` だけが行う。[ToC]・管理状態は 64 文字のままである。
 文書全体はファイル全体（frontmatter を含む）、セクションは `Heading.start_line` から `Heading.section_end_line`
 の直前までの原文を対象にする。
 
@@ -26,7 +28,8 @@ import re
 
 from markdown_reader import MarkdownDocument, ReferenceDefinition, read_document
 
-_RECORD_WORD_PATTERN = re.compile(r"[0-9a-f]{64}")
+RECORD_LENGTH = 12
+_RECORD_WORD_PATTERN = re.compile(r"[0-9a-f]{%d}" % RECORD_LENGTH)
 _TITLE_IN_RAW_PATTERN = re.compile(
     r"(?<=\S)(\s+(?:\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'|\((?:[^()\\]|\\.)*\)))\s*\Z",
     re.DOTALL,
@@ -34,8 +37,18 @@ _TITLE_IN_RAW_PATTERN = re.compile(
 
 
 def is_record_word(word: str | None) -> bool:
-    """title に記録した[内容ハッシュ]の語か（64 桁の小文字 16 進。大文字は不可）。"""
+    """title に記録した[内容ハッシュ]の語か（12 桁の小文字 16 進。大文字は不可）。"""
     return word is not None and _RECORD_WORD_PATTERN.fullmatch(word) is not None
+
+
+def title_value(content_hash: str) -> str:
+    """[内容ハッシュ]（64 桁）から、title に書く値を得る。title に書く値は、この関数だけが決める（REQ-001 D-058）。"""
+    return content_hash[:RECORD_LENGTH]
+
+
+def record_matches(record: str | None, content_hash: str) -> bool:
+    """title に記録した値が、[内容ハッシュ]（64 桁）と一致するか。記録なし（`None`）は一致しない。"""
+    return record is not None and record == title_value(content_hash)
 
 
 def read_recorded_hash(definition: ReferenceDefinition) -> str | None:

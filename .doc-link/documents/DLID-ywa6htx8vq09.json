@@ -1,0 +1,38 @@
+{
+  "content_hash": "3d83f58b2ce6150048738df2d9a14b2f22f88deea8e4a50adcbc765a2d20b549",
+  "doc_link_id": "DLID-ywa6htx8vq09",
+  "keywords": [
+    "markdown-it-py",
+    "DLID format",
+    "frontmatter",
+    "content hash",
+    "SHA-256",
+    "heading anchor",
+    "section range",
+    "CommonMark",
+    "AI generated fields",
+    "write verification"
+  ],
+  "path": "docs/specs/design/DES-008_content-rules.md",
+  "purpose": "Design rules for Markdown parsing, DLID reading and writing, heading anchors, content hash computation, and AI-generated field limits and validation.",
+  "summary": [
+    "Frontmatter detection and doc_link_id recognition; missing or invalid values all count as no document ID",
+    "DLID format: 60-bit random value in lowercase Crockford Base32, 12 characters, case-sensitive match",
+    "Writes are limited to DLIDs at frontmatter and heading ends, verified by re-parsing and rolled back on other diffs",
+    "Atomic replacement via temp file and os.replace, preserving permissions and following symlinks",
+    "Parsing uses markdown-it-py and CommonMark link rules for reference definitions, labels, titles, hrefs and fragments",
+    "Heading anchors follow github-slugger-compatible rules with character removal and duplicate numbering",
+    "Content hash is SHA-256 of raw UTF-8 bytes, excluding the title of formal references; title records use the first 12 characters",
+    "Section hash covers the section range from its heading to the next heading of equal or higher level",
+    "AI-generated fields use limits L with a hidden validator bound H and minimum element counts; values are written in English"
+  ],
+  "tasks": [
+    "Implementing Markdown parsing and reference extraction",
+    "Implementing DLID assignment and write verification",
+    "Computing or testing content hashes and test vectors",
+    "Generating heading anchors for fragment checks",
+    "Implementing validation of AI-generated ToC fields",
+    "Reviewing writes to user documents for boundary compliance"
+  ],
+  "title": "DES-008 Markdown 解析・比較値・生成情報の規則"
+}

@@ -1,4 +1,8 @@
-# DES-001 システム全体設計
+---
+doc_link_id: DLID-3da82gspdp44
+---
+
+# DES-001 システム全体設計 DLID-he599f4215xq
 
 **状態**: 承認済み\
 **更新日**: 2026-11-02\
@@ -6,7 +10,7 @@
 
 <a id="sec-1"></a>
 
-## 1. システム境界
+## 1. システム境界 DLID-gzrbkxrazr3s
 
 doc-link は DocAdvisor を置き換え、[Index 対象文書]の[文書 ID]、[ToC]、検索、[DLID]の解決、参照検査、[変更影響候補の通知]を担う。[Index 対象指定]は呼び出し元が完全な desired state として渡す。Forge の設定ファイルは呼び出し元が解釈し、doc-link は直接読まない。[ToC 識別キー]は[ToC]を識別するが、参照の有効範囲は限定しない。
 
@@ -14,7 +18,7 @@ doc-link が[Index 対象文書]に書き込めるのは[DLID]だけであり、
 
 <a id="sec-2"></a>
 
-## 2. 全体の操作と接続
+## 2. 全体の操作と接続 DLID-xw8rpzytg31z
 
 | 操作                 | 主な入力                                                                          | 後続へ渡す結果                                                                                                     | 書き込み境界                                                                        |
 | -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
@@ -30,7 +34,7 @@ doc-link が[Index 対象文書]に書き込めるのは[DLID]だけであり、
 
 <a id="sec-3"></a>
 
-## 3. 全体シーケンスの概要
+## 3. 全体シーケンスの概要 DLID-wa3zfxxced6j
 
 次の図は[ToC]構築（`index-docs`）と、その後に別操作として行う[変更影響候補の通知]（`check-impact`）の正常系を示す。SKILL の構成と各 SKILL のシーケンスは[DES-010][des-010]に置く。修正要否は doc-link では判定しない。失敗分岐、検索時の確認、状態遷移の許可条件は処理別文書と[DES-004][des-004]に置く。
 
@@ -68,7 +72,7 @@ sequenceDiagram
 
 <a id="sec-4"></a>
 
-## 4. 共通不変条件
+## 4. 共通不変条件 DLID-9wx7mkwga40b
 
 1. [文書 ID]はパス、本文、[ToC 識別キー]と独立し、発行済みの値を変更理由だけで再発行しない。
 2. 現在の参照の存在・パス一致は、記載パスが示すディレクトリの実走査なしに断定しない。
@@ -79,16 +83,16 @@ sequenceDiagram
 
 <a id="sec-5"></a>
 
-## 5. 本書で確定しないこと
+## 5. 本書で確定しないこと DLID-mzr6cep22ym1
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録する。参照先を読めない場合も[ToC]の確定を止めないことは、要件 D-025 が定める。
 
-[req-001]: ../requirement/REQ-001_overview.md
-[readme]: README.md
-[des-002]: DES-002_execution-responsibilities.md
-[des-010]: DES-010_skill-composition.md
-[des-004]: DES-004_state-machines.md
-[des-007]: DES-007_references-impact.md
-[des-005]: DES-005_indexing.md
-[des-003]: DES-003_data-model.md
-[des-006]: DES-006_search.md
+[req-001]: ../requirement/REQ-001_overview.md "8418f83ba277 DLID-veg2nsjk8zw1"
+[readme]: README.md "f1ff9833f7d6 DLID-zvepba87h7zk"
+[des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
+[des-010]: DES-010_skill-composition.md "da86b37d3824 DLID-7e90gq3sdncc"
+[des-004]: DES-004_state-machines.md "53b4f7321987 DLID-3f92k3tz4rew"
+[des-007]: DES-007_references-impact.md "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-005]: DES-005_indexing.md "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-003]: DES-003_data-model.md "4708f535908f DLID-yqqrwtycr379"
+[des-006]: DES-006_search.md "5e6990692aaa DLID-nnbgpzkkm5vq"

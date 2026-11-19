@@ -87,7 +87,7 @@ sequenceDiagram
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録する。参照先を読めない場合も[ToC]の確定を止めないことは、要件 D-025 が定める。
 
-[req-001]: ../requirement/REQ-001_overview.md "8418f83ba277 DLID-veg2nsjk8zw1"
+[req-001]: ../requirement/REQ-001_overview.md "a69aaa86f118 DLID-veg2nsjk8zw1"
 [readme]: README.md "f1ff9833f7d6 DLID-zvepba87h7zk"
 [des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
 [des-010]: DES-010_skill-composition.md "da86b37d3824 DLID-7e90gq3sdncc"

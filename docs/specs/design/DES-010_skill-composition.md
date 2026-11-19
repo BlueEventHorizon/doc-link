@@ -453,7 +453,7 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 | 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                              | 検索を失敗として返す                                                                                           |
 | 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                  | `query-docs` が結果を返した後                                                                                  |
 
-[req-001]: ../requirement/REQ-001_overview.md "8418f83ba277 DLID-veg2nsjk8zw1"
+[req-001]: ../requirement/REQ-001_overview.md "a69aaa86f118 DLID-veg2nsjk8zw1"
 [des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "85860fe69f58 DLID-bk29x4s8tadq"
@@ -466,7 +466,7 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4 "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2 "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "90a2b4835b36 DLID-pc44gkb54821"
-[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "8418f83ba277 DLID-veg2nsjk8zw1"
+[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "a69aaa86f118 DLID-veg2nsjk8zw1"
 [req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "40bbb7b52fec DLID-kxe3nxfgk491"
 [des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "90be2ac68a19 DLID-anz9vack2xzt"

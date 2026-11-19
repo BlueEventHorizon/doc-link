@@ -1,21 +1,21 @@
 # ToC checksums for key: specs
 # Auto-generated - do not edit
-generated_at: 2026-11-19T16:17:48Z
+generated_at: 2026-11-19T16:28:19Z
 file_count: 16
 checksums:
-  docs/specs/design/DES-001_system-overview.md: e9e1136e72b548de34867f58cc5359518b1df3abcc90ffd9b5d682f103af9adc
-  docs/specs/design/DES-002_execution-responsibilities.md: 137f07df92dcf31486ec4c211fda3206ff79bc0099ea0fcd40172edb95d6301b
+  docs/specs/design/DES-001_system-overview.md: f32844de35c8e1b295f3daa960ed173758e409e4eb39866ffa13f8a0059422f6
+  docs/specs/design/DES-002_execution-responsibilities.md: 6421f50ba595fe61210fa26bc6cf29df0e3dfc8a6d4f9d5640fc01b54b15fb0c
   docs/specs/design/DES-003_data-model.md: 594f97c90f55d9a813e0177648b7e7f1d0ff8963aee97c81176cbc842e1af004
   docs/specs/design/DES-004_state-machines.md: 8733a48d514b8fac3a0fc2d9e95342d29937528df7f93b5e590510f70583e29b
-  docs/specs/design/DES-005_indexing.md: 74e014b4719faf0157c9360783bcd680c47f6e6a70b93c6cab4bd3984e7c0ebf
+  docs/specs/design/DES-005_indexing.md: 2e8f0165b8313a333052af2887ebfdb90c1c2174894491e562f096415a8c5df8
   docs/specs/design/DES-006_search.md: 8606474866e91621f3fde5222169e7870640a75fd99d27b770fd3edd68957ca8
   docs/specs/design/DES-007_references-impact.md: 5d9fdd3ed6feb2c6c37d6b9fc0ca28d11d8f5ccb07707ba17d017388926ef878
   docs/specs/design/DES-008_content-rules.md: a35ba35cd6e5e0e8b3dc86494243d17763ff1f9b62e3a2266520de629f50396b
-  docs/specs/design/DES-009_verification.md: e9831df915056bf9b01a79b967f9879909d8e38e812ed88be406fcfe1f9eff4e
-  docs/specs/design/DES-010_skill-composition.md: b9457e42ce24c663da8199aa74e004575e0d093d942603912924a6b4ecfb2e7e
+  docs/specs/design/DES-009_verification.md: 170f0d996649076e448a42062c8ad706ca0cfdb4ad444472fa6c7a164eb32ac8
+  docs/specs/design/DES-010_skill-composition.md: 6bb50373334b7000386af1f58d01354002174eeb222515a8ef7e10ef6b8ec6ef
   docs/specs/design/README.md: 23d46c45708987be196f6db54e697c6203d9695a4f6f7c3c44224e6d08cb9eb2
-  docs/specs/requirement/REQ-001_overview.md: 2a2f008175accf220af8a2f4987e29fa40b376029f9ff4f9fdd9dd62c0a7b404
-  docs/specs/requirement/REQ-002_document-id.md: ca4d88de0198dcc241068bc5a02676f8fa86980fe95edbba2a09c92dae5680e1
-  docs/specs/requirement/REQ-003_toc.md: 116041fd04d4890f7b7d6972626fa24751b2d6d1b04a7af8c281f6b462d96f40
-  docs/specs/requirement/REQ-004_search.md: 0bcd48474d51d8e3e8f95b89bde32b70ea486ed4103ddb3c6c8a17fc9353c731
-  docs/specs/requirement/REQ-005_references.md: 42878711cebedb27d8a3f86365ddd404b99be08b7d2cccc317ceddc6f481d722
+  docs/specs/requirement/REQ-001_overview.md: fe3acbce575408f0d76c70435b2c4f3be31367778b212abfc2c1cc9a7060ea9a
+  docs/specs/requirement/REQ-002_document-id.md: 229e954d0e69161059929589ce9c4789587e8c4cb5a3cd19c0ae33c9b8bbdbf6
+  docs/specs/requirement/REQ-003_toc.md: a643c751ce377d3bbbf728d3f51f90265019cfb67e303571a81aedf35ba8ea13
+  docs/specs/requirement/REQ-004_search.md: 743205b5f95b93b5442db6869c93fb02257bb8d6b0f287df92d9014084a82678
+  docs/specs/requirement/REQ-005_references.md: 8b1a5f4554255e731d7a2e7dc889ddb39d7a2556dcf409b766aa48e3a33d7885

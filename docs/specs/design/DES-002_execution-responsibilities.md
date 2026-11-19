@@ -70,7 +70,7 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3 "8418f83ba277 DLID-veg2nsjk8zw1"
+[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3 "a69aaa86f118 DLID-veg2nsjk8zw1"
 [readme]: README.md "f1ff9833f7d6 DLID-zvepba87h7zk"
 [des-010]: DES-010_skill-composition.md "da86b37d3824 DLID-7e90gq3sdncc"
 [des-006-sec-2]: DES-006_search.md#sec-2 "5e6990692aaa DLID-nnbgpzkkm5vq"

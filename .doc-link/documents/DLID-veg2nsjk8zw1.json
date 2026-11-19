@@ -1,37 +1,40 @@
 {
-  "content_hash": "8418f83ba277483d349b888bd9b20d7fc003ac33f24f50630fce11cd8d3cbaca",
+  "content_hash": "a69aaa86f11865cf4c93c04ec2804428555e840717188dd38ebd436e3b5f51a1",
   "doc_link_id": "DLID-veg2nsjk8zw1",
   "keywords": [
     "doc-link",
-    "requirements overview",
     "DLID",
-    "glossary",
-    "decision register",
+    "document ID",
+    "section ID",
     "ToC",
-    "responsibility boundary",
-    "non-functional requirements",
-    "operation flow",
-    "change impact notification"
+    "content hash",
+    "change impact notification",
+    "requirements overview",
+    "decision register",
+    "project management AI"
   ],
   "path": "docs/specs/requirement/REQ-001_overview.md",
-  "purpose": "Overview requirements for doc-link: goals, glossary, scope, responsibility boundaries, non-functional requirements, errors, and the decision and open-issue registers.",
+  "purpose": "Overview of doc-link requirements: purpose, background, glossary, scope, responsibility boundaries, non-functional requirements, findings, and the decision and open-issue registers for the DocAdvisor replacement plugin.",
   "summary": [
-    "Purpose and background: replacing DocAdvisor with permanent document-ID based indexing, reference tracking and change-impact notification",
-    "Overall system flow diagram covering introduction, DLID check and assignment, link check, ToC build and impact check",
-    "Document search flow with ToC rebuild confirmation and searching an existing ToC",
-    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash and project management AI",
-    "Scope: what is included and excluded, and the responsibility boundary between doc-link and the project management AI",
-    "Non-functional requirements: rebuild consistency, determinism, idempotence, write boundary, diagnosability, resumability, scalability, generation limits",
-    "Error conditions and findings that do not block ToC finalization",
-    "Decision register D-001 to D-058 and the resolved open-issue table"
+    "Purpose and background: replacing DocAdvisor with permanent document-ID based management instead of path-based keys",
+    "Overall flow diagram covering DLID check, assignment, link check, ToC build, and change-impact check with user confirmations",
+    "Document search flow with ToC rebuild check and the option to search an existing stale ToC",
+    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash, and project management AI",
+    "Scope in and out, and the responsibility split between doc-link and the project management AI",
+    "Non-functional requirements: rebuild consistency, determinism, idempotence, write boundary limited to DLID, diagnosability, resumability, scalability",
+    "Error candidates and non-blocking findings that are recorded in the ToC without stopping its confirmation",
+    "Decision register D-001 to D-058 covering ID format, write rules, reference notation, hashing, operation flow, and search policy",
+    "Open-issue register U-001 onward, each marked decided or deferred to design"
   ],
   "tasks": [
     "Understanding the overall goals and scope of doc-link",
-    "Looking up a decision ID or the reason behind a specification",
-    "Checking glossary term definitions before writing specifications",
-    "Designing or implementing the operation flow of check-dlid, embed-dlid, check-links, index-docs and check-impact",
-    "Reviewing the write boundary of doc-link into user documents",
-    "Checking non-functional requirements and error handling rules"
+    "Looking up the definition of a glossary term before writing specifications",
+    "Checking a decision (D-xxx) before changing design or implementation",
+    "Designing or implementing DLID assignment and embedding",
+    "Designing or implementing ToC build, rebuild, and confirmation",
+    "Implementing reference checks and change-impact notification",
+    "Implementing document search behavior",
+    "Reviewing whether a change respects the write boundary and non-functional requirements"
   ],
   "title": "doc-link 要件定義書 — 総論"
 }

@@ -29,10 +29,6 @@
       "doc_link_id": "DLID-nnbgpzkkm5vq"
     },
     {
-      "applied_hash": "8418f83ba277483d349b888bd9b20d7fc003ac33f24f50630fce11cd8d3cbaca",
-      "doc_link_id": "DLID-veg2nsjk8zw1"
-    },
-    {
       "applied_hash": "85860fe69f585058aa3a680479b194207b695ff1e65dccd2e7d4e23fdb5b8aa0",
       "doc_link_id": "DLID-bk29x4s8tadq"
     },
@@ -47,6 +43,10 @@
     {
       "applied_hash": "9c461d1e907e5dbbfac7bc355431efbadc26c2d27aeb537214a11090aad43c3d",
       "doc_link_id": "DLID-xmg0jcmep2h2"
+    },
+    {
+      "applied_hash": "a69aaa86f11865cf4c93c04ec2804428555e840717188dd38ebd436e3b5f51a1",
+      "doc_link_id": "DLID-veg2nsjk8zw1"
     },
     {
       "applied_hash": "d3a5a1cf16cb040353ad60f12b014e2daacaf4fdb49c5c96c37241d7cf44f749",
@@ -67,82 +67,82 @@
   ],
   "last_checks": [
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-3da82gspdp44",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-3f92k3tz4rew",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-7e90gq3sdncc",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-anz9vack2xzt",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-bk29x4s8tadq",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-dgphqw70rkpz",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-h96208rqr773",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-kxe3nxfgk491",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-nnbgpzkkm5vq",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-pc44gkb54821",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-pr3jp4hzb8js",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-veg2nsjk8zw1",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-xmg0jcmep2h2",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-yqqrwtycr379",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-ywa6htx8vq09",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:14:28+00:00",
+      "checked_at": "2026-11-19T16:27:02+00:00",
       "doc_link_id": "DLID-zvepba87h7zk",
       "result": "success"
     }
@@ -150,7 +150,7 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/rules/agent_data_exchange_rules.md",
         "result": "match",
         "scope": "docs/rules"
@@ -166,7 +166,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/rules/plugin_implementation_guidelines.md",
         "result": "match",
         "scope": "docs/rules"
@@ -182,7 +182,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-001_system-overview.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -198,7 +198,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -214,7 +214,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -230,7 +230,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -246,7 +246,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -262,7 +262,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -278,7 +278,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -294,7 +294,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -310,7 +310,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -326,7 +326,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -342,7 +342,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -358,7 +358,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -374,7 +374,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -390,7 +390,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -406,7 +406,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -422,7 +422,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -438,7 +438,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -454,7 +454,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -470,7 +470,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -486,7 +486,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -502,7 +502,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -518,7 +518,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -534,7 +534,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -550,7 +550,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -566,7 +566,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -582,7 +582,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -598,7 +598,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -614,7 +614,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -630,7 +630,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -646,7 +646,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -662,7 +662,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -678,7 +678,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -694,7 +694,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -710,7 +710,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -726,7 +726,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -742,7 +742,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -758,7 +758,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -774,7 +774,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -790,7 +790,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -806,7 +806,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -822,7 +822,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -838,7 +838,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -854,7 +854,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -870,7 +870,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -886,7 +886,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -902,7 +902,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -918,7 +918,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -934,7 +934,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -950,7 +950,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -966,7 +966,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -982,7 +982,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -998,7 +998,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1014,7 +1014,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1030,7 +1030,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1046,7 +1046,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1062,7 +1062,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1078,7 +1078,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1094,7 +1094,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1110,7 +1110,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1126,7 +1126,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1142,7 +1142,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1158,7 +1158,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1174,7 +1174,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1190,7 +1190,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1206,7 +1206,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1222,7 +1222,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/README.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1238,7 +1238,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/README.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1254,7 +1254,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/design/README.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1270,7 +1270,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1286,7 +1286,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1302,7 +1302,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1318,7 +1318,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1334,7 +1334,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1350,7 +1350,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1366,7 +1366,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1382,7 +1382,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1398,7 +1398,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1414,7 +1414,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1430,7 +1430,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1446,7 +1446,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1462,7 +1462,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1478,7 +1478,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1494,7 +1494,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1510,7 +1510,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1526,7 +1526,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1542,7 +1542,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1558,7 +1558,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1574,7 +1574,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1590,7 +1590,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1606,7 +1606,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1622,7 +1622,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1638,7 +1638,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1654,7 +1654,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1670,7 +1670,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1686,7 +1686,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1702,7 +1702,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1718,7 +1718,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1734,7 +1734,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1750,7 +1750,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1766,7 +1766,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1782,7 +1782,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1798,7 +1798,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1814,7 +1814,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1830,7 +1830,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1846,7 +1846,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1862,7 +1862,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1878,7 +1878,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1894,7 +1894,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1910,7 +1910,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1926,7 +1926,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1942,7 +1942,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1958,7 +1958,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1974,7 +1974,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1990,7 +1990,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2006,7 +2006,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2022,7 +2022,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2038,7 +2038,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2054,7 +2054,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2070,7 +2070,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2086,7 +2086,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2102,7 +2102,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2118,7 +2118,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2134,7 +2134,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2150,7 +2150,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2166,7 +2166,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2182,7 +2182,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2198,7 +2198,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2214,7 +2214,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2230,7 +2230,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2246,7 +2246,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2262,7 +2262,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2278,7 +2278,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2294,7 +2294,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2310,7 +2310,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2326,7 +2326,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2342,7 +2342,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2358,7 +2358,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2374,7 +2374,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2390,7 +2390,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2406,7 +2406,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2422,7 +2422,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:14:28+00:00",
+        "checked_at": "2026-11-19T16:27:02+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3137,6 +3137,13 @@
       "heading": "13. 文書参照とリンク検査",
       "position": 1,
       "section_id": "DLID-9nc60w1jj966"
+    },
+    {
+      "content_hash": "242335b4c0c77841bade5ea7530078354a5536625495124982a8ffa92d9da167",
+      "doc_link_id": "DLID-veg2nsjk8zw1",
+      "heading": "doc-link 要件定義書 — 総論",
+      "position": 0,
+      "section_id": "DLID-75ja6a0cja5m"
     },
     {
       "content_hash": "25965a35c44a0051070c1f0e20551f2af3f46529aa7f9bf0dcc02d4cbd838182",
@@ -4014,13 +4021,6 @@
       "section_id": "DLID-fwe832jzywcp"
     },
     {
-      "content_hash": "c1c1b265ebd98eb45a186987e2e87b3581ff703e3cacc193baa496c79f91c02a",
-      "doc_link_id": "DLID-veg2nsjk8zw1",
-      "heading": "doc-link 要件定義書 — 総論",
-      "position": 0,
-      "section_id": "DLID-75ja6a0cja5m"
-    },
-    {
       "content_hash": "c455ccf37594a1bf6d8833b5543b902770b217929929376a7abd35abd468f133",
       "doc_link_id": "DLID-veg2nsjk8zw1",
       "heading": "3. 目的",
@@ -4217,13 +4217,6 @@
       "section_id": "DLID-p07g3hc4e4xd"
     },
     {
-      "content_hash": "e86caa50381e543eae95d87ce7cc8ba560b4d3a2399e1bd386500c10d77bf909",
-      "doc_link_id": "DLID-veg2nsjk8zw1",
-      "heading": "19. 決定事項",
-      "position": 24,
-      "section_id": "DLID-phx3m5ynd4s4"
-    },
-    {
       "content_hash": "e881c27e4f9da7adfbf99d139a1a79c87b4e8bdcfdca2d67eb5cd9cc9d995a8a",
       "doc_link_id": "DLID-veg2nsjk8zw1",
       "heading": "3.2 文書検索フロー",
@@ -4301,6 +4294,13 @@
       "section_id": "DLID-8crwqpf21hbe"
     },
     {
+      "content_hash": "fa620fae5db2b56949101c6daa62abb98f66fe948723a57533e75c83c89393d6",
+      "doc_link_id": "DLID-veg2nsjk8zw1",
+      "heading": "19. 決定事項",
+      "position": 24,
+      "section_id": "DLID-phx3m5ynd4s4"
+    },
+    {
       "content_hash": "fbcb2e395c11b7061401e8aeb0b848ff8af83ee7edeca997a7f89d43a779008d",
       "doc_link_id": "DLID-ywa6htx8vq09",
       "heading": "DES-008 Markdown 解析・比較値・生成情報の規則",
@@ -4333,5 +4333,5 @@
     "paths": []
   },
   "toc_key": "specs",
-  "version": 1
+  "version": 2
 }

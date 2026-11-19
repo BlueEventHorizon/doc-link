@@ -162,21 +162,10 @@ class CategoriesTest(CheckLinksTestBase):
             self.assertNotIn("example.com", finding["target"])
             self.assertNotIn("plain.md", finding["target"])
 
-    def test_scope_and_guidance(self):
+    def test_scope(self):
         scope = self.result["scope"]
         self.assertIn("ref", scope["directories"])
         self.assertTrue(scope["checked_at"])
-        guidance = "\n".join(self.result["guidance"])
-        self.assertIn("suggested_title", guidance)
-        self.assertIn("index-docs", guidance)
-        self.assertIn("current_path", guidance)
-
-    def test_guidance_asks_the_user_before_rewriting_links(self):
-        # D-057・AC-033: 書き直す前に、一覧を利用者に示して確認し、承認された分だけを書き直す
-        guidance = "\n".join(self.result["guidance"])
-        self.assertIn("利用者", guidance)
-        self.assertIn("確認", guidance)
-        self.assertIn("承認", guidance)
 
     def test_writes_nothing(self):
         self.assertEqual(self.snapshot(), self.before)
@@ -385,6 +374,22 @@ class CleanTest(CheckLinksTestBase):
         code, result = self.run_main("--key", "k", "--paths", "src/m.md", "nope.md")
         self.assertEqual(code, 0)
         self.assertEqual(result["problems"], [{"path": "nope.md", "reason": "missing"}])
+
+
+class WithoutDocumentIdTest(CheckLinksTestBase):
+    def test_document_without_id_is_warned_as_incomplete(self):
+        self.write("ref/a.md", REF_A)
+        self.write("src/m.md", "# M\n")
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(len(result["warnings"]), 1)
+        self.assertIn("src/m.md", result["warnings"][0])
+
+    def test_documents_with_id_give_no_warning(self):
+        self.write("src/m.md", f"---\ndoc_link_id: {DOC_MAIN}\n---\n# M {SEC_MAIN}\n")
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["warnings"], [])
 
 
 class UnreadableTest(CheckLinksTestBase):

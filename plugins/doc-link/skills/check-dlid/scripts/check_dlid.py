@@ -71,13 +71,9 @@ import target_spec  # noqa: E402
 from dlid import KIND_DOCUMENT, KIND_SECTION, DlidLocation  # noqa: E402
 from markdown_reader import has_unclosed_frontmatter, read_document  # noqa: E402
 
-GUIDANCE_EMBED = (
-    "[文書 ID]・[セクション ID]の無い箇所は、検出した文書の一覧を利用者に示して、[DLID]を付与するかを確認する。"
-    "付与が承認されたら、`embed-dlid` を実行して[DLID]を付与する（`embed-dlid` の起動が書き込みの承認である）"
-)
-GUIDANCE_DUPLICATE = (
-    "重複する[DLID]は、`embed-dlid` の実行で、示された候補から利用者が原本を確定する。"
-    "原本以外の箇所へ新しい[DLID]が発行される"
+GUIDANCE_CONFIRM = (
+    "[文書 ID]・[セクション ID]の無い箇所は、検出した文書の一覧を利用者に示して、"
+    "[DLID]を付与するかを確認する"
 )
 GUIDANCE_UNCHECKED = (
     "`problems` の対象は検査できていない。指定や権限を直して、もう一度実行する"
@@ -145,9 +141,7 @@ def detect(root: Path, files: list[str]) -> dict:
     duplicates = [_duplicate_to_dict(report) for report in plan.duplicates]
     guidance: list[str] = []
     if missing_documents or missing_sections or duplicates:
-        guidance.append(GUIDANCE_EMBED)
-    if duplicates:
-        guidance.append(GUIDANCE_DUPLICATE)
+        guidance.append(GUIDANCE_CONFIRM)
     if any(entry["unclosed_frontmatter"] for entry in missing_documents):
         guidance.append(GUIDANCE_UNCLOSED)
 

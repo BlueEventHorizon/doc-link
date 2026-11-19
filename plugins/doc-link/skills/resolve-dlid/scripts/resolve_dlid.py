@@ -28,7 +28,6 @@
   - `not_at_recorded_path` のとき: `recorded_paths`（記録されたパスのすべて。現在の実体パスではない）
   - `resolved` のとき: `content_hash`（[内容ハッシュ]。得られないときは `null`）と `content_hash_state`
     （`recorded`・`differs`・`unavailable`）
-- `guidance`: 後工程の案内（自然文の配列）。`not_at_recorded_path` があるとき `index-docs` の実行を案内する
 
 ## 仕様の解釈
 
@@ -80,11 +79,6 @@ STATUS_NO_RECORD = "no_record"
 HASH_RECORDED = "recorded"
 HASH_DIFFERS = "differs"
 HASH_UNAVAILABLE = "unavailable"
-
-GUIDANCE_INDEX = (
-    "記録されたパスに無い[DLID]がある。`index-docs` を実行して[ToC]を再構築すると、"
-    "記録が現物に合わせて更新される（ユーザーまたはプロジェクト管理 AI が実行する）"
-)
 
 
 class _Records:
@@ -235,10 +229,7 @@ def resolve(root: Path, dlids: list[str]) -> dict:
             results.append(_resolve_section(dlid, entries, records, documents))
         else:
             results.append(_no_record(dlid))
-    guidance = []
-    if any(result["status"] == STATUS_NOT_AT_PATH for result in results):
-        guidance.append(GUIDANCE_INDEX)
-    return {"results": results, "guidance": guidance}
+    return {"results": results}
 
 
 def build_parser() -> argparse.ArgumentParser:

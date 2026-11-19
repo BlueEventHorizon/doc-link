@@ -36,10 +36,6 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/resolve_dlid.py" --project-root "${
 - 記録されたパスに無い（`not_at_recorded_path`）: `recorded_paths` を添えて報告する。これは現在の実体パスではない。確かめられなかったので、別の場所を探さない
 - 記録が無い（`no_record`）: 記録が無いと報告する
 
-### 3. 次の作業を案内する
-
-記録されたパスに無い DLID があるときは、`guidance` に従い、`index-docs` の実行を案内する。その文書を含む ToC を再構築すると、記録が現物に合わせて更新される。案内するだけで、`index-docs` をこのスキルから実行しない。
-
 ## 参照を書くときの手順（プロジェクト管理 AI 向け）
 
 プロジェクト管理 AI が参照を書くときは、次の順で行う。

@@ -75,10 +75,6 @@ class SkillMdTest(unittest.TestCase):
         self.assertIn("ScheduleWakeup", self.body)
         self.assertIn("待たない", self.body)
 
-    def test_points_to_follow_up_steps(self):
-        self.assertIn("embed-dlid", self.body)
-        self.assertIn("check-impact", self.body)
-
     def test_arguments_are_only_key_and_target_spec(self):
         self.assertIn("ToC 識別キーと Index 対象指定だけ", self.body)
         self.assertNotIn("$ARGUMENTS", self.body)

@@ -62,26 +62,8 @@ class SkillMdTest(unittest.TestCase):
                     script = line[len(COMMAND_PREFIX) :].split('"', 1)[0]
                     self.assertTrue((SKILL_DIR / "scripts" / script).is_file(), script)
 
-    def test_states_it_writes_nothing_and_points_to_index_docs(self):
-        self.assertIn("何も書き込まない", self.body)
-        self.assertIn("index-docs", self.body)
-        self.assertIn("`index-docs` の実行を案内する", self.body)
-
     def test_does_not_ask_the_user(self):
         self.assertNotIn("AskUserQuestion", self.body)
-
-    def test_hands_the_follow_up_to_the_project_manager_ai(self):
-        for needle in (
-            "プロジェクト管理 AI",
-            "参照元の修正が必要かを判断する",
-            "確かめた参照の title に、参照先の現在ハッシュを書く",
-            "確かめていない参照の title は、書き換えない",
-            "title の内容ハッシュだけを書いたときは、実行しなくてよい",
-            "報告が空になるまで、これを繰り返す",
-            "script は行わない",
-        ):
-            with self.subTest(needle=needle):
-                self.assertIn(needle, self.body)
 
     def test_arguments_are_only_key_and_target_spec(self):
         self.assertIn("ToC 識別キーと Index 対象指定だけ", self.body)

@@ -1,0 +1,42 @@
+{
+  "content_hash": "a7037b12722536682aa371798acb684c51c7f9a9a88c6cc165fbccd4c2f107e4",
+  "doc_link_id": "DLID-35fhyrzd02he",
+  "keywords": [
+    "plugin implementation",
+    "SKILL.md",
+    "Python script",
+    "testing",
+    "temp files",
+    "fallback",
+    "version files",
+    "script placement",
+    "distribution",
+    "component interface"
+  ],
+  "path": "docs/rules/plugin_implementation_guidelines.md",
+  "purpose": "General rules for implementing plugin scripts (Python/Bash) and SKILL.md that do not depend on a specific plugin: language choice, tests, layout, temp files, references, fallbacks, versioning.",
+  "summary": [
+    "Script language choice and dependency policy: standard library Python by default, Bash for external commands",
+    "Test requirements: mandatory for distributed .py, naming test_{module}.py, test directory matches skill name",
+    "No inline logic in SKILL.md; call independent scripts instead",
+    "Placement of scripts and docs: skill-specific vs plugin-wide, no direct reference to other skills internals",
+    "Temp files under .temp/<plugin>/<skill>/ written with the Write tool, session ID in file name",
+    "Distributed artifacts must not reference development-only docs",
+    "Only SKILL is the interface to other components; never call their scripts directly",
+    "Delete unused code; no deprecation markers",
+    "Do not use script parsers for AI-interpreted natural-language input",
+    "Do not write fallbacks reflexively; and do not edit version files in ordinary work"
+  ],
+  "tasks": [
+    "Implementing plugin Python or Bash scripts",
+    "Writing SKILL.md that calls scripts",
+    "Adding tests for distributed scripts",
+    "Deciding where to place scripts and docs",
+    "Writing temporary files for commands",
+    "Depending on another plugin component",
+    "Considering adding a fallback to error handling",
+    "Reviewing changes that touch version files",
+    "Removing obsolete code"
+  ],
+  "title": "プラグイン実装ガイドライン"
+}

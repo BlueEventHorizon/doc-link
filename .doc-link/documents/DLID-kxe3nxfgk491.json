@@ -1,0 +1,39 @@
+{
+  "content_hash": "40bbb7b52fecf2d7f465a8d94f08a8285735ebebafb6a416848d5eac7f14f2a9",
+  "doc_link_id": "DLID-kxe3nxfgk491",
+  "keywords": [
+    "ToC",
+    "document information",
+    "content hash",
+    "change detection",
+    "AI generated fields",
+    "internal tolerance limit",
+    "rebuild",
+    "section entry",
+    "reference entry",
+    "ToC candidate"
+  ],
+  "path": "docs/specs/requirement/REQ-003_toc.md",
+  "purpose": "Requirements for the information a ToC manages, content hash rules, change detection against an existing ToC, and ToC build, update and finalization, with acceptance criteria.",
+  "summary": [
+    "Information managed in the ToC: document information, section entries and reference entries",
+    "Limits for AI generated fields: description limit L and internal tolerance H = floor(L x 1.3), with H never shown to the generating AI",
+    "Change detection: new, body change, reference change, move or rename, leaving the Index target, no change",
+    "Content hash rules: SHA-256 of the original text, excluding the title of formal references",
+    "When the reflected hash is updated, tied to ToC finalization",
+    "ToC build and rebuild procedure in three stages, with per-key independence",
+    "Update plan and generation of document information and AI generated fields only where needed",
+    "Reconstruction of references and check states from directory search results",
+    "ToC candidate validation and atomic finalization, keeping the last good ToC on failure",
+    "Acceptance criteria AC-001 to AC-027"
+  ],
+  "tasks": [
+    "Implementing ToC build or rebuild (index-docs)",
+    "Implementing change detection and the change set",
+    "Implementing content hash calculation",
+    "Implementing AI generated field generation and limit validation",
+    "Designing the ToC data model and storage",
+    "Writing tests for ToC acceptance criteria"
+  ],
+  "title": "doc-link 要件定義書 — [ToC]管理"
+}

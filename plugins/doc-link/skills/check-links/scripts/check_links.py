@@ -112,6 +112,7 @@ from content_hash import (  # noqa: E402
     document_content_hash,
     is_record_word,
     section_content_hashes,
+    title_value,
 )
 from markdown_reader import (  # noqa: E402
     MarkdownDocument,
@@ -152,7 +153,6 @@ _GUIDANCE_RESOLVE = (
 
 REASON_FRAGMENT_UNRESOLVED = "fragment_unresolved"
 REASON_HEADING_WITHOUT_DLID = "heading_without_dlid"
-_GUIDANCE_INDEX = "リンクを直した後は `index-docs` を実行する"
 
 _FORMAL_CATEGORIES = frozenset(
     {
@@ -233,13 +233,15 @@ class _Targets:
                     return {
                         "suggested_title_unavailable_reason": REASON_HEADING_WITHOUT_DLID
                     }
-                value = section_content_hashes(text)[index]
+                value = title_value(section_content_hashes(text)[index])
                 return {"suggested_title": f"{value} {heading.section_id}"}
             if fragment not in reference_check.explicit_anchors(text):
                 return {
                     "suggested_title_unavailable_reason": REASON_FRAGMENT_UNRESOLVED
                 }
-        return {"suggested_title": f"{document_content_hash(text)} {doc_id}"}
+        return {
+            "suggested_title": f"{title_value(document_content_hash(text))} {doc_id}"
+        }
 
 
 def _inline_links(document: MarkdownDocument):
@@ -419,9 +421,15 @@ def _guidance(findings: list[dict]) -> list[str]:
         guidance.append(_GUIDANCE_FIX_LINKS)
     if categories & {CATEGORY_LINK_WITHOUT_DLID, CATEGORY_INLINE_LINK_WITH_DLID}:
         guidance.append(_GUIDANCE_RESOLVE)
-    if guidance:
-        guidance.append(_GUIDANCE_INDEX)
     return guidance
+
+
+def _warning_without_id(paths: list[str]) -> str:
+    """文書 ID の無い文書があるときの警告。その文書を指すリンクは、title に書く値を示せない。"""
+    return (
+        f"[文書 ID]の無い文書がある（{len(paths)} 件: {'、'.join(paths)}）。"
+        "その文書を指すリンクは検出できず、title に書く値も示せないので、参照の検査は不完全である"
+    )
 
 
 def execute(args: argparse.Namespace) -> int:
@@ -440,6 +448,7 @@ def execute(args: argparse.Namespace) -> int:
     unverified: list[dict] = []
     unreadable: list[dict] = []
     directories: set[str] = set()
+    without_id: list[str] = []
     matched = 0
     for source in expansion.files:
         try:
@@ -447,9 +456,12 @@ def execute(args: argparse.Namespace) -> int:
         except (OSError, UnicodeDecodeError) as error:
             unreadable.append({"path": source, "reason": str(error)})
             continue
+        document = read_document(text)
+        if document.frontmatter.doc_link_id is None:
+            without_id.append(source)
         matched += _check_source(
             source,
-            read_document(text),
+            document,
             scanner=scanner,
             targets=targets,
             checked_at=checked_at,
@@ -457,6 +469,10 @@ def execute(args: argparse.Namespace) -> int:
             unverified=unverified,
             directories=directories,
         )
+
+    warnings = list(expansion.warnings)
+    if without_id:
+        warnings.append(_warning_without_id(without_id))
 
     counts: dict[str, int] = {}
     for finding in findings:
@@ -477,7 +493,7 @@ def execute(args: argparse.Namespace) -> int:
                 "checked_at": checked_at,
             },
             "problems": [problem.to_dict() for problem in expansion.problems],
-            "warnings": list(expansion.warnings),
+            "warnings": warnings,
             "guidance": _guidance(findings),
         }
     )

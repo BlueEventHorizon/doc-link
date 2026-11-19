@@ -27,6 +27,7 @@ from scenario_support import (  # noqa: E402
 )
 
 import toc_candidate  # noqa: E402
+from content_hash import title_value  # noqa: E402
 from reference_check import ReferenceCheckError  # noqa: E402
 
 KEY = "k"
@@ -77,7 +78,7 @@ class FailureScenarioBase(ScenarioBase):
         self.assertEqual(info["purpose"], "新しい目的")
         resolved = self.resolve_one(ID_B)
         self.assertEqual(resolved["status"], "resolved")
-        self.assertEqual(resolved["content_hash"], info["content_hash"])
+        self.assertEqual(resolved["content_hash"], title_value(info["content_hash"]))
         # 旧版の[確定 ToC]が反映している[内容ハッシュ]は、最新の[文書情報]と異なる
         entry = next(d for d in self.toc(KEY)["documents"] if d["doc_link_id"] == ID_B)
         self.assertNotEqual(entry["applied_hash"], info["content_hash"])

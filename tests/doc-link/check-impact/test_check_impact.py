@@ -21,7 +21,7 @@ import change_set  # noqa: E402
 import state_store  # noqa: E402
 import toc_candidate  # noqa: E402
 import toc_check  # noqa: E402
-from content_hash import document_content_hash  # noqa: E402
+from content_hash import document_content_hash, title_value  # noqa: E402
 from reference_check import check_document  # noqa: E402
 from target_spec import MODE_TARGETS, TargetSpec  # noqa: E402
 
@@ -95,10 +95,14 @@ class CheckImpactTestBase(unittest.TestCase):
         self.spec = spec
 
     def hashes(self):
+        """title に書く値（[確定 ToC]の完全なハッシュの先頭 12 桁）。"""
         toc = state_store.load_confirmed_toc(self.root, KEY)
         return (
-            {e["doc_link_id"]: e["applied_hash"] for e in toc["documents"]},
-            {e["section_id"]: e["content_hash"] for e in toc["sections"]},
+            {
+                e["doc_link_id"]: title_value(e["applied_hash"])
+                for e in toc["documents"]
+            },
+            {e["section_id"]: title_value(e["content_hash"]) for e in toc["sections"]},
         )
 
     def snapshot(self):
@@ -145,7 +149,6 @@ class ImpactResultTest(CheckImpactTestBase):
         self.assertEqual(result["scope"]["scanned_documents"], ["a.md"])
         self.assertEqual(result["scope"]["target"]["key"], KEY)
         self.assertTrue(result["scope"]["checked_at"])
-        self.assertTrue(any("check-impact" in line for line in result["guidance"]))
 
     def test_empty_result_after_the_records_are_rewritten(self):
         self.build()
@@ -187,7 +190,7 @@ class ImpactResultTest(CheckImpactTestBase):
         _, second = self.run_main(*ARGS)
         self.assertEqual(first["changed_documents"], second["changed_documents"])
 
-    def test_document_without_id_is_reported_as_excluded_with_guidance(self):
+    def test_document_without_id_is_reported_as_excluded(self):
         self.write("c.md", "# C\n\nno document id\n")
         self.build(extra_paths=("c.md",))
         code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "c.md")
@@ -195,12 +198,11 @@ class ImpactResultTest(CheckImpactTestBase):
         self.assertEqual(result["status"], "up_to_date")
         (excluded,) = result["excluded"]
         self.assertIn("c.md", json.dumps(excluded))
-        self.assertIn(check_impact.GUIDANCE_EXCLUDED, result["guidance"])
         self.assertTrue(result["changed_documents"])
 
 
 class StaleTocTest(CheckImpactTestBase):
-    def test_stale_result_keeps_the_excluded_documents_and_their_guidance(self):
+    def test_stale_result_keeps_the_excluded_documents(self):
         self.write("c.md", "# C\n\nno document id\n")
         self.build(extra_paths=("c.md",))
         self.write("b.md", b_text(intro="changed"))
@@ -209,8 +211,6 @@ class StaleTocTest(CheckImpactTestBase):
         self.assertEqual(result["status"], "rebuild_needed")
         self.assertNotIn("changed_documents", result)
         self.assertEqual(len(result["excluded"]), 1)
-        self.assertIn(check_impact.GUIDANCE_EXCLUDED, result["guidance"])
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
 
     def test_changed_document_returns_the_check_toc_result_without_candidates(self):
         self.build()
@@ -220,8 +220,7 @@ class StaleTocTest(CheckImpactTestBase):
         self.assertEqual(code, 0)
         self.assertNotIn("changed_documents", result)
         self.assertEqual(result["status"], "rebuild_needed")
-        self.assertEqual({k: v for k, v in result.items() if k != "guidance"}, expected)
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
+        self.assertEqual(result, expected)
 
     def test_not_built_returns_the_check_toc_result(self):
         self.write("a.md", a_text())
@@ -229,7 +228,6 @@ class StaleTocTest(CheckImpactTestBase):
         self.assertEqual(code, 0)
         self.assertEqual(result["status"], "not_built")
         self.assertNotIn("changed_documents", result)
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
 
     def test_record_only_rewrite_is_not_stale(self):
         self.build()

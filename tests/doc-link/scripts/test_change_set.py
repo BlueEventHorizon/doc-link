@@ -8,7 +8,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 
 import change_set  # noqa: E402
 import state_store  # noqa: E402
-from content_hash import document_content_hash, section_content_hashes  # noqa: E402
+from content_hash import RECORD_LENGTH, document_content_hash, section_content_hashes  # noqa: E402
 from markdown_reader import read_document  # noqa: E402
 
 KEY = "main"
@@ -18,8 +18,8 @@ ID_C = "DLID-pqrstvwxyz01"
 S1 = "DLID-00000000s001"
 S2 = "DLID-00000000s002"
 S3 = "DLID-00000000s003"
-HASH_X = "a" * 64
-HASH_Y = "b" * 64
+HASH_X = "a" * RECORD_LENGTH
+HASH_Y = "b" * RECORD_LENGTH
 
 
 def doc(doc_id, *lines):

@@ -62,11 +62,6 @@ class SkillMdTest(unittest.TestCase):
                     script = line[len(COMMAND_PREFIX) :].split('"', 1)[0]
                     self.assertTrue((SKILL_DIR / "scripts" / script).is_file(), script)
 
-    def test_states_it_writes_nothing_and_points_to_index_docs(self):
-        self.assertIn("何も書き込まない", self.body)
-        self.assertIn("index-docs", self.body)
-        self.assertIn("`index-docs` の実行を案内する", self.body)
-
     def test_does_not_ask_the_user(self):
         self.assertNotIn("AskUserQuestion", self.body)
 

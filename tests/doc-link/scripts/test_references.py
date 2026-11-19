@@ -5,11 +5,12 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 
+from content_hash import RECORD_LENGTH  # noqa: E402
 from references import extract_references  # noqa: E402
 
 ID_A = "DLID-0123456789ab"
 ID_B = "DLID-abcdefghjkmn"
-H1 = "a" * 64
+H1 = "a" * RECORD_LENGTH
 
 
 class ExtractTest(unittest.TestCase):
@@ -27,7 +28,7 @@ class ExtractTest(unittest.TestCase):
         cases = {
             "none": (f'[r]: b.md "{ID_B}"\n', None),
             "valid": (f'[r]: b.md "{H1} {ID_B}"\n', H1),
-            "upper": (f'[r]: b.md "{"A" * 64} {ID_B}"\n', None),
+            "upper": (f'[r]: b.md "{"A" * RECORD_LENGTH} {ID_B}"\n', None),
             "short": (f'[r]: b.md "{"a" * 63} {ID_B}"\n', None),
             "other": (f'[r]: b.md "メモ {ID_B}"\n', None),
         }

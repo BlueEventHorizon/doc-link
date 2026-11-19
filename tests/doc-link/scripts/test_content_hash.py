@@ -7,13 +7,20 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 
 import content_hash  # noqa: E402
-from content_hash import document_content_hash, is_record_word, section_content_hashes  # noqa: E402
+from content_hash import (  # noqa: E402
+    RECORD_LENGTH,
+    document_content_hash,
+    is_record_word,
+    record_matches,
+    section_content_hashes,
+    title_value,
+)
 from markdown_reader import read_document  # noqa: E402
 
 ID_A = "DLID-0123456789ab"
 ID_B = "DLID-abcdefghjkmn"
-H1 = "a" * 64
-H2 = "b" * 64
+H1 = "a" * RECORD_LENGTH
+H2 = "b" * RECORD_LENGTH
 
 
 def sha(text):
@@ -28,19 +35,47 @@ def doc(record=None, body="本文\n", link_text="参照", dest="b.md"):
 class RecordWordTest(unittest.TestCase):
     def test_valid(self):
         self.assertTrue(is_record_word(H1))
-        self.assertTrue(is_record_word("0123456789abcdef" * 4))
+        self.assertTrue(is_record_word("0123456789abcdef"[:RECORD_LENGTH]))
 
     def test_invalid(self):
-        for word in (None, "", "A" * 64, "a" * 63, "a" * 65, "g" * 64, "a" * 63 + "G"):
+        n = RECORD_LENGTH
+        for word in (
+            None,
+            "",
+            "A" * n,
+            "a" * (n - 1),
+            "a" * (n + 1),
+            "g" * n,
+            "a" * (n - 1) + "G",
+        ):
             with self.subTest(word=word):
                 self.assertFalse(is_record_word(word))
+
+    def test_the_full_hash_is_not_a_record_word(self):
+        self.assertFalse(is_record_word(sha("x")))
+
+    def test_title_value_is_a_record_word_taken_from_the_head_of_the_hash(self):
+        full = document_content_hash("# T\n")
+        self.assertEqual(len(full), 64)
+        self.assertEqual(title_value(full), full[:RECORD_LENGTH])
+        self.assertTrue(is_record_word(title_value(full)))
+
+    def test_record_matches_compares_with_the_head_of_the_hash(self):
+        full = document_content_hash("# T\n")
+        other = document_content_hash("# U\n")
+        self.assertTrue(record_matches(title_value(full), full))
+        self.assertFalse(record_matches(title_value(other), full))
+        self.assertFalse(record_matches(None, full))
+        self.assertFalse(record_matches(full, full))
 
     def test_read_recorded_hash(self):
         definition = read_document(f'[r]: b.md "{H1} {ID_B}"\n').references[0]
         self.assertEqual(content_hash.read_recorded_hash(definition), H1)
         definition = read_document(f'[r]: b.md "{ID_B}"\n').references[0]
         self.assertIsNone(content_hash.read_recorded_hash(definition))
-        definition = read_document(f'[r]: b.md "{"A" * 64} {ID_B}"\n').references[0]
+        definition = read_document(
+            f'[r]: b.md "{"A" * RECORD_LENGTH} {ID_B}"\n'
+        ).references[0]
         self.assertIsNone(content_hash.read_recorded_hash(definition))
 
 
@@ -182,13 +217,13 @@ def sections_doc(first="一\n", second="二\n", prefix="前\n", record=H1):
 
 class SectionHashTest(unittest.TestCase):
     def test_range_bytes(self):
-        text = sections_doc(record="c" * 64)
+        text = sections_doc(record="c" * RECORD_LENGTH)
         document = read_document(text)
         heading = document.headings[1]
         raw = "".join(document.lines[heading.start_line : heading.section_end_line])
         self.assertEqual(
             section_content_hashes(text)[1],
-            sha(raw.replace(f' "{"c" * 64} {ID_B}"', "")),
+            sha(raw.replace(f' "{"c" * RECORD_LENGTH} {ID_B}"', "")),
         )
 
     def test_outside_change_keeps_hash(self):
@@ -220,7 +255,7 @@ class SectionHashTest(unittest.TestCase):
     def test_record_outside_range_does_not_alter_section(self):
         # 見出し1 の範囲には見出し2 の定義が入るが、見出し3 の範囲外の記録は見出し3 に影響しない
         a = section_content_hashes(sections_doc(record=H1))
-        b = section_content_hashes(sections_doc(record="d" * 64))
+        b = section_content_hashes(sections_doc(record="d" * RECORD_LENGTH))
         self.assertEqual(a[2], b[2])
 
 

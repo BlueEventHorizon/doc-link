@@ -1,6 +1,6 @@
 ---
 name: check-dlid
-description: 対象の Markdown 文書の DLID（文書 ID とセクション ID）を検査する。文書 ID が無い文書、セクション ID の無い見出し、重複する DLID（同じ文書の中を含む）を、該当パスつきで報告し、検出があれば embed-dlid の実行を案内する。何も書き込まない。ToC を構築する前や、DLID の状態を確かめたいときに使う。
+description: 対象の Markdown 文書の DLID（文書 ID とセクション ID）を検査する。文書 ID が無い文書、セクション ID の無い見出し、重複する DLID（同じ文書の中を含む）を、該当パスつきで報告する。何も書き込まない。ToC を構築する前や、DLID の状態を確かめたいときに使う。
 ---
 
 # check-dlid
@@ -36,10 +36,6 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_dlid.py" --project-root "${CL
 - `problems`・`warnings`: 存在しない・Markdown でない指定など。あれば、あわせて報告する
 - `clean` が真のときは、検出事項が無いことを報告する
 
-### 3. 次の作業を案内する
+### 3. 検出事項の扱い
 
-検出事項（`clean` が偽）があるときは、`guidance` に従い、`embed-dlid` の実行を案内する。
-
-- 文書 ID・セクション ID の無い箇所は、プロジェクト管理 AI が、検出した文書の一覧を利用者に示して、DLID を付与するかを確認する。付与が承認されたら、`embed-dlid` を実行する（起動が書き込みの承認である）
-- 重複する DLID は、`embed-dlid` の実行で、示した候補から利用者が原本を確定する
-- 検査は何も書き込まない。案内するだけで、`embed-dlid` をこのスキルから実行しない
+検出事項（`clean` が偽）があるときは、`guidance` に従う。文書 ID・セクション ID の無い箇所は、プロジェクト管理 AI が、検出した文書の一覧を利用者に示して、DLID を付与するかを確認する。このスキルは付与を行わない。

@@ -1,0 +1,40 @@
+{
+  "content_hash": "90a2b4835b36625525917a769a29edeaa0ff74fc6c9b65ab793a1af9eed9262e",
+  "doc_link_id": "DLID-pc44gkb54821",
+  "keywords": [
+    "formal reference",
+    "content hash",
+    "DLID",
+    "section ID",
+    "check-links",
+    "check-impact",
+    "change impact candidates",
+    "path mismatch",
+    "reference link definition",
+    "inconsistency check"
+  ],
+  "path": "docs/specs/requirement/REQ-005_references.md",
+  "purpose": "Requirements for doc-link references: DLID-based formal references, link checking, path-fix notification, section IDs, change impact candidates, and inconsistency detection.",
+  "summary": [
+    "FR-007 formal references via reference-link definitions whose title holds a content hash and DLID",
+    "FR-009 link checking by actually searching the referenced directory, not relying on stored ToC",
+    "FR-010 path-fix information notified only when the current path is confirmed; doc-link never edits links",
+    "Section 13.1 section IDs (DLID) appended to every heading and issued only by the DLID assignment operation",
+    "FR-013 change impact candidates found by reverse lookup when current hash differs from recorded title hash",
+    "FR-014 and FR-015 notification of candidates, no stored notification state, repeated until the AI rewrites the hash",
+    "FR-016 inconsistency checks: missing or duplicate IDs, broken references, links lacking DLID, inline links",
+    "Rewrites of user documents require showing a list to the user and approval; doc-link never rewrites",
+    "Acceptance criteria AC-003, 004, 006, 007, 008, 009, 028, 032, 033",
+    "Only direct references are listed; indirect impact is detected stepwise by repeated detection"
+  ],
+  "tasks": [
+    "Implementing check-links and check-impact scripts",
+    "Designing reference notation and DLID handling in titles",
+    "Implementing section ID assignment for headings",
+    "Handling moved or renamed documents and path mismatches",
+    "Detecting and reporting change impact candidates",
+    "Writing tests for reference and impact acceptance criteria",
+    "Writing guidance that asks the user before rewriting documents"
+  ],
+  "title": "doc-link 要件定義書 — 参照と変更通知"
+}

@@ -24,6 +24,8 @@ from scenario_support import (  # noqa: E402
     query_docs,
 )
 
+from content_hash import title_value  # noqa: E402
+
 KEYS = {"one": ["docs/a.md", "docs/b.md"], "two": ["docs/b.md", "docs/c.md"]}
 A_TEXT = doc_text(ID_A, "A", "body of a", S_A)
 B_TEXT = doc_text(ID_B, "B", "body of b", S_B)
@@ -148,7 +150,7 @@ class MultipleKeysScenarioTest(ScenarioBase):
         latest = self.info(ID_B)["content_hash"]
         self.assertNotEqual(stale_entry["applied_hash"], latest)
         resolved = self.resolve_one(ID_B)
-        self.assertEqual(resolved["content_hash"], latest)
+        self.assertEqual(resolved["content_hash"], title_value(latest))
         # two を再構築しても、B の生成は依頼されない（検証済みの[文書情報]を再利用する）
         result = self.build_ok("two", KEYS["two"])
         self.assertEqual(self.requested, [])

@@ -1,0 +1,39 @@
+{
+  "content_hash": "de3932695d2ca756ff85dfc8c0dc64b4f2ed05a58e3c4c2be0d1c571aa2fa9e7",
+  "doc_link_id": "DLID-tq1tc0r4nnpn",
+  "keywords": [
+    "uv run",
+    "PEP 723",
+    "PyYAML",
+    "markdown-it-py",
+    "Node.js prohibited",
+    "inheriting SKILL",
+    "context fork",
+    "unittest",
+    "test placement",
+    "implementation rules"
+  ],
+  "path": "docs/rules/doc-link_implementation_rules.md",
+  "purpose": "Implementation rules specific to doc-link that take precedence over the generic plugin_ norm documents for the listed items only.",
+  "summary": [
+    "Defines which items override the generic norm documents; others follow the generic ones",
+    "Python scripts run via uv run with PEP 723 inline dependency metadata",
+    "Only PyYAML and markdown-it-py are allowed as external dependencies",
+    "External commands are invoked through Bash",
+    "Node.js and Node.js-based tools or packages are prohibited; GitHub Actions excluded",
+    "All SKILLs are inheriting type; context: fork and agent are not written",
+    "Isolated-context processing is implemented as a custom Agent",
+    "Every .py under plugins/ must have tests placed under tests/{plugin}/{skill}/ as test_{module}.py",
+    "Shared scripts are tested under tests/{plugin}/scripts/; no skill named scripts",
+    "Test command uses uv run with unittest discover"
+  ],
+  "tasks": [
+    "Writing or modifying Python scripts under plugins/",
+    "Adding or changing script dependencies",
+    "Writing a SKILL.md or deciding its execution model",
+    "Adding tests for plugin scripts",
+    "Deciding where a test file goes and how to run tests",
+    "Reviewing implementation against doc-link specific rules"
+  ],
+  "title": "doc-link 実装ルール"
+}

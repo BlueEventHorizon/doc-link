@@ -37,12 +37,12 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-ro
 
 `initial_build_required`（未構築）
 
-- 検索しない。`index-docs` による初回構築が必要だと呼び出し元へ返して終える
+- 検索しない。ToC が未構築で検索できないことを呼び出し元へ返して終える
 
 `confirm_rebuild`（再構築が必要）
 
 - 返った `scale`（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、AI による要約生成が必要な件数）を示して、AskUserQuestion で二択を確認する。選択肢は `options` のとおり、「再構築してから検索する」と「既存の ToC のまま検索する」である
-- 「再構築してから検索する」: `index-docs` を Skill ツールで実行し、確定結果を得る。その後、`prepare` の引数に `--choice rebuild` を足して、手順 1 をやり直す
+- 「再構築してから検索する」: 呼び出し元（プロジェクト管理 AI）に `index-docs` の実行を求め、確定結果を受け取る。このスキルは `index-docs` を実行しない。その後、`prepare` の引数に `--choice rebuild` を足して、手順 1 をやり直す
   - `index-docs` には、検索前検査と同じ ToC 識別キーと Index 対象指定を、解釈せずそのまま渡す。引数なしで起動すると単体モード（`all`）になり、別の ToC を再構築してしまう
   - Index 対象指定を受け取っていなかったとき（`target_spec_source` が `saved`。保存済みの指定で検査した）は、返された `target_spec` の `paths`・`dirs`・`exclude` の要素を、変えずに `--paths`・`--dirs`・`--exclude` へ渡す。`target_spec` の `mode` が `all` のときは `--all` を渡す。ToC 識別キーは `target_spec` の `key` を `--key` へ渡す（`mode` が `all` のときは `--key` を渡さない）
 - 「既存の ToC のまま検索する」: `prepare` の引数に `--choice existing` を足して、手順 1 をやり直す
@@ -87,4 +87,4 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" collect --project-ro
 - 使用した ToC 識別キー（`toc_key`）と ToC の版（`toc_version`）
 - 鮮度（`freshness`・`freshness_notice`）。パスの注意（`path_notice`）も添える。記録されたパスを現在の実体パスとして断定しない
 - 「既存の ToC のまま検索する」を選んだときは、その版が現在の Index 対象リストを反映していない可能性を、結果全体に明示する
-- 後工程として、結果の文書を読み、作業に使うのは呼び出し元である。このスキルは文書を読まず、編集しない
+- 結果の文書を読み、作業に使うのは呼び出し元である。このスキルは文書を読まず、編集しない

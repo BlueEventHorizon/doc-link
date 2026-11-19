@@ -35,7 +35,6 @@
 - `scale`: `rebuild_needed` のときの再構築の規模（`new`・`departed`・`path_changed`・`content_changed`・`missing_id`・
   `duplicate_id`・`ai_generation`）。それ以外は `null`
 - `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定など
-- `guidance`: 検出後にすべきことの案内（自然文の配列）
 
 ## 仕様の解釈
 
@@ -65,42 +64,12 @@ import script_output  # noqa: E402
 import target_spec  # noqa: E402
 import toc_check  # noqa: E402
 
-GUIDANCE_NOT_BUILT = (
-    "[ToC]が未構築である。`index-docs` を実行して、初回の構築をする"
-    "（ユーザーまたはプロジェクト管理 AI が実行する）"
-)
-GUIDANCE_REBUILD = (
-    "[ToC]と現物に不一致がある。`index-docs` を実行して、[ToC]を再構築する"
-    "（ユーザーまたはプロジェクト管理 AI が実行する）"
-)
-GUIDANCE_SPEC_CHANGED = (
-    "渡した対象指定が、[ToC]に保存した指定と違う。`index-docs` を実行して、新しい指定を保存する"
-    "（指定を保存しないと、指定を渡さない検索が、古い指定で走査する）"
-)
-GUIDANCE_EXCLUDED = (
-    "ID 未付与・ID 重複の文書は[ToC]に入らない。`check-dlid` で確かめ、"
-    "`embed-dlid` で解消してから、`index-docs` を実行する"
-)
-
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--project-root", default=os.getcwd())
     target_spec.add_target_arguments(parser)
     return parser
-
-
-def _guidance(result: toc_check.TocCheck) -> list[str]:
-    guidance: list[str] = []
-    if result.status == toc_check.STATUS_NOT_BUILT:
-        guidance.append(GUIDANCE_NOT_BUILT)
-    elif result.status == toc_check.STATUS_REBUILD_NEEDED:
-        guidance.append(GUIDANCE_REBUILD)
-        if result.target_spec_changed:
-            guidance.append(GUIDANCE_SPEC_CHANGED)
-    if result.status != toc_check.STATUS_NOT_BUILT and result.excluded:
-        guidance.append(GUIDANCE_EXCLUDED)
-    return guidance
 
 
 def execute(args: argparse.Namespace) -> int:
@@ -117,9 +86,7 @@ def execute(args: argparse.Namespace) -> int:
             ["[ToC]の鮮度を判定できない"]
             + [cause.describe() for cause in result.causes]
         )
-    output = result.to_dict()
-    output["guidance"] = _guidance(result)
-    return script_output.emit_result(output)
+    return script_output.emit_result(result.to_dict())
 
 
 def main(argv: list[str] | None = None) -> int:

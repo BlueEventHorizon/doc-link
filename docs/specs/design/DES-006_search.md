@@ -1,4 +1,8 @@
-# DES-006 文書検索設計
+---
+doc_link_id: DLID-nnbgpzkkm5vq
+---
+
+# DES-006 文書検索設計 DLID-wwna81gbj3jz
 
 **状態**: 承認済み\
 **更新日**: 2026-11-17\
@@ -6,7 +10,7 @@
 
 <a id="sec-1"></a>
 
-## 1. 検索前の判定
+## 1. 検索前の判定 DLID-ksmh21dbz9zv
 
 検索要求はキー（省略時は予約キー `all`）とタスク・検索条件を持つ。指定キーの[確定 ToC]がなければ、検索せず初回構築が必要と返す。[確定 ToC]があれば、その版に保存した再解釈可能な対象指定で現在の一覧を走査し、ID、パス、比較値を版と照合する。新しい完全な対象指定が同時に与えられた場合はそれを優先する。その指定が版に保存した指定と違うときは、文書に差が無くても、再構築が必要と判定する（要件 D-053）。対象指定の展開・現物の読取りが失敗した場合は「更新不要」と判定しない。
 
@@ -16,7 +20,7 @@
 
 <a id="sec-2"></a>
 
-## 2. 検索結果の契約
+## 2. 検索結果の契約 DLID-p07g3hc4e4xd
 
 各候補は[文書 ID]、[確定 ToC]に記録されたパス、関連理由、必要ならセクション、使用した[ToC 識別キー]・[ToC]版・鮮度判定を持つ。「既存版のまま」を選んだ場合は、その版が現在の[Index 対象リスト]を反映していない可能性を結果全体にも付ける。文書が現物で移動・削除されていても、古い索引のパスを現在の実体パスとして断定しない。
 
@@ -33,7 +37,7 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 <a id="sec-3"></a>
 
-## 3. [DLID]の解決
+## 3. [DLID]の解決 DLID-m0xegzfyhc3k
 
 `resolve-dlid` は[DLID]の並びを受け取り、[DLID]ごとに解決結果を返す（要件 FR-018、D-047）。[ToC 識別キー]は受け取らない。解決は確定済みの管理状態の記録と、記録されたパスの現物だけで行う。
 
@@ -47,8 +51,8 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 [ToC]、管理状態、[Index 対象文書]には書き込まない。
 
-[req-004]: ../requirement/REQ-004_search.md
-[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9
-[des-003-sec-2]: DES-003_data-model.md#sec-2
-[des-008-sec-1]: DES-008_content-rules.md#sec-1
-[des-005]: DES-005_indexing.md
+[req-004]: ../requirement/REQ-004_search.md "d3a5a1cf16cb DLID-h96208rqr773"
+[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "85860fe69f58 DLID-bk29x4s8tadq"
+[des-003-sec-2]: DES-003_data-model.md#sec-2 "4708f535908f DLID-yqqrwtycr379"
+[des-008-sec-1]: DES-008_content-rules.md#sec-1 "3d83f58b2ce6 DLID-ywa6htx8vq09"
+[des-005]: DES-005_indexing.md "1cecc49a17b2 DLID-dgphqw70rkpz"

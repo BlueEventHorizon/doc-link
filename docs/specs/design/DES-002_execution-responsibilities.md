@@ -1,4 +1,8 @@
-# DES-002 実行主体と処理責務
+---
+doc_link_id: DLID-anz9vack2xzt
+---
+
+# DES-002 実行主体と処理責務 DLID-fwe832jzywcp
 
 **状態**: 承認済み\
 **更新日**: 2026-11-02\
@@ -6,7 +10,7 @@
 
 <a id="sec-1"></a>
 
-## 1. 責務と権限
+## 1. 責務と権限 DLID-zex778vtfhtg
 
 | 主体                              | 担うこと                                                                                                          | 書き込み権限と禁止事項                                                                                                                                             |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -21,7 +25,7 @@
 
 <a id="sec-2"></a>
 
-## 2. script が提供する論理的な操作
+## 2. script が提供する論理的な操作 DLID-4wf0pqpj2rzc
 
 | 操作                 | 入力                                                      | 成功結果                                                                     | 副作用・失敗時の約束                                                                                                              |
 | -------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
@@ -41,7 +45,7 @@
 
 <a id="sec-3"></a>
 
-## 3. Skill と script の接続規則
+## 3. Skill と script の接続規則 DLID-gjwba2n3mq4v
 
 doc-link の各 Skill は、呼び出し元（[プロジェクト管理 AI]）のコンテキストでそのまま実行する継承型とする。SKILL とカスタム Agent の構成は[DES-010][des-010]に定める。Skill の実行と、通知を受けた本文・リンクの修正は同じ AI が行う。script は[DLID]の書き込みと管理状態の更新だけを担い、[情報生成 AI]だけを別のコンテキストに分ける（2 番目の規則）。
 
@@ -53,7 +57,7 @@ doc-link の各 Skill は、呼び出し元（[プロジェクト管理 AI]）�
 
 <a id="sec-4"></a>
 
-## 4. 保留と後続設計
+## 4. 保留と後続設計 DLID-8ck587eq1qnd
 
 DLID 付与操作が ID を一部の文書へ保存した後に失敗した場合、既発行 ID は不変として再実行時に再利用する必要がある（要件 D-004）。検証を通って書き込んだ[DLID]は正しい値なのでロールバックせず、発行済みとして報告する。操作は正常終了させず、書き込めなかった文書ごとにパス・問題箇所・原因を報告する（要件 FR-002、NFR-005）。再実行すると残りの文書を処理する。script の分割、CLI の引数形式は後続設計で扱う。Python の script は `uv run` で実行し、Python 本体と外部依存（markdown-it-py）は uv が用意する。利用者の環境の前提は uv だけとする。
 
@@ -66,11 +70,11 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3
-[readme]: README.md
-[des-010]: DES-010_skill-composition.md
-[des-006-sec-2]: DES-006_search.md#sec-2
-[des-006-sec-3]: DES-006_search.md#sec-3
-[des-005-sec-5]: DES-005_indexing.md#sec-5
-[des-007-sec-3]: DES-007_references-impact.md#sec-3
-[implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md
+[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3 "8418f83ba277 DLID-veg2nsjk8zw1"
+[readme]: README.md "f1ff9833f7d6 DLID-zvepba87h7zk"
+[des-010]: DES-010_skill-composition.md "da86b37d3824 DLID-7e90gq3sdncc"
+[des-006-sec-2]: DES-006_search.md#sec-2 "5e6990692aaa DLID-nnbgpzkkm5vq"
+[des-006-sec-3]: DES-006_search.md#sec-3 "5e6990692aaa DLID-nnbgpzkkm5vq"
+[des-005-sec-5]: DES-005_indexing.md#sec-5 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-007-sec-3]: DES-007_references-impact.md#sec-3 "3d76a10e246f DLID-pr3jp4hzb8js"
+[implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"

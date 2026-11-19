@@ -1,40 +1,39 @@
 {
-  "content_hash": "a69aaa86f11865cf4c93c04ec2804428555e840717188dd38ebd436e3b5f51a1",
+  "content_hash": "e039c117ad0be4c31bb26dac308613bf490116b12c288d29095c359847ed4d09",
   "doc_link_id": "DLID-veg2nsjk8zw1",
   "keywords": [
     "doc-link",
     "DLID",
     "document ID",
-    "section ID",
     "ToC",
-    "content hash",
-    "change impact notification",
     "requirements overview",
     "decision register",
-    "project management AI"
+    "glossary",
+    "content hash",
+    "write boundary",
+    "change impact notification"
   ],
   "path": "docs/specs/requirement/REQ-001_overview.md",
-  "purpose": "Overview of doc-link requirements: purpose, background, glossary, scope, responsibility boundaries, non-functional requirements, findings, and the decision and open-issue registers for the DocAdvisor replacement plugin.",
+  "purpose": "Overview requirements for the doc-link plugin: purpose, glossary, scope, shared non-functional requirements, error classes, and the decision and open-issue registers that govern the split requirement documents.",
   "summary": [
-    "Purpose and background: replacing DocAdvisor with permanent document-ID based management instead of path-based keys",
-    "Overall flow diagram covering DLID check, assignment, link check, ToC build, and change-impact check with user confirmations",
-    "Document search flow with ToC rebuild check and the option to search an existing stale ToC",
-    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash, and project management AI",
-    "Scope in and out, and the responsibility split between doc-link and the project management AI",
-    "Non-functional requirements: rebuild consistency, determinism, idempotence, write boundary limited to DLID, diagnosability, resumability, scalability",
-    "Error candidates and non-blocking findings that are recorded in the ToC without stopping its confirmation",
-    "Decision register D-001 to D-058 covering ID format, write rules, reference notation, hashing, operation flow, and search policy",
-    "Open-issue register U-001 onward, each marked decided or deferred to design"
+    "Purpose and background of replacing DocAdvisor with ID-based document management",
+    "Overall flow diagrams for introduction, operation, change notification, and document search",
+    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash, and index target list",
+    "Scope: included and excluded items, and responsibility boundary between doc-link and the project management AI",
+    "Non-functional requirements: rebuild consistency, determinism, idempotency, write boundary, diagnosability, resumability, scalability",
+    "Error candidates and findings that do not block ToC confirmation",
+    "Decision register D-001 to D-058 covering DLID format, write rules, hashing, references, search policy, and operation flow",
+    "Open-issue register with decided outcomes and design-deferred items"
   ],
   "tasks": [
     "Understanding the overall goals and scope of doc-link",
-    "Looking up the definition of a glossary term before writing specifications",
-    "Checking a decision (D-xxx) before changing design or implementation",
-    "Designing or implementing DLID assignment and embedding",
-    "Designing or implementing ToC build, rebuild, and confirmation",
-    "Implementing reference checks and change-impact notification",
-    "Implementing document search behavior",
-    "Reviewing whether a change respects the write boundary and non-functional requirements"
+    "Looking up glossary term definitions before writing specifications",
+    "Checking decision records before changing requirements or design",
+    "Designing or implementing DLID assignment and write-boundary behavior",
+    "Implementing ToC build, rebuild, and consistency checks",
+    "Implementing change impact notification and reference checks",
+    "Defining error handling and validation of AI-generated fields",
+    "Reviewing requirement and design consistency"
   ],
   "title": "doc-link 要件定義書 — 総論"
 }

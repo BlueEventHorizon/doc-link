@@ -225,7 +225,6 @@
 - 書き直す対象の検出事項があるとき、案内が、一覧を利用者に示して書き直しを確認し、承認された分だけを書き直すよう指示する → `check-links/test_check_links.py::GuidanceConfirmationTest::test_link_without_dlid_alone_asks_for_confirmation`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_inline_link_with_dlid_alone_asks_for_confirmation`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_path_mismatch_alone_asks_for_confirmation`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_confirmation_is_given_once_for_mixed_findings`
 - 検出事項が無いとき、案内を返さない → `check-links/test_check_links.py::GuidanceConfirmationTest::test_no_findings_gives_no_guidance`
 - `check-links` が文書を書き換えない → `check-links/test_check_links.py::CategoriesTest::test_writes_nothing`
-- [DLID]の検出があるとき、検出した文書の一覧を示して、利用者に付与を確認するよう案内する（D-057） → `check-dlid/test_check_dlid.py::DetectionTest::test_findings_still_exit_0_and_ask_the_user_before_embedding`
 
 ## NFR-001〜003 一貫性・決定性・冪等性
 

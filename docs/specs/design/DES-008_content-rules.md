@@ -97,7 +97,7 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 [req-002]: ../requirement/REQ-002_document-id.md "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003]: ../requirement/REQ-003_toc.md "40bbb7b52fec DLID-kxe3nxfgk491"
-[req-005]: ../requirement/REQ-005_references.md "90a2b4835b36 DLID-pc44gkb54821"
+[req-005]: ../requirement/REQ-005_references.md "4909917f4466 DLID-pc44gkb54821"
 [des-005-sec-3]: DES-005_indexing.md#sec-3 "1cecc49a17b2 DLID-dgphqw70rkpz"
-[des-007-sec-1]: DES-007_references-impact.md#sec-1 "3d76a10e246f DLID-pr3jp4hzb8js"
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "da86b37d3824 DLID-7e90gq3sdncc"
+[des-007-sec-1]: DES-007_references-impact.md#sec-1 "f5cea4052598 DLID-pr3jp4hzb8js"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "cc47b18bbb6a DLID-7e90gq3sdncc"

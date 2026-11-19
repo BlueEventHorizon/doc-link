@@ -5,7 +5,7 @@ doc_link_id: DLID-7e90gq3sdncc
 # DES-010 SKILL と Agent の構成 DLID-gf7dehdq4tpd
 
 **状態**: 承認済み\
-**更新日**: 2026-11-19\
+**更新日**: 2026-11-20\
 **根拠**: [要件総論][req-001]、[実行主体][des-002]
 
 <a id="sec-1"></a>
@@ -66,7 +66,7 @@ doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する
 
 | SKILL          | 検出する状態                                                                                                                                                                                                                                                                                  | 検出事項の扱い（誰が、何で）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `check-dlid`   | [文書 ID]が無い。[セクション ID]の無い見出しがある。[文書 ID]または[セクション ID]が重複している（[セクション ID]は同じ文書の中を含む）                                                                                                                                                       | [プロジェクト管理 AI]が、検出した文書の一覧を示して、利用者に DLID を付与するかを確認する（要件 D-057）。このスキルは検出して返すだけで、付与は行わない                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `check-dlid`   | [文書 ID]が無い。[セクション ID]の無い見出しがある。[文書 ID]または[セクション ID]が重複している（[セクション ID]は同じ文書の中を含む）                                                                                                                                                       | 検出して返すだけで、付与は行わない。付与は `embed-dlid` が行う（要件 D-040、D-057）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `check-links`  | 壊れた参照。ID とパスの不一致。存在しないセクションへの参照。フラグメントが参照先のセクションへ解決しないリンク。参照先ディレクトリに見つからない。`doc_link_id` を持つ Markdown を指しているが title に[DLID]の無いリンク。[DLID]入りの title を持つが、リファレンスリンクの定義でないリンク | [プロジェクト管理 AI]は、書き直す前に、一覧（文書・行・書く値）を利用者に示して、書き直すかを確認する（要件 D-057）。承認された分について、title に[DLID]の無いリンクには、検出事項に添えられた値（参照先の[内容ハッシュ]と[DLID]。[DES-007 §1][des-007-sec-1]）を、[プロジェクト管理 AI]が title に書く。インラインリンクは、リファレンスリンクの定義に書き換える。[プロジェクト管理 AI]がリンクを直す。パスの不一致には確認できた現在のパスが添えられる（FR-010）。フラグメント不一致には、そのセクションへ届く現在のアンカーが添えられる（FR-009）。参照先が見つからない場合は、移動か削除かを[プロジェクト管理 AI]が判断する。対象に[文書 ID]の無い文書があるときは、参照の検査が不完全であることを、警告として返す |
 | `check-toc`    | [ToC]が無い（未構築）。[ToC]と実体ファイルの不一致（新規、離脱、移動、参照の違い、[ToC]に反映したハッシュと[現在ハッシュ]の違い。参照の違いは、参照元の位置・参照先の[DLID]・リンク先のパスで比べ、title の[内容ハッシュ]は比べない）                                                         | 検出して返すだけで、再構築は行わない                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `check-impact` | 参照元の title に記録した[内容ハッシュ]が、参照先の[現在ハッシュ]と異なる参照（記録が無い参照を含む）と、[ToC]から把握できるその参照元。[ToC]が最新であることが前提で、古ければ変更影響候補を返さずに `check-toc` と同じ結果を返す                                                            | [プロジェクト管理 AI]が、参照元の修正が必要かを判断し、必要なら直す。確かめたあと、参照元の title の[内容ハッシュ]を書き換える。書き換えるまで、同じ参照が次の `check-impact` でも返る。修正した参照元を参照する文書は、次の `check-impact` で新しい変更として現れる                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -253,7 +253,6 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    actor User as ユーザー
     participant PM as プロジェクト管理 AI
     participant Skill as check-dlid
     participant Scripts as script 群
@@ -264,9 +263,6 @@ sequenceDiagram
     Scripts->>Docs: frontmatter と見出しの行の末尾の DLID を読み取る
     Scripts-->>Skill: ID 未付与の文書と見出し、重複する DLID と該当パス
     Skill-->>PM: 検出結果
-    opt 検出した文書がある
-        PM->>User: 検出した文書の一覧を示して DLID の付与を確認する
-    end
 ```
 
 検査できなかった対象（読めないディレクトリ、存在しない指定、固定除外の名前のディレクトリの指定）があるときは、検出事項が無くても、検査できなかった対象を報告し、結果の `clean` を偽にする（要件 D-054）。
@@ -349,10 +345,11 @@ sequenceDiagram
 
 `check-impact` は、変更影響候補を返したあとの動きを、[プロジェクト管理 AI]に次のとおり指示する。判断・修正・title の[内容ハッシュ]の書き換えは[プロジェクト管理 AI]が行い、script は行わない（要件 FR-014、D-031）。
 
-- 変更箇所と参照元の文書を読み、参照元の修正が必要かを判断する。
+- 参照元ごとに、変更箇所と参照元の該当記述を読み、参照元の修正が必要かを判断する。
 - 必要なら、参照元を直す。
+- 判断の結果（参照元ごとの、修正の要否と根拠）を、報告に残す。
 - 確かめた参照の title に、参照先の[現在ハッシュ]を書く。値は `check-impact` が返したものを使う。
-- 確かめていない参照の title は、書き換えない。
+- 確かめていない参照の title は、書き換えない。読まずに一括で書き換えない。読まずに書き換えると、その参照の通知が消え、変更の検出が意味を失う。
 - 書いたあとは、`check-impact` をもう一度実行する。
 - 報告が空になるまで、これを繰り返す。
 
@@ -411,12 +408,8 @@ sequenceDiagram
     PM->>Check: DLID を検査する
     Check-->>PM: ID 未付与の文書と見出し、重複
     opt 検出がある
-        PM->>User: 検出した文書の一覧を示して DLID の付与を確認する
-        User-->>PM: 付与するかを答える
-        opt 付与する
-            PM->>Embed: 起動する（起動が書き込みの承認）
-            Embed-->>PM: 書き込んだ文書・位置・DLID
-        end
+        PM->>Embed: 起動する（起動が書き込みの承認）
+        Embed-->>PM: 書き込んだ文書・位置・DLID
     end
     PM->>Links: 参照を検査する
     Links-->>PM: 検出事項と、title に書く値
@@ -453,20 +446,20 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 | 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                              | 検索を失敗として返す                                                                                           |
 | 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                  | `query-docs` が結果を返した後                                                                                  |
 
-[req-001]: ../requirement/REQ-001_overview.md "a69aaa86f118 DLID-veg2nsjk8zw1"
+[req-001]: ../requirement/REQ-001_overview.md "e039c117ad0b DLID-veg2nsjk8zw1"
 [des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12 "d3a5a1cf16cb DLID-h96208rqr773"
-[req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13 "90a2b4835b36 DLID-pc44gkb54821"
-[req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15 "90a2b4835b36 DLID-pc44gkb54821"
+[req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13 "4909917f4466 DLID-pc44gkb54821"
+[req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15 "4909917f4466 DLID-pc44gkb54821"
 [req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003-sec-10]: ../requirement/REQ-003_toc.md#sec-10 "40bbb7b52fec DLID-kxe3nxfgk491"
-[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14 "90a2b4835b36 DLID-pc44gkb54821"
+[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14 "4909917f4466 DLID-pc44gkb54821"
 [req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4 "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2 "40bbb7b52fec DLID-kxe3nxfgk491"
-[req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "90a2b4835b36 DLID-pc44gkb54821"
-[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "a69aaa86f118 DLID-veg2nsjk8zw1"
+[req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "4909917f4466 DLID-pc44gkb54821"
+[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "e039c117ad0b DLID-veg2nsjk8zw1"
 [req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "40bbb7b52fec DLID-kxe3nxfgk491"
 [des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "90be2ac68a19 DLID-anz9vack2xzt"
@@ -478,10 +471,10 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [des-005-sec-2]: DES-005_indexing.md#sec-2 "1cecc49a17b2 DLID-dgphqw70rkpz"
 [des-005-sec-3]: DES-005_indexing.md#sec-3 "1cecc49a17b2 DLID-dgphqw70rkpz"
 [des-005-sec-4]: DES-005_indexing.md#sec-4 "1cecc49a17b2 DLID-dgphqw70rkpz"
-[des-007-sec-1]: DES-007_references-impact.md#sec-1 "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-007-sec-1]: DES-007_references-impact.md#sec-1 "f5cea4052598 DLID-pr3jp4hzb8js"
 [des-004-sec-3]: DES-004_state-machines.md#sec-3 "53b4f7321987 DLID-3f92k3tz4rew"
 [des-006-sec-1]: DES-006_search.md#sec-1 "5e6990692aaa DLID-nnbgpzkkm5vq"
-[des-007-sec-2]: DES-007_references-impact.md#sec-2 "3d76a10e246f DLID-pr3jp4hzb8js"
-[des-007-sec-3]: DES-007_references-impact.md#sec-3 "3d76a10e246f DLID-pr3jp4hzb8js"
+[des-007-sec-2]: DES-007_references-impact.md#sec-2 "f5cea4052598 DLID-pr3jp4hzb8js"
+[des-007-sec-3]: DES-007_references-impact.md#sec-3 "f5cea4052598 DLID-pr3jp4hzb8js"
 [exchange-rules]: ../../rules/agent_data_exchange_rules.md "590998804bef DLID-2g3cgnnry3bm"
 [des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "90be2ac68a19 DLID-anz9vack2xzt"

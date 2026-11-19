@@ -105,6 +105,8 @@ doc-link は、通知の状態を保存しない（D-038）。
 - 参照先の[現在ハッシュ]と異なる参照は、報告のたびに返す。
 - [プロジェクト管理 AI]が参照元を確かめて直し、title の[内容ハッシュ]を参照先の[現在ハッシュ]へ書き換えるまで、同じ参照を返し続ける。
 - title の[内容ハッシュ]を書くのは[プロジェクト管理 AI]である。doc-link は書かない（D-031）。
+- title の[内容ハッシュ]の書き換えは、参照元ごとに、変更箇所と参照元の記述を読み、参照元の修正が要らない、または修正したと確かめた参照だけに行う。確かめずに書き換えると、その参照の通知が消え、変更の検出が意味を失う。読まずに一括で書き換えない。
+- 確かめた結果（参照元ごとの、修正の要否と根拠）は、報告に残す。
 
 <a id="sec-15"></a>
 
@@ -170,9 +172,9 @@ doc-link は、通知の状態を保存しない（D-038）。
 
 `check-links` が、[プロジェクト管理 AI]が書き直す対象の検出事項を返したとき、返す案内（`guidance`）が、利用者へ一覧（文書・行・書く値）を示して書き直しを確認し、承認された分だけを書き直すことを、[プロジェクト管理 AI]に指示すること。`check-links` が[Index 対象文書]を書き換えないこと。
 
-[req-001]: REQ-001_overview.md "a69aaa86f118 DLID-veg2nsjk8zw1"
+[req-001]: REQ-001_overview.md "e039c117ad0b DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "d3a5a1cf16cb DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "90a2b4835b36 DLID-pc44gkb54821"
-[req-005-sec-13-1]: REQ-005_references.md#sec-13-1 "90a2b4835b36 DLID-pc44gkb54821"
+[req-005]: REQ-005_references.md "4909917f4466 DLID-pc44gkb54821"
+[req-005-sec-13-1]: REQ-005_references.md#sec-13-1 "4909917f4466 DLID-pc44gkb54821"

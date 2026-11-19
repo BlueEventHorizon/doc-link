@@ -254,11 +254,11 @@ Forge が `.doc_structure.yaml` から解決した[ToC 識別キー]と対象指
 
 文書の[DLID]と[セクション ID]を渡した場合、それぞれ現在のパスが返り、セクションには見出しとアンカーが添えられること。解決済みには、記録した[内容ハッシュ]が添えられること。文書を移動した後、[ToC]を再構築する前は「記録されたパスに無い」が返り、移動前のパスを現在のパスとして返さないこと。[ToC]を再構築した後は、同じ[DLID]から移動後のパスが返ること。管理状態に記録の無い[DLID]には「記録が無い」が返ること。解決の前後で、[Index 対象文書]、[ToC]および管理状態が変わらないこと（D-047）。
 
-[req-001]: REQ-001_overview.md "a69aaa86f118 DLID-veg2nsjk8zw1"
+[req-001]: REQ-001_overview.md "e039c117ad0b DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "d3a5a1cf16cb DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "90a2b4835b36 DLID-pc44gkb54821"
+[req-005]: REQ-005_references.md "4909917f4466 DLID-pc44gkb54821"
 [req-002-sec-9]: REQ-002_document-id.md#sec-9 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-002-sec-9-1]: REQ-002_document-id.md#sec-9-1 "85860fe69f58 DLID-bk29x4s8tadq"
 [req-002-sec-8]: REQ-002_document-id.md#sec-8 "85860fe69f58 DLID-bk29x4s8tadq"

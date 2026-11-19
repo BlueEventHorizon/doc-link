@@ -221,6 +221,13 @@
 - 添えた値を書いた参照が正しい参照として判定される → `check-links/test_check_links.py::SuggestedTitleTest::test_writing_the_value_makes_the_reference_formal_and_matched`、`check-links/test_check_links.py::SuggestedTitleTest::test_writing_the_section_value_makes_the_reference_matched`
 - doc-link が文書へ書かない → `check-links/test_check_links.py::CategoriesTest::test_writes_nothing`
 
+### AC-033
+
+- 書き直す対象の検出事項があるとき、案内が、一覧を利用者に示して書き直しを確認し、承認された分だけを書き直すよう指示する → `check-links/test_check_links.py::CategoriesTest::test_guidance_asks_the_user_before_rewriting_links`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_link_without_dlid_alone_asks_for_confirmation`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_inline_link_with_dlid_alone_asks_for_confirmation`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_path_mismatch_alone_asks_for_confirmation`、`check-links/test_check_links.py::GuidanceConfirmationTest::test_confirmation_is_given_once_for_mixed_findings`
+- 検出事項が無いとき、案内を返さない → `check-links/test_check_links.py::GuidanceConfirmationTest::test_no_findings_gives_no_guidance`
+- `check-links` が文書を書き換えない → `check-links/test_check_links.py::CategoriesTest::test_writes_nothing`
+- [DLID]の検出があるとき、利用者に付与を確認してから `embed-dlid` を起動するよう案内する（D-057） → `check-dlid/test_check_dlid.py::DetectionTest::test_findings_guide_to_ask_the_user_before_embedding`
+
 ## NFR-001〜003 一貫性・決定性・冪等性
 
 - 同一入力の論理同値 → `scripts/test_state_store.py::DeterminismTest::test_same_bytes_regardless_of_order`、`scripts/test_toc_candidate.py::AssembleTest::test_deterministic`、`scripts/test_state_store.py::DeterminismTest::test_toc_set_lists_are_order_independent`

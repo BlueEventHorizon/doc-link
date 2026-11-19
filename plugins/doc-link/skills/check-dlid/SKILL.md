@@ -40,6 +40,6 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_dlid.py" --project-root "${CL
 
 検出事項（`clean` が偽）があるときは、`guidance` に従い、`embed-dlid` の実行を案内する。
 
-- 文書 ID・セクション ID の無い箇所は、ユーザーまたはプロジェクト管理 AI が `embed-dlid` を実行して付与する
+- 文書 ID・セクション ID の無い箇所は、プロジェクト管理 AI が、検出した文書の一覧を利用者に示して、DLID を付与するかを確認する。付与が承認されたら、`embed-dlid` を実行する（起動が書き込みの承認である）
 - 重複する DLID は、`embed-dlid` の実行で、示した候補から利用者が原本を確定する
 - 検査は何も書き込まない。案内するだけで、`embed-dlid` をこのスキルから実行しない

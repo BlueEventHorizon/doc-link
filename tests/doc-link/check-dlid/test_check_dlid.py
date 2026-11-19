@@ -204,6 +204,16 @@ class DetectionTest(CheckTestBase):
         self.assertEqual(code, 0)
         self.assertTrue(any("embed-dlid" in line for line in result["guidance"]))
 
+    def test_findings_guide_to_ask_the_user_before_embedding(self):
+        # D-057: 付与の前に、検出した文書の一覧を利用者に示して確認する
+        self.write("a.md", "# T\n")
+        _, result = self.run_main("--key", "k", "--paths", "a.md")
+        embed = [line for line in result["guidance"] if "embed-dlid" in line]
+        self.assertTrue(embed, result)
+        self.assertTrue(
+            all("利用者" in line and "確認" in line for line in embed), embed
+        )
+
     def test_duplicates_guide_to_origin_confirmation(self):
         self.write("orig.md", DOC)
         self.write("copy.md", DOC)

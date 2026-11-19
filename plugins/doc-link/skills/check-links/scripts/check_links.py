@@ -134,6 +134,10 @@ CATEGORY_INLINE_LINK_WITH_DLID = "inline_link_with_dlid"
 KIND_DEFINITION = "definition"
 KIND_INLINE = "inline"
 
+_GUIDANCE_CONFIRM = (
+    "書き直す前に、検出したリンクと書く値の一覧（文書・行・書く値）を利用者に示して、書き直すかを確認する。"
+    "承認された分だけを書き直す。確認なしに書き直さない"
+)
 _GUIDANCE_FIX_LINKS = (
     "リンクを直すのは[プロジェクト管理 AI]である。パスの不一致には `current_path`、フラグメント不一致には"
     " `current_anchor` を使う。参照先が見つからない（`absent`・`missing_section`）場合は、移動か削除かを"
@@ -405,6 +409,12 @@ def _check_references(
 def _guidance(findings: list[dict]) -> list[str]:
     categories = {finding["category"] for finding in findings}
     guidance = []
+    rewrite_categories = _FORMAL_CATEGORIES | {
+        CATEGORY_LINK_WITHOUT_DLID,
+        CATEGORY_INLINE_LINK_WITH_DLID,
+    }
+    if categories & rewrite_categories:
+        guidance.append(_GUIDANCE_CONFIRM)
     if categories & _FORMAL_CATEGORIES:
         guidance.append(_GUIDANCE_FIX_LINKS)
     if categories & {CATEGORY_LINK_WITHOUT_DLID, CATEGORY_INLINE_LINK_WITH_DLID}:

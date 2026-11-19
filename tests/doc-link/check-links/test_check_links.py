@@ -171,8 +171,43 @@ class CategoriesTest(CheckLinksTestBase):
         self.assertIn("index-docs", guidance)
         self.assertIn("current_path", guidance)
 
+    def test_guidance_asks_the_user_before_rewriting_links(self):
+        # D-057・AC-033: 書き直す前に、一覧を利用者に示して確認し、承認された分だけを書き直す
+        guidance = "\n".join(self.result["guidance"])
+        self.assertIn("利用者", guidance)
+        self.assertIn("確認", guidance)
+        self.assertIn("承認", guidance)
+
     def test_writes_nothing(self):
         self.assertEqual(self.snapshot(), self.before)
+
+
+class GuidanceConfirmationTest(unittest.TestCase):
+    """D-057・AC-033: 書き直す対象の検出事項が 1 つでもあれば、書き直す前の確認を案内する。"""
+
+    def confirm_lines(self, categories):
+        findings = [{"category": category} for category in categories]
+        return [
+            line
+            for line in check_links._guidance(findings)
+            if "利用者" in line and "確認" in line and "承認" in line
+        ]
+
+    def test_link_without_dlid_alone_asks_for_confirmation(self):
+        self.assertEqual(len(self.confirm_lines(["link_without_dlid"])), 1)
+
+    def test_inline_link_with_dlid_alone_asks_for_confirmation(self):
+        self.assertEqual(len(self.confirm_lines(["inline_link_with_dlid"])), 1)
+
+    def test_path_mismatch_alone_asks_for_confirmation(self):
+        self.assertEqual(len(self.confirm_lines(["path_mismatch"])), 1)
+
+    def test_confirmation_is_given_once_for_mixed_findings(self):
+        categories = ["link_without_dlid", "path_mismatch", "absent"]
+        self.assertEqual(len(self.confirm_lines(categories)), 1)
+
+    def test_no_findings_gives_no_guidance(self):
+        self.assertEqual(check_links._guidance([]), [])
 
 
 DOC_C = "DLID-3333333333cc"

@@ -198,12 +198,12 @@ class DetectionTest(CheckTestBase):
         self.assertEqual(result["duplicates"], [])
         self.assertEqual(result["guidance"], [])
 
-    def test_findings_still_exit_0_and_ask_the_user_before_embedding(self):
-        # D-057: 付与の前に、検出した文書の一覧を利用者に示して確認する
+    def test_findings_still_exit_0(self):
         self.write("a.md", "# T\n")
         code, result = self.run_main("--key", "k", "--paths", "a.md")
         self.assertEqual(code, 0)
-        self.assertEqual(result["guidance"], [check_dlid.GUIDANCE_CONFIRM])
+        self.assertFalse(result["clean"])
+        self.assertEqual(result["guidance"], [])
 
     def test_missing_target_is_reported_and_processing_continues(self):
         self.write("a.md", "# T\n")

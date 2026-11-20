@@ -60,6 +60,6 @@ Index 対象から離脱した文書は、指定キーの[確定 ToC]から除�
 現時点で未決の関係はない。[文書 ID]の発行方式と一意性は要件 D-028／D-030 で決定した（要件 U-016）。
 
 [req-003-sec-7]: ../requirement/REQ-003_toc.md#sec-7 "40bbb7b52fec DLID-kxe3nxfgk491"
-[readme]: README.md "f1ff9833f7d6 DLID-zvepba87h7zk"
+[readme]: README.md "46122592dd45 DLID-zvepba87h7zk"
 [des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "90be2ac68a19 DLID-anz9vack2xzt"
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "da86b37d3824 DLID-7e90gq3sdncc"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "cc47b18bbb6a DLID-7e90gq3sdncc"

@@ -47,8 +47,8 @@ doc_link_id: DLID-h96208rqr773
 
 指定キーの[ToC]が未構築の場合は検索できず、初回構築が必要であることを返すこと。既存[ToC]がある場合は、検索要求に[Index 対象指定]が含まれなくても、[ToC]に保存された指定を再解釈して現在の対象文書を列挙し、再構築要否を検査できること。検索前の検査で再構築が不要と判定された場合は、そのまま検索を実行すること。再構築が必要と判定された場合は、検索前にユーザーへ再構築の規模（変更種別ごとの件数と AI による要約生成が必要な件数）を示して確認し、「[ToC]を再構築してから検索する」または「既存の[ToC]のまま検索する」を選択できること。後者を選択した場合は[ToC]を更新せず、検索結果に[ToC]の状態と、現在の[Index 対象文書]を反映していない可能性を含めること。再構築要否を判定できない場合は検索を停止し、原因を返すこと。
 
-[req-001]: REQ-001_overview.md "8418f83ba277 DLID-veg2nsjk8zw1"
+[req-001]: REQ-001_overview.md "e039c117ad0b DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "85860fe69f58 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "d3a5a1cf16cb DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "90a2b4835b36 DLID-pc44gkb54821"
+[req-005]: REQ-005_references.md "4909917f4466 DLID-pc44gkb54821"

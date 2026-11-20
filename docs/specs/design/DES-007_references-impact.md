@@ -83,6 +83,7 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 - doc-link は、何も書き換えない。
 - title の[内容ハッシュ]を書くのは、[プロジェクト管理 AI]である。
 - [プロジェクト管理 AI]が参照元を確かめて直し、title の[内容ハッシュ]を参照先の[現在ハッシュ]へ書き換えるまで、同じ参照を毎回返す（要件 FR-015）。
+- 書き換えは、参照元ごとに、変更箇所と参照元の記述を読んで確かめた参照だけに行う。読まずに一括で書き換えない。確かめた結果（修正の要否と根拠）は、報告に残す（要件 FR-015、[DES-010 §3.7][des-010-sec-3-7]）。
 - title の[内容ハッシュ]を書き換えても、参照元の[内容ハッシュ]は変わらない（要件 D-039、[DES-008 §3][des-008-sec-3]）。
 
 <a id="sec-4"></a>
@@ -91,8 +92,9 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 
 不整合検査は ID 欠落・重複、壊れた参照、title に[DLID]の無いリンク、パス不一致、[ToC]と現物の差、title の記録と参照先の[現在ハッシュ]が異なる参照を一覧化する操作として扱う。検査内容ごとに `check-dlid`、`check-links`、`check-toc`、`check-impact` の SKILL に分ける（[DES-010][des-010]）。検査は管理状態を書き換えない。ID の付与は DLID 付与操作だけが行うので、検査は[Index 対象文書]を変更しない（要件 D-035）。検出事項に重要度の分類は設けない。検出事項ごとの扱い（[ToC]の確定を妨げるか、検出後の作業）は、要件 D-025・D-036 と[DES-010][des-010]が定める。「存在しないセクション」は、リンク先パスの文書は存在するが、title の[セクション ID]を行の末尾に持つ見出しがその文書にも指定ディレクトリ内の他の文書にも無いことで判定する（§1、要件 D-033）。
 
-[req-005]: ../requirement/REQ-005_references.md "90a2b4835b36 DLID-pc44gkb54821"
-[des-010]: DES-010_skill-composition.md "da86b37d3824 DLID-7e90gq3sdncc"
-[des-010-sec-1-2]: DES-010_skill-composition.md#sec-1-2 "da86b37d3824 DLID-7e90gq3sdncc"
+[req-005]: ../requirement/REQ-005_references.md "4909917f4466 DLID-pc44gkb54821"
+[des-010]: DES-010_skill-composition.md "cc47b18bbb6a DLID-7e90gq3sdncc"
+[des-010-sec-1-2]: DES-010_skill-composition.md#sec-1-2 "cc47b18bbb6a DLID-7e90gq3sdncc"
+[des-010-sec-3-7]: DES-010_skill-composition.md#sec-3-7 "cc47b18bbb6a DLID-7e90gq3sdncc"
 [des-008-sec-2]: DES-008_content-rules.md#sec-2 "3d83f58b2ce6 DLID-ywa6htx8vq09"
 [des-008-sec-3]: DES-008_content-rules.md#sec-3 "3d83f58b2ce6 DLID-ywa6htx8vq09"

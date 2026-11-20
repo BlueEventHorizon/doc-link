@@ -1,5 +1,5 @@
 {
-  "content_hash": "da86b37d38244bdb3b59cc84861462b71fd8884c6525f3cb2068f3e3912d3379",
+  "content_hash": "cc47b18bbb6a3eb38f4d2fc607407b72fa75b517b2fe2e1372c83994fa0bc70f",
   "doc_link_id": "DLID-7e90gq3sdncc",
   "keywords": [
     "SKILL composition",
@@ -8,34 +8,31 @@
     "query-worker",
     "embed-dlid",
     "index-docs",
-    "check-impact",
-    "sequence diagram",
+    "check-dlid",
     "operation flow",
-    "DLID"
+    "sequence diagram",
+    "data exchange"
   ],
   "path": "docs/specs/design/DES-010_skill-composition.md",
-  "purpose": "Design of the eight doc-link SKILLs and two custom Agents: responsibilities, use cases, per-SKILL sequences, the operation flow, and the data exchange with Agents.",
+  "purpose": "Design of the doc-link SKILL and custom Agent composition: responsibilities, check SKILL findings, use cases, per-SKILL sequences, the operation flow, and Agent data exchange.",
   "summary": [
-    "Composition table of eight SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, check-dlid, check-links, check-toc, check-impact) with write permissions and requirement mapping",
-    "Custom Agents toc-updater (information generation) and query-worker (search) with responsibilities and callers",
-    "Responsibilities of operation and lookup SKILLs",
-    "Responsibilities of inspection SKILLs, what each detects and how the project management AI handles findings",
-    "check-impact output: changed documents with direct referrers, recorded content hash versus current hash, no indirect referrers",
-    "Use case diagram for users, the project management AI and caller skills",
-    "Sequence diagrams for each SKILL, including embed-dlid, index-docs, query-docs and resolve-dlid",
-    "Operation flow common to introduction and later changes: check-dlid, embed-dlid, check-links, index-docs, check-impact, with user confirmation for writes",
-    "Procedure for writing a reference with resolve-dlid and when index-docs is needed",
-    "Request and result exchange with custom Agents: identifiers, limits, error values, script validation, deletion timing"
+    "Eight SKILLs and two custom Agents (toc-updater, query-worker) with write permissions and corresponding requirements",
+    "Responsibilities of operation and query SKILLs: embed-dlid, index-docs, query-docs, resolve-dlid",
+    "Check SKILLs and how each finding is handled: check-dlid, check-links, check-toc, check-impact",
+    "Use case diagram for users, the project management AI, and calling skills",
+    "Per-SKILL sequence diagrams from embed-dlid through resolve-dlid",
+    "Steps for the project management AI to write a reference with a content hash",
+    "Common operation flow starting from index-docs, applying to both adoption and later changes",
+    "Instruction for handling check-impact results: judge, fix referrers, record hashes, rerun until empty",
+    "Data exchange with custom Agents: identifiers, request, result, error value, script validation, deletion timing"
   ],
   "tasks": [
-    "Implementing or modifying a doc-link SKILL",
-    "Implementing or modifying the toc-updater or query-worker Agent",
-    "Reviewing the SKILL and Agent design against requirements",
-    "Deciding the order in which to run SKILLs after introduction or changes",
-    "Writing SKILL.md files for doc-link",
-    "Handling findings of check-dlid, check-links, check-toc or check-impact",
-    "Writing a reference using resolve-dlid",
-    "Designing data exchange between a SKILL and an Agent"
+    "Implementing or changing any doc-link SKILL.md or its script",
+    "Designing or modifying the toc-updater or query-worker Agent",
+    "Deciding the order in which to run check and index SKILLs",
+    "Reviewing SKILL responsibilities and write permissions",
+    "Handling check-links or check-impact findings as the project management AI",
+    "Implementing the Agent request and result exchange"
   ],
   "title": "DES-010 SKILL と Agent の構成"
 }

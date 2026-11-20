@@ -35,7 +35,3 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_dlid.py" --project-root "${CL
 - `duplicates`: 重複する DLID ごとに、すべての該当パス（`locations` の `path`・`kind`・`line`・`heading`）。`candidates` があれば、管理状態に記録されたパスと一致する原本の候補として示す
 - `problems`・`warnings`: 存在しない・Markdown でない指定など。あれば、あわせて報告する
 - `clean` が真のときは、検出事項が無いことを報告する
-
-### 3. 検出事項の扱い
-
-検出事項（`clean` が偽）があるときは、`guidance` に従う。文書 ID・セクション ID の無い箇所は、プロジェクト管理 AI が、検出した文書の一覧を利用者に示して、DLID を付与するかを確認する。このスキルは付与を行わない。

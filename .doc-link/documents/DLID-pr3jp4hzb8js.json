@@ -1,39 +1,39 @@
 {
-  "content_hash": "3d76a10e246f14ede2b1bc3c93e1f6654d2a5158baa263c7db918e7199fa049b",
+  "content_hash": "f5cea40525986b21a766f309807acf36bd39a4f619919c42a9a4c54e41c0c640",
   "doc_link_id": "DLID-pr3jp4hzb8js",
   "keywords": [
     "formal reference",
-    "DLID",
+    "reference link definition",
+    "title DLID",
     "content hash",
-    "change impact",
+    "change impact candidate",
+    "reverse reference",
     "check-links",
     "check-impact",
-    "reverse reference",
-    "fragment mismatch",
-    "directory scan",
-    "section ID"
+    "path mismatch",
+    "fragment mismatch"
   ],
   "path": "docs/specs/design/DES-007_references-impact.md",
-  "purpose": "Design for extracting formal references, checking them by real directory scans, and notifying change-impact candidates by comparing recorded content hashes with current hashes.",
+  "purpose": "Design for checking formal references between documents and notifying change-impact candidates when a referenced target changes, plus the consistency checks built on them.",
   "summary": [
-    "Formal references are reference-link definitions whose title ends with a DLID, with an optional recorded 12-char content hash before it",
-    "Real directory scan classifies targets as match, path mismatch, or absent, plus fragment mismatch checks against anchors",
-    "Path-mismatch fixes are notified only when the same ID is uniquely confirmed by scanning; no current path is guessed",
-    "Links without a DLID get a suggested title value (content hash plus DLID) computed from the live target",
-    "Reverse references are built from scanned sources and limited to documents and sections in the confirmed ToC",
-    "Impact candidates are references whose recorded hash differs from the current hash or has no record",
-    "Indirect referrers are not listed; impact propagates one step per detection",
-    "Notification returns changed IDs, recorded hashes, referrer locations and scope; doc-link keeps no notification state and edits nothing",
-    "Consistency checks are split into check-dlid, check-links, check-toc and check-impact and never modify managed state"
+    "Extraction of formal references from reference-link definition titles ending in a DLID, with the optional recorded content hash",
+    "Real directory scanning to classify references as match, path mismatch, absent, or fragment mismatch, with duplicate diagnostics",
+    "Values to write into titles of links lacking a DLID, derived from the current target content",
+    "Reverse reference construction from scanned sources, limited to documents and sections in the confirmed ToC",
+    "Impact detection by comparing recorded title hashes with the current hashes of referenced targets",
+    "Direct referrers only; indirect impact is detected one step at a time",
+    "Notification contract: doc-link keeps no notification state and edits nothing; the project management AI judges and rewrites hashes",
+    "Behavior when the ToC is stale or no referrers are found",
+    "Consistency check division into check-dlid, check-links, check-toc, and check-impact"
   ],
   "tasks": [
-    "Implementing check-links or check-impact scripts",
-    "Designing or reviewing reference extraction from link titles",
-    "Handling path mismatch, missing target and fragment mismatch diagnostics",
-    "Computing title values for links lacking a DLID",
-    "Implementing change-impact candidate notification",
-    "Writing tests for reference and impact behavior",
-    "Deciding how a project management AI should rewrite recorded hashes"
+    "Implementing or modifying check-links and check-impact scripts",
+    "Designing reference extraction and title recording rules",
+    "Reviewing change-impact notification behavior",
+    "Writing or rewriting reference links with content hashes in titles",
+    "Handling check-impact results after a referenced document changes",
+    "Diagnosing broken references, path mismatches, and fragment mismatches",
+    "Writing tests for reference checks and impact detection"
   ],
   "title": "DES-007 参照検査と[変更影響候補の通知]"
 }

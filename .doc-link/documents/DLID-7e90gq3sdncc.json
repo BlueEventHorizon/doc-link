@@ -1,0 +1,38 @@
+{
+  "content_hash": "cc47b18bbb6a3eb38f4d2fc607407b72fa75b517b2fe2e1372c83994fa0bc70f",
+  "doc_link_id": "DLID-7e90gq3sdncc",
+  "keywords": [
+    "SKILL composition",
+    "custom Agent",
+    "toc-updater",
+    "query-worker",
+    "embed-dlid",
+    "index-docs",
+    "check-dlid",
+    "operation flow",
+    "sequence diagram",
+    "data exchange"
+  ],
+  "path": "docs/specs/design/DES-010_skill-composition.md",
+  "purpose": "Design of the doc-link SKILL and custom Agent composition: responsibilities, check SKILL findings, use cases, per-SKILL sequences, the operation flow, and Agent data exchange.",
+  "summary": [
+    "Eight SKILLs and two custom Agents (toc-updater, query-worker) with write permissions and corresponding requirements",
+    "Responsibilities of operation and query SKILLs: embed-dlid, index-docs, query-docs, resolve-dlid",
+    "Check SKILLs and how each finding is handled: check-dlid, check-links, check-toc, check-impact",
+    "Use case diagram for users, the project management AI, and calling skills",
+    "Per-SKILL sequence diagrams from embed-dlid through resolve-dlid",
+    "Steps for the project management AI to write a reference with a content hash",
+    "Common operation flow starting from index-docs, applying to both adoption and later changes",
+    "Instruction for handling check-impact results: judge, fix referrers, record hashes, rerun until empty",
+    "Data exchange with custom Agents: identifiers, request, result, error value, script validation, deletion timing"
+  ],
+  "tasks": [
+    "Implementing or changing any doc-link SKILL.md or its script",
+    "Designing or modifying the toc-updater or query-worker Agent",
+    "Deciding the order in which to run check and index SKILLs",
+    "Reviewing SKILL responsibilities and write permissions",
+    "Handling check-links or check-impact findings as the project management AI",
+    "Implementing the Agent request and result exchange"
+  ],
+  "title": "DES-010 SKILL と Agent の構成"
+}

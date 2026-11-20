@@ -18,7 +18,8 @@ PEP 723 とロックは持たない。[確定 ToC]・[文書情報]・参照元�
   `recorded_content_hash` は使わない（記録だけを書き換えても[内容ハッシュ]は変わらず、[ToC]が古いと判定されない。D-039）
 - 参照先の[現在ハッシュ]は、現物から計算せず、[確定 ToC]に記録した値を使う。参照先が[セクション ID]なら、[確定 ToC]の
   `sections` のそのセクションの `content_hash`。文書の[DLID]なら、`documents` のその[文書 ID]の `applied_hash`
-- 記録と[現在ハッシュ]を、64 桁の文字列として完全一致で比べる。一致しない参照と、記録なしの参照を影響候補にする
+- 記録と[現在ハッシュ]の比較は `content_hash.record_matches`、返す `current_hash`（title に書く値）は
+  `content_hash.title_value` が決める。一致しない参照と、記録なしの参照を影響候補にする
 - 参照先の[DLID]が[確定 ToC]の `sections` にも `documents` にも無い参照は、比べず、影響候補にしない（`check-links` が検出する）
 - 間接の参照元は列挙しない（D-043）。直接の参照元だけを、変更された文書ごとにまとめる
 
@@ -42,6 +43,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import state_store
+from content_hash import record_matches, title_value
 from markdown_reader import read_document
 from references import extract_from_document
 
@@ -197,7 +199,7 @@ def enumerate_impact(project_root: str | Path, toc_key: str) -> ImpactResult:
                 kind, section_id, heading = TARGET_DOCUMENT, None, None
             else:
                 continue  # 参照先が[確定 ToC]に無い（check-links が検出する）
-            if reference.recorded_hash == current_hash:
+            if record_matches(reference.recorded_hash, current_hash):
                 continue
             definition = "".join(
                 document.lines[reference.line : end_lines[reference.line]]
@@ -216,7 +218,7 @@ def enumerate_impact(project_root: str | Path, toc_key: str) -> ImpactResult:
                     target_section_id=section_id,
                     target_heading=heading,
                     recorded_hash=reference.recorded_hash,
-                    current_hash=current_hash,
+                    current_hash=title_value(current_hash),
                 )
             )
 

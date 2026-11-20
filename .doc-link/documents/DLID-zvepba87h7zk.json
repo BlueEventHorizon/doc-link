@@ -1,0 +1,31 @@
+{
+  "content_hash": "46122592dd45b7d780d5f26e596597afecf877b67097237dfbb6901d2e9206c7",
+  "doc_link_id": "DLID-zvepba87h7zk",
+  "keywords": [
+    "design document index",
+    "doc-link design",
+    "source of truth",
+    "requirements versus design",
+    "DES-001 to DES-010",
+    "pending decisions",
+    "state transition table"
+  ],
+  "path": "docs/specs/design/README.md",
+  "purpose": "Index of the doc-link design documents, stating the role of requirements versus design and mapping each design document to the content it owns.",
+  "summary": [
+    "Requirements are the source of truth for behavior and constraints; design is for subjects, information, states, and processing",
+    "Design must not override requirements; unresolved items are not treated as confirmed specification",
+    "Table mapping DES-001 to DES-010 to their responsibilities",
+    "Diagrams are illustrative; the transition table in DES-004 is normative",
+    "Each process detail lives in one document and is not duplicated in the overall design",
+    "Pending decisions blocking confirmation: none",
+    "Requirements and designs are approved after review, and storage is decided as JSON files"
+  ],
+  "tasks": [
+    "Finding which design document covers a topic",
+    "Starting design work or review of doc-link",
+    "Resolving conflicts between requirements and design",
+    "Checking whether any decision is pending before implementing"
+  ],
+  "title": "doc-link 設計書の構成"
+}

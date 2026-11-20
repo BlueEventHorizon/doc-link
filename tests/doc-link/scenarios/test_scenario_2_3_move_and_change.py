@@ -21,8 +21,10 @@ from scenario_support import (  # noqa: E402
     doc_text,
 )
 
+from content_hash import RECORD_LENGTH  # noqa: E402
+
 KEY = "k"
-OLD_RECORD = "c" * 64
+OLD_RECORD = "c" * RECORD_LENGTH
 
 
 def a_text(c_path="c.md", record=OLD_RECORD, target=ID_C):
@@ -193,12 +195,60 @@ class ContentChangeScenarioTest(ScenarioBase):
 
     def test_rewriting_a_record_does_not_change_the_referrer_hash(self):
         info_before = self.info(ID_A)
-        self.write("docs/a.md", a_text(record="d" * 64))
+        self.write("docs/a.md", a_text(record="d" * RECORD_LENGTH))
         code, fresh = self.check_toc(KEY, self.paths)
         self.assertEqual((code, fresh["status"]), (0, "up_to_date"))
         self.build_ok(KEY, self.paths)
         self.assertEqual(self.requested, [])
         self.assertEqual(self.info(ID_A), info_before)
+
+
+class FirstTitleScenarioTest(ScenarioBase):
+    """参照の title を初めて書いても、書いた文書の内容ハッシュは変わらず、書いた記録は書いた直後から正しい。
+
+    title に書く[内容ハッシュ]は、参照先の現在ハッシュ（`resolve-dlid` の値）である。title を書くことで書いた文書
+    自身のハッシュが変わると、その文書を参照する文書の記録が古くなり、書き直しが要る。
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.paths = ["docs/a.md", "docs/b.md", "docs/c.md"]
+        self.write("docs/b.md", B_TEXT)
+        self.write("docs/c.md", C_TEXT)
+        # 参照元 A は、title の無い定義で C を指す（[正式な参照]ではない）
+        self.write("docs/a.md", doc_text(ID_A, "A", "[to c][c]\n\n[c]: c.md", S_A))
+        self.build_ok(KEY, self.paths)
+
+    def test_first_title_keeps_the_referrer_hash_and_the_record_is_correct(self):
+        info_before = self.info(ID_A)
+        c_hash = self.resolve_one(ID_C)["content_hash"]
+
+        self.write("docs/a.md", a_text(record=c_hash))
+        # 参照が現れるので[ToC]は更新が要るが、A の本文は変わらないので要約の生成は要らない
+        code, stale = self.check_toc(KEY, self.paths)
+        self.assertEqual((code, stale["status"]), (0, "rebuild_needed"))
+        self.assertEqual(stale["counts"]["content_changed"], 0)
+        self.assertEqual(stale["counts"]["references_changed"], 1)
+        result = self.build_ok(KEY, self.paths)
+        self.assertEqual(self.requested, [])
+        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(self.info(ID_A), info_before)
+
+        # 書いた記録は、書き直さずに、そのまま正しい
+        code, fresh = self.check_toc(KEY, self.paths)
+        self.assertEqual((code, fresh["status"]), (0, "up_to_date"))
+        self.assertEqual(self.impact_documents(KEY, self.paths), [])
+
+    def test_retargeting_the_title_is_detected_as_a_reference_change(self):
+        c_hash = self.resolve_one(ID_C)["content_hash"]
+        self.write("docs/a.md", a_text(record=c_hash))
+        self.build_ok(KEY, self.paths)
+
+        self.write("docs/a.md", a_text(record=c_hash, target=ID_B))
+        code, stale = self.check_toc(KEY, self.paths)
+        self.assertEqual((code, stale["status"]), (0, "rebuild_needed"))
+        self.assertEqual(stale["counts"]["references_changed"], 1)
+        self.assertEqual(stale["counts"]["content_changed"], 0)
 
 
 if __name__ == "__main__":

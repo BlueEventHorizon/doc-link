@@ -1,7 +1,7 @@
 {
   "name": "doc-link",
   "description": "Index and search project Markdown by stable document IDs (DLIDs), track references between documents, and notify the documents affected by a change",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": { "name": "k2moons" },
   "license": "MIT",
   "homepage": "https://github.com/BlueEventHorizon/doc-link",

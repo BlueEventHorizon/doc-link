@@ -89,22 +89,20 @@ class CheckTestBase(unittest.TestCase):
 class StatusTest(CheckTestBase):
     ARGS = ("--key", KEY, "--paths", "a.md", "b.md")
 
-    def test_not_built_exits_0_and_guides_to_index_docs(self):
+    def test_not_built_exits_0(self):
         self.write("a.md", A_TEXT)
         code, result = self.run_main(*self.ARGS)
         self.assertEqual(code, 0)
         self.assertEqual(result["status"], "not_built")
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
 
-    def test_up_to_date_exits_0_without_guidance(self):
+    def test_up_to_date_exits_0(self):
         self.build()
         code, result = self.run_main(*self.ARGS)
         self.assertEqual(code, 0)
         self.assertEqual(result["status"], "up_to_date")
-        self.assertEqual(result["guidance"], [])
         self.assertEqual(result["documents"], [])
 
-    def test_rebuild_needed_exits_0_with_list_scale_and_guidance(self):
+    def test_rebuild_needed_exits_0_with_list_and_scale(self):
         self.build()
         self.write("a.md", A_TEXT + "more\n")
         code, result = self.run_main(*self.ARGS)
@@ -116,7 +114,6 @@ class StatusTest(CheckTestBase):
         )
         self.assertEqual(result["scale"]["content_changed"], 1)
         self.assertEqual(result["scale"]["ai_generation"], 1)
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
 
     def test_given_spec_takes_priority_over_the_saved_one(self):
         self.build()
@@ -133,15 +130,7 @@ class StatusTest(CheckTestBase):
         self.assertEqual(result["status"], "not_built")
         self.assertEqual(result["toc_key"], "all")
 
-    def test_excluded_documents_guide_to_embed_dlid(self):
-        self.write("noid.md", "# No id\n")
-        self.build(paths=("a.md", "b.md", "noid.md"))
-        code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "noid.md")
-        self.assertEqual(code, 0)
-        self.assertEqual(result["status"], "up_to_date")
-        self.assertTrue(any("embed-dlid" in line for line in result["guidance"]))
-
-    def test_different_spec_needs_a_rebuild_with_guidance(self):
+    def test_different_spec_needs_a_rebuild(self):
         self.build()
         self.write("c.md", "# No id\n")
         code, result = self.run_main("--key", KEY, "--paths", "a.md", "b.md", "c.md")
@@ -149,8 +138,6 @@ class StatusTest(CheckTestBase):
         self.assertEqual(result["status"], "rebuild_needed")
         self.assertTrue(result["target_spec_changed"])
         self.assertEqual(result["saved_target_spec"]["paths"], ["a.md", "b.md"])
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
-        self.assertTrue(any("保存" in line for line in result["guidance"]))
 
 
 class ReadOnlyTest(CheckTestBase):

@@ -1,0 +1,649 @@
+{
+  "documents": [
+    {
+      "applied_hash": "0fd442bde5b1457d7f209a1056a5e1d95b559e9b2eecb4cf06bc795c345400fe",
+      "doc_link_id": "DLID-55jqxg7r9qr1"
+    },
+    {
+      "applied_hash": "590998804bef5b2ad3e9ecc74303225cb274baf74e08afc006d689309f730ea3",
+      "doc_link_id": "DLID-2g3cgnnry3bm"
+    },
+    {
+      "applied_hash": "619be1bfd3ccab1df83c092d59bfdb4983bd862a23be9eddbfe5c1319c37c7ad",
+      "doc_link_id": "DLID-59vzewmxghxc"
+    },
+    {
+      "applied_hash": "6c74e9d6f9d50c142843856465a1f8763d995b463eaff8fd596701e135281494",
+      "doc_link_id": "DLID-n32vb00syfve"
+    },
+    {
+      "applied_hash": "a7037b12722536682aa371798acb684c51c7f9a9a88c6cc165fbccd4c2f107e4",
+      "doc_link_id": "DLID-35fhyrzd02he"
+    },
+    {
+      "applied_hash": "d194bed7b52e882f193dd5ea2b11be86049d29e94700c1cfd187660724a86eb5",
+      "doc_link_id": "DLID-r079k4d191ym"
+    },
+    {
+      "applied_hash": "de3932695d2ca756ff85dfc8c0dc64b4f2ed05a58e3c4c2be0d1c571aa2fa9e7",
+      "doc_link_id": "DLID-tq1tc0r4nnpn"
+    }
+  ],
+  "last_checks": [
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "result": "success"
+    },
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "result": "success"
+    },
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "result": "success"
+    },
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "result": "success"
+    },
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "result": "success"
+    },
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "result": "success"
+    },
+    {
+      "checked_at": "2026-11-19T16:15:15+00:00",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "result": "success"
+    }
+  ],
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-19T16:15:15+00:00",
+        "found_path": "docs/rules/plugin_claude_code_authoring_guide.md",
+        "result": "match",
+        "scope": "docs/rules"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "d194bed7b52e",
+      "recorded_path": "plugin_claude_code_authoring_guide.md",
+      "source_doc_id": "DLID-n32vb00syfve",
+      "source_section_id": null,
+      "target_doc_id": "DLID-r079k4d191ym",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-19T16:15:15+00:00",
+        "found_path": "docs/rules/plugin_claude_code_reference.md",
+        "result": "match",
+        "scope": "docs/rules"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "6c74e9d6f9d5",
+      "recorded_path": "plugin_claude_code_reference.md",
+      "source_doc_id": "DLID-r079k4d191ym",
+      "source_section_id": null,
+      "target_doc_id": "DLID-n32vb00syfve",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-19T16:15:15+00:00",
+        "found_path": "docs/rules/plugin_implementation_guidelines.md",
+        "result": "match",
+        "scope": "docs/rules"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "a7037b127225",
+      "recorded_path": "plugin_implementation_guidelines.md",
+      "source_doc_id": "DLID-55jqxg7r9qr1",
+      "source_section_id": null,
+      "target_doc_id": "DLID-35fhyrzd02he",
+      "target_section_id": null
+    }
+  ],
+  "reverse_references": [
+    {
+      "source_doc_id": "DLID-55jqxg7r9qr1",
+      "source_section_id": null,
+      "target_doc_id": "DLID-35fhyrzd02he",
+      "target_section_id": null
+    },
+    {
+      "source_doc_id": "DLID-n32vb00syfve",
+      "source_section_id": null,
+      "target_doc_id": "DLID-r079k4d191ym",
+      "target_section_id": null
+    },
+    {
+      "source_doc_id": "DLID-r079k4d191ym",
+      "source_section_id": null,
+      "target_doc_id": "DLID-n32vb00syfve",
+      "target_section_id": null
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "02a1805ce865b07b41ddfa43c1468bca36b957a42350fed2a2e8989382124ce7",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "プラグイン実装ガイドライン",
+      "position": 0,
+      "section_id": "DLID-4px5jv1568w5"
+    },
+    {
+      "content_hash": "0b8b1251ba8edd006b195c831d12d71e521bda636863c591090cd7cbd4143b63",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "確定してから書き、上書きしない",
+      "position": 9,
+      "section_id": "DLID-f7ma3cxc4we2"
+    },
+    {
+      "content_hash": "0e49c51b9b3140a1795369a5ff93ebdf7da0385dbfdee948d1dc3b2a8610748c",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "`3` 以上に共通の意味を置かない理由",
+      "position": 2,
+      "section_id": "DLID-gemtm84pnhy8"
+    },
+    {
+      "content_hash": "16457dcc9235cad2e12fc8506e85942ae7c7e762c6fb4feda4e46e25320fc84b",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "`context: fork` の不具合",
+      "position": 3,
+      "section_id": "DLID-b0y85e04y1rw"
+    },
+    {
+      "content_hash": "1bfeddc47245e28acfc189cc2a2b4bbede6a20438e8a355c8bf1272da37e8884",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "起動経路の選び方",
+      "position": 3,
+      "section_id": "DLID-emht0nf25nd5"
+    },
+    {
+      "content_hash": "288a19adaa5d2faa2e4c6d59c80dda2344743cea559e34118ed7d2df75e6d76f",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "パスは絶対パスでよい",
+      "position": 12,
+      "section_id": "DLID-rerm67m9wrfj"
+    },
+    {
+      "content_hash": "28bd5db8d0fcffc43b70d19ebeb70352f005b6ddb2776d13afb1697311c71ad9",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "形式の検証を置かない",
+      "position": 11,
+      "section_id": "DLID-2mrw6fbc9ns3"
+    },
+    {
+      "content_hash": "292a680ce87d0c0c87207bb1eb626804706fc52cb7029c42cc5e3d8c244f752c",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "カスタム Agent",
+      "position": 5,
+      "section_id": "DLID-kxhmhn6h4r3p"
+    },
+    {
+      "content_hash": "2c80616e84c2f824f2b0b5a64624ddbb9a7b3bd69eead05ee2d798faf516eef7",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "多重防御",
+      "position": 6,
+      "section_id": "DLID-tj5cht2bh9z5"
+    },
+    {
+      "content_hash": "2d6d96929419c464397e82357bdcaf8dc364be3613038cda6f47d2ca72b18382",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "名称",
+      "position": 1,
+      "section_id": "DLID-n2ev98sq8arw"
+    },
+    {
+      "content_hash": "3a94a53493942e132332c0463e5cc5cab808abe2bee4406b16e0445e231bfc47",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "2. `subagent_type` の値域",
+      "position": 4,
+      "section_id": "DLID-p0anbksg88q2"
+    },
+    {
+      "content_hash": "402559c2b716eadfc514d3b956afd71c79db63d42912468d409b6b4e7c7ab1bb",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "フォールバックを反射的に書かない [MANDATORY]",
+      "position": 10,
+      "section_id": "DLID-0em6bma15tg2"
+    },
+    {
+      "content_hash": "44a231efe251e8bd7e24ebe4c8fdc68af8620492f9de6b5950b0d4e57ee23ba5",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "スクリプトと文書の配置 [IMPORTANT]",
+      "position": 4,
+      "section_id": "DLID-jzpbdqs5tqrj"
+    },
+    {
+      "content_hash": "4509cc30d289ac71b6dc1402a522602d5f582ec7c2472c551f2e98e6b21f25cb",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "理由",
+      "position": 13,
+      "section_id": "DLID-mm983yy7b9wy"
+    },
+    {
+      "content_hash": "493dd3898b15f05e0dd340a5f9e0b48e2d0d046de36ea026d9859a969691240d",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "script のエラー出力",
+      "position": 0,
+      "section_id": "DLID-ptjyhgyayypg"
+    },
+    {
+      "content_hash": "57cc4e45d61fb614376cb55e1ca59ac0c23a3fe29a678b362aee6b69df371e4d",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "編集しない対象",
+      "position": 15,
+      "section_id": "DLID-wwzecwvhss9v"
+    },
+    {
+      "content_hash": "5d98ac0ac8f1d80222e1104be5423abf1944099d7e096318299559d803df228e",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "配布物は開発用の文書を参照しない [MANDATORY]",
+      "position": 6,
+      "section_id": "DLID-mhrmweybjx9z"
+    },
+    {
+      "content_hash": "63593940471b2b79fcdc2977d8c6c80025e281d159695d043723cd3f77d5b682",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "依存の追加と削除 [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-rz9q08ayff14"
+    },
+    {
+      "content_hash": "638eb13242ea9ed5f270d9f5835cb1f6380c8003dadc3109e43418d1f122ee25",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "heading": "優先する範囲 [MANDATORY]",
+      "position": 1,
+      "section_id": "DLID-62m358p4cwbs"
+    },
+    {
+      "content_hash": "6d601b9157a2f7b9307765573c7876961db7f164ded4eb6f92b605d8a3595e7d",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "他のコンポーネントへの窓口は SKILL だけ [MANDATORY]",
+      "position": 7,
+      "section_id": "DLID-z6bcgfwrztj4"
+    },
+    {
+      "content_hash": "6e644a29e7c152f1172dfbb77a26b55c94abcd539b1c4846c09b2f384126c3df",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "基本原則",
+      "position": 3,
+      "section_id": "DLID-fzv410j82pcq"
+    },
+    {
+      "content_hash": "6ed29577dd2f3016a802c5add5e14fcb25d68c205597e3026a6f8bc5a9508622",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "各機能が決めること",
+      "position": 14,
+      "section_id": "DLID-1qmnw1t0tgcm"
+    },
+    {
+      "content_hash": "731e35539b6c9c959889b2d6826c5b30caa655c157d939fbe16979e2ff67376f",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "Agent の完了の待ち方 [MANDATORY]",
+      "position": 8,
+      "section_id": "DLID-jtpfexg1pajr"
+    },
+    {
+      "content_hash": "74c6166db89d3e3e474c1358cd6b25258168b9e90ed6d91d17bc33be41f04aa4",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "Claude Code リファレンス（SKILL / プラグイン / Agent）",
+      "position": 0,
+      "section_id": "DLID-2a93hrp8cv46"
+    },
+    {
+      "content_hash": "79b95d03ce501e3dc46e47ef63d4a4f700f15de3b380e9c24a5cc1468fdc64ec",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "uv 利用ルール",
+      "position": 0,
+      "section_id": "DLID-6a28har6hrt1"
+    },
+    {
+      "content_hash": "7af681003b9ed091c99a03a30ce49eb23d6921c2da747661607b2c64897a667c",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "heading": "実行と依存 [MANDATORY]",
+      "position": 2,
+      "section_id": "DLID-q71wr7vxtx6z"
+    },
+    {
+      "content_hash": "8022a8a8ad4b3d7ed8ad07b13cac9fcc25f41f8a8f3e229ae6b20142ceae3a6f",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "例外",
+      "position": 7,
+      "section_id": "DLID-shjyhry8ty4b"
+    },
+    {
+      "content_hash": "8100bdb88783cd1e8360e38da6be9bcff465c52f0531de912145fc35991e795d",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "判断の手順",
+      "position": 12,
+      "section_id": "DLID-hx3xzsgqyyjh"
+    },
+    {
+      "content_hash": "8241d2fdb9c047b88793d0619c77d4d026324e4ba6d0ec81d86ce5ba54852e11",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "一時ファイルは `.temp/<plugin>/<skill>/` に `Write` ツールで書く [CRITICAL]",
+      "position": 5,
+      "section_id": "DLID-jej8f9m3vz0h"
+    },
+    {
+      "content_hash": "82e50b1e56fe040eff343192ee12b568043681d3b86ac0e70408c367e59abcef",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "heading": "Node.js [MANDATORY]",
+      "position": 3,
+      "section_id": "DLID-6ehnfvsjn4yq"
+    },
+    {
+      "content_hash": "82f721d2f4a6094877807b4b6936fd8bea0a05c65a0a67e8097e40ee277b7847",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "Claude Code 作成ガイド（SKILL / カスタム Agent）",
+      "position": 0,
+      "section_id": "DLID-p3ppj6znsh69"
+    },
+    {
+      "content_hash": "845efbb0bbe3bc4e2c79fb23361bd8627ab6fae3a35fb2e542de145ce0da0d6c",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "heading": "テスト [MANDATORY]",
+      "position": 5,
+      "section_id": "DLID-avzfrasm4v19"
+    },
+    {
+      "content_hash": "872e35b0c4bf7b64cbf3f1a1847421120913ce0fe84ac522a0048a720b9b174e",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "別スキルの呼び出し [MANDATORY]",
+      "position": 7,
+      "section_id": "DLID-yfysfspxt2zf"
+    },
+    {
+      "content_hash": "9072420d2ac1b6709e7d6c52bbe0d766f4a49595c0180775634b535e971e6347",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "理由",
+      "position": 17,
+      "section_id": "DLID-fmzrshbaygz4"
+    },
+    {
+      "content_hash": "9075d900f9362fd71cf8f587aeeea379951cc18120cd5c1c1a29715becaf2d31",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "AI が解釈する入力にスクリプトのパーサーを使わない [CRITICAL]",
+      "position": 9,
+      "section_id": "DLID-erqgzx68j9y4"
+    },
+    {
+      "content_hash": "91e5cc8948f8222c80970593783dbfce8277ad6a743c568842c5a2df582785da",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "適用範囲",
+      "position": 1,
+      "section_id": "DLID-dfvccr5n7rv9"
+    },
+    {
+      "content_hash": "94b5fef2c534c3fb12dca07dbd1fb555b9a4b04391921b2aa1953ea4f7e6a193",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "運ぶのは識別値だけ [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-v3fcy1fkkdpp"
+    },
+    {
+      "content_hash": "953665855107636018af039ea2e11bf3d82975a0390375640d01f076abcc1460",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "終了の値で成否を表す",
+      "position": 10,
+      "section_id": "DLID-mf2dwgjrt3zt"
+    },
+    {
+      "content_hash": "9cd969ec462507d95d6ae16a0d0d0a05dad45a2a846918c06af5357bfbdf15f1",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "出典の記し方",
+      "position": 1,
+      "section_id": "DLID-6ez7m48dcqbk"
+    },
+    {
+      "content_hash": "9cfc15996a14c03527134b102073c8cedfc5cabb9cc2bbcd396404e15aea7e2d",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "ロック",
+      "position": 5,
+      "section_id": "DLID-nz0m4aryvsg8"
+    },
+    {
+      "content_hash": "a08311fc8607935279dff590d94cfc794691f9ee80792f89aaf73a07cd3e4da5",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "読む側はパスを得て直接読む",
+      "position": 6,
+      "section_id": "DLID-ty1vvkgd97zy"
+    },
+    {
+      "content_hash": "a681012c7f556fbf3fc566b9594741e1ee82c555272bc2bffe3a506020c0f443",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "終了コードの宣言 [MANDATORY]",
+      "position": 3,
+      "section_id": "DLID-jzhrr7nx93mq"
+    },
+    {
+      "content_hash": "ab7484ff8b77095a3567b627c3124ffeae8db4da5412b44d09a69e46805a0494",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "起動経路",
+      "position": 2,
+      "section_id": "DLID-bdq9ta2dd6kf"
+    },
+    {
+      "content_hash": "ab98f57245c92ad11987c7b8c9a4aec084814721ffea3858709327f288e60d17",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "例外",
+      "position": 16,
+      "section_id": "DLID-n63xrv3gbzwp"
+    },
+    {
+      "content_hash": "acf58de6a39f7af0fb76080b0258e1b9126c328923495ca71ce8decaf98cea20",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "テスト [CRITICAL]",
+      "position": 2,
+      "section_id": "DLID-a1dqx3s6k9ba"
+    },
+    {
+      "content_hash": "ad437e29981b028d58342bdfd115eba736fdfe5c02db0f17a8e51f2ccac390fa",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "適用範囲",
+      "position": 1,
+      "section_id": "DLID-tb0f710nk973"
+    },
+    {
+      "content_hash": "b01bf18551895d414a39b7459921ecc7816b70bfdccf41002dbe4061ea5a03b2",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "agent とのデータ受け渡し",
+      "position": 0,
+      "section_id": "DLID-p639bx95kvev"
+    },
+    {
+      "content_hash": "b3ceebb9dfba6f55e1e11a7b8a04e89000c67069ec2be1beddd34cb5e4ec6c7d",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "終わったら削除する",
+      "position": 13,
+      "section_id": "DLID-zhdqh2wtg8qg"
+    },
+    {
+      "content_hash": "b4a784fcb013453c59e30df59a9c1332ae6749677983429d889bfc6ab09a3c2a",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "使わないコードは削除する [IMPORTANT]",
+      "position": 8,
+      "section_id": "DLID-f93xz9akmt8b"
+    },
+    {
+      "content_hash": "b6b665165920c92e20811236c4b80bddb0d17f166ef2608a496d77ec407eddff",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "公開直後の版を取り込まない",
+      "position": 7,
+      "section_id": "DLID-rht6admcdb3g"
+    },
+    {
+      "content_hash": "b9c0836e770412d214493d57a04e5deefa089cf3ca5da5aa56a04740adc2949a",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "SKILL.md にインラインスクリプトを書かない [CRITICAL]",
+      "position": 3,
+      "section_id": "DLID-rty2ap6xgkfj"
+    },
+    {
+      "content_hash": "be212d1f0f23b996a473bb199b7574314345fe5438e2b2bede7c9881be250f9e",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "heading": "SKILL の実行モデル [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-nrwvj497nqt8"
+    },
+    {
+      "content_hash": "bfa4cfa8a63bb7d765e680be1ff6d8e2db26184fc21941ced78fac22571a5da1",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "依存の宣言の置き場",
+      "position": 2,
+      "section_id": "DLID-w2t19v8jbhh3"
+    },
+    {
+      "content_hash": "c1096375fc8a18b2fd6d43cdd3f265c47f790bdc7ed6733bad0f831cf61ad324",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "標準エラー出力",
+      "position": 6,
+      "section_id": "DLID-5ac29c71avh8"
+    },
+    {
+      "content_hash": "c28cfcbcac4c69c2b10ab835b414e9c4dd8c064d28e73acb82b85544c28af89a",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "1. 起動経路 5 種と短縮名称",
+      "position": 2,
+      "section_id": "DLID-r1ejx3b27739"
+    },
+    {
+      "content_hash": "c76e62f0f4aa4f9879ca2015781c962f8e12d1052b1f2bc701bcaec2cf01d09e",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "終了コード [MANDATORY]",
+      "position": 1,
+      "section_id": "DLID-4xy25dxb160k"
+    },
+    {
+      "content_hash": "c82fb07696db9a0dbf4ced5037ba673d47e1a37027ce8f071e01b25c91b3c108",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "3. Agent の起動に関する観測",
+      "position": 5,
+      "section_id": "DLID-bgqd34m0admq"
+    },
+    {
+      "content_hash": "caf3645a23b8646663b71e1d79eb9d1a9d2272046fe8af39b88e0a2755326f3e",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "スクリプト言語と依存 [IMPORTANT]",
+      "position": 1,
+      "section_id": "DLID-c5bk0wjjp0bm"
+    },
+    {
+      "content_hash": "cc2da7635be7c87c8dbfb2bdfca812fba68c1a2379d0758950c6f4636f56dd15",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "Python の版",
+      "position": 8,
+      "section_id": "DLID-y00mrvk1fnqr"
+    },
+    {
+      "content_hash": "d5e18cbf0c0c5cd2005e86831ba55eeb8fc21c7ad66cbc7ee20fe288c227467f",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "意味は定義が持つ [MANDATORY]",
+      "position": 8,
+      "section_id": "DLID-x58macmsp71n"
+    },
+    {
+      "content_hash": "db17b954a692f556178829bdc3179be806cbc1d0161e633a4a47d5aba20e7cf0",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "なぜ prompt と return value で運ばないか",
+      "position": 2,
+      "section_id": "DLID-4c3ekhtv3nfz"
+    },
+    {
+      "content_hash": "db72439f4c50a11e1e1ec6fb1f6b1c20c9f47e20d8b1d03a68582a3a2bfaa011",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "継承型 SKILL",
+      "position": 4,
+      "section_id": "DLID-dmy5gkkra1qh"
+    },
+    {
+      "content_hash": "dc2985678ef5f8a4969ff01f782ae6b727aa0e1836f6a36ae9dad8d55cbca648",
+      "doc_link_id": "DLID-tq1tc0r4nnpn",
+      "heading": "doc-link 実装ルール",
+      "position": 0,
+      "section_id": "DLID-9qpga2gvjnmx"
+    },
+    {
+      "content_hash": "dd4f650d4aca3696b0e72db9e696b8e33d7d4a86f348fe2611520b9c7b9a51e5",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "実行 [MANDATORY]",
+      "position": 3,
+      "section_id": "DLID-vgtdhmzf59zb"
+    },
+    {
+      "content_hash": "dded6bf9dac3a83cb331611688f3dd20f0e87e8e8416d5d86aadb60bf28715bd",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "禁止するパターン",
+      "position": 11,
+      "section_id": "DLID-aj96vtgb3wg7"
+    },
+    {
+      "content_hash": "e22a009294fe29b2ec619732a3043dd91f60decc8138f59877d3267bfa83f88f",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "書くのは script [MANDATORY]",
+      "position": 5,
+      "section_id": "DLID-t9zwxxys59vv"
+    },
+    {
+      "content_hash": "f1d9bb5c4eb451d7da2114cd8405b61e1e35db2083501607fb80c36207ede9f5",
+      "doc_link_id": "DLID-2g3cgnnry3bm",
+      "heading": "値は変形せずに届く",
+      "position": 7,
+      "section_id": "DLID-wmzmhv12nm27"
+    },
+    {
+      "content_hash": "f502c1f17d535083c3f164fb4722e19322c41218a23b90dbd3ecd0d314ba0b96",
+      "doc_link_id": "DLID-35fhyrzd02he",
+      "heading": "バージョン関連ファイルは通常の作業で編集しない [CRITICAL]",
+      "position": 14,
+      "section_id": "DLID-cas54zcbq420"
+    },
+    {
+      "content_hash": "f74839b7d1f9932e8babd4839c1dcc603a0c98a43536bf76541af330008d9d0f",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "更新",
+      "position": 6,
+      "section_id": "DLID-fdverfrzfema"
+    },
+    {
+      "content_hash": "faf63a77091b992aded79dd9bee48ba1a4da49384e039b45872d16699a31ae41",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "標準出力",
+      "position": 5,
+      "section_id": "DLID-sead9gpfbm1a"
+    },
+    {
+      "content_hash": "fe1e887b650f3cc814311fdd3f5ff6d653ebe714242f37fe4d8840892bbcc6a4",
+      "doc_link_id": "DLID-59vzewmxghxc",
+      "heading": "呼び出し側 [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-df9ndax9f375"
+    }
+  ],
+  "target_spec": {
+    "dirs": [
+      "docs/rules"
+    ],
+    "exclude": [],
+    "key": "rules",
+    "mode": "targets",
+    "paths": []
+  },
+  "toc_key": "rules",
+  "version": 1
+}

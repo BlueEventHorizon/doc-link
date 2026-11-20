@@ -25,7 +25,7 @@
 終了コード 0 のとき結果の JSON、1 のときエラーの JSON（`errors` は自然文の配列）を返す。
 
 [ToC]が未構築（`not_built`）・再構築必要（`rebuild_needed`）のとき、変更影響候補を返さず、`check-toc` と同じ検査結果
-（`check-toc` の標準出力と同じ項目）を返す。`changed_documents` は持たない。`guidance` は `index-docs` の実行を案内する。
+（`check-toc` の標準出力と同じ項目）を返す。`changed_documents` と `guidance` は持たない。
 
 [ToC]が最新（`up_to_date`）のとき、次を返す。
 
@@ -70,22 +70,11 @@ import script_output  # noqa: E402
 import target_spec  # noqa: E402
 import toc_check  # noqa: E402
 
-GUIDANCE_NOT_BUILT = (
-    "[ToC]が未構築のため、変更影響候補を返さない。`index-docs` を実行して、初回の構築をする"
-    "（ユーザーまたはプロジェクト管理 AI が実行する）"
-)
-GUIDANCE_REBUILD = (
-    "[ToC]と現物に不一致があるため、変更影響候補を返さない。`index-docs` を実行して、[ToC]を再構築した後、"
-    "`check-impact` をもう一度実行する（ユーザーまたはプロジェクト管理 AI が実行する）"
-)
-GUIDANCE_EXCLUDED = (
-    "ID 未付与・ID 重複の文書は[ToC]に入らない。`check-dlid` で確かめ、"
-    "`embed-dlid` で解消してから、`index-docs` を実行する"
-)
 GUIDANCE_IMPACT = (
-    "変更箇所と参照元の文書を読み、参照元の修正が必要かを[プロジェクト管理 AI]が判断する。必要なら参照元を直し、"
+    "参照元ごとに、変更箇所と参照元の該当記述を読み、参照元の修正が必要かを[プロジェクト管理 AI]が判断する。必要なら参照元を直し、"
+    "判断の結果（修正の要否と根拠）を報告に残す。"
     "確かめた参照の title に参照先の[現在ハッシュ]（`current_hash`）を書く。確かめていない参照の title は書き換えない。"
-    "参照元を直したときは `index-docs` を実行する（title の[内容ハッシュ]だけを書いたときは実行しなくてよい）。"
+    "読まずに一括で書き換えない（書き換えると、その参照の通知が消える）。"
     "書いたあとは `check-impact` をもう一度実行し、`changed_documents` が空になるまで繰り返す"
 )
 NOTE_SCOPE = (
@@ -101,25 +90,10 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _stale_output(check: toc_check.TocCheck) -> dict:
-    output = check.to_dict()
-    guidance = [
-        GUIDANCE_NOT_BUILT
-        if check.status == toc_check.STATUS_NOT_BUILT
-        else GUIDANCE_REBUILD
-    ]
-    if check.status != toc_check.STATUS_NOT_BUILT and check.excluded:
-        guidance.append(GUIDANCE_EXCLUDED)
-    output["guidance"] = guidance
-    return output
-
-
 def _impact_output(check: toc_check.TocCheck, root: Path) -> dict:
     checked_at = utc_now()
     result = impact_candidates.enumerate_impact(root, check.toc_key)
     guidance = [GUIDANCE_IMPACT] if result.changed_documents else []
-    if check.excluded:
-        guidance.append(GUIDANCE_EXCLUDED)
     return {
         "status": check.status,
         "changed_documents": [d.to_dict() for d in result.changed_documents],
@@ -153,7 +127,7 @@ def execute(args: argparse.Namespace) -> int:
             + [cause.describe() for cause in check.causes]
         )
     if check.status != toc_check.STATUS_UP_TO_DATE:
-        return script_output.emit_result(_stale_output(check))
+        return script_output.emit_result(check.to_dict())
     try:
         output = _impact_output(check, root)
     except impact_candidates.ImpactFailure as failure:

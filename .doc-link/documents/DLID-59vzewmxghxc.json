@@ -1,0 +1,39 @@
+{
+  "content_hash": "619be1bfd3ccab1df83c092d59bfdb4983bd862a23be9eddbfe5c1319c37c7ad",
+  "doc_link_id": "DLID-59vzewmxghxc",
+  "keywords": [
+    "exit code",
+    "error output",
+    "errors array",
+    "argparse",
+    "stdout JSON",
+    "stderr",
+    "docstring declaration",
+    "script contract",
+    "caller handling"
+  ],
+  "path": "docs/rules/plugin_script_error_output_rules.md",
+  "purpose": "Normative rules for how plugin Python scripts return exit codes and error output, targeting machine-readable output that AI reads and branches on.",
+  "summary": [
+    "Exit codes: 0 completed, 1 undifferentiated failure, 2 argument rejected by argparse, 3 or more script-specific",
+    "Completion judgment excludes result content; zero findings still exit 0",
+    "Meaning of codes 3 and above belongs only to the script returning them",
+    "Scripts returning 3 or more must declare a full exit code table in the module docstring, including 0",
+    "Wrappers passing through exit codes must declare the range or collapse to 0, 1, 2",
+    "Callers branch only on declared values; undeclared or 1 treated as undifferentiated error",
+    "Standard output: result JSON on 0, error JSON on non-zero, except 2 where argparse writes usage to stderr",
+    "Error JSON has an errors array of natural-language sentences",
+    "Diagnostics may go to stderr but error content must be in stdout JSON",
+    "Exception for harness-defined contracts such as hooks; applicability note for existing scripts"
+  ],
+  "tasks": [
+    "Writing a new plugin Python script",
+    "Defining script exit codes",
+    "Writing a module docstring exit code table",
+    "Writing SKILL.md that handles script results",
+    "Designing script error output JSON",
+    "Reviewing script error handling",
+    "Writing wrapper scripts that pass through exit codes"
+  ],
+  "title": "script のエラー出力"
+}

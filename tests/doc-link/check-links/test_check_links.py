@@ -15,7 +15,12 @@ SKILL_SCRIPTS_DIR = (
 sys.path.insert(0, str(SKILL_SCRIPTS_DIR))
 
 import check_links  # noqa: E402
-from content_hash import document_content_hash, section_content_hashes  # noqa: E402
+from content_hash import (  # noqa: E402
+    RECORD_LENGTH,
+    document_content_hash,
+    section_content_hashes,
+    title_value,
+)
 
 DOC_A = "DLID-0123456789ab"
 SEC_A1 = "DLID-abcdefghjkmn"
@@ -25,7 +30,7 @@ SEC_GONE = "DLID-4444444444dd"
 DOC_GONE = "DLID-zzzzzzzzzzzz"
 DOC_MAIN = "DLID-5555555555ee"
 SEC_MAIN = "DLID-6666666666ff"
-HASH = "a" * 64
+HASH = "a" * RECORD_LENGTH
 
 REF_A = f"---\ndoc_link_id: {DOC_A}\n---\n# Alpha {SEC_A1}\n\n## Beta {SEC_A2}\n"
 REF_B = f"---\ndoc_link_id: {DOC_B}\n---\n# Bee\n"
@@ -162,17 +167,41 @@ class CategoriesTest(CheckLinksTestBase):
             self.assertNotIn("example.com", finding["target"])
             self.assertNotIn("plain.md", finding["target"])
 
-    def test_scope_and_guidance(self):
+    def test_scope(self):
         scope = self.result["scope"]
         self.assertIn("ref", scope["directories"])
         self.assertTrue(scope["checked_at"])
-        guidance = "\n".join(self.result["guidance"])
-        self.assertIn("suggested_title", guidance)
-        self.assertIn("index-docs", guidance)
-        self.assertIn("current_path", guidance)
 
     def test_writes_nothing(self):
         self.assertEqual(self.snapshot(), self.before)
+
+
+class GuidanceConfirmationTest(unittest.TestCase):
+    """D-057・AC-033: 書き直す対象の検出事項が 1 つでもあれば、書き直す前の確認を案内する。"""
+
+    def confirm_lines(self, categories):
+        findings = [{"category": category} for category in categories]
+        return [
+            line
+            for line in check_links._guidance(findings)
+            if "利用者" in line and "確認" in line and "承認" in line
+        ]
+
+    def test_link_without_dlid_alone_asks_for_confirmation(self):
+        self.assertEqual(len(self.confirm_lines(["link_without_dlid"])), 1)
+
+    def test_inline_link_with_dlid_alone_asks_for_confirmation(self):
+        self.assertEqual(len(self.confirm_lines(["inline_link_with_dlid"])), 1)
+
+    def test_path_mismatch_alone_asks_for_confirmation(self):
+        self.assertEqual(len(self.confirm_lines(["path_mismatch"])), 1)
+
+    def test_confirmation_is_given_once_for_mixed_findings(self):
+        categories = ["link_without_dlid", "path_mismatch", "absent"]
+        self.assertEqual(len(self.confirm_lines(categories)), 1)
+
+    def test_no_findings_gives_no_guidance(self):
+        self.assertEqual(check_links._guidance([]), [])
 
 
 DOC_C = "DLID-3333333333cc"
@@ -199,19 +228,20 @@ class SuggestedTitleTest(CheckLinksTestBase):
 
     def test_document_link_gets_document_hash_and_document_id(self):
         found, _ = self.findings_of("# M\n\n[r]: ../ref/a.md\n")
-        expected = f"{document_content_hash(REF_A)} {DOC_A}"
+        expected = f"{title_value(document_content_hash(REF_A))} {DOC_A}"
         self.assertEqual(found["../ref/a.md"]["suggested_title"], expected)
+        self.assertEqual(len(expected.split()[0]), RECORD_LENGTH)
 
     def test_heading_fragment_gets_section_hash_and_section_id(self):
         anchor = "beta-dlid-pqrstvwxyz01"
         found, _ = self.findings_of(f"# M\n\n[r]: ../ref/a.md#{anchor}\n")
         # 見出しの出現順は Alpha, Beta なので、Beta は 2 番目
-        expected = f"{section_content_hashes(REF_A)[1]} {SEC_A2}"
+        expected = f"{title_value(section_content_hashes(REF_A)[1])} {SEC_A2}"
         self.assertEqual(found[f"../ref/a.md#{anchor}"]["suggested_title"], expected)
 
     def test_explicit_anchor_fragment_gets_document_value(self):
         found, _ = self.findings_of("# M\n\n[r]: ../ref/c.md#manual\n")
-        expected = f"{document_content_hash(REF_C)} {DOC_C}"
+        expected = f"{title_value(document_content_hash(REF_C))} {DOC_C}"
         self.assertEqual(found["../ref/c.md#manual"]["suggested_title"], expected)
 
     def test_unresolved_fragment_has_reason_and_no_value(self):
@@ -232,7 +262,7 @@ class SuggestedTitleTest(CheckLinksTestBase):
 
     def test_inline_link_gets_the_same_value(self):
         found, _ = self.findings_of("# M\n\nsee [x](../ref/a.md).\n")
-        expected = f"{document_content_hash(REF_A)} {DOC_A}"
+        expected = f"{title_value(document_content_hash(REF_A))} {DOC_A}"
         self.assertEqual(found["../ref/a.md"]["suggested_title"], expected)
         self.assertEqual(found["../ref/a.md"]["kind"], "inline")
 
@@ -265,13 +295,13 @@ class SuggestedTitleTest(CheckLinksTestBase):
 
 
 class RecordWordTest(CheckLinksTestBase):
-    def test_only_64_lowercase_hex_is_read_as_a_record(self):
+    def test_only_a_lowercase_hex_word_of_the_record_length_is_read_as_a_record(self):
         words = {
-            "ok": "a" * 64,
-            "upper": "A" * 64,
-            "short": "a" * 63,
-            "long": "a" * 65,
-            "nonhex": "g" * 64,
+            "ok": "a" * RECORD_LENGTH,
+            "upper": "A" * RECORD_LENGTH,
+            "short": "a" * (RECORD_LENGTH - 1),
+            "long": "a" * (RECORD_LENGTH + 1),
+            "nonhex": "g" * RECORD_LENGTH,
             "none": None,
         }
         self.write("ref/a.md", REF_A)
@@ -284,7 +314,7 @@ class RecordWordTest(CheckLinksTestBase):
         self.assertEqual(code, 0)
         recorded = {f["resolved_path"]: f["recorded_hash"] for f in result["findings"]}
         expected = {
-            f"ref/gone{index}.md": ("a" * 64 if name == "ok" else None)
+            f"ref/gone{index}.md": ("a" * RECORD_LENGTH if name == "ok" else None)
             for index, name in enumerate(words)
         }
         self.assertEqual(recorded, expected)
@@ -350,6 +380,22 @@ class CleanTest(CheckLinksTestBase):
         code, result = self.run_main("--key", "k", "--paths", "src/m.md", "nope.md")
         self.assertEqual(code, 0)
         self.assertEqual(result["problems"], [{"path": "nope.md", "reason": "missing"}])
+
+
+class WithoutDocumentIdTest(CheckLinksTestBase):
+    def test_document_without_id_is_warned_as_incomplete(self):
+        self.write("ref/a.md", REF_A)
+        self.write("src/m.md", "# M\n")
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(len(result["warnings"]), 1)
+        self.assertIn("src/m.md", result["warnings"][0])
+
+    def test_documents_with_id_give_no_warning(self):
+        self.write("src/m.md", f"---\ndoc_link_id: {DOC_MAIN}\n---\n# M {SEC_MAIN}\n")
+        code, result = self.run_main("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["warnings"], [])
 
 
 class UnreadableTest(CheckLinksTestBase):

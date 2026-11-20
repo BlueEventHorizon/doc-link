@@ -118,7 +118,7 @@ class Base(unittest.TestCase):
 class ResolvedTest(Base):
     def test_document_is_resolved_with_path_and_content_hash(self):
         self.basic_state()
-        item, result = self.one(DOC_A)
+        item, _ = self.one(DOC_A)
         self.assertEqual(
             item,
             {
@@ -130,7 +130,6 @@ class ResolvedTest(Base):
                 "content_hash_state": "recorded",
             },
         )
-        self.assertEqual(result["guidance"], [])
 
     def test_section_is_resolved_with_heading_anchor_and_hash(self):
         self.basic_state()
@@ -167,20 +166,18 @@ class MovedDocumentTest(Base):
         shutil.move(self.root / "docs/a.md", self.root / "docs/b/a.md")
         for dlid, kind in ((DOC_A, "document"), (SEC_1, "section")):
             with self.subTest(dlid=dlid):
-                item, result = self.one(dlid)
+                item, _ = self.one(dlid)
                 self.assertEqual(item["status"], "not_at_recorded_path")
                 self.assertEqual(item["kind"], kind)
                 self.assertEqual(item["recorded_paths"], ["docs/a.md"])
                 self.assertNotIn("path", item)
-                self.assertTrue(any("index-docs" in g for g in result["guidance"]))
 
         self.save_info(DOC_A, "docs/b/a.md", "doc-hash-a")
         for dlid in (DOC_A, SEC_1):
             with self.subTest(rebuilt=dlid):
-                item, result = self.one(dlid)
+                item, _ = self.one(dlid)
                 self.assertEqual(item["status"], "resolved")
                 self.assertEqual(item["path"], "docs/b/a.md")
-                self.assertEqual(result["guidance"], [])
 
     def test_dlid_mismatch_at_recorded_path(self):
         self.basic_state()
@@ -240,9 +237,8 @@ class MovedDocumentTest(Base):
 class NoRecordTest(Base):
     def test_unrecorded_dlid(self):
         self.basic_state()
-        item, result = self.one(UNKNOWN)
+        item, _ = self.one(UNKNOWN)
         self.assertEqual(item, {"dlid": UNKNOWN, "kind": None, "status": "no_record"})
-        self.assertEqual(result["guidance"], [])
 
     def test_no_state_directory_means_no_record(self):
         item, _ = self.one(DOC_A)

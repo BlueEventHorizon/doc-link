@@ -1,0 +1,39 @@
+{
+  "content_hash": "5e6990692aaa88dcc301e7e49b85ece78f4f4c13f55bd26ab0201ac9be707abe",
+  "doc_link_id": "DLID-nnbgpzkkm5vq",
+  "keywords": [
+    "document search",
+    "semantic search",
+    "resolve-dlid",
+    "DLID resolution",
+    "freshness",
+    "search AI",
+    "false negative",
+    "ToC copy",
+    "rebuild judgment",
+    "recorded path"
+  ],
+  "path": "docs/specs/design/DES-006_search.md",
+  "purpose": "Design spec for document search and DLID resolution: pre-search freshness judgment, search result contract, search AI role, ToC copy contents, and the read-only resolve-dlid behavior.",
+  "summary": [
+    "Pre-search judgment: no confirmed ToC, rebuild not needed, rebuild needed, or undeterminable",
+    "User choice between rebuilding before search and searching the existing version, with rebuild scale shown",
+    "Undeterminable state treated as a failure that stops search; no silent fallback to old version",
+    "Search result contract: document ID, recorded path, reason, section, key, ToC version, freshness",
+    "Search AI reads all entries of the ToC copy and prioritizes avoiding false negatives",
+    "ToC copy contents: document info and section headings, without paths, hashes, references, or check results",
+    "Worker must not invent IDs, correct paths, or change ToC and management state",
+    "resolve-dlid resolves DLIDs from recorded paths and verifies against current files",
+    "Resolution outcomes: resolved, not at recorded path, no record; content hash attached from records only",
+    "Resolution is read-only and does not write ToC, management state, or index target documents"
+  ],
+  "tasks": [
+    "Implementing document search skill and scripts",
+    "Implementing resolve-dlid",
+    "Designing the search AI agent prompt and input",
+    "Handling stale or rebuild-needed ToC in search",
+    "Writing tests for search and DLID resolution",
+    "Reviewing search result format"
+  ],
+  "title": "DES-006 文書検索設計"
+}

@@ -198,17 +198,12 @@ class DetectionTest(CheckTestBase):
         self.assertEqual(result["duplicates"], [])
         self.assertEqual(result["guidance"], [])
 
-    def test_findings_still_exit_0_and_guide_to_embed_dlid(self):
+    def test_findings_still_exit_0(self):
         self.write("a.md", "# T\n")
         code, result = self.run_main("--key", "k", "--paths", "a.md")
         self.assertEqual(code, 0)
-        self.assertTrue(any("embed-dlid" in line for line in result["guidance"]))
-
-    def test_duplicates_guide_to_origin_confirmation(self):
-        self.write("orig.md", DOC)
-        self.write("copy.md", DOC)
-        _, result = self.run_main("--key", "k", "--paths", "orig.md", "copy.md")
-        self.assertTrue(any("原本" in line for line in result["guidance"]))
+        self.assertFalse(result["clean"])
+        self.assertEqual(result["guidance"], [])
 
     def test_missing_target_is_reported_and_processing_continues(self):
         self.write("a.md", "# T\n")

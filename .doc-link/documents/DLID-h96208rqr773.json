@@ -1,0 +1,39 @@
+{
+  "content_hash": "d3a5a1cf16cb040353ad60f12b014e2daacaf4fdb49c5c96c37241d7cf44f749",
+  "doc_link_id": "DLID-h96208rqr773",
+  "keywords": [
+    "document search",
+    "FR-006",
+    "AC-019",
+    "ToC rebuild check",
+    "stale ToC",
+    "reserved key all",
+    "search results",
+    "false negative",
+    "Index target specification",
+    "AI summary count"
+  ],
+  "path": "docs/specs/requirement/REQ-004_search.md",
+  "purpose": "Requirements for doc-link document search: finding task-relevant documents with high recall, checking ToC rebuild necessity before search, and the information returned in results.",
+  "summary": [
+    "FR-006 search of documents related to a task, prioritizing no omissions over precision",
+    "Key handling: --key selects a ToC, omitted key searches the reserved key all in standalone mode",
+    "Missing ToC returns a notice that initial build with an index target specification is needed",
+    "Pre-search rebuild-necessity check using the stored reinterpretable index target specification",
+    "User chooses between rebuilding the ToC before search or searching the existing ToC as is",
+    "Confirmation shows counts per change type and the number of documents needing AI summary generation",
+    "Undeterminable rebuild necessity stops search as a failure and never offers the stale-ToC option",
+    "Searching an existing ToC as is reports possible staleness and does not re-confirm the ToC",
+    "Search results include document ID, ToC path, reason, section, and ToC state",
+    "AC-019 acceptance criterion for pre-search ToC rebuild confirmation"
+  ],
+  "tasks": [
+    "Implementing the document search skill or script",
+    "Designing search behavior and result format",
+    "Implementing pre-search ToC rebuild check and user confirmation",
+    "Handling missing ToC or stale ToC during search",
+    "Writing tests for search acceptance criteria AC-019",
+    "Reviewing search requirements consistency with ToC requirements"
+  ],
+  "title": "doc-link 要件定義書 — 文書検索"
+}

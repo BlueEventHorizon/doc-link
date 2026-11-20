@@ -1,0 +1,39 @@
+{
+  "content_hash": "4708f535908f9e0d97efa1c7faa871054a3d32d098561ca32cd73664971f38a5",
+  "doc_link_id": "DLID-yqqrwtycr379",
+  "keywords": [
+    "data model",
+    "document info",
+    "committed ToC",
+    "section entry",
+    "content hash",
+    "reference check result",
+    "multiplicity",
+    "freshness",
+    "document ID",
+    "ToC key"
+  ],
+  "path": "docs/specs/design/DES-003_data-model.md",
+  "purpose": "Defines the logical data model of doc-link: information entities, identifiers, sources, relationships, multiplicity, and value meaning and freshness, without specifying a physical schema.",
+  "summary": [
+    "Model boundary: current artifacts and the last committed index are separate; no notification state is held",
+    "Table of logical entities: document identity, target spec, observation, document info, reference description, check result, section entry, final check state, committed ToC, build run",
+    "Document info is stored once per document ID and shared by all keys, never copied per key",
+    "Committed ToC holds membership, references, reflected hashes, and check results, not document info",
+    "Multiplicity: documents may belong to multiple keys and have multiple references; at most one committed ToC per key",
+    "Reverse references are derived only from scanned referrers, not all referrers in the world",
+    "Sections are identified by heading-end section IDs; sections without a DLID have no stable identity",
+    "Document ID and content hash differ; link path fixes change the content hash",
+    "Reference check match holds only for the recorded directory and check time",
+    "Documents leaving the index target are removed from the committed ToC; no unresolved relations remain"
+  ],
+  "tasks": [
+    "Designing or revising the doc-link data model",
+    "Implementing storage of document info and committed ToC",
+    "Implementing reference description and check result handling",
+    "Handling section entries and section IDs",
+    "Reasoning about freshness of ToC versus current files",
+    "Reviewing multi-key behavior of the same document ID"
+  ],
+  "title": "DES-003 論理データモデル"
+}

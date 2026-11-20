@@ -74,10 +74,7 @@ EXIT_VALUE_OK = "0"
 _SEARCH_ID = re.compile(r"SEARCH-[0-9a-f]{8}")
 _ITEM_NAME = re.compile(r"item-([0-9]{6})")
 
-GUIDANCE_INITIAL_BUILD = (
-    "[ToC]が未構築のため検索しない。`index-docs` を実行して、初回の構築をする"
-    "（ユーザーまたはプロジェクト管理 AI が実行する）"
-)
+GUIDANCE_INITIAL_BUILD = "[ToC]が未構築のため検索しない"
 NOTICE_POSSIBLY_STALE = (
     "この検索に使った[ToC]は、現在の[Index 対象リスト]を反映していない可能性がある"
     "（利用者が「既存版のまま検索」を選んだ。[ToC]は更新していない）。"

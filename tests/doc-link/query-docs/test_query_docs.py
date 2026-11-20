@@ -101,7 +101,6 @@ class PrepareOutcomeTest(QueryTestBase):
         code, result = self.prepare()
         self.assertEqual(code, 0)
         self.assertEqual(result["action"], "initial_build_required")
-        self.assertTrue(any("index-docs" in line for line in result["guidance"]))
 
     def test_up_to_date_fixes_current_version(self):
         self.build()

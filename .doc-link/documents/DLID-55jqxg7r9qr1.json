@@ -1,0 +1,39 @@
+{
+  "content_hash": "0fd442bde5b1457d7f209a1056a5e1d95b559e9b2eecb4cf06bc795c345400fe",
+  "doc_link_id": "DLID-55jqxg7r9qr1",
+  "keywords": [
+    "uv",
+    "PEP 723",
+    "inline script metadata",
+    "dependency management",
+    "lock file",
+    "exclude-newer",
+    "supply chain attack",
+    "requires-python",
+    "pyproject.toml",
+    "uv run --locked"
+  ],
+  "path": "docs/rules/plugin_uv_usage_rules.md",
+  "purpose": "Rules for running Python scripts and managing dependencies with uv, so that uv selects and records version numbers and people and AI never write them by hand.",
+  "summary": [
+    "Applicability: applies when project instructions mandate uv; adoption for distributed scripts is a user-environment decision",
+    "Where to declare dependencies: PEP 723 inline metadata for standalone or distributed scripts, pyproject.toml for script groups with shared modules and tests",
+    "Execution: run Python scripts with uv run, declare Python and dependencies in PEP 723 metadata, keep tool.uv settings in the metadata",
+    "Adding and removing dependencies: get user permission, use uv add --script with --bounds lower and uv remove --script, never hand-write versions",
+    "Locking: uv lock --script, commit the lock file with the script, use uv run --locked to detect mismatches",
+    "Updating: check with uv tree --outdated, upgrade with uv lock --upgrade or --upgrade-package, review the lock diff before commit",
+    "Excluding freshly published versions: exclude-newer = \"3 days\" to mitigate supply-chain attacks, with a per-package exception for urgent security fixes",
+    "Python version: requires-python lower bound follows the latest stable release, excluding alpha, beta and rc, checked via uv python list"
+  ],
+  "tasks": [
+    "Writing or running a Python script in a plugin",
+    "Adding or removing a script dependency",
+    "Declaring PEP 723 inline metadata",
+    "Setting up pyproject.toml for a group of scripts and tests",
+    "Creating or updating a uv lock file",
+    "Upgrading outdated dependencies",
+    "Choosing the requires-python lower bound",
+    "Running unit tests with uv run --locked"
+  ],
+  "title": "uv 利用ルール"
+}

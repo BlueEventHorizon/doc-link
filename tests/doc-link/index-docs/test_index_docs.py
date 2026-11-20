@@ -18,6 +18,7 @@ SKILL_SCRIPTS_DIR = (
 sys.path.insert(0, str(SKILL_SCRIPTS_DIR))
 
 import index_docs  # noqa: E402
+from content_hash import RECORD_LENGTH  # noqa: E402
 import state_store  # noqa: E402
 import toc_candidate  # noqa: E402
 from change_set import build_change_set  # noqa: E402
@@ -28,7 +29,7 @@ ID_C = "DLID-pqrstvwxyz01"
 S_A = "DLID-00000000s001"
 S_B = "DLID-00000000s002"
 S_C = "DLID-00000000s003"
-RECORD = "c" * 64
+RECORD = "c" * RECORD_LENGTH
 
 A_TEXT = f"""---
 doc_link_id: {ID_A}
@@ -355,7 +356,7 @@ class IdempotenceTest(Base):
 
     def test_reference_only_change_does_not_generate(self):
         self.build("k", ALL)
-        self.write("docs/a.md", A_TEXT.replace(RECORD, "d" * 64))
+        self.write("docs/a.md", A_TEXT.replace(RECORD, "d" * RECORD_LENGTH))
         # title の記録語だけの書き換えは[内容ハッシュ]に影響しない
         code, result = self.advance("k", ALL)
         self.assertEqual(code, 0)

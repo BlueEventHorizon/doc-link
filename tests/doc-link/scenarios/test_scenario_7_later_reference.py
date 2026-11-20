@@ -17,6 +17,8 @@ from scenario_support import (  # noqa: E402
     strip_dlids,
 )
 
+from content_hash import RECORD_LENGTH  # noqa: E402
+
 KEY = "k"
 PATHS = ["docs/target.md", "docs/source.md"]
 TARGET_ORIGINAL = "# Target\n\nintro\n\n## Section One\n\nbody one\n"
@@ -92,12 +94,12 @@ class LaterReferenceScenarioTest(ScenarioBase):
         self.assertEqual(self.read("docs/target.md"), target_before)
 
     def test_scenario_7_reference_with_a_record_is_a_formal_reference_too(self):
-        self.write_reference(record="e" * 64)
+        self.write_reference(record="e" * RECORD_LENGTH)
         self.build_ok(KEY, PATHS)
         references = self.toc(KEY)["references"]
         self.assertEqual(
             [(r["target_section_id"], r["recorded_content_hash"]) for r in references],
-            [(self.section_id, "e" * 64)],
+            [(self.section_id, "e" * RECORD_LENGTH)],
         )
 
     def test_scenario_7_embedding_again_does_not_write_to_a_link_without_a_dlid(self):

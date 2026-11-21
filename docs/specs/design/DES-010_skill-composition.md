@@ -442,19 +442,19 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 | 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                                                              | 検索を失敗として返す                                                                                           |
 | 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                                                  | `query-docs` が結果を返した後                                                                                  |
 
-[req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "6b263e36591d DLID-bk29x4s8tadq"
-[req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "6b263e36591d DLID-bk29x4s8tadq"
+[req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "db100f7cc796 DLID-bk29x4s8tadq"
+[req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "db100f7cc796 DLID-bk29x4s8tadq"
 [req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12 "1380e03c79c5 DLID-h96208rqr773"
 [req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13 "413c4c0e5fae DLID-pc44gkb54821"
 [req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15 "413c4c0e5fae DLID-pc44gkb54821"
-[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "6b263e36591d DLID-bk29x4s8tadq"
+[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "db100f7cc796 DLID-bk29x4s8tadq"
 [req-003-sec-10]: ../requirement/REQ-003_toc.md#sec-10 "191fbc0b3993 DLID-kxe3nxfgk491"
 [req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14 "413c4c0e5fae DLID-pc44gkb54821"
 [req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4 "191fbc0b3993 DLID-kxe3nxfgk491"
 [req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2 "191fbc0b3993 DLID-kxe3nxfgk491"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "413c4c0e5fae DLID-pc44gkb54821"
 [req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "5d0596315129 DLID-veg2nsjk8zw1"
-[req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "6b263e36591d DLID-bk29x4s8tadq"
+[req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "db100f7cc796 DLID-bk29x4s8tadq"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "191fbc0b3993 DLID-kxe3nxfgk491"
 [des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "e978f1de2a45 DLID-anz9vack2xzt"
 [des-008-sec-4]: DES-008_content-rules.md#sec-4 "a535f218431f DLID-ywa6htx8vq09"

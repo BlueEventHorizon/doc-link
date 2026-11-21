@@ -171,7 +171,7 @@ doc-link は、通知の状態を保存しない（[D-038][req-001-d]）。
 `check-links` が、[プロジェクト管理 AI]が書き直す対象の検出事項を返したとき、返す案内（`guidance`）が、利用者へ一覧（文書・行・書く値）を示して書き直しを確認し、承認された分だけを書き直すことを、[プロジェクト管理 AI]に指示すること。`check-links` が[Index 対象文書]を書き換えないこと。
 
 [req-001]: REQ-001_overview.md "5d0596315129 DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "6b263e36591d DLID-bk29x4s8tadq"
+[req-002]: REQ-002_document-id.md "db100f7cc796 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "191fbc0b3993 DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "1380e03c79c5 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "413c4c0e5fae DLID-pc44gkb54821"

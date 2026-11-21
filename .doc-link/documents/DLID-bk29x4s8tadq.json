@@ -1,38 +1,41 @@
 {
-  "content_hash": "6b263e36591d7ac77d415ec83a50e8c9c31d59492d73f1c3d40d4356e7c9b526",
+  "content_hash": "db100f7cc7960de385cd0b361ac342f77b7afde72352eb37b535ecbc3e013911",
   "doc_link_id": "DLID-bk29x4s8tadq",
   "keywords": [
     "document ID",
     "DLID",
     "doc_link_id",
-    "frontmatter",
     "ToC identification key",
     "Index target specification",
+    "desired state",
+    "frontmatter",
     "duplicate ID",
     "DLID resolution",
-    "section ID",
     "fixed exclusion"
   ],
   "path": "docs/specs/requirement/REQ-002_document-id.md",
-  "purpose": "Requirements for Index targets and document IDs: target specification via ToC keys, DLID issuing, validation, duplicate resolution, the DLID assignment operation, and DLID resolution to current paths.",
+  "purpose": "Requirements for defining which Markdown files are index targets per ToC identification key, and for issuing, verifying, validating and resolving document IDs (DLID).",
   "summary": [
-    "Index target range: ToC identification key, target specification options, fixed exclusions, desired-state semantics",
-    "Writing the document ID into Markdown frontmatter as doc_link_id",
-    "Index target list determination and FR-017 reception of key and target specification",
-    "FR-001 issuing and reading document IDs, 60-bit random Crockford Base32 value",
-    "FR-002 validation: missing IDs, missing section IDs, duplicate document and section IDs",
-    "FR-018 DLID resolution to current path with recorded content hash",
-    "Document ID confirmation step in ToC build, excluding missing and duplicate documents",
-    "DLID assignment operation steps and the result returned as counts",
-    "Acceptance criteria AC-005 to AC-031 for IDs, keys, independence and resolution"
+    "Index target scope: per-key desired state, target specification options, fixed directory exclusions",
+    "Reserved key all, --all mode, and rejection of ambiguous or conflicting arguments",
+    "Document ID is independent of ToC key; one document may belong to several keys",
+    "doc_link_id frontmatter format: DLID- prefix plus 12-character Crockford Base32 value",
+    "Index target list determination and receipt of key and target specification (FR-017)",
+    "Document ID issuance, reading, and immutability rules (FR-001)",
+    "Validation of missing and duplicate document and section IDs (FR-002)",
+    "DLID resolution to current path with recorded content hash (FR-018)",
+    "Document ID confirmation stage and DLID assignment operation steps",
+    "Acceptance criteria AC-005 to AC-031 covering IDs, keys, immutability and resolution"
   ],
   "tasks": [
-    "Implementing target specification parsing (--key, --dirs, --paths, --exclude, --all)",
-    "Implementing the DLID assignment operation (embed-dlid)",
-    "Implementing check-dlid validation of document and section IDs",
+    "Designing or implementing index target specification parsing",
+    "Implementing DLID assignment operation",
+    "Implementing document ID confirmation during ToC build",
     "Implementing DLID resolution to paths",
-    "Handling duplicate DLIDs after document copying",
-    "Writing tests for ID related acceptance criteria"
+    "Handling duplicate or missing document IDs",
+    "Defining fixed directory exclusions for scanning",
+    "Writing tests for acceptance criteria on document IDs",
+    "Integrating with Forge key and target resolution"
   ],
   "title": "doc-link 要件定義書 — Index 対象と[文書 ID]"
 }

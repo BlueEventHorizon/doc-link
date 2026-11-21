@@ -95,9 +95,9 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 タイトルは文書の最初の H1 見出しのテキストから、行末の[セクション ID]を除いたものとする。H1 が無い文書のタイトルは `toc-updater` が生成する。目的・内容概要・適用作業・キーワード、および生成するタイトルは、`toc-updater` が対象文書の本文を読んで生成する（[DES-010 §4][des-010-sec-4]）。[情報生成 AI]に渡す上限はフィールド別の `L` のみとする。script の検証器は `H = floor(L × 1.3)` を用い、`L` 超・`H` 以下を受理し、`H` 超を拒否する。[情報生成 AI]が参照するプロンプト・ルール・再試行メッセージに `H` や余白の存在を含めない。`L` の値と文字数の数え方は要件 D-044 に従う。配列のフィールドは要素数を `L`・`H` で検証する。要素数の下限は、内容概要 5、適用作業 1、キーワード 5 とし、下回れば拒否する。生成する値は、文書の言語にかかわらず英語で書く。検証器のエラーを[情報生成 AI]へ戻す場合も実際の拒否境界を開示しない。
 
-[req-002]: ../requirement/REQ-002_document-id.md "85860fe69f58 DLID-bk29x4s8tadq"
+[req-002]: ../requirement/REQ-002_document-id.md "7592c163da94 DLID-bk29x4s8tadq"
 [req-003]: ../requirement/REQ-003_toc.md "40bbb7b52fec DLID-kxe3nxfgk491"
 [req-005]: ../requirement/REQ-005_references.md "4909917f4466 DLID-pc44gkb54821"
-[des-005-sec-3]: DES-005_indexing.md#sec-3 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-005-sec-3]: DES-005_indexing.md#sec-3 "9ec807d7746f DLID-dgphqw70rkpz"
 [des-007-sec-1]: DES-007_references-impact.md#sec-1 "f5cea4052598 DLID-pr3jp4hzb8js"
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "cc47b18bbb6a DLID-7e90gq3sdncc"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "104cd159d8b0 DLID-7e90gq3sdncc"

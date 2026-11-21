@@ -62,4 +62,4 @@ Index 対象から離脱した文書は、指定キーの[確定 ToC]から除�
 [req-003-sec-7]: ../requirement/REQ-003_toc.md#sec-7 "40bbb7b52fec DLID-kxe3nxfgk491"
 [readme]: README.md "46122592dd45 DLID-zvepba87h7zk"
 [des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "90be2ac68a19 DLID-anz9vack2xzt"
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "cc47b18bbb6a DLID-7e90gq3sdncc"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "104cd159d8b0 DLID-7e90gq3sdncc"

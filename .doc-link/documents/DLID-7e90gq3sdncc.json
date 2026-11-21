@@ -1,38 +1,39 @@
 {
-  "content_hash": "104cd159d8b06c3ff535616052427bfdc1ac8f6b3e5b15c40f913c098a0169fc",
+  "content_hash": "b25c3562db6da5e289d77392e8e367f866bb53ede517d498b0754521d15640a0",
   "doc_link_id": "DLID-7e90gq3sdncc",
   "keywords": [
     "SKILL composition",
     "custom Agent",
     "toc-updater",
     "query-worker",
+    "embed-dlid",
+    "index-docs",
     "check-impact",
-    "check-links",
     "sequence diagram",
-    "operation flow",
-    "agent data exchange"
+    "data exchange",
+    "DLID"
   ],
   "path": "docs/specs/design/DES-010_skill-composition.md",
-  "purpose": "Defines the composition of the eight SKILLs and two custom Agents, their responsibilities, per-SKILL sequences, the overall operation flow, and the data exchange with Agents.",
+  "purpose": "Design document defining the doc-link composition of 8 SKILLs and 2 custom Agents: responsibilities, check findings handling, use cases, per-SKILL sequences, operational flow, and Agent data exchange.",
   "summary": [
-    "Table of eight SKILLs by type, writes to target documents, managed state changes, and requirements",
-    "Two custom Agents: toc-updater generates document info, query-worker selects relevant documents",
-    "Responsibilities of embed-dlid, index-docs, query-docs and resolve-dlid",
-    "Responsibilities of check-dlid, check-links, check-toc and check-impact and how findings are handled",
-    "check-impact returns changed documents with direct referrers and records no notification state",
-    "Use case diagram for user, project management AI and calling skills",
-    "Sequence diagrams per SKILL, including the embed-dlid, index-docs and query-docs flows",
-    "Overall operation flow from check-dlid through embed-dlid, check-links, index-docs and check-impact",
-    "Rules for writing references: resolve-dlid, title hash, when index-docs is needed",
-    "Data exchange with custom Agents via identifiers, request and result files, and exit values"
+    "Overview table of 8 SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, check-dlid, check-links, check-toc, check-impact) with write permissions and requirement mapping",
+    "Custom Agents: toc-updater (generates document info, max 3 documents per launch) and query-worker (ToC-based search)",
+    "Responsibilities of operation and lookup SKILLs, including DLID embedding, ToC build, search and DLID resolution",
+    "Check SKILLs: detected states and who handles findings with what, including link rewriting after user approval",
+    "check-impact output: changed documents with direct referrers, content hash comparison, no notification state",
+    "Use case diagram for user, project management AI and caller skills",
+    "Sequence diagrams for each SKILL (3.1 to 3.8)",
+    "Operational flow starting from index-docs, common to introduction and later changes",
+    "Data exchange with custom Agents: identifiers, request, result, error value, script validation, deletion timing"
   ],
   "tasks": [
-    "Implementing or changing SKILL.md files",
-    "Implementing the toc-updater or query-worker Agent",
-    "Designing the order of SKILL usage",
-    "Implementing check-impact or check-links handling",
-    "Writing a reference with a content hash in the link title",
-    "Reviewing SKILL and Agent responsibilities"
+    "Implementing or modifying doc-link SKILLs",
+    "Writing or changing SKILL.md files",
+    "Implementing toc-updater or query-worker agents",
+    "Designing check-dlid, check-links, check-toc or check-impact behavior",
+    "Reviewing SKILL sequences and operational flow",
+    "Implementing Agent request and result exchange",
+    "Checking design consistency with requirements"
   ],
   "title": "DES-010 SKILL と Agent の構成"
 }

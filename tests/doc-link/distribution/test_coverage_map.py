@@ -36,13 +36,18 @@ MANUAL_REFERENCE = re.compile(r"`([\w-]+_manual\.md)`")
 AC_RUN = re.compile(r"AC-([\d／〜]+)")
 
 
+def displayed(line):
+    """リファレンスリンク（`[文字][ラベル]`）を、表示される文字に戻す。設計書は要件の ID をリンクにして書く。"""
+    return re.sub(r"\[([^\]]+)\]\[[^\]]*\]", r"\1", line)
+
+
 def design_rows():
     """設計書の対応表の各行の（要件の欄, 受け入れ条件の ID の集合）。"""
     text = DESIGN.read_text(encoding="utf-8")
     start = text.index("## 2. 要件から設計・受け入れ検証への対応")
     end = text.index('<a id="sec-3">')
     rows = []
-    for line in text[start:end].splitlines():
+    for line in map(displayed, text[start:end].splitlines()):
         if not re.match(r"^\| N?FR-", line):
             continue
         cells = [cell.strip() for cell in line.strip().strip("|").split("|")]

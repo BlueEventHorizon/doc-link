@@ -1,39 +1,38 @@
 {
-  "content_hash": "4708f535908f9e0d97efa1c7faa871054a3d32d098561ca32cd73664971f38a5",
+  "content_hash": "eec2db1da9834be2edde5cfbbeb1ccc615194d1cb69b634c3db3021a48ba893f",
   "doc_link_id": "DLID-yqqrwtycr379",
   "keywords": [
     "data model",
     "document info",
-    "committed ToC",
+    "confirmed ToC",
+    "reference check result",
     "section entry",
     "content hash",
-    "reference check result",
-    "multiplicity",
-    "freshness",
-    "document ID",
-    "ToC key"
+    "doc_link_id",
+    "cardinality",
+    "reverse reference",
+    "freshness"
   ],
   "path": "docs/specs/design/DES-003_data-model.md",
-  "purpose": "Defines the logical data model of doc-link: information entities, identifiers, sources, relationships, multiplicity, and value meaning and freshness, without specifying a physical schema.",
+  "purpose": "Defines the logical data model of doc-link: identity, relationships, versions and primary sources of information such as document info, references, sections and confirmed ToC, without fixing a physical schema.",
   "summary": [
-    "Model boundary: current artifacts and the last committed index are separate; no notification state is held",
-    "Table of logical entities: document identity, target spec, observation, document info, reference description, check result, section entry, final check state, committed ToC, build run",
-    "Document info is stored once per document ID and shared by all keys, never copied per key",
-    "Committed ToC holds membership, references, reflected hashes, and check results, not document info",
-    "Multiplicity: documents may belong to multiple keys and have multiple references; at most one committed ToC per key",
-    "Reverse references are derived only from scanned referrers, not all referrers in the world",
+    "Model boundary: current actual files and last confirmed index are separate; no notification state is held; key membership does not limit reference validity",
+    "Information table: document identity, target specification, observation, document info, reference description, reference check result, section entry, last check state, confirmed ToC, build run",
+    "Document info is stored once per doc_link_id and never copied per key, so all keys see the same latest info",
+    "Confirmed ToC holds membership, references, reflected hashes, check results, but not document info",
+    "Cardinality: a key has many document IDs, a document belongs to many keys, at most one confirmed ToC per key",
+    "Reverse references are derived from scanned referrers only, not all referrers in the world",
     "Sections are identified by heading-end section IDs; sections without a DLID have no stable identity",
-    "Document ID and content hash differ; link path fixes change the content hash",
-    "Reference check match holds only for the recorded directory and check time",
-    "Documents leaving the index target are removed from the committed ToC; no unresolved relations remain"
+    "Document ID differs from content hash; link path fixes also change the hash",
+    "Reference check match holds only for the recorded directory and time; documents leaving the target are removed from the ToC"
   ],
   "tasks": [
     "Designing or revising the doc-link data model",
-    "Implementing storage of document info and committed ToC",
-    "Implementing reference description and check result handling",
-    "Handling section entries and section IDs",
-    "Reasoning about freshness of ToC versus current files",
-    "Reviewing multi-key behavior of the same document ID"
+    "Implementing JSON state file schemas",
+    "Implementing ToC build and confirm logic",
+    "Implementing reference check and reverse reference derivation",
+    "Reviewing multi-key behavior of document info",
+    "Handling sections and section IDs"
   ],
   "title": "DES-003 論理データモデル"
 }

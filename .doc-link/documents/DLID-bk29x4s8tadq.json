@@ -1,41 +1,41 @@
 {
-  "content_hash": "7592c163da9458d403d30ae245cae99898879cbc91d54277092869e172ff2755",
+  "content_hash": "db100f7cc7960de385cd0b361ac342f77b7afde72352eb37b535ecbc3e013911",
   "doc_link_id": "DLID-bk29x4s8tadq",
   "keywords": [
     "document ID",
     "DLID",
     "doc_link_id",
-    "section ID",
     "ToC identification key",
     "Index target specification",
     "desired state",
-    "DLID assignment",
+    "frontmatter",
+    "duplicate ID",
     "DLID resolution",
-    "duplicate detection"
+    "fixed exclusion"
   ],
   "path": "docs/specs/requirement/REQ-002_document-id.md",
-  "purpose": "Requirements for doc-link index scope (ToC key and index target specification), Markdown frontmatter document ID format, document ID issuance, validation and duplicate handling, and DLID resolution.",
+  "purpose": "Requirements for defining which Markdown files are index targets per ToC identification key, and for issuing, verifying, validating and resolving document IDs (DLID).",
   "summary": [
-    "Index target scope: ToC identification key, complete desired state per key, and target specification options (paths, dirs, exclude, all)",
-    "Fixed exclusion directories applied to --all scans and --dirs expansion, and rejection of ambiguous or reserved-key input",
-    "Independence of document ID from ToC keys and from Forge .doc_structure.yaml responsibility boundary",
-    "Document ID format in frontmatter doc_link_id: DLID- prefix plus 12-character Crockford Base32 value from 60-bit random",
-    "Index target list determination stage before ID checking (FR-017)",
-    "Document ID validation (FR-002): missing, malformed, duplicate document IDs and section IDs, treated uniformly as missing",
-    "DLID assignment operation (section 9.2): explicit invocation, issuing document IDs and section IDs, duplicate original resolution",
-    "Document ID confirmation step (9.1) excluding ID-less and duplicate documents from the ToC while reporting them",
-    "DLID resolution (FR-018): current path, heading and anchor, recorded content hash, no-record and path-missing responses",
-    "Acceptance conditions AC-005 to AC-031 covering duplicates, immutability, key independence, and resolution"
+    "Index target scope: per-key desired state, target specification options, fixed directory exclusions",
+    "Reserved key all, --all mode, and rejection of ambiguous or conflicting arguments",
+    "Document ID is independent of ToC key; one document may belong to several keys",
+    "doc_link_id frontmatter format: DLID- prefix plus 12-character Crockford Base32 value",
+    "Index target list determination and receipt of key and target specification (FR-017)",
+    "Document ID issuance, reading, and immutability rules (FR-001)",
+    "Validation of missing and duplicate document and section IDs (FR-002)",
+    "DLID resolution to current path with recorded content hash (FR-018)",
+    "Document ID confirmation stage and DLID assignment operation steps",
+    "Acceptance criteria AC-005 to AC-031 covering IDs, keys, immutability and resolution"
   ],
   "tasks": [
-    "Designing or implementing index target specification parsing (--key, --dirs, --paths, --exclude, --all)",
-    "Implementing the DLID assignment operation (embed-dlid)",
-    "Implementing document ID validation and duplicate detection",
-    "Implementing DLID resolution to current paths",
-    "Implementing the document ID confirmation stage of ToC building",
-    "Writing or reviewing acceptance tests for document ID behavior",
-    "Integrating doc-link with Forge via ToC identification keys",
-    "Reviewing design documents against document ID requirements"
+    "Designing or implementing index target specification parsing",
+    "Implementing DLID assignment operation",
+    "Implementing document ID confirmation during ToC build",
+    "Implementing DLID resolution to paths",
+    "Handling duplicate or missing document IDs",
+    "Defining fixed directory exclusions for scanning",
+    "Writing tests for acceptance criteria on document IDs",
+    "Integrating with Forge key and target resolution"
   ],
   "title": "doc-link 要件定義書 — Index 対象と[文書 ID]"
 }

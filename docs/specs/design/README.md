@@ -4,9 +4,6 @@ doc_link_id: DLID-zvepba87h7zk
 
 # doc-link 設計書の構成 DLID-2f3q114x45q6
 
-**状態**: 承認済み\
-**更新日**: 2026-10-31
-
 要件定義書は「実現する振る舞いと制約」の正本、ここにある設計書は「どの主体・情報・状態・処理で実現するか」の正本とする。要件と設計が食い違う場合、設計だけで要件を上書きしない。未決事項を解決するまで、該当する遷移や結果を確定仕様として扱わない。
 
 | 文書                                     | 担当する内容                                                                                          |
@@ -30,14 +27,14 @@ doc_link_id: DLID-zvepba87h7zk
 
 要件の未決事項はすべて決定済みであり、保存方式は JSON ファイルに決定済みである（[DES-002 §4][des-002-sec-4]）。要件定義書と設計書はレビューを経て承認済みである。
 
-[des-001]: DES-001_system-overview.md "e78b52333bed DLID-3da82gspdp44"
-[des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
-[des-003]: DES-003_data-model.md "4708f535908f DLID-yqqrwtycr379"
-[des-004]: DES-004_state-machines.md "64ccae2cd512 DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "9ec807d7746f DLID-dgphqw70rkpz"
-[des-006]: DES-006_search.md "5e6990692aaa DLID-nnbgpzkkm5vq"
-[des-007]: DES-007_references-impact.md "f5cea4052598 DLID-pr3jp4hzb8js"
-[des-008]: DES-008_content-rules.md "3d83f58b2ce6 DLID-ywa6htx8vq09"
-[des-009]: DES-009_verification.md "9c461d1e907e DLID-xmg0jcmep2h2"
-[des-010]: DES-010_skill-composition.md "104cd159d8b0 DLID-7e90gq3sdncc"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "90be2ac68a19 DLID-anz9vack2xzt"
+[des-001]: DES-001_system-overview.md "9288ec08a8a6 DLID-3da82gspdp44"
+[des-002]: DES-002_execution-responsibilities.md "e978f1de2a45 DLID-anz9vack2xzt"
+[des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
+[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
+[des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
+[des-009]: DES-009_verification.md "ab6bf50edb8f DLID-xmg0jcmep2h2"
+[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"

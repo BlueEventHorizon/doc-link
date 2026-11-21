@@ -1,39 +1,39 @@
 {
-  "content_hash": "f5cea40525986b21a766f309807acf36bd39a4f619919c42a9a4c54e41c0c640",
+  "content_hash": "463a2d89954ae08104da29e58e1e582e8193f593d2ff6ac89391c8008e7a6069",
   "doc_link_id": "DLID-pr3jp4hzb8js",
   "keywords": [
     "formal reference",
-    "reference link definition",
-    "title DLID",
+    "reference link",
+    "DLID",
     "content hash",
-    "change impact candidate",
+    "change impact",
     "reverse reference",
     "check-links",
     "check-impact",
     "path mismatch",
-    "fragment mismatch"
+    "fragment anchor"
   ],
   "path": "docs/specs/design/DES-007_references-impact.md",
-  "purpose": "Design for checking formal references between documents and notifying change-impact candidates when a referenced target changes, plus the consistency checks built on them.",
+  "purpose": "Design for checking formal references against actual files, listing reverse references and change-impact candidates, notifying them, and running consistency checks.",
   "summary": [
-    "Extraction of formal references from reference-link definition titles ending in a DLID, with the optional recorded content hash",
-    "Real directory scanning to classify references as match, path mismatch, absent, or fragment mismatch, with duplicate diagnostics",
-    "Values to write into titles of links lacking a DLID, derived from the current target content",
-    "Reverse reference construction from scanned sources, limited to documents and sections in the confirmed ToC",
-    "Impact detection by comparing recorded title hashes with the current hashes of referenced targets",
-    "Direct referrers only; indirect impact is detected one step at a time",
-    "Notification contract: doc-link keeps no notification state and edits nothing; the project management AI judges and rewrites hashes",
-    "Behavior when the ToC is stale or no referrers are found",
-    "Consistency check division into check-dlid, check-links, check-toc, and check-impact"
+    "Formal references are extracted from reference-link definitions whose title ends with a DLID, with an optional recorded content hash",
+    "Real directory scan classifies targets as match, path mismatch, or absent, and checks fragments and anchors",
+    "Path-mismatch fix targets are notified only when the same ID is uniquely confirmed by the scan",
+    "Links without a DLID in the title get a suggested value of content hash plus DLID read from current files",
+    "Reverse references are built from scanned sources and limited to documents and sections in the confirmed ToC",
+    "Recorded hash in a title is compared exactly with the target current hash to list impact candidates",
+    "Indirect referrers are not listed; impact propagates one step at a time",
+    "Notification is stateless; the same reference is returned until the project management AI rewrites the recorded hash",
+    "Consistency checks are split into check-dlid, check-links, check-toc and check-impact and never modify managed state"
   ],
   "tasks": [
-    "Implementing or modifying check-links and check-impact scripts",
-    "Designing reference extraction and title recording rules",
-    "Reviewing change-impact notification behavior",
-    "Writing or rewriting reference links with content hashes in titles",
-    "Handling check-impact results after a referenced document changes",
-    "Diagnosing broken references, path mismatches, and fragment mismatches",
-    "Writing tests for reference checks and impact detection"
+    "Designing or implementing check-links reference validation",
+    "Implementing check-impact change-impact notification",
+    "Implementing reverse reference lookup",
+    "Handling path mismatch and fragment mismatch diagnostics",
+    "Writing title values for links without a DLID",
+    "Writing tests for reference and impact checks",
+    "Reviewing consistency check behavior"
   ],
   "title": "DES-007 参照検査と[変更影響候補の通知]"
 }

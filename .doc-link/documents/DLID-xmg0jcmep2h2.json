@@ -1,35 +1,36 @@
 {
-  "content_hash": "0a7ae9d0cd794d4db7cb11a49f70675d4d6c0ffe17345ac4dd99942938e8a3ad",
+  "content_hash": "ab6bf50edb8feae03d07f94f7ff4bf4778293e4d0f20f341f0f0e04aab20eb6e",
   "doc_link_id": "DLID-xmg0jcmep2h2",
   "keywords": [
     "test norms",
-    "verification",
-    "traceability",
-    "state transitions",
+    "requirement traceability",
+    "state transition",
     "check-impact",
     "check-links",
     "acceptance criteria",
-    "scenarios",
-    "multi-key",
-    "unit tests"
+    "cross-cutting scenarios",
+    "unit tests",
+    "verification",
+    "approval status"
   ],
   "path": "docs/specs/design/DES-009_verification.md",
-  "purpose": "Defines test norms, the mapping from requirements to designs and verification points, cross-cutting scenarios, and approval status for verifying the doc-link design.",
+  "purpose": "Defines test norms, the mapping from requirements to design and acceptance verification points, cross-cutting scenarios, and the approval status of the design.",
   "summary": [
-    "State-machine tests treat the transition table as the only allowed transitions",
-    "Missing reference targets do not block candidate confirmation",
-    "check-impact tests cover read-only behavior, hash comparison, and repeated notification",
-    "check-links tests cover inline links with DLID titles and recorded-hash parsing",
-    "Deterministic processing has separate unit tests",
-    "A table maps requirements to primary designs and verification points",
-    "Cross-cutting scenarios cover first build, move, content change, failure, multi-key, out-of-range reference",
-    "All open requirement items are decided and the design is approved"
+    "State machine tests cover every transition table row, rejecting guard failures and undefined events",
+    "Missing reference targets do not block candidate confirmation and are recorded as absent",
+    "check-impact test cases for read-only behavior, hash comparison, repeated notification, and no chained notification",
+    "check-links test cases for inline links with DLID titles and recorded hash word form",
+    "Deterministic processing has separate unit tests for parsing, ID handling, resolution, hashing and validation",
+    "Table maps requirements to primary design documents and main verification points",
+    "Seven cross-cutting scenarios: initial build, move, content change, failure, multiple keys, out-of-scope references, later references",
+    "Approval status states that all open requirement items are decided and the design is approved"
   ],
   "tasks": [
-    "Writing tests for state transitions and check scripts",
-    "Verifying requirement coverage by the design",
-    "Designing acceptance and scenario tests",
-    "Reviewing design approval status"
+    "Writing tests for state machines and checks",
+    "Verifying requirement coverage by design",
+    "Designing acceptance tests",
+    "Reviewing cross-cutting scenarios",
+    "Checking design approval status"
   ],
   "title": "DES-009 要件対応と設計検証"
 }

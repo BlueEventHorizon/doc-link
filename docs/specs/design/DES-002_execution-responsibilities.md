@@ -4,8 +4,6 @@ doc_link_id: DLID-anz9vack2xzt
 
 # DES-002 実行主体と処理責務 DLID-fwe832jzywcp
 
-**根拠**: [要件の責務境界][req-001-sec-5-3]、[設計書の構成][readme]
-
 <a id="sec-1"></a>
 
 ## 1. 責務と権限 DLID-zex778vtfhtg
@@ -68,13 +66,11 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3 "5d0596315129 DLID-veg2nsjk8zw1"
-[readme]: README.md "d2b927142749 DLID-zvepba87h7zk"
-[des-010]: DES-010_skill-composition.md "b25c3562db6d DLID-7e90gq3sdncc"
-[des-006-sec-2]: DES-006_search.md#sec-2 "585e5d745a56 DLID-nnbgpzkkm5vq"
-[des-006-sec-3]: DES-006_search.md#sec-3 "585e5d745a56 DLID-nnbgpzkkm5vq"
-[des-005-sec-5]: DES-005_indexing.md#sec-5 "12c57d162234 DLID-dgphqw70rkpz"
-[des-007-sec-3]: DES-007_references-impact.md#sec-3 "3ee703ae09de DLID-pr3jp4hzb8js"
+[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-006-sec-2]: DES-006_search.md#sec-2 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-006-sec-3]: DES-006_search.md#sec-3 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-005-sec-5]: DES-005_indexing.md#sec-5 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-007-sec-3]: DES-007_references-impact.md#sec-3 "463a2d89954a DLID-pr3jp4hzb8js"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"

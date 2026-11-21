@@ -4,8 +4,6 @@ doc_link_id: DLID-nnbgpzkkm5vq
 
 # DES-006 文書検索設計 DLID-wwna81gbj3jz
 
-**根拠**: [文書検索要件][req-004]、[DLID の解決の要件][req-002-sec-9]
-
 <a id="sec-1"></a>
 
 ## 1. 検索前の判定 DLID-ksmh21dbz9zv
@@ -49,10 +47,8 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 [ToC]、管理状態、[Index 対象文書]には書き込まない。
 
-[req-004]: ../requirement/REQ-004_search.md "1380e03c79c5 DLID-h96208rqr773"
-[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "6b263e36591d DLID-bk29x4s8tadq"
-[des-003-sec-2]: DES-003_data-model.md#sec-2 "eec2db1da983 DLID-yqqrwtycr379"
-[des-008-sec-1]: DES-008_content-rules.md#sec-1 "5abc0b499da6 DLID-ywa6htx8vq09"
-[des-005]: DES-005_indexing.md "12c57d162234 DLID-dgphqw70rkpz"
+[des-003-sec-2]: DES-003_data-model.md#sec-2 "c166e9748f2a DLID-yqqrwtycr379"
+[des-008-sec-1]: DES-008_content-rules.md#sec-1 "a535f218431f DLID-ywa6htx8vq09"
+[des-005]: DES-005_indexing.md "1ccb35c93c6c DLID-dgphqw70rkpz"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "ba12fbc70601 DLID-8vajyevfatkv"

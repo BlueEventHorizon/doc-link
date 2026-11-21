@@ -4,8 +4,6 @@ doc_link_id: DLID-3da82gspdp44
 
 # DES-001 システム全体設計 DLID-he599f4215xq
 
-**根拠**: [要件総論][req-001]、[設計書の構成][readme]
-
 <a id="sec-1"></a>
 
 ## 1. システム境界 DLID-gzrbkxrazr3s
@@ -85,14 +83,12 @@ sequenceDiagram
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録する。参照先を読めない場合も[ToC]の確定を止めないことは、要件 [D-025][req-001-d] が定める。
 
-[req-001]: ../requirement/REQ-001_overview.md "5d0596315129 DLID-veg2nsjk8zw1"
-[readme]: README.md "d2b927142749 DLID-zvepba87h7zk"
-[des-002]: DES-002_execution-responsibilities.md "f33cc46cc95c DLID-anz9vack2xzt"
-[des-010]: DES-010_skill-composition.md "b25c3562db6d DLID-7e90gq3sdncc"
-[des-004]: DES-004_state-machines.md "d987c5d11718 DLID-3f92k3tz4rew"
-[des-007]: DES-007_references-impact.md "3ee703ae09de DLID-pr3jp4hzb8js"
-[des-005]: DES-005_indexing.md "12c57d162234 DLID-dgphqw70rkpz"
-[des-003]: DES-003_data-model.md "eec2db1da983 DLID-yqqrwtycr379"
-[des-006]: DES-006_search.md "585e5d745a56 DLID-nnbgpzkkm5vq"
+[des-002]: DES-002_execution-responsibilities.md "e978f1de2a45 DLID-anz9vack2xzt"
+[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
+[des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
+[des-005]: DES-005_indexing.md "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
+[des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "ba12fbc70601 DLID-8vajyevfatkv"

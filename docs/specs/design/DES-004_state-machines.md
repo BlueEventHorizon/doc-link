@@ -4,8 +4,6 @@ doc_link_id: DLID-3f92k3tz4rew
 
 # DES-004 状態モデルと許可遷移 DLID-h1mqw7dj0w2a
 
-**根拠**: [ToC 管理要件][req-003]
-
 <a id="sec-1"></a>
 
 ## 1. 状態の分離と規範 DLID-avhjbcr0q865
@@ -116,9 +114,8 @@ DLID 付与操作（`embed-dlid`）の実行ごとの状態は次の通り。[In
 | E-06 | 開始／対象確定／原本確認待ち／計画確定 | 当該段階の処理が失敗した（書き込めなかった文書が 1 件でもある場合を含む）、または利用者が原本を確定せずに終えた | 失敗         | 検証を通って書き込んだ[DLID]は戻さない。書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因を返す（要件 [FR-002][req-002-fr-002]、[D-040][req-001-d]、[NFR-005][req-001-nfr-005]） |
 | E-07 | 失敗                                   | 再実行を明示的に開始                                                                                            | 開始         | 書き込み済みの[DLID]を既存の[DLID]として照合し直す                                                                                                                                              |
 
-[req-003]: ../requirement/REQ-003_toc.md "191fbc0b3993 DLID-kxe3nxfgk491"
-[des-009]: DES-009_verification.md "0a7ae9d0cd79 DLID-xmg0jcmep2h2"
-[des-008]: DES-008_content-rules.md "5abc0b499da6 DLID-ywa6htx8vq09"
+[des-009]: DES-009_verification.md "ab6bf50edb8f DLID-xmg0jcmep2h2"
+[des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"

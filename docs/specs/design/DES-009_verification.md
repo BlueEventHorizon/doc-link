@@ -4,8 +4,6 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 # DES-009 要件対応と設計検証 DLID-7e6sqa5ehfep
 
-**根拠**: [要件書群][req-001]、[状態モデル][des-004]
-
 <a id="sec-1"></a>
 
 ## 1. テストの規範 DLID-13qfqbvamwny
@@ -70,15 +68,14 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 要件の未決事項は、すべて決定済みである。設計書はレビューを経て承認済みである。
 
-[req-001]: ../requirement/REQ-001_overview.md "5d0596315129 DLID-veg2nsjk8zw1"
-[des-004]: DES-004_state-machines.md "d987c5d11718 DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "12c57d162234 DLID-dgphqw70rkpz"
-[des-008]: DES-008_content-rules.md "5abc0b499da6 DLID-ywa6htx8vq09"
-[des-007]: DES-007_references-impact.md "3ee703ae09de DLID-pr3jp4hzb8js"
-[des-006]: DES-006_search.md "585e5d745a56 DLID-nnbgpzkkm5vq"
-[des-010]: DES-010_skill-composition.md "b25c3562db6d DLID-7e90gq3sdncc"
-[des-003]: DES-003_data-model.md "eec2db1da983 DLID-yqqrwtycr379"
-[des-002]: DES-002_execution-responsibilities.md "f33cc46cc95c DLID-anz9vack2xzt"
+[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
+[des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
+[des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
+[des-002]: DES-002_execution-responsibilities.md "e978f1de2a45 DLID-anz9vack2xzt"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-001-nfr-001]: ../requirement/REQ-001_overview.md#nfr-001-toc再構築の一貫性-dlid-j4xry3ca5rsb "1bfb73100c73 DLID-j4xry3ca5rsb"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "32719882644f DLID-kp2w32mbpdb8"

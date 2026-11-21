@@ -1,37 +1,39 @@
 {
-  "content_hash": "5abc0b499da6ec5dd6310702a2dd1af786afee9895981619cedf9646b14a1ede",
+  "content_hash": "a535f218431fd008c2d52dc744950786ad1985ae4c8aff9a0dcaf48c9a9dfecf",
   "doc_link_id": "DLID-ywa6htx8vq09",
   "keywords": [
     "DLID",
     "frontmatter",
     "markdown-it-py",
     "CommonMark",
+    "heading anchor",
     "content hash",
     "SHA-256",
-    "heading anchor",
     "section range",
     "AI-generated fields",
     "validator"
   ],
   "path": "docs/specs/design/DES-008_content-rules.md",
-  "purpose": "Defines rules for reading and writing document IDs, Markdown parsing, anchor generation, content hash computation, and AI-generated field limits and validation.",
+  "purpose": "Design rules for reading and writing document IDs, Markdown parsing and positions, heading anchors, content hash comparison values, and AI-generated fields with their validation.",
   "summary": [
-    "Frontmatter doc_link_id is read with minimal parsing; missing or unrecognized values count as no ID",
-    "Only DLIDs are written, at frontmatter or heading ends, verified by re-parsing and atomic replace",
-    "Markdown is parsed with markdown-it-py following CommonMark link rules",
-    "Section ranges run from a heading to the next heading of the same or higher level",
-    "Heading anchors follow github-slugger-compatible rules",
-    "Content hash is SHA-256 of raw UTF-8 text, with formal reference titles excluded",
-    "Titles record the first 12 hex characters of the hash",
-    "Section hashes cover the section range text",
-    "AI-generated fields have per-field limits L and array minimum counts, in English"
+    "Frontmatter parsing and DLID recognition, issuance format, and write-only-DLID insertion with post-write verification",
+    "Markdown parsed with markdown-it-py following CommonMark; no custom regex for block structure",
+    "Reference link rules covering labels, titles, hrefs, schemes, images, autolinks and fragments",
+    "Heading anchor generation matching github-slugger rules, used only for checking and never written",
+    "Content hash is SHA-256 of the raw UTF-8 bytes, with 12-character recorded values in titles",
+    "Formal reference titles are excluded from hash calculation so recording hashes does not change the source hash",
+    "Section content hash covers the section range from heading to next same-or-higher heading",
+    "Test vectors are defined for hash invariance and sensitivity",
+    "AI-generated fields use limit L for generation and hidden threshold H for validation, with minimum array sizes"
   ],
   "tasks": [
-    "Implementing Markdown parsing and DLID writing",
-    "Implementing content hash computation",
-    "Implementing anchor generation for headings",
-    "Validating AI-generated ToC fields",
-    "Writing test vectors for hashes and link rules"
+    "Implementing DLID reading, issuing and writing",
+    "Implementing Markdown parsing for links and headings",
+    "Implementing heading anchor generation",
+    "Implementing content hash calculation",
+    "Implementing AI-generated field validation",
+    "Writing parser and hash tests",
+    "Reviewing write-boundary safety"
   ],
   "title": "DES-008 Markdown 解析・比較値・生成情報の規則"
 }

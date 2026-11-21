@@ -4,8 +4,6 @@ doc_link_id: DLID-dgphqw70rkpz
 
 # DES-005 対象確定・DLID 付与・[ToC]構築設計 DLID-yhb7552z92k6
 
-**根拠**: [Index 対象と ID][req-002]、[ToC 管理][req-003]
-
 <a id="sec-1"></a>
 
 ## 1. 入出力と実行境界 DLID-racs51864j70
@@ -92,13 +90,11 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 
 [ToC]の構築・再構築は、通知の状態を持たない（要件 [D-038][req-001-d]）。失敗時は段階、対象 ID・パス、原因、[確定 ToC]の有無を返す。再実行時は[確定 ToC]と現物から再判定し、旧版に取り込まれた要約を不必要に繰り返さない。
 
-[req-002]: ../requirement/REQ-002_document-id.md "6b263e36591d DLID-bk29x4s8tadq"
-[req-003]: ../requirement/REQ-003_toc.md "191fbc0b3993 DLID-kxe3nxfgk491"
-[des-004]: DES-004_state-machines.md "d987c5d11718 DLID-3f92k3tz4rew"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "f33cc46cc95c DLID-anz9vack2xzt"
+[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"
 [req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#sec-6-1 "6b263e36591d DLID-bk29x4s8tadq"
 [req-001-sec-17-1]: ../requirement/REQ-001_overview.md#sec-17-1 "5d0596315129 DLID-veg2nsjk8zw1"
-[des-008-sec-3]: DES-008_content-rules.md#sec-3 "5abc0b499da6 DLID-ywa6htx8vq09"
+[des-008-sec-3]: DES-008_content-rules.md#sec-3 "a535f218431f DLID-ywa6htx8vq09"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"

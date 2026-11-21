@@ -4,8 +4,6 @@ doc_link_id: DLID-7e90gq3sdncc
 
 # DES-010 SKILL と Agent の構成 DLID-gf7dehdq4tpd
 
-**根拠**: [要件総論][req-001]、[実行主体][des-002]
-
 <a id="sec-1"></a>
 
 ## 1. 構成 DLID-154xfxg7rkzy
@@ -444,8 +442,6 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 | 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                                                              | 検索を失敗として返す                                                                                           |
 | 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                                                  | `query-docs` が結果を返した後                                                                                  |
 
-[req-001]: ../requirement/REQ-001_overview.md "5d0596315129 DLID-veg2nsjk8zw1"
-[des-002]: DES-002_execution-responsibilities.md "f33cc46cc95c DLID-anz9vack2xzt"
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "6b263e36591d DLID-bk29x4s8tadq"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "6b263e36591d DLID-bk29x4s8tadq"
 [req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12 "1380e03c79c5 DLID-h96208rqr773"
@@ -460,22 +456,22 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "5d0596315129 DLID-veg2nsjk8zw1"
 [req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "6b263e36591d DLID-bk29x4s8tadq"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "191fbc0b3993 DLID-kxe3nxfgk491"
-[des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "f33cc46cc95c DLID-anz9vack2xzt"
-[des-008-sec-4]: DES-008_content-rules.md#sec-4 "5abc0b499da6 DLID-ywa6htx8vq09"
-[des-006-sec-2]: DES-006_search.md#sec-2 "585e5d745a56 DLID-nnbgpzkkm5vq"
-[des-006-sec-3]: DES-006_search.md#sec-3 "585e5d745a56 DLID-nnbgpzkkm5vq"
-[des-005-sec-2-1]: DES-005_indexing.md#sec-2-1 "12c57d162234 DLID-dgphqw70rkpz"
-[des-008-sec-1]: DES-008_content-rules.md#sec-1 "5abc0b499da6 DLID-ywa6htx8vq09"
-[des-005-sec-2]: DES-005_indexing.md#sec-2 "12c57d162234 DLID-dgphqw70rkpz"
-[des-005-sec-3]: DES-005_indexing.md#sec-3 "12c57d162234 DLID-dgphqw70rkpz"
-[des-005-sec-4]: DES-005_indexing.md#sec-4 "12c57d162234 DLID-dgphqw70rkpz"
-[des-007-sec-1]: DES-007_references-impact.md#sec-1 "3ee703ae09de DLID-pr3jp4hzb8js"
-[des-004-sec-3]: DES-004_state-machines.md#sec-3 "d987c5d11718 DLID-3f92k3tz4rew"
-[des-006-sec-1]: DES-006_search.md#sec-1 "585e5d745a56 DLID-nnbgpzkkm5vq"
-[des-007-sec-2]: DES-007_references-impact.md#sec-2 "3ee703ae09de DLID-pr3jp4hzb8js"
-[des-007-sec-3]: DES-007_references-impact.md#sec-3 "3ee703ae09de DLID-pr3jp4hzb8js"
+[des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "e978f1de2a45 DLID-anz9vack2xzt"
+[des-008-sec-4]: DES-008_content-rules.md#sec-4 "a535f218431f DLID-ywa6htx8vq09"
+[des-006-sec-2]: DES-006_search.md#sec-2 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-006-sec-3]: DES-006_search.md#sec-3 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-005-sec-2-1]: DES-005_indexing.md#sec-2-1 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-008-sec-1]: DES-008_content-rules.md#sec-1 "a535f218431f DLID-ywa6htx8vq09"
+[des-005-sec-2]: DES-005_indexing.md#sec-2 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-005-sec-3]: DES-005_indexing.md#sec-3 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-005-sec-4]: DES-005_indexing.md#sec-4 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-007-sec-1]: DES-007_references-impact.md#sec-1 "463a2d89954a DLID-pr3jp4hzb8js"
+[des-004-sec-3]: DES-004_state-machines.md#sec-3 "676fc369ec46 DLID-3f92k3tz4rew"
+[des-006-sec-1]: DES-006_search.md#sec-1 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-007-sec-2]: DES-007_references-impact.md#sec-2 "463a2d89954a DLID-pr3jp4hzb8js"
+[des-007-sec-3]: DES-007_references-impact.md#sec-3 "463a2d89954a DLID-pr3jp4hzb8js"
 [exchange-rules]: ../../rules/agent_data_exchange_rules.md "590998804bef DLID-2g3cgnnry3bm"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "f33cc46cc95c DLID-anz9vack2xzt"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-001-nfr-008]: ../requirement/REQ-001_overview.md#nfr-008-生成指示と検証基準の分離-dlid-fc5e4s6nctp9 "7c7778285762 DLID-fc5e4s6nctp9"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "8fbdec918bdd DLID-z0g4zx0wr0cn"

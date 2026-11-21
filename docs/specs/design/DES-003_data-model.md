@@ -4,8 +4,6 @@ doc_link_id: DLID-yqqrwtycr379
 
 # DES-003 論理データモデル DLID-r0cbjnptm8qv
 
-**根拠**: [ToC の情報要件][req-003-sec-7]、[設計書の構成][readme]
-
 <a id="sec-1"></a>
 
 ## 1. モデルの境界 DLID-3wwk8rkdkpam
@@ -57,9 +55,7 @@ Index 対象から離脱した文書は、指定キーの[確定 ToC]から除�
 
 現時点で未決の関係はない。[文書 ID]の発行方式と一意性は要件 [D-028][req-001-d]／[D-030][req-001-d] で決定した（要件 [U-016][req-001-u]）。
 
-[req-003-sec-7]: ../requirement/REQ-003_toc.md#sec-7 "191fbc0b3993 DLID-kxe3nxfgk491"
-[readme]: README.md "d2b927142749 DLID-zvepba87h7zk"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "f33cc46cc95c DLID-anz9vack2xzt"
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "b25c3562db6d DLID-7e90gq3sdncc"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "ea5099a8e006 DLID-7e90gq3sdncc"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"

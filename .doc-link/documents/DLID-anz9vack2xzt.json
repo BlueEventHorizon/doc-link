@@ -1,39 +1,37 @@
 {
-  "content_hash": "f33cc46cc95ce824b05140cc1c5534c13abe3b006ef98125793fbd7b39152746",
+  "content_hash": "e978f1de2a45514439060dcc0bc2a59234202750f9907818877c05e87a12e7e9",
   "doc_link_id": "DLID-anz9vack2xzt",
   "keywords": [
     "responsibilities",
     "write permission",
     "script operations",
+    "Skill",
     "information generation AI",
     "search AI",
-    "Skill",
     ".doc-link",
-    "JSON storage",
-    "deterministic output",
-    "DLID assignment"
+    "JSON state files",
+    "DLID assignment",
+    "temporary files"
   ],
   "path": "docs/specs/design/DES-002_execution-responsibilities.md",
-  "purpose": "Defines which actors (project AI, Skill, scripts, content AI, search AI, user) do what in doc-link, their write permissions, the logical script operations, Skill-script connection rules, and the storage layout.",
+  "purpose": "Defines which actors execute doc-link processing and their responsibilities, write permissions, script operations, Skill-script connection rules, and the layout of the management state files.",
   "summary": [
-    "Responsibility and permission table for caller/project AI, Skill, deterministic scripts, info-generation AI, search AI and user",
-    "Logical script operations table: target expansion, ID check, DLID assignment, comparison values, diff, reference check, AI output validation, candidate commit, search read, DLID resolution, inconsistency check",
-    "Skill-script connection rules: no self-reported stage success, information boundary for the generation AI, mechanical impact listing, re-check as a new operation, separate operations",
-    "Generation AI never receives the internal tolerance limit H, only the published limit L; validation boundary belongs to scripts",
-    "Impact notification lists changed documents and known referrers mechanically; no judgment or fix proposal inside doc-link",
-    "Partial failure of DLID assignment: written DLIDs are kept and reported, failed documents reported with path and cause, rerun processes the rest",
-    "All files live inside the project; temporary files go under .temp/doc-link/<skill>/; scripts run via uv run",
-    "Management state is stored as JSON under .doc-link/ and tracked by git, split into per-document info files and per-key confirmed ToC files",
-    "Deterministic byte-identical output (UTF-8, sorted keys, fixed indent) and no rewrite of unchanged files"
+    "Responsibility table of actors: caller/project AI, Skill, deterministic scripts, information-generation AI, search AI, user, with write permissions and prohibitions",
+    "Logical script operations with inputs, success results and side-effect or failure promises",
+    "Skill-script connection rules: no self-reported stage success, guarded transitions, hidden internal limit H from the generation AI",
+    "Impact notification is enumerated mechanically by scripts; no repair judgment or fix proposal inside doc-link",
+    "Re-check after a fix is a new operation; check, search, resolve, build and notify are distinct operations",
+    "Handling of partial failure in DLID assignment: written DLIDs are kept, failures are reported per document",
+    "All doc-link files stay inside the project; temporary files go under .temp/doc-link/<skill>/",
+    "Management state stored as JSON under .doc-link/ and tracked by git, split into per-document info files and per-key ToC files",
+    "Deterministic byte-for-byte output so merges converge by rebuilding"
   ],
   "tasks": [
-    "Designing or reviewing doc-link responsibilities and permissions",
-    "Implementing doc-link scripts and their operations",
-    "Writing SKILL.md and custom Agent definitions",
-    "Designing the information boundary for the generation AI",
-    "Implementing state file storage and serialization",
-    "Handling DLID assignment failures and reruns",
-    "Resolving merge conflicts in .doc-link state files"
+    "Designing or reviewing doc-link Skills, scripts and custom Agents",
+    "Implementing script operations and their guards",
+    "Deciding who may write what in doc-link",
+    "Implementing DLID assignment error handling",
+    "Designing management state file layout and resolving merge conflicts"
   ],
   "title": "DES-002 実行主体と処理責務"
 }

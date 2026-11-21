@@ -4,8 +4,6 @@ doc_link_id: DLID-pr3jp4hzb8js
 
 # DES-007 参照検査と[変更影響候補の通知] DLID-37c14e215jqb
 
-**根拠**: [参照と変更通知の要件][req-005]
-
 <a id="sec-1"></a>
 
 ## 1. [正式な参照]と検査根拠 DLID-pnrn5dyy7z05
@@ -90,12 +88,11 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 
 不整合検査は ID 欠落・重複、壊れた参照、title に[DLID]の無いリンク、パス不一致、[ToC]と現物の差、title の記録と参照先の[現在ハッシュ]が異なる参照を一覧化する操作として扱う。検査内容ごとに `check-dlid`、`check-links`、`check-toc`、`check-impact` の SKILL に分ける（[DES-010][des-010]）。検査は管理状態を書き換えない。ID の付与は DLID 付与操作だけが行うので、検査は[Index 対象文書]を変更しない（要件 [D-035][req-001-d]）。検出事項に重要度の分類は設けない。検出事項ごとの扱い（[ToC]の確定を妨げるか、検出後の作業）は、要件 [D-025][req-001-d]・[D-036][req-001-d] と[DES-010][des-010]が定める。「存在しないセクション」は、リンク先パスの文書は存在するが、title の[セクション ID]を行の末尾に持つ見出しがその文書にも指定ディレクトリ内の他の文書にも無いことで判定する（§1、要件 [D-033][req-001-d]）。
 
-[req-005]: ../requirement/REQ-005_references.md "413c4c0e5fae DLID-pc44gkb54821"
-[des-010]: DES-010_skill-composition.md "b25c3562db6d DLID-7e90gq3sdncc"
-[des-010-sec-1-2]: DES-010_skill-composition.md#sec-1-2 "b25c3562db6d DLID-7e90gq3sdncc"
-[des-010-sec-3-7]: DES-010_skill-composition.md#sec-3-7 "b25c3562db6d DLID-7e90gq3sdncc"
-[des-008-sec-2]: DES-008_content-rules.md#sec-2 "5abc0b499da6 DLID-ywa6htx8vq09"
-[des-008-sec-3]: DES-008_content-rules.md#sec-3 "5abc0b499da6 DLID-ywa6htx8vq09"
+[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-010-sec-1-2]: DES-010_skill-composition.md#sec-1-2 "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-010-sec-3-7]: DES-010_skill-composition.md#sec-3-7 "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-008-sec-2]: DES-008_content-rules.md#sec-2 "a535f218431f DLID-ywa6htx8vq09"
+[des-008-sec-3]: DES-008_content-rules.md#sec-3 "a535f218431f DLID-ywa6htx8vq09"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
 [req-005-ac-032]: ../requirement/REQ-005_references.md#ac-032-title-に書く値の提示-dlid-nc6z2c2w5wx3 "d2b830d42495 DLID-nc6z2c2w5wx3"
 [req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "54755c6543f2 DLID-zacf5tmy6x4x"

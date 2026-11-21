@@ -13,7 +13,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from scenario_support import (  # noqa: E402
     FIXED,
     ScenarioBase,
+    document_id_in,
     query_docs,
+    section_id_in,
     strip_dlids,
 )
 
@@ -31,16 +33,12 @@ class FirstTimeScenarioTest(ScenarioBase):
         self.write("docs/a.md", A_ORIGINAL)
         self.write("docs/b.md", B_ORIGINAL)
 
-    def written_ids(self, result):
-        documents = {}
-        sections = {}
-        for item in result["written"]:
-            if item["kind"] == "document":
-                documents[item["path"]] = item["dlid"]
-            else:
-                sections[(item["path"], item["heading"].rsplit(" ", 1)[0])] = item[
-                    "dlid"
-                ]
+    def written_ids(self):
+        """付与された[DLID]を、文書から読む（`embed-dlid` は件数だけを返す。要件 D-040）。"""
+        documents = {path: document_id_in(self.read(path)) for path in PATHS}
+        sections = {
+            ("docs/a.md", "Part"): section_id_in(self.read("docs/a.md"), "Part")
+        }
         return documents, sections
 
     def test_scenario_1_from_embedding_to_searchable(self):
@@ -52,7 +50,12 @@ class FirstTimeScenarioTest(ScenarioBase):
         self.assertEqual(strip_dlids(self.read("docs/b.md")), B_ORIGINAL)
         self.assertTrue(self.read("docs/a.md").startswith("---\ndoc_link_id: DLID-"))
         self.assertEqual(self.state_snapshot(), {})
-        documents, sections = self.written_ids(embedded)
+        # a.md は H1 と H2、b.md は H1 だけである（文書の ID 2 件、セクション ID 3 件）
+        self.assertEqual(
+            embedded["written_counts"],
+            {"document_ids": 2, "section_ids": 3, "replaced": 0},
+        )
+        documents, sections = self.written_ids()
         id_a, id_b = documents["docs/a.md"], documents["docs/b.md"]
         section_part = sections[("docs/a.md", "Part")]
         self.assertEqual(len({id_a, id_b, section_part}), 3)

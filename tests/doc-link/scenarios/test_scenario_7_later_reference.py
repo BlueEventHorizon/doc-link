@@ -14,6 +14,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from scenario_support import (  # noqa: E402
     ScenarioBase,
+    document_id_in,
+    section_id_in,
+    section_ids_in,
     strip_dlids,
 )
 
@@ -33,22 +36,18 @@ class LaterReferenceScenarioTest(ScenarioBase):
         code, embedded = self.embed(KEY, PATHS)
         self.assertEqual(code, 0, embedded)
         self.target_after_embed = self.read("docs/target.md")
-        self.target_doc_id = next(
-            w["dlid"]
-            for w in embedded["written"]
-            if w["path"] == "docs/target.md" and w["kind"] == "document"
-        )
-        # 全見出しに[セクション ID]が付いている
-        self.section_id = next(
-            w["dlid"]
-            for w in embedded["written"]
-            if w["path"] == "docs/target.md"
-            and w["kind"] == "section"
-            and w["heading"].startswith("Section One")
-        )
+        # `embed-dlid` は件数だけを返す（要件 D-040）。付与された値は、文書から読む
         self.assertEqual(
-            len([w for w in embedded["written"] if w["kind"] == "section"]), 3
+            embedded["written_counts"],
+            {"document_ids": 2, "section_ids": 3, "replaced": 0},
         )
+        self.target_doc_id = document_id_in(self.target_after_embed)
+        self.assertIsNotNone(self.target_doc_id)
+        # 全見出しに[セクション ID]が付いている
+        self.section_id = section_id_in(self.target_after_embed, "Section One")
+        self.assertIsNotNone(self.section_id)
+        self.assertEqual(len(section_ids_in(self.target_after_embed)), 2)
+        self.assertEqual(len(section_ids_in(self.read("docs/source.md"))), 1)
         self.assertEqual(strip_dlids(self.target_after_embed), TARGET_ORIGINAL)
 
     def anchor(self):
@@ -116,7 +115,10 @@ class LaterReferenceScenarioTest(ScenarioBase):
         code, embedded = self.embed(KEY, PATHS)
         self.assertEqual(code, 0, embedded)
         # 付与するものは無く、リンク（title の無いもの・[DLID]の無いもの）には何も書き込まない
-        self.assertEqual(embedded["written"], [])
+        self.assertEqual(
+            embedded["written_counts"],
+            {"document_ids": 0, "section_ids": 0, "replaced": 0},
+        )
         self.assertEqual(self.snapshot("docs"), documents_before)
         # title に[DLID]の無いリンクは、check-links が報告するだけである
         code, links = self.check_links(KEY, PATHS)
@@ -143,7 +145,10 @@ class LaterReferenceScenarioTest(ScenarioBase):
         state_before = self.state_snapshot()
         code, embedded = self.embed(KEY, PATHS)
         self.assertEqual(code, 0, embedded)
-        self.assertEqual(embedded["written"], [])
+        self.assertEqual(
+            embedded["written_counts"],
+            {"document_ids": 0, "section_ids": 0, "replaced": 0},
+        )
         self.assertEqual(self.snapshot("docs"), documents_before)
         # DLID 付与操作は管理状態を書き換えない
         self.assertEqual(self.state_snapshot(), state_before)

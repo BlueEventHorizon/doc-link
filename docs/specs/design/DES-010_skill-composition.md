@@ -4,33 +4,29 @@ doc_link_id: DLID-7e90gq3sdncc
 
 # DES-010 SKILL と Agent の構成 DLID-gf7dehdq4tpd
 
-**状態**: 承認済み\
-**更新日**: 2026-11-20\
-**根拠**: [要件総論][req-001]、[実行主体][des-002]
-
 <a id="sec-1"></a>
 
 ## 1. 構成 DLID-154xfxg7rkzy
 
 doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する。SKILL はいずれも呼び出し元（[プロジェクト管理 AI]）のコンテキストで実行する継承型とする（[DES-002 §3][des-002-sec-3]）。各 SKILL は処理を script に委ね、SKILL.md にロジックを書かない。
 
-| SKILL          | 種類 | [Index 対象文書]への書き込み   | 管理状態の書き換え            | 対応する要件                                                                                   |
-| -------------- | ---- | ------------------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------- |
-| `embed-dlid`   | 操作 | あり（[DLID]だけ、要件 D-031） | なし                          | [REQ-002 §9.2][req-002-sec-9-2]、FR-001、FR-002、D-029、D-033〜D-035                           |
-| `index-docs`   | 操作 | なし（要件 D-035）             | あり（[文書情報]、[ToC]の版） | FR-017、[REQ-002 §9.1][req-002-sec-9-1]、FR-003〜FR-005、FR-009、FR-010、FR-011、FR-012、D-036 |
-| `query-docs`   | 照会 | なし                           | なし                          | [REQ-004 §12][req-004-sec-12] FR-006                                                           |
-| `resolve-dlid` | 照会 | なし                           | なし                          | [REQ-002 §9][req-002-sec-9] FR-018、D-047                                                      |
-| `check-dlid`   | 検査 | なし                           | なし                          | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-002 §9][req-002-sec-9] FR-002                       |
-| `check-links`  | 検査 | なし                           | なし                          | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-005 §13][req-005-sec-13] FR-009                     |
-| `check-toc`    | 検査 | なし                           | なし                          | [REQ-005 §15][req-005-sec-15] FR-016、[REQ-003 §10][req-003-sec-10] FR-011                     |
-| `check-impact` | 検査 | なし                           | なし                          | [REQ-005 §14][req-005-sec-14] FR-013〜FR-015、[REQ-005 §15][req-005-sec-15] FR-016、D-038      |
+| SKILL          | 種類 | [Index 対象文書]への書き込み                | 管理状態の書き換え            | 対応する要件                                                                                                                                                                                                                              |
+| -------------- | ---- | ------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `embed-dlid`   | 操作 | あり（[DLID]だけ、要件 [D-031][req-001-d]） | なし                          | [REQ-002 §9.2][req-002-sec-9-2]、[FR-001][req-002-fr-001]、[FR-002][req-002-fr-002]、[D-029][req-001-d]、[D-033][req-001-d]〜[D-035][req-001-d]                                                                                           |
+| `index-docs`   | 操作 | なし（要件 [D-035][req-001-d]）             | あり（[文書情報]、[ToC]の版） | [FR-017][req-002-fr-017]、[REQ-002 §9.1][req-002-sec-9-1]、[FR-003][req-003-fr-003]〜[FR-005][req-003-fr-005]、[FR-009][req-005-fr-009]、[FR-010][req-005-fr-010]、[FR-011][req-003-fr-011]、[FR-012][req-003-fr-012]、[D-036][req-001-d] |
+| `query-docs`   | 照会 | なし                                        | なし                          | [REQ-004 §12][req-004-sec-12] [FR-006][req-004-fr-006]                                                                                                                                                                                    |
+| `resolve-dlid` | 照会 | なし                                        | なし                          | [REQ-002 §9][req-002-sec-9] [FR-018][req-002-fr-018]、[D-047][req-001-d]                                                                                                                                                                  |
+| `check-dlid`   | 検査 | なし                                        | なし                          | [REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]、[REQ-002 §9][req-002-sec-9] [FR-002][req-002-fr-002]                                                                                                                              |
+| `check-links`  | 検査 | なし                                        | なし                          | [REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]、[REQ-005 §13][req-005-sec-13] [FR-009][req-005-fr-009]                                                                                                                            |
+| `check-toc`    | 検査 | なし                                        | なし                          | [REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]、[REQ-003 §10][req-003-sec-10] [FR-011][req-003-fr-011]                                                                                                                            |
+| `check-impact` | 検査 | なし                                        | なし                          | [REQ-005 §14][req-005-sec-14] [FR-013][req-005-fr-013]〜[FR-015][req-005-fr-015]、[REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]、[D-038][req-001-d]                                                                              |
 
-検査の SKILL は検出して返し、管理状態を書き換える SKILL はない。`check-impact` も書き換えない（要件 D-038、[DES-007 §3][des-007-sec-3]）。
+検査の SKILL は検出して返し、管理状態を書き換える SKILL はない。`check-impact` も書き換えない（要件 [D-038][req-001-d]、[DES-007 §3][des-007-sec-3]）。
 
 | カスタム Agent            | 責務                                                                                                                                                                                                                                                                                                                                                                                                                                  | 起動元       |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | `toc-updater`（情報生成） | 1 回の起動で同じディレクトリの最大 3 文書を受け持ち（同じディレクトリの文書は内容が関連していることが多く、関連する文書をまとめて読むほうが Agent の効率が高いため）、文書ごとに独立して、目的・内容概要・適用作業・検索用キーワードを生成する。記述上限 `L` 以外の検証情報を持たない（要件: [REQ-003 §7.4][req-003-sec-7-4]、[REQ-003 §11.2.2][req-003-sec-11-2-2]／設計: [DES-002 §3][des-002-sec-3]、[DES-008 §4][des-008-sec-4]） | `index-docs` |
-| `query-worker`（検索）    | [確定 ToC]の[ToC]全体を読んで、タスクに関連する文書を選び、関連理由とともに返す。読み取り専用で、存在しない ID を補わず、[ToC]と管理状態を変更しない（要件: [REQ-004 §12][req-004-sec-12] FR-006／設計: [DES-006 §2][des-006-sec-2]）                                                                                                                                                                                                 | `query-docs` |
+| `query-worker`（検索）    | [確定 ToC]の[ToC]全体を読んで、タスクに関連する文書を選び、関連理由とともに返す。読み取り専用で、存在しない ID を補わず、[ToC]と管理状態を変更しない（要件: [REQ-004 §12][req-004-sec-12] [FR-006][req-004-fr-006]／設計: [DES-006 §2][des-006-sec-2]）                                                                                                                                                                               | `query-docs` |
 
 <a id="sec-1-1"></a>
 
@@ -40,8 +36,8 @@ doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する
 
 - [文書 ID]の無い文書へ[DLID]を発行し、frontmatter に書き込む（要件: [REQ-002 §9.2][req-002-sec-9-2]／設計: [DES-005 §2.1][des-005-sec-2-1]、[DES-008 §1][des-008-sec-1]）
 - [セクション ID]を持たないすべての見出しへ[セクション ID]を発行し、見出しの行の末尾に書き込む（要件: [REQ-005 §13.1][req-005-sec-13-1]／設計: [DES-005 §2.1][des-005-sec-2-1]、[DES-008 §1][des-008-sec-1]）
-- 同じ ID を持つ文書が複数あるとき、原本の候補を利用者に示し、利用者が原本を確定した後、複製側に新しい ID を発行して書き込む（要件: [REQ-002 §9][req-002-sec-9] FR-002／設計: [DES-005 §2.1][des-005-sec-2-1]）
-- リンクとその title は書き換えない。既存文書の移行も、全対象への[文書 ID]の付与と[セクション ID]の発行だけで行う（要件: [REQ-002 §9.2][req-002-sec-9-2]、[REQ-001 §19][req-001-sec-19] D-034・D-042／設計: [DES-005 §2.1][des-005-sec-2-1]）
+- 同じ ID を持つ文書が複数あるとき、原本の候補を利用者に示し、利用者が原本を確定した後、複製側に新しい ID を発行して書き込む（要件: [REQ-002 §9][req-002-sec-9] [FR-002][req-002-fr-002]／設計: [DES-005 §2.1][des-005-sec-2-1]）
+- リンクとその title は書き換えない。既存文書の移行も、全対象への[文書 ID]の付与と[セクション ID]の発行だけで行う（要件: [REQ-002 §9.2][req-002-sec-9-2]、[REQ-001 §19][req-001-sec-19] [D-034][req-001-d]・[D-042][req-001-d]／設計: [DES-005 §2.1][des-005-sec-2-1]）
 
 `index-docs`
 
@@ -58,33 +54,33 @@ doc-link は次の 8 つの SKILL と 2 つのカスタム Agent で構成する
 
 `resolve-dlid`
 
-- 渡された[DLID]ごとに、管理状態に記録されたパスを、その文書が今もその[DLID]を持つことを確かめてから返す。[セクション ID]には見出しとアンカーを添える。確かめられない[DLID]には記録されたパスに無いことを、記録の無い[DLID]にはそのことを返す。解決済みには、記録した[内容ハッシュ]を添える（要件: [REQ-002 §9][req-002-sec-9] FR-018／設計: [DES-006 §3][des-006-sec-3]）
+- 渡された[DLID]ごとに、管理状態に記録されたパスを、その文書が今もその[DLID]を持つことを確かめてから返す。[セクション ID]には見出しとアンカーを添える。確かめられない[DLID]には記録されたパスに無いことを、記録の無い[DLID]にはそのことを返す。解決済みには、記録した[内容ハッシュ]を添える（要件: [REQ-002 §9][req-002-sec-9] [FR-018][req-002-fr-018]／設計: [DES-006 §3][des-006-sec-3]）
 
 <a id="sec-1-2"></a>
 
 ### 1.2 検査の SKILL の責務 DLID-h9bg56gdypm5
 
-| SKILL          | 検出する状態                                                                                                                                                                                                                                                                                  | 検出事項の扱い（誰が、何で）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `check-dlid`   | [文書 ID]が無い。[セクション ID]の無い見出しがある。[文書 ID]または[セクション ID]が重複している（[セクション ID]は同じ文書の中を含む）                                                                                                                                                       | 検出して返すだけで、付与は行わない。付与は `embed-dlid` が行う（要件 D-040、D-057）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `check-links`  | 壊れた参照。ID とパスの不一致。存在しないセクションへの参照。フラグメントが参照先のセクションへ解決しないリンク。参照先ディレクトリに見つからない。`doc_link_id` を持つ Markdown を指しているが title に[DLID]の無いリンク。[DLID]入りの title を持つが、リファレンスリンクの定義でないリンク | [プロジェクト管理 AI]は、書き直す前に、一覧（文書・行・書く値）を利用者に示して、書き直すかを確認する（要件 D-057）。承認された分について、title に[DLID]の無いリンクには、検出事項に添えられた値（参照先の[内容ハッシュ]と[DLID]。[DES-007 §1][des-007-sec-1]）を、[プロジェクト管理 AI]が title に書く。インラインリンクは、リファレンスリンクの定義に書き換える。[プロジェクト管理 AI]がリンクを直す。パスの不一致には確認できた現在のパスが添えられる（FR-010）。フラグメント不一致には、そのセクションへ届く現在のアンカーが添えられる（FR-009）。参照先が見つからない場合は、移動か削除かを[プロジェクト管理 AI]が判断する。対象に[文書 ID]の無い文書があるときは、参照の検査が不完全であることを、警告として返す |
-| `check-toc`    | [ToC]が無い（未構築）。[ToC]と実体ファイルの不一致（新規、離脱、移動、参照の違い、[ToC]に反映したハッシュと[現在ハッシュ]の違い。参照の違いは、参照元の位置・参照先の[DLID]・リンク先のパスで比べ、title の[内容ハッシュ]は比べない）                                                         | 検出して返すだけで、再構築は行わない                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `check-impact` | 参照元の title に記録した[内容ハッシュ]が、参照先の[現在ハッシュ]と異なる参照（記録が無い参照を含む）と、[ToC]から把握できるその参照元。[ToC]が最新であることが前提で、古ければ変更影響候補を返さずに `check-toc` と同じ結果を返す                                                            | [プロジェクト管理 AI]が、参照元の修正が必要かを判断し、必要なら直す。確かめたあと、参照元の title の[内容ハッシュ]を書き換える。書き換えるまで、同じ参照が次の `check-impact` でも返る。修正した参照元を参照する文書は、次の `check-impact` で新しい変更として現れる                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| SKILL          | 検出する状態                                                                                                                                                                                                                                                                                  | 検出事項の扱い（誰が、何で）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `check-dlid`   | [文書 ID]が無い。[セクション ID]の無い見出しがある。[文書 ID]または[セクション ID]が重複している（[セクション ID]は同じ文書の中を含む）                                                                                                                                                       | 検出して返すだけで、付与は行わない。付与は `embed-dlid` が行う（要件 [D-040][req-001-d]、[D-057][req-001-d]）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `check-links`  | 壊れた参照。ID とパスの不一致。存在しないセクションへの参照。フラグメントが参照先のセクションへ解決しないリンク。参照先ディレクトリに見つからない。`doc_link_id` を持つ Markdown を指しているが title に[DLID]の無いリンク。[DLID]入りの title を持つが、リファレンスリンクの定義でないリンク | [プロジェクト管理 AI]は、書き直す前に、一覧（文書・行・書く値）を利用者に示して、書き直すかを確認する（要件 [D-057][req-001-d]）。承認された分について、title に[DLID]の無いリンクには、検出事項に添えられた値（参照先の[内容ハッシュ]と[DLID]。[DES-007 §1][des-007-sec-1]）を、[プロジェクト管理 AI]が title に書く。インラインリンクは、リファレンスリンクの定義に書き換える。[プロジェクト管理 AI]がリンクを直す。パスの不一致には確認できた現在のパスが添えられる（[FR-010][req-005-fr-010]）。フラグメント不一致には、そのセクションへ届く現在のアンカーが添えられる（[FR-009][req-005-fr-009]）。参照先が見つからない場合は、移動か削除かを[プロジェクト管理 AI]が判断する。対象に[文書 ID]の無い文書があるときは、参照の検査が不完全であることを、警告として返す |
+| `check-toc`    | [ToC]が無い（未構築）。[ToC]と実体ファイルの不一致（新規、離脱、移動、参照の違い、[ToC]に反映したハッシュと[現在ハッシュ]の違い。参照の違いは、参照元の位置・参照先の[DLID]・リンク先のパスで比べ、title の[内容ハッシュ]は比べない）                                                         | 検出して返すだけで、再構築は行わない                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `check-impact` | 参照元の title に記録した[内容ハッシュ]が、参照先の[現在ハッシュ]と異なる参照（記録が無い参照を含む）と、[ToC]から把握できるその参照元。[ToC]が最新であることが前提で、古ければ変更影響候補を返さずに `check-toc` と同じ結果を返す                                                            | [プロジェクト管理 AI]が、参照元の修正が必要かを判断し、必要なら直す。確かめたあと、参照元の title の[内容ハッシュ]を書き換える。書き換えるまで、同じ参照が次の `check-impact` でも返る。修正した参照元を参照する文書は、次の `check-impact` で新しい変更として現れる                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 検査ごとの根拠は次のとおり。
 
-- `check-dlid`: 要件[REQ-005 §15][req-005-sec-15] FR-016、[REQ-002 §9][req-002-sec-9] FR-002／設計[DES-005 §2][des-005-sec-2]、[DES-008 §1][des-008-sec-1]
-- `check-links`: 要件[REQ-005 §13][req-005-sec-13] FR-009・FR-010、[REQ-001 §19][req-001-sec-19] D-042、[REQ-005 §15][req-005-sec-15] FR-016／設計[DES-007 §1][des-007-sec-1]
-- `check-toc`: 要件[REQ-003 §10][req-003-sec-10] FR-011、[REQ-005 §15][req-005-sec-15] FR-016／設計[DES-005 §3][des-005-sec-3]、[DES-006 §1][des-006-sec-1]。`query-docs` の検索前検査と同じ script を使い、渡された完全な対象指定を保存済みの指定より優先する（要件 FR-006、FR-016）
-- `check-impact`: 要件[REQ-005 §14][req-005-sec-14] FR-013〜FR-015、D-038／設計[DES-007 §2・§3][des-007-sec-2]
+- `check-dlid`: 要件[REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]、[REQ-002 §9][req-002-sec-9] [FR-002][req-002-fr-002]／設計[DES-005 §2][des-005-sec-2]、[DES-008 §1][des-008-sec-1]
+- `check-links`: 要件[REQ-005 §13][req-005-sec-13] [FR-009][req-005-fr-009]・[FR-010][req-005-fr-010]、[REQ-001 §19][req-001-sec-19] [D-042][req-001-d]、[REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]／設計[DES-007 §1][des-007-sec-1]
+- `check-toc`: 要件[REQ-003 §10][req-003-sec-10] [FR-011][req-003-fr-011]、[REQ-005 §15][req-005-sec-15] [FR-016][req-005-fr-016]／設計[DES-005 §3][des-005-sec-3]、[DES-006 §1][des-006-sec-1]。`query-docs` の検索前検査と同じ script を使い、渡された完全な対象指定を保存済みの指定より優先する（要件 [FR-006][req-004-fr-006]、[FR-016][req-005-fr-016]）
+- `check-impact`: 要件[REQ-005 §14][req-005-sec-14] [FR-013][req-005-fr-013]〜[FR-015][req-005-fr-015]、[D-038][req-001-d]／設計[DES-007 §2・§3][des-007-sec-2]
 
 `check-impact` は、title の記録と参照先の[現在ハッシュ]が異なる参照を、変更された文書ごとにまとめて返す。
 
 - 変更された文書の配列を返し、その要素ごとに直接の参照元の配列を持つ。
 - 各参照元に、title に記録した[内容ハッシュ]（記録なしを含む）と、参照先の[現在ハッシュ]を添える。
-- [セクション ID]を指す参照元は、そのセクションの範囲の[現在ハッシュ]と比べる（要件 D-033）。
-- 異なる参照が無いときは、空の配列と検査範囲を返す（FR-014）。
-- 間接の参照元は含めない。参照元を直すと、その参照元が次の `check-impact` で変更として現れるので、間接的な影響は 1 段ずつ検出される（要件 D-043）。
+- [セクション ID]を指す参照元は、そのセクションの範囲の[現在ハッシュ]と比べる（要件 [D-033][req-001-d]）。
+- 異なる参照が無いときは、空の配列と検査範囲を返す（[FR-014][req-005-fr-014]）。
+- 間接の参照元は含めない。参照元を直すと、その参照元が次の `check-impact` で変更として現れるので、間接的な影響は 1 段ずつ検出される（要件 [D-043][req-001-d]）。
 - 通知の状態は持たない。比べる基準は、参照元の title の記録だけである（[DES-007 §3][des-007-sec-3]）。
 
 <a id="sec-2"></a>
@@ -133,13 +129,13 @@ flowchart LR
 
 ## 3. SKILL ごとのシーケンス DLID-av4127n5ws5j
 
-各 SKILL は自分の処理だけを行い、次の SKILL の実行を促さない（要件 D-057）。SKILL をどの順に使うかは、§3.9 の流れが定める。
+各 SKILL は自分の処理だけを行い、次の SKILL の実行を促さない（要件 [D-057][req-001-d]）。SKILL をどの順に使うかは、§3.9 の流れが定める。
 
 <a id="sec-3-1"></a>
 
 ### 3.1 embed-dlid DLID-z9j2ys29jx12
 
-起動を書き込みの承認とし、重複する ID の原本の確定以外では利用者に確認しない（要件 D-040）。対象は `index-docs` と同じ[ToC 識別キー]と[Index 対象指定]で決める（要件 D-041）。
+起動を書き込みの承認とし、重複する ID の原本の確定以外では利用者に確認しない（要件 [D-040][req-001-d]）。対象は `index-docs` と同じ[ToC 識別キー]と[Index 対象指定]で決める（要件 [D-041][req-001-d]）。
 
 ```mermaid
 sequenceDiagram
@@ -165,7 +161,7 @@ sequenceDiagram
         Scripts->>Docs: 再解析して差分が DLID だけかを検証する
     end
     Scripts-->>Skill: 書き込み結果
-    Skill-->>PM: 書き込んだ文書・位置・DLID と、書き込めなかった文書ごとのパス・問題箇所・原因
+    Skill-->>PM: 書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因
 ```
 
 <a id="sec-3-2"></a>
@@ -265,7 +261,7 @@ sequenceDiagram
     Skill-->>PM: 検出結果
 ```
 
-検査できなかった対象（読めないディレクトリ、存在しない指定、固定除外の名前のディレクトリの指定）があるときは、検出事項が無くても、検査できなかった対象を報告し、結果の `clean` を偽にする（要件 D-054）。
+検査できなかった対象（読めないディレクトリ、存在しない指定、固定除外の名前のディレクトリの指定）があるときは、検出事項が無くても、検査できなかった対象を報告し、結果の `clean` を偽にする（要件 [D-054][req-001-d]）。
 
 <a id="sec-3-5"></a>
 
@@ -343,7 +339,7 @@ sequenceDiagram
     end
 ```
 
-`check-impact` は、変更影響候補を返したあとの動きを、[プロジェクト管理 AI]に次のとおり指示する。判断・修正・title の[内容ハッシュ]の書き換えは[プロジェクト管理 AI]が行い、script は行わない（要件 FR-014、D-031）。
+`check-impact` は、変更影響候補を返したあとの動きを、[プロジェクト管理 AI]に次のとおり指示する。判断・修正・title の[内容ハッシュ]の書き換えは[プロジェクト管理 AI]が行い、script は行わない（要件 [FR-014][req-005-fr-014]、[D-031][req-001-d]）。
 
 - 参照元ごとに、変更箇所と参照元の該当記述を読み、参照元の修正が必要かを判断する。
 - 必要なら、参照元を直す。
@@ -392,7 +388,7 @@ sequenceDiagram
 
 ### 3.9 運用の流れ（導入と変更後で共通） DLID-7abvxracbbba
 
-要件 D-057 の流れを、通しの図で示す。この流れは `index-docs` を起点とし、[プロジェクト管理 AI]が `index-docs` の手順 0 として行う。各 SKILL の動きは §3.1〜§3.8 に従い、各 SKILL は次の SKILL の実行を促さない。導入は、この流れの初回である。変更後も、毎回 `check-dlid` から行う。[DLID]の無い文書は[ToC]に入らず、検索と参照の対象から外れるためである。
+要件 [D-057][req-001-d] の流れを、通しの図で示す。この流れは `index-docs` を起点とし、[プロジェクト管理 AI]が `index-docs` の手順 0 として行う。各 SKILL の動きは §3.1〜§3.8 に従い、各 SKILL は次の SKILL の実行を促さない。導入は、この流れの初回である。変更後も、毎回 `check-dlid` から行う。[DLID]の無い文書は[ToC]に入らず、検索と参照の対象から外れるためである。
 
 ```mermaid
 sequenceDiagram
@@ -409,7 +405,7 @@ sequenceDiagram
     Check-->>PM: ID 未付与の文書と見出し、重複
     opt 検出がある
         PM->>Embed: 起動する（起動が書き込みの承認）
-        Embed-->>PM: 書き込んだ文書・位置・DLID
+        Embed-->>PM: 書き込んだ件数
     end
     PM->>Links: 参照を検査する
     Links-->>PM: 検出事項と、title に書く値
@@ -436,45 +432,60 @@ sequenceDiagram
 
 SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ受け渡し規約][exchange-rules]に従う。運ぶのは script が生成した識別値だけで、置き場は `.temp/doc-link/<skill>/` の下で、識別値から script が決める（[DES-002 §4][des-002-sec-4]）。依頼と結果は script が書き、書き終えてから公開する。結果は Agent が値を script へ渡し、script が書く。読む側は script から絶対パスを受け取って直接読む。終了の値は文字列で、正常は `"0"` とする。成否は script が判定する。処理が終わったら、依頼と結果を削除する。
 
-| 項目                               | `toc-updater`（情報生成）                                                                                   | `query-worker`（検索）                                                                                         |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| 識別値                             | 構築 ID と[文書 ID]の並び（最大 3）                                                                         | 検索 ID                                                                                                        |
-| 依頼                               | 対象文書の絶対パス、フィールドごとの記述上限 `L`（要件 D-044）。内部許容上限 `H` は含めない（要件 NFR-008） | 検索のタスク、[ToC 識別キー]、検索に使う版で固定した[ToC]の写しの絶対パス（中身は[DES-006 §2][des-006-sec-2]） |
-| 結果                               | 目的、内容概要、適用される作業、検索用キーワード。見出しから取得できない場合はタイトル                      | 関連する文書の[文書 ID]、関連理由、必要なら[セクション ID]の並び                                               |
-| エラー値                           | `"source_unreadable"`（対象文書を読めなかった）                                                             | なし（空集合）                                                                                                 |
-| script の検査                      | `L`・`H` による長さの検証（[DES-008 §4][des-008-sec-4]）                                                    | 返った[文書 ID]と[セクション ID]が、固定した[ToC]の版にあること。無い ID を含む結果は異常とする                |
-| 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                              | 検索を失敗として返す                                                                                           |
-| 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                  | `query-docs` が結果を返した後                                                                                  |
+| 項目                               | `toc-updater`（情報生成）                                                                                                                   | `query-worker`（検索）                                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| 識別値                             | 構築 ID と[文書 ID]の並び（最大 3）                                                                                                         | 検索 ID                                                                                                        |
+| 依頼                               | 対象文書の絶対パス、フィールドごとの記述上限 `L`（要件 [D-044][req-001-d]）。内部許容上限 `H` は含めない（要件 [NFR-008][req-001-nfr-008]） | 検索のタスク、[ToC 識別キー]、検索に使う版で固定した[ToC]の写しの絶対パス（中身は[DES-006 §2][des-006-sec-2]） |
+| 結果                               | 目的、内容概要、適用される作業、検索用キーワード。見出しから取得できない場合はタイトル                                                      | 関連する文書の[文書 ID]、関連理由、必要なら[セクション ID]の並び                                               |
+| エラー値                           | `"source_unreadable"`（対象文書を読めなかった）                                                                                             | なし（空集合）                                                                                                 |
+| script の検査                      | `L`・`H` による長さの検証（[DES-008 §4][des-008-sec-4]）                                                                                    | 返った[文書 ID]と[セクション ID]が、固定した[ToC]の版にあること。無い ID を含む結果は異常とする                |
+| 終了の値が無い、または定義外のとき | その文書の生成を失敗とし、B-04 の失敗として扱う（[DES-004 §3][des-004-sec-3]）                                                              | 検索を失敗として返す                                                                                           |
+| 削除する時点                       | [文書情報]を確定した後、または構築の終了時                                                                                                  | `query-docs` が結果を返した後                                                                                  |
 
-[req-001]: ../requirement/REQ-001_overview.md "e039c117ad0b DLID-veg2nsjk8zw1"
-[des-002]: DES-002_execution-responsibilities.md "90be2ac68a19 DLID-anz9vack2xzt"
-[req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "85860fe69f58 DLID-bk29x4s8tadq"
-[req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "85860fe69f58 DLID-bk29x4s8tadq"
-[req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12 "d3a5a1cf16cb DLID-h96208rqr773"
-[req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13 "4909917f4466 DLID-pc44gkb54821"
-[req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15 "4909917f4466 DLID-pc44gkb54821"
-[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "85860fe69f58 DLID-bk29x4s8tadq"
-[req-003-sec-10]: ../requirement/REQ-003_toc.md#sec-10 "40bbb7b52fec DLID-kxe3nxfgk491"
-[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14 "4909917f4466 DLID-pc44gkb54821"
-[req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4 "40bbb7b52fec DLID-kxe3nxfgk491"
-[req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2 "40bbb7b52fec DLID-kxe3nxfgk491"
-[req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "4909917f4466 DLID-pc44gkb54821"
-[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "e039c117ad0b DLID-veg2nsjk8zw1"
-[req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "85860fe69f58 DLID-bk29x4s8tadq"
-[req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "40bbb7b52fec DLID-kxe3nxfgk491"
-[des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "90be2ac68a19 DLID-anz9vack2xzt"
-[des-008-sec-4]: DES-008_content-rules.md#sec-4 "3d83f58b2ce6 DLID-ywa6htx8vq09"
-[des-006-sec-2]: DES-006_search.md#sec-2 "5e6990692aaa DLID-nnbgpzkkm5vq"
-[des-006-sec-3]: DES-006_search.md#sec-3 "5e6990692aaa DLID-nnbgpzkkm5vq"
-[des-005-sec-2-1]: DES-005_indexing.md#sec-2-1 "1cecc49a17b2 DLID-dgphqw70rkpz"
-[des-008-sec-1]: DES-008_content-rules.md#sec-1 "3d83f58b2ce6 DLID-ywa6htx8vq09"
-[des-005-sec-2]: DES-005_indexing.md#sec-2 "1cecc49a17b2 DLID-dgphqw70rkpz"
-[des-005-sec-3]: DES-005_indexing.md#sec-3 "1cecc49a17b2 DLID-dgphqw70rkpz"
-[des-005-sec-4]: DES-005_indexing.md#sec-4 "1cecc49a17b2 DLID-dgphqw70rkpz"
-[des-007-sec-1]: DES-007_references-impact.md#sec-1 "f5cea4052598 DLID-pr3jp4hzb8js"
-[des-004-sec-3]: DES-004_state-machines.md#sec-3 "53b4f7321987 DLID-3f92k3tz4rew"
-[des-006-sec-1]: DES-006_search.md#sec-1 "5e6990692aaa DLID-nnbgpzkkm5vq"
-[des-007-sec-2]: DES-007_references-impact.md#sec-2 "f5cea4052598 DLID-pr3jp4hzb8js"
-[des-007-sec-3]: DES-007_references-impact.md#sec-3 "f5cea4052598 DLID-pr3jp4hzb8js"
+[req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#sec-9-2 "db100f7cc796 DLID-bk29x4s8tadq"
+[req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#sec-9-1 "db100f7cc796 DLID-bk29x4s8tadq"
+[req-004-sec-12]: ../requirement/REQ-004_search.md#sec-12 "1380e03c79c5 DLID-h96208rqr773"
+[req-005-sec-13]: ../requirement/REQ-005_references.md#sec-13 "413c4c0e5fae DLID-pc44gkb54821"
+[req-005-sec-15]: ../requirement/REQ-005_references.md#sec-15 "413c4c0e5fae DLID-pc44gkb54821"
+[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "db100f7cc796 DLID-bk29x4s8tadq"
+[req-003-sec-10]: ../requirement/REQ-003_toc.md#sec-10 "191fbc0b3993 DLID-kxe3nxfgk491"
+[req-005-sec-14]: ../requirement/REQ-005_references.md#sec-14 "413c4c0e5fae DLID-pc44gkb54821"
+[req-003-sec-7-4]: ../requirement/REQ-003_toc.md#sec-7-4 "191fbc0b3993 DLID-kxe3nxfgk491"
+[req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#sec-11-2-2 "191fbc0b3993 DLID-kxe3nxfgk491"
+[req-005-sec-13-1]: ../requirement/REQ-005_references.md#sec-13-1 "413c4c0e5fae DLID-pc44gkb54821"
+[req-001-sec-19]: ../requirement/REQ-001_overview.md#sec-19 "5d0596315129 DLID-veg2nsjk8zw1"
+[req-002-sec-8]: ../requirement/REQ-002_document-id.md#sec-8 "db100f7cc796 DLID-bk29x4s8tadq"
+[req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#sec-11-2-4 "191fbc0b3993 DLID-kxe3nxfgk491"
+[des-002-sec-3]: DES-002_execution-responsibilities.md#sec-3 "e978f1de2a45 DLID-anz9vack2xzt"
+[des-008-sec-4]: DES-008_content-rules.md#sec-4 "a535f218431f DLID-ywa6htx8vq09"
+[des-006-sec-2]: DES-006_search.md#sec-2 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-006-sec-3]: DES-006_search.md#sec-3 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-005-sec-2-1]: DES-005_indexing.md#sec-2-1 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-008-sec-1]: DES-008_content-rules.md#sec-1 "a535f218431f DLID-ywa6htx8vq09"
+[des-005-sec-2]: DES-005_indexing.md#sec-2 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-005-sec-3]: DES-005_indexing.md#sec-3 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-005-sec-4]: DES-005_indexing.md#sec-4 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-007-sec-1]: DES-007_references-impact.md#sec-1 "463a2d89954a DLID-pr3jp4hzb8js"
+[des-004-sec-3]: DES-004_state-machines.md#sec-3 "676fc369ec46 DLID-3f92k3tz4rew"
+[des-006-sec-1]: DES-006_search.md#sec-1 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
+[des-007-sec-2]: DES-007_references-impact.md#sec-2 "463a2d89954a DLID-pr3jp4hzb8js"
+[des-007-sec-3]: DES-007_references-impact.md#sec-3 "463a2d89954a DLID-pr3jp4hzb8js"
 [exchange-rules]: ../../rules/agent_data_exchange_rules.md "590998804bef DLID-2g3cgnnry3bm"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "90be2ac68a19 DLID-anz9vack2xzt"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[req-001-nfr-008]: ../requirement/REQ-001_overview.md#nfr-008-生成指示と検証基準の分離-dlid-fc5e4s6nctp9 "7c7778285762 DLID-fc5e4s6nctp9"
+[req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "8fbdec918bdd DLID-z0g4zx0wr0cn"
+[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "4a3aa7696bd9 DLID-edwjjf150svm"
+[req-002-fr-017]: ../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "3a428cdc5ccf DLID-3wc02prwb6x7"
+[req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "ba12fbc70601 DLID-8vajyevfatkv"
+[req-003-fr-003]: ../requirement/REQ-003_toc.md#fr-003-文書の移動改名の認識-dlid-grzqdx81bakh "5e0072a4ce7a DLID-grzqdx81bakh"
+[req-003-fr-005]: ../requirement/REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82 "47be50aa7f05 DLID-65nf6n2jax82"
+[req-003-fr-011]: ../requirement/REQ-003_toc.md#fr-011-文書全体の変更検出-dlid-a7nqc4aq8zwb "c8d953d1fad0 DLID-a7nqc4aq8zwb"
+[req-003-fr-012]: ../requirement/REQ-003_toc.md#fr-012-セクション単位の変更検出-dlid-8kfhte6q4ywd "1e0144cf1a2f DLID-8kfhte6q4ywd"
+[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "efad280a4a88 DLID-481cwc8365a3"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "54755c6543f2 DLID-zacf5tmy6x4x"
+[req-005-fr-010]: ../requirement/REQ-005_references.md#fr-010-参照パス修正情報の通知-dlid-ev07yszprm9m "46f991bc5caa DLID-ev07yszprm9m"
+[req-005-fr-013]: ../requirement/REQ-005_references.md#fr-013-変更影響候補の特定-dlid-cnw6h5pzv3wz "702c9a68b2f8 DLID-cnw6h5pzv3wz"
+[req-005-fr-014]: ../requirement/REQ-005_references.md#fr-014-変更影響候補の通知-dlid-j0z4w1wm0g4p "6a036ff75fc1 DLID-j0z4w1wm0g4p"
+[req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "6b6384beeb32 DLID-8btcs80840gr"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "9b7c85b2f9f3 DLID-jhkngqtfdnhn"

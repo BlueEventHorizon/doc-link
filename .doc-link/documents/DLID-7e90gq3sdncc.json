@@ -1,38 +1,39 @@
 {
-  "content_hash": "cc47b18bbb6a3eb38f4d2fc607407b72fa75b517b2fe2e1372c83994fa0bc70f",
+  "content_hash": "ea5099a8e006bd62948a37b22014f5e48e64266877d96af6e136456feea0653e",
   "doc_link_id": "DLID-7e90gq3sdncc",
   "keywords": [
     "SKILL composition",
-    "custom Agent",
     "toc-updater",
     "query-worker",
     "embed-dlid",
     "index-docs",
-    "check-dlid",
-    "operation flow",
-    "sequence diagram",
-    "data exchange"
+    "check-impact",
+    "check-links",
+    "operating flow",
+    "agent data exchange",
+    "sequence diagram"
   ],
   "path": "docs/specs/design/DES-010_skill-composition.md",
-  "purpose": "Design of the doc-link SKILL and custom Agent composition: responsibilities, check SKILL findings, use cases, per-SKILL sequences, the operation flow, and Agent data exchange.",
+  "purpose": "Design of the eight doc-link SKILLs and two custom Agents: responsibilities, sequences, the operating flow, and the data exchange contract between SKILLs and Agents.",
   "summary": [
-    "Eight SKILLs and two custom Agents (toc-updater, query-worker) with write permissions and corresponding requirements",
-    "Responsibilities of operation and query SKILLs: embed-dlid, index-docs, query-docs, resolve-dlid",
-    "Check SKILLs and how each finding is handled: check-dlid, check-links, check-toc, check-impact",
-    "Use case diagram for users, the project management AI, and calling skills",
-    "Per-SKILL sequence diagrams from embed-dlid through resolve-dlid",
-    "Steps for the project management AI to write a reference with a content hash",
-    "Common operation flow starting from index-docs, applying to both adoption and later changes",
-    "Instruction for handling check-impact results: judge, fix referrers, record hashes, rerun until empty",
-    "Data exchange with custom Agents: identifiers, request, result, error value, script validation, deletion timing"
+    "Composition of eight inheriting SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, check-dlid, check-links, check-toc, check-impact) and their write permissions",
+    "Two custom Agents: toc-updater generates document info, query-worker performs search, with responsibilities and callers",
+    "Responsibilities of operation and query SKILLs, each mapped to requirements and design sections",
+    "Responsibilities of the four check SKILLs: what each detects and how findings are handled by the project management AI",
+    "check-impact result structure: changed documents with direct referrers, recorded content hash versus current hash, no notification state",
+    "Use case diagram of users, project management AI and calling skills against the SKILLs",
+    "Per-SKILL sequence diagrams (3.1 to 3.8) including the rule for writing references with resolve-dlid",
+    "Common operating flow starting from check-dlid, embed-dlid, check-links, index-docs and check-impact, with ordering rationale",
+    "Data exchange with custom Agents: identifier values, request and result contents, error values, script validation, deletion timing"
   ],
   "tasks": [
-    "Implementing or changing any doc-link SKILL.md or its script",
-    "Designing or modifying the toc-updater or query-worker Agent",
-    "Deciding the order in which to run check and index SKILLs",
-    "Reviewing SKILL responsibilities and write permissions",
-    "Handling check-links or check-impact findings as the project management AI",
-    "Implementing the Agent request and result exchange"
+    "Implementing or modifying any doc-link SKILL.md or its entry script",
+    "Implementing or modifying the toc-updater or query-worker custom Agent",
+    "Designing the order in which SKILLs are run after document changes",
+    "Reviewing which SKILL may write to documents or managed state",
+    "Implementing the request and result exchange between SKILLs and Agents",
+    "Implementing check-links rewriting of link titles with DLID and content hash",
+    "Implementing or testing check-impact change impact detection"
   ],
   "title": "DES-010 SKILL と Agent の構成"
 }

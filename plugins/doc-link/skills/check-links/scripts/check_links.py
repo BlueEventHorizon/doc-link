@@ -57,7 +57,9 @@
 各検出事項は、参照元のパス `source_path`・行 `line`（1 始まり）・リンク先 `target`（記載されたパスとフラグメント）を持つ。
 [正式な参照]の検出事項は、加えて `dlid`・`recorded_hash`（title に記録した[内容ハッシュ]。記録なしは `null`）・
 `resolved_path` を持つ。title の記録と参照先の[現在ハッシュ]の比較は check-impact の仕事で、ここではしない。
-検査範囲は `scope`（走査したディレクトリ `directories` と時点 `checked_at`）である。検出後の案内は `guidance`。
+検査範囲は `scope`（対象指定 `target`、参照先を探して走査したディレクトリ `directories`、時点 `checked_at`）である。
+`directories` は参照を検査するたびに足されるので、参照が 1 件も無いときは空になる。参照元として読んだ文書の数は
+`summary.checked_documents` である。検出後の案内は `guidance`。
 
 ## 仕様の解釈（設計書が値や形式を定めていない点）
 

@@ -45,7 +45,7 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_links.py" --project-root "${C
 - `absent` は、世界全体に参照先が無いことを意味しない。指定ディレクトリ内に見つからないことだけを示す。保存済みのデータから現在のパスを推測して補わない
 - `recorded_hash` が null のものは、title に内容ハッシュの記録が無い参照である。記録と参照先の現在ハッシュの比較は、このスキルでは行わない
 - `unverified_links`（リンク先の文書を読めず判定できなかったリンク）と `unreadable_documents`（読めなかった参照元の文書）が空でなければ、検査できなかったものとして報告する
-- `summary` の `matched_references`（一致した参照の件数）と、`scope`（走査したディレクトリ `directories` と時点 `checked_at`）を添える。検出事項が無いことは、この範囲で見つからなかったという事実だけを示す
+- `summary` の `checked_documents`（参照元として読んだ文書の数）・`matched_references`（一致した参照の件数）と、`scope`（対象指定 `target`、参照先を探して走査したディレクトリ `directories`、時点 `checked_at`）を添える。`directories` は参照を検査するたびに足されるので、参照が 1 件も無いときは空になる。この場合の検査範囲は、`target` と `checked_documents` が示す。検出事項が無いことは、この範囲で見つからなかったという事実だけを示す
 
 ### 3. 検出事項の扱い
 

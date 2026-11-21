@@ -63,6 +63,25 @@ def strip_dlids(text):
     return _DLID_AT_LINE_END.sub("", _DLID_FRONTMATTER.sub("", text, count=1))
 
 
+def document_id_in(text):
+    """文書の frontmatter の `doc_link_id`（付与された[文書 ID]）。`embed-dlid` は件数だけを返すので、文書から読む。"""
+    found = re.search(r"\A---\ndoc_link_id: (DLID-[0-9a-z]{12})\n", text)
+    return found.group(1) if found else None
+
+
+def section_id_in(text, heading):
+    """見出しのテキストが `heading` の行の末尾の[セクション ID]（付与された値）。無ければ `None`。"""
+    found = re.search(
+        r"^#+ " + re.escape(heading) + r" (DLID-[0-9a-z]{12})$", text, re.MULTILINE
+    )
+    return found.group(1) if found else None
+
+
+def section_ids_in(text):
+    """見出しの行の末尾の[セクション ID]の並び。"""
+    return re.findall(r"^#+ .* (DLID-[0-9a-z]{12})$", text, re.MULTILINE)
+
+
 def submit_args(doc_id, values=None):
     values = values or FIXED
     args = ["--doc-id", doc_id, f"--purpose={values['purpose']}"]

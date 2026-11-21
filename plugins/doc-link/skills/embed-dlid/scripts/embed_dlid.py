@@ -35,8 +35,13 @@ script は確認せず、AI が JSON を組み立てない。
 ## 標準出力
 
 終了コード 0 のとき結果の JSON、それ以外（2 を除く）のときエラーの JSON（`errors` は自然文の配列）を返す。
-終了コード 3・4 のエラーの JSON は、`errors` に加えて、利用者へ返す情報（`duplicates`、`written`、`failed`）を持つ。
+終了コード 3・4 のエラーの JSON は、`errors` に加えて、利用者へ返す情報（`duplicates`、`written_counts`、`failed`）を持つ。
 位置の行番号はすべて 1 始まりである。
+
+書き込む[DLID]の明細（文書・位置・[DLID]）は返さない。`git` の差分で確かめられるためである（要件 D-040）。返すのは件数だけで、
+`plan` は `planned_counts`、`apply` は `written_counts` に、`document_ids`（文書の ID の件数）・`section_ids`（セクション
+ID の件数）・`replaced`（置き換えた[DLID]の件数。`document_ids`・`section_ids` の内数）を持つ。重複する[DLID]の原本の
+確定に要る `duplicates` と、書き込めなかった文書の `failed` は、明細のまま返す。
 
 ## 終了コード
 
@@ -46,7 +51,7 @@ script は確認せず、AI が JSON を組み立てない。
 | 1    | 区別のないエラー（対象指定の拒否、文書・管理状態を読めない、原本の指定が不正）                                               |
 | 2    | 引数を受理できない（`argparse`）                                                                                             |
 | 3    | `apply` で、原本の指定を求める重複が残っているので、何も書き込まなかった                                                     |
-| 4    | `apply` で、書き込めなかった文書がある（検証を通って書き込んだ[DLID]は戻らず、`written` に発行済みとして含む）               |
+| 4    | `apply` で、書き込めなかった文書がある（検証を通って書き込んだ[DLID]は戻らず、`written_counts` に発行済みとして含む）       |
 """
 
 import argparse
@@ -201,30 +206,12 @@ def _duplicate_to_dict(report: embed_plan.DuplicateReport) -> dict:
     }
 
 
-def _item_to_dict(item: embed_plan.IssueItem) -> dict:
-    position = item.position
-    line = (
-        position.start_line + 1
-        if isinstance(position, embed_plan.HeadingPosition)
-        else None
-    )
+def _counts(kinds: list[str], replaced: int) -> dict:
+    """付与する（書き込んだ）[DLID]の件数。明細（文書・位置・[DLID]）は返さない（要件 D-040）。"""
     return {
-        "path": item.path,
-        "kind": item.kind,
-        "reason": item.reason,
-        "replaces": item.replaces,
-        "line": line,
-    }
-
-
-def _written_to_dict(item: dlid_writer.WrittenItem) -> dict:
-    return {
-        "path": item.path,
-        "kind": item.kind,
-        "dlid": item.dlid,
-        "replaced": item.replaced,
-        "line": item.line,
-        "heading": item.heading,
+        "document_ids": sum(1 for kind in kinds if kind == KIND_DOCUMENT),
+        "section_ids": sum(1 for kind in kinds if kind == KIND_SECTION),
+        "replaced": replaced,
     }
 
 
@@ -241,7 +228,7 @@ def _emit(payload: dict, code: int) -> int:
     """結果・エラーの JSON を `script_output` の形式で出し、指定の終了コードを返す。
 
     `script_output.emit_error` は `errors` だけを出して 1 を返すので、終了コード 3・4 で追加の情報
-    （`duplicates`・`written`・`failed`）を返すために、同じ書式の `emit_result` を使い、返り値は使わない。
+    （`duplicates`・`written_counts`・`failed`）を返すために、同じ書式の `emit_result` を使い、返り値は使わない。
     """
     script_output.emit_result(payload)
     return code
@@ -305,7 +292,10 @@ def execute(args: argparse.Namespace) -> int:
             {
                 "state": run.state,
                 "needs_origin": not plan.confirmed,
-                "items": [_item_to_dict(item) for item in plan.items],
+                "planned_counts": _counts(
+                    [item.kind for item in plan.items],
+                    sum(1 for item in plan.items if item.replaces is not None),
+                ),
                 **common,
             },
             script_output.EXIT_OK,
@@ -326,11 +316,15 @@ def execute(args: argparse.Namespace) -> int:
         )
 
     result = dlid_writer.apply_plan(root, plan)
-    written = [_written_to_dict(item) for item in result.written]
+    written_counts = _counts(
+        [item.kind for item in result.written],
+        sum(1 for item in result.written if item.replaced is not None),
+    )
     if result.succeeded:
         run.apply(sm.EVENT_WRITE, sm.Facts(written_and_verified=True))
         return _emit(
-            {"state": run.state, "written": written, **common}, script_output.EXIT_OK
+            {"state": run.state, "written_counts": written_counts, **common},
+            script_output.EXIT_OK,
         )
 
     run.apply(sm.EVENT_FAIL, sm.Facts(documents_unwritten=True))
@@ -342,7 +336,7 @@ def execute(args: argparse.Namespace) -> int:
                 for failure in result.failed
             ],
             {
-                "written": written,
+                "written_counts": written_counts,
                 "failed": [_failure_to_dict(failure) for failure in result.failed],
                 **common,
             },

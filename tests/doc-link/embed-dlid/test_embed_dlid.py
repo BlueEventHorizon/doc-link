@@ -2,6 +2,7 @@ import contextlib
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -20,6 +21,15 @@ import embed_dlid  # noqa: E402
 ID_A = "DLID-0123456789ab"
 ID_B = "DLID-abcdefghjkmn"
 DOC = f"---\ndoc_link_id: {ID_A}\n---\n# T {ID_B}\n\nbody\n"
+
+
+def counts(document_ids, section_ids, replaced=0):
+    """付与する（書き込んだ）[DLID]の件数。明細は返さない（要件 D-040）。"""
+    return {
+        "document_ids": document_ids,
+        "section_ids": section_ids,
+        "replaced": replaced,
+    }
 
 
 class EntryTestBase(unittest.TestCase):
@@ -61,15 +71,8 @@ class PlanCommandTest(EntryTestBase):
         self.assertEqual(code, 0)
         self.assertEqual(result["state"], "計画確定")
         self.assertFalse(result["needs_origin"])
-        self.assertEqual(
-            [(i["path"], i["kind"], i["line"]) for i in result["items"]],
-            [
-                ("a.md", "document", None),
-                ("a.md", "section", 1),
-                ("a.md", "section", 3),
-            ],
-        )
-        self.assertNotIn("dlid", result["items"][0])
+        self.assertEqual(result["planned_counts"], counts(1, 2))
+        self.assertNotIn("items", result)
         self.assertEqual(self.snapshot(), before)
 
     def test_plan_with_duplicates_awaits_origin_and_shows_origin_args(self):
@@ -100,14 +103,15 @@ class PlanCommandTest(EntryTestBase):
         self.write(".temp/x/ignored.md", "# I\n")
         code, result = self.run_main("plan")
         self.assertEqual(code, 0)
-        self.assertEqual({i["path"] for i in result["items"]}, {"docs/a.md"})
+        # .temp 配下は対象に入らないので、docs/a.md の 1 文書・1 見出しだけを数える
+        self.assertEqual(result["planned_counts"], counts(1, 1))
 
     def test_missing_target_is_reported_and_processing_continues(self):
         self.write("a.md", "# T\n")
         code, result = self.run_main("plan", "--key", "k", "--paths", "a.md", "nope.md")
         self.assertEqual(code, 0)
         self.assertEqual(result["problems"], [{"path": "nope.md", "reason": "missing"}])
-        self.assertEqual({i["path"] for i in result["items"]}, {"a.md"})
+        self.assertEqual(result["planned_counts"], counts(1, 1))
 
 
 class RejectedArgumentsTest(EntryTestBase):
@@ -228,15 +232,12 @@ class ApplyCommandTest(EntryTestBase):
         code, result = self.run_main("apply", "--key", "k", "--paths", "a.md")
         self.assertEqual(code, 0)
         self.assertEqual(result["state"], "完了")
-        self.assertEqual(
-            [(w["path"], w["kind"], w["replaced"]) for w in result["written"]],
-            [("a.md", "document", None), ("a.md", "section", None)],
+        self.assertEqual(result["written_counts"], counts(1, 1))
+        self.assertNotIn("written", result)
+        self.assertRegex(
+            self.read("a.md"),
+            r"\A---\ndoc_link_id: DLID-[0-9a-z]{12}\n---\n\n# T DLID-[0-9a-z]{12}\n\Z",
         )
-        text = self.read("a.md")
-        doc_id = result["written"][0]["dlid"]
-        section_id = result["written"][1]["dlid"]
-        self.assertEqual(text, f"---\ndoc_link_id: {doc_id}\n---\n\n# T {section_id}\n")
-        self.assertEqual(result["written"][1]["line"], 5)
 
     def test_apply_does_not_touch_management_state(self):
         self.write("a.md", "# T\n")
@@ -249,7 +250,7 @@ class ApplyCommandTest(EntryTestBase):
         after_first = self.snapshot()
         code, result = self.run_main("apply", "--key", "k", "--paths", "a.md")
         self.assertEqual(code, 0)
-        self.assertEqual(result["written"], [])
+        self.assertEqual(result["written_counts"], counts(0, 0))
         self.assertEqual(self.snapshot(), after_first)
 
     def test_apply_with_duplicates_and_no_origin_exits_3_and_writes_nothing(self):
@@ -280,10 +281,7 @@ class ApplyCommandTest(EntryTestBase):
         )
         self.assertEqual(code, 0, result)
         self.assertEqual(self.read("orig.md"), DOC)
-        self.assertEqual(
-            sorted((w["kind"], w["replaced"]) for w in result["written"]),
-            [("document", ID_A), ("section", ID_B)],
-        )
+        self.assertEqual(result["written_counts"], counts(1, 1, replaced=2))
         copy = self.read("copy.md")
         self.assertNotIn(ID_A, copy)
         self.assertNotIn(ID_B, copy)
@@ -303,7 +301,7 @@ class ApplyCommandTest(EntryTestBase):
         self.assertEqual(
             set(result["failed"][0]), {"path", "location", "cause", "reverted"}
         )
-        self.assertEqual({w["path"] for w in result["written"]}, {"b.md"})
+        self.assertEqual(result["written_counts"], counts(1, 1))
         self.assertTrue(result["errors"][0].startswith("a.md: "))
         self.assertEqual(self.read("a.md"), "# A\n")
         self.assertTrue(self.read("b.md").startswith("---\ndoc_link_id: DLID-"))
@@ -312,13 +310,13 @@ class ApplyCommandTest(EntryTestBase):
         (self.root / "a.md").chmod(0o644)
         code, result = self.run_main("apply", "--key", "k", "--paths", "a.md", "b.md")
         self.assertEqual(code, 0)
-        self.assertEqual({w["path"] for w in result["written"]}, {"a.md"})
+        self.assertEqual(result["written_counts"], counts(1, 1))
 
     def test_unclosed_frontmatter_exits_4(self):
         self.write("a.md", "---\ntitle: x\n# T\n")
         code, result = self.run_main("apply", "--key", "k", "--paths", "a.md")
         self.assertEqual(code, embed_dlid.EXIT_NOT_WRITTEN)
-        self.assertEqual(result["written"], [])
+        self.assertEqual(result["written_counts"], counts(0, 0))
         self.assertEqual(result["failed"][0]["location"], "frontmatter")
         self.assertEqual(self.read("a.md"), "---\ntitle: x\n# T\n")
 

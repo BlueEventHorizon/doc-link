@@ -52,7 +52,7 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 [ToC]、管理状態、[Index 対象文書]には書き込まない。
 
 [req-004]: ../requirement/REQ-004_search.md "d3a5a1cf16cb DLID-h96208rqr773"
-[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "85860fe69f58 DLID-bk29x4s8tadq"
+[req-002-sec-9]: ../requirement/REQ-002_document-id.md#sec-9 "7592c163da94 DLID-bk29x4s8tadq"
 [des-003-sec-2]: DES-003_data-model.md#sec-2 "4708f535908f DLID-yqqrwtycr379"
 [des-008-sec-1]: DES-008_content-rules.md#sec-1 "3d83f58b2ce6 DLID-ywa6htx8vq09"
-[des-005]: DES-005_indexing.md "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "9ec807d7746f DLID-dgphqw70rkpz"

@@ -70,11 +70,11 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3 "e039c117ad0b DLID-veg2nsjk8zw1"
+[req-001-sec-5-3]: ../requirement/REQ-001_overview.md#sec-5-3 "4de76fff274c DLID-veg2nsjk8zw1"
 [readme]: README.md "46122592dd45 DLID-zvepba87h7zk"
-[des-010]: DES-010_skill-composition.md "cc47b18bbb6a DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "104cd159d8b0 DLID-7e90gq3sdncc"
 [des-006-sec-2]: DES-006_search.md#sec-2 "5e6990692aaa DLID-nnbgpzkkm5vq"
 [des-006-sec-3]: DES-006_search.md#sec-3 "5e6990692aaa DLID-nnbgpzkkm5vq"
-[des-005-sec-5]: DES-005_indexing.md#sec-5 "1cecc49a17b2 DLID-dgphqw70rkpz"
+[des-005-sec-5]: DES-005_indexing.md#sec-5 "9ec807d7746f DLID-dgphqw70rkpz"
 [des-007-sec-3]: DES-007_references-impact.md#sec-3 "f5cea4052598 DLID-pr3jp4hzb8js"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"

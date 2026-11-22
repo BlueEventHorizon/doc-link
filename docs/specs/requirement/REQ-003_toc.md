@@ -210,7 +210,7 @@ title に記録した[内容ハッシュ]は、比較値に含めない。[プ�
 
 変更種別は必ずしも排他的ではない。同じ文書が「移動・改名」と「本文変更」の両方に該当する場合など、検出したすべての変更を保持すること。
 
-既存[ToC]が存在しない初回構築では、現在のすべての[Index 対象文書]を新規として扱う。変更集合には、[文書 ID]、変更種別、比較に用いた変更前後の値、および次段階で必要となる処理の種別を含めること。
+既存[ToC]が存在しない初回構築では、現在のすべての[Index 対象文書]を新規として扱う。変更集合には、[文書 ID]、変更種別、比較に用いた変更前後の値、および次段階で必要となる処理の種別を含めること。構築・再構築の完了結果は、変更集合を、種別ごとの件数と、全件を収めた明細のファイルで返す（[D-059][req-001-d]）。
 
 ```mermaid
 flowchart TB
@@ -387,7 +387,7 @@ sequenceDiagram
     end
 ```
 
-この処理の終点は、[ToC]の確定と構築・再構築結果および変更集合の返却である。文書検索は[§3.2][req-001-sec-3-2]、[変更影響候補の通知]と[プロジェクト管理 AI]による修正要否の判断は[§3.1][req-001-sec-3-1]で扱う。
+この処理の終点は、[ToC]の確定と構築・再構築結果および変更集合の返却である。結果は、判断に要る項目と件数だけを返し、変更集合などの全件は、明細のファイルへ書いてそのパスを返す（[D-059][req-001-d]）。文書検索は[§3.2][req-001-sec-3-2]、[変更影響候補の通知]と[プロジェクト管理 AI]による修正要否の判断は[§3.1][req-001-sec-3-1]で扱う。
 
 ## 受け入れ条件 DLID-2p5r1mzsx4w7
 
@@ -436,22 +436,22 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 
 参照情報だけが変更された文書（[内容ハッシュ]が同じもの）では参照関係を更新し、[AI 生成フィールド]を再利用すること。
 
-[req-001]: REQ-001_overview.md "5d0596315129 DLID-veg2nsjk8zw1"
+[req-001]: REQ-001_overview.md "e8dc3ac2a407 DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "db100f7cc796 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "191fbc0b3993 DLID-kxe3nxfgk491"
+[req-003]: REQ-003_toc.md "9b17a415c403 DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "1380e03c79c5 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "413c4c0e5fae DLID-pc44gkb54821"
 [des-003]: ../design/DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
 [req-002-sec-6-2]: REQ-002_document-id.md#sec-6-2 "db100f7cc796 DLID-bk29x4s8tadq"
-[req-003-sec-10-1]: REQ-003_toc.md#sec-10-1 "191fbc0b3993 DLID-kxe3nxfgk491"
+[req-003-sec-10-1]: REQ-003_toc.md#sec-10-1 "9b17a415c403 DLID-kxe3nxfgk491"
 [req-005-sec-13-1]: REQ-005_references.md#sec-13-1 "413c4c0e5fae DLID-pc44gkb54821"
 [req-002-sec-9-1]: REQ-002_document-id.md#sec-9-1 "db100f7cc796 DLID-bk29x4s8tadq"
-[req-003-sec-10]: REQ-003_toc.md#sec-10 "191fbc0b3993 DLID-kxe3nxfgk491"
-[req-003-sec-7-4]: REQ-003_toc.md#sec-7-4 "191fbc0b3993 DLID-kxe3nxfgk491"
-[req-003-sec-10-2]: REQ-003_toc.md#sec-10-2 "191fbc0b3993 DLID-kxe3nxfgk491"
-[req-001-sec-3-2]: REQ-001_overview.md#sec-3-2 "5d0596315129 DLID-veg2nsjk8zw1"
-[req-001-sec-3-1]: REQ-001_overview.md#sec-3-1 "5d0596315129 DLID-veg2nsjk8zw1"
-[req-003-sec-10-1-2]: REQ-003_toc.md#sec-10-1-2 "191fbc0b3993 DLID-kxe3nxfgk491"
-[req-001-d]: REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[req-003-sec-10]: REQ-003_toc.md#sec-10 "9b17a415c403 DLID-kxe3nxfgk491"
+[req-003-sec-7-4]: REQ-003_toc.md#sec-7-4 "9b17a415c403 DLID-kxe3nxfgk491"
+[req-003-sec-10-2]: REQ-003_toc.md#sec-10-2 "9b17a415c403 DLID-kxe3nxfgk491"
+[req-001-sec-3-2]: REQ-001_overview.md#sec-3-2 "e8dc3ac2a407 DLID-veg2nsjk8zw1"
+[req-001-sec-3-1]: REQ-001_overview.md#sec-3-1 "e8dc3ac2a407 DLID-veg2nsjk8zw1"
+[req-003-sec-10-1-2]: REQ-003_toc.md#sec-10-1-2 "9b17a415c403 DLID-kxe3nxfgk491"
+[req-001-d]: REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "efad280a4a88 DLID-481cwc8365a3"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "5f184a5e0f8c DLID-p7t2pht6h17a"

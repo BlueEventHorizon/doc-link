@@ -8,7 +8,7 @@ doc_link_id: DLID-dgphqw70rkpz
 
 ## 1. 入出力と実行境界 DLID-racs51864j70
 
-入力は[ToC 識別キー]、当該キーの完全な[Index 対象指定]、対象 Markdown、当該キーの最後の[確定 ToC]である。出力は、新しい[確定 ToC]または失敗診断、変更集合、参照検査結果である。処理の段階は[DES-004 の B-01〜B-09][des-004]に従い、途中候補を現在版として公開しない。初回は既存版がなくても、ID 確認の後に候補を作り確定する。構築は[Index 対象文書]を書き換えない（要件 [D-035][req-001-d]）。
+入力は[ToC 識別キー]、当該キーの完全な[Index 対象指定]、対象 Markdown、当該キーの最後の[確定 ToC]である。出力は、新しい[確定 ToC]または失敗診断、変更集合、参照検査結果である。完了結果は、判断に要る項目と件数だけを標準出力へ返し、変更集合などの全件は明細のファイルへ書く（§4、要件 [D-059][req-001-d]）。処理の段階は[DES-004 の B-01〜B-09][des-004]に従い、途中候補を現在版として公開しない。初回は既存版がなくても、ID 確認の後に候補を作り確定する。構築は[Index 対象文書]を書き換えない（要件 [D-035][req-001-d]）。
 
 <a id="sec-2"></a>
 
@@ -74,6 +74,18 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 
 候補は少なくとも ID の一意性、[確定 Index 対象リスト]との対応、参照と逆参照の対応、必須フィールドを検査する。構築中に現物が変わった場合の再評価はしない。その変更は次の `check-toc` が検出する。検査済み候補（そのキーの所属、参照関係、[反映済みハッシュ]、検査結果）だけを一括して公開し、失敗時は旧[確定 ToC]を保持する。[文書情報]はこの一括公開に含めず、文書ごとに確定する（要件 [D-024][req-001-d]）。
 
+完了結果は、判断に要る項目と件数だけを標準出力へ返し、全件の明細は作業ファイルへ書く（要件 [D-059][req-001-d]）。標準出力は、次を持つ。
+
+- 確定結果（版、[確定 ToC]を書き換えたか）
+- 変更の種別ごとの件数。文書は、新規・本文変更・参照変更・移動・改名・離脱・変更なしに分け、セクションは、追加・削除・移動・見出し変更・本文変更に分ける。複数の種別に該当する文書・セクションは、それぞれの種別に数える。該当が無い種別も、0 として必ず持つ。確定した文書の件数と、初回構築かも持つ
+- 生成した文書の件数
+- 参照検査結果（分類ごとの件数と、一致以外の検出事項）
+- ID 未付与・重複で除外した文書
+- 報告すべき問題と警告
+- 明細ファイルの絶対パス
+
+明細ファイルは、変更集合（§3 の記録。文書・セクションごとの変更前後の値を含む）と、生成した文書の一覧を、全件持つ。[ToC 識別キー]ごとに 1 つを `.temp/doc-link/index-docs/` に置く。script が一時ファイルへ書き終えてから 1 回の置き換えで公開し（組み立て途中のものを読ませない）、同じ[ToC 識別キー]の次の構築で置き換える。[確定 ToC]を公開する前に書き、書けないときは公開せずに構築の失敗として報告する。構築が失敗したときは、パスを返さない。
+
 <a id="sec-5"></a>
 
 ## 5. 書き込みの単位 DLID-hs82xgzwkpyz
@@ -90,12 +102,12 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 
 [ToC]の構築・再構築は、通知の状態を持たない（要件 [D-038][req-001-d]）。失敗時は段階、対象 ID・パス、原因、[確定 ToC]の有無を返す。再実行時は[確定 ToC]と現物から再判定し、旧版に取り込まれた要約を不必要に繰り返さない。
 
-[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"
+[des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "5eb022745267 DLID-anz9vack2xzt"
 [req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#sec-6-1 "db100f7cc796 DLID-bk29x4s8tadq"
-[req-001-sec-17-1]: ../requirement/REQ-001_overview.md#sec-17-1 "5d0596315129 DLID-veg2nsjk8zw1"
+[req-001-sec-17-1]: ../requirement/REQ-001_overview.md#sec-17-1 "e8dc3ac2a407 DLID-veg2nsjk8zw1"
 [des-008-sec-3]: DES-008_content-rules.md#sec-3 "a535f218431f DLID-ywa6htx8vq09"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "4a3aa7696bd9 DLID-edwjjf150svm"

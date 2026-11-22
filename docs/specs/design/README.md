@@ -27,14 +27,14 @@ doc_link_id: DLID-zvepba87h7zk
 
 要件の未決事項はすべて決定済みであり、保存方式は JSON ファイルに決定済みである（[DES-002 §4][des-002-sec-4]）。要件定義書と設計書はレビューを経て承認済みである。
 
-[des-001]: DES-001_system-overview.md "9288ec08a8a6 DLID-3da82gspdp44"
-[des-002]: DES-002_execution-responsibilities.md "e978f1de2a45 DLID-anz9vack2xzt"
+[des-001]: DES-001_system-overview.md "5f91d48e8b97 DLID-3da82gspdp44"
+[des-002]: DES-002_execution-responsibilities.md "5eb022745267 DLID-anz9vack2xzt"
 [des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
-[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "226248ba364c DLID-dgphqw70rkpz"
 [des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
 [des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
-[des-009]: DES-009_verification.md "ab6bf50edb8f DLID-xmg0jcmep2h2"
-[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "e978f1de2a45 DLID-anz9vack2xzt"
+[des-009]: DES-009_verification.md "29b125164ccc DLID-xmg0jcmep2h2"
+[des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "5eb022745267 DLID-anz9vack2xzt"

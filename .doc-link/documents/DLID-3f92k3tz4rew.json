@@ -1,37 +1,39 @@
 {
-  "content_hash": "676fc369ec466542543f1c11e8cab3ec15d248d4a0bef43e133dc8e3781cca74",
+  "content_hash": "bad0bb8aa05a16cc235355516f1d2236d5261b89266b957bad4c68ee371572ea",
   "doc_link_id": "DLID-3f92k3tz4rew",
   "keywords": [
     "state machine",
     "transitions",
     "confirmed ToC",
-    "build run",
+    "build execution",
     "embed-dlid",
-    "DLID",
-    "failure and rerun",
-    "candidate inspection",
-    "freshness",
-    "original confirmation"
+    "failure handling",
+    "guard",
+    "reference check result",
+    "duplicate DLID",
+    "rerun"
   ],
   "path": "docs/specs/design/DES-004_state-machines.md",
-  "purpose": "Defines the normative state model and permitted transitions for published ToC versions, ToC build/rebuild runs, and DLID embedding runs, with tables and diagrams.",
+  "purpose": "Specifies state models and permitted transitions for ToC publication, build execution, and DLID embedding, as the normative transition tables that scripts enforce.",
   "summary": [
-    "Separation of published ToC state from build run progress; \"rebuild needed\" and \"referent missing\" are judgments, not states",
-    "Stateless operations: search, DLID resolution and checks never change managed state",
-    "Published ToC transitions P-01 to P-03: unbuilt to published, republish, failure keeps the prior state",
-    "Build run transitions B-01 to B-09 from started through scope, IDs, changes, data, references, candidate, finished or failed",
-    "Failure handling: no candidate published, old ToC kept, no automatic retry, explicit rerun",
-    "Document information confirmed so far is not rolled back when a build fails",
-    "Reference check results (match, path mismatch, missing in directory) and their freshness",
-    "DLID embedding run transitions E-01 to E-07 including original confirmation for duplicates",
-    "Rejection of transitions not in the table, with mermaid state diagrams as visualization"
+    "Separation of ToC publication state from build progress; rebuild-needed and reference-absent are results, not states",
+    "Transition tables are normative; disallowed combinations are rejected and no new confirmed ToC is created",
+    "Confirmed ToC states: unbuilt or published, with transitions P-01 to P-03",
+    "Build execution states and transitions B-01 to B-09 from start through completion or failure",
+    "AI generation requests are allowed only after changes are fixed",
+    "Failure keeps the old confirmed ToC and already confirmed document info is not rolled back",
+    "Reference check results: match, path mismatch, or absent in directory, with checked directory and time",
+    "State transition tests are defined in DES-009",
+    "DLID embedding execution states and transitions E-01 to E-07 including duplicate original confirmation",
+    "Search, DLID resolution, and checks hold no state"
   ],
   "tasks": [
-    "Implementing ToC build or rebuild state handling",
-    "Implementing the embed-dlid operation",
+    "Implementing state transition guards in scripts",
     "Writing state transition tests",
-    "Reviewing design consistency of state and failure behavior",
-    "Designing failure reporting and rerun behavior"
+    "Designing build failure and retry behavior",
+    "Implementing embed-dlid duplicate handling",
+    "Reviewing allowed transitions",
+    "Designing reference check result recording"
   ],
   "title": "DES-004 状態モデルと許可遷移"
 }

@@ -86,6 +86,23 @@ SECTION_MOVED = "moved"
 SECTION_HEADING = "heading_changed"
 SECTION_BODY = "body_changed"
 
+# 件数に必ず持つ種別（該当が無くても 0 で持つ）。文書の `unchanged` は種別を持たない文書の数。
+DOCUMENT_KINDS = (
+    CHANGE_NEW,
+    CHANGE_CONTENT,
+    CHANGE_REFERENCES,
+    CHANGE_PATH,
+    CHANGE_DEPARTED,
+)
+SECTION_KINDS = (
+    SECTION_ADDED,
+    SECTION_DELETED,
+    SECTION_MOVED,
+    SECTION_HEADING,
+    SECTION_BODY,
+)
+DOCUMENT_UNCHANGED = "unchanged"
+
 FAILURE_DOCUMENT_UNREADABLE = "document_unreadable"
 FAILURE_STATE_UNREADABLE = "state_unreadable"
 
@@ -234,6 +251,29 @@ class ChangeSet:
             "excluded": [d.to_dict() for d in self.excluded],
             "documents": [d.to_dict() for d in self.documents],
             "sections": [s.to_dict() for s in self.sections],
+        }
+
+    def summary(self) -> dict:
+        """種別ごとの件数。複数の種別に該当する文書・セクションは、それぞれの種別に数える。
+
+        文書の `unchanged` は、種別を持たない文書の数である。該当が無い種別も 0 で持つ。
+        `confirmed_documents` は[確定 Index 対象リスト]の件数で、対象離脱の文書を含まない。
+        """
+        documents = {kind: 0 for kind in (*DOCUMENT_KINDS, DOCUMENT_UNCHANGED)}
+        for document in self.documents:
+            if document.unchanged:
+                documents[DOCUMENT_UNCHANGED] += 1
+            for kind in document.kinds:
+                documents[kind] += 1
+        sections = {kind: 0 for kind in SECTION_KINDS}
+        for section in self.sections:
+            for kind in section.kinds:
+                sections[kind] += 1
+        return {
+            "first_build": self.first_build,
+            "confirmed_documents": len(self.confirmed_documents),
+            "documents": documents,
+            "sections": sections,
         }
 
 

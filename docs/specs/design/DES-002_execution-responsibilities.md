@@ -57,7 +57,7 @@ doc-link の各 Skill は、呼び出し元（[プロジェクト管理 AI]）�
 
 DLID 付与操作が ID を一部の文書へ保存した後に失敗した場合、既発行 ID は不変として再実行時に再利用する必要がある（要件 [D-004][req-001-d]）。検証を通って書き込んだ[DLID]は正しい値なのでロールバックせず、発行済みとして報告する。操作は正常終了させず、書き込めなかった文書ごとにパス・問題箇所・原因を報告する（要件 [FR-002][req-002-fr-002]、[NFR-005][req-001-nfr-005]）。再実行すると残りの文書を処理する。script の分割、CLI の引数形式は後続設計で扱う。Python の script は `uv run` で実行し、Python 本体と外部依存（markdown-it-py）は uv が用意する。利用者の環境の前提は uv だけとする。
 
-doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に渡す[ToC]の写し）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
+doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に渡す[ToC]の写し、構築の完了結果の明細ファイル）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
 
 doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` に JSON ファイルとして保存し、git で追跡する（決定: 要件 [U-011][req-001-u]）。並行するブランチで更新しても衝突が差分として読めるよう、次の 2 種類のファイルに分ける。
 
@@ -66,13 +66,13 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
 [des-006-sec-2]: DES-006_search.md#sec-2 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [des-006-sec-3]: DES-006_search.md#sec-3 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
-[des-005-sec-5]: DES-005_indexing.md#sec-5 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-005-sec-5]: DES-005_indexing.md#sec-5 "226248ba364c DLID-dgphqw70rkpz"
 [des-007-sec-3]: DES-007_references-impact.md#sec-3 "463a2d89954a DLID-pr3jp4hzb8js"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "4a3aa7696bd9 DLID-edwjjf150svm"

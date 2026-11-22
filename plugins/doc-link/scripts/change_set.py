@@ -4,7 +4,7 @@ DES-005 §2 の 3・§3、DES-004 §3（B-02・B-03）、DES-003 §2・§4、DES
 入口 script ではないので、PEP 723 とロックは持たない。AI 要約・参照先の実走査・[ToC]と[文書情報]の書き込み・更新計画の
 作成（TASK-011）は持たない。この処理は対象文書と管理状態を読むだけである。
 
-使う部品: 文書の解析は `markdown_reader.read_document`、[内容ハッシュ]は `content_hash`（[正式な参照]の title を除く規則を含む）、
+使う部品: 文書の解析は `markdown_reader.read_document`、[内容ハッシュ]は `content_hash`（リファレンスリンクの定義の行を除く規則を含む）、
 [正式な参照]の抽出は `references`、管理状態の読取りは `state_store`。これらを再実装しない。
 
 ## 入力と出力
@@ -38,11 +38,11 @@ DES-005 §2 の 3・§3、DES-004 §3（B-02・B-03）、DES-003 §2・§4、DES
 - セクションの `position`: 文書の見出しのうち[セクション ID]を持つものだけを出現順に数えた 0 始まりの通し番号
   （[セクション ID]を持たない見出しは数えない）。途中にセクションを足すと、それ以後のセクションは位置が変わり
   「移動」に該当する。設計書が「位置が違う」を移動と定めるので、それに従う
-- セクションの `content_hash`: `content_hash.section_content_hashes` の値（[正式な参照]の title を除く）
+- セクションの `content_hash`: `content_hash.section_content_hashes` の値（リファレンスリンクの定義の行を除く）
 
 判定:
 
-- 内容変更は、文書全体の[内容ハッシュ]（[正式な参照]の title を除く）が `applied_hash` と異なること。パス変更は、現在のパスが
+- 内容変更は、文書全体の[内容ハッシュ]（リファレンスリンクの定義の行を除く）が `applied_hash` と異なること。パス変更は、現在のパスが
   [文書情報]の `path` と異なること。[確定 ToC]にある[文書 ID]で、現在の[確定 Index 対象リスト]にもある文書に
   ついて、[文書情報]を読む。[文書情報]が無い・読めないときは、変更なしや新規で代替せず `ChangeFailure` にする
 - 変更種別は排他でない。新規の文書は、ほかの種別を持たない（比べる対象がない）
@@ -62,7 +62,7 @@ DES-005 §2 の 3・§3、DES-004 §3（B-02・B-03）、DES-003 §2・§4、DES
 """
 
 from collections.abc import Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import state_store
@@ -85,6 +85,23 @@ SECTION_DELETED = "deleted"
 SECTION_MOVED = "moved"
 SECTION_HEADING = "heading_changed"
 SECTION_BODY = "body_changed"
+
+# 件数に必ず持つ種別（該当が無くても 0 で持つ）。文書の `unchanged` は種別を持たない文書の数。
+DOCUMENT_KINDS = (
+    CHANGE_NEW,
+    CHANGE_CONTENT,
+    CHANGE_REFERENCES,
+    CHANGE_PATH,
+    CHANGE_DEPARTED,
+)
+SECTION_KINDS = (
+    SECTION_ADDED,
+    SECTION_DELETED,
+    SECTION_MOVED,
+    SECTION_HEADING,
+    SECTION_BODY,
+)
+DOCUMENT_UNCHANGED = "unchanged"
 
 FAILURE_DOCUMENT_UNREADABLE = "document_unreadable"
 FAILURE_STATE_UNREADABLE = "state_unreadable"
@@ -234,6 +251,56 @@ class ChangeSet:
             "excluded": [d.to_dict() for d in self.excluded],
             "documents": [d.to_dict() for d in self.documents],
             "sections": [s.to_dict() for s in self.sections],
+        }
+
+    def with_first_old_paths(self, first_old_paths: dict[str, str]) -> "ChangeSet":
+        """構築の途中で[文書情報]のパスが新しくなった文書の移動を、変更集合へ合わせる。
+
+        `first_old_paths` は、[文書 ID]から、構築で最初に検出した移動の前のパスへの対応である。
+        文書ごとに、その前のパス（無ければ今の比較の前のパス）と現在のパスを比べ、違えば移動（`path_changed`）を
+        持たせ、同じなら（移動して元に戻した場合）持たせない。新規と対象離脱の文書は、パスを比べないので変えない。
+        種別の並びは、判定の順（移動・本文変更・参照変更）に保つ。
+        """
+        documents = []
+        for document in self.documents:
+            if CHANGE_NEW in document.kinds or CHANGE_DEPARTED in document.kinds:
+                documents.append(document)
+                continue
+            old_path = first_old_paths.get(document.doc_link_id, document.old_path)
+            kinds = set(document.kinds)
+            if old_path != document.new_path:
+                kinds.add(CHANGE_PATH)
+            else:
+                kinds.discard(CHANGE_PATH)
+            ordered = tuple(
+                kind
+                for kind in (CHANGE_PATH, CHANGE_CONTENT, CHANGE_REFERENCES)
+                if kind in kinds
+            )
+            documents.append(replace(document, kinds=ordered, old_path=old_path))
+        return replace(self, documents=tuple(documents))
+
+    def summary(self) -> dict:
+        """種別ごとの件数。複数の種別に該当する文書・セクションは、それぞれの種別に数える。
+
+        文書の `unchanged` は、種別を持たない文書の数である。該当が無い種別も 0 で持つ。
+        `confirmed_documents` は[確定 Index 対象リスト]の件数で、対象離脱の文書を含まない。
+        """
+        documents = {kind: 0 for kind in (*DOCUMENT_KINDS, DOCUMENT_UNCHANGED)}
+        for document in self.documents:
+            if document.unchanged:
+                documents[DOCUMENT_UNCHANGED] += 1
+            for kind in document.kinds:
+                documents[kind] += 1
+        sections = {kind: 0 for kind in SECTION_KINDS}
+        for section in self.sections:
+            for kind in section.kinds:
+                sections[kind] += 1
+        return {
+            "first_build": self.first_build,
+            "confirmed_documents": len(self.confirmed_documents),
+            "documents": documents,
+            "sections": sections,
         }
 
 

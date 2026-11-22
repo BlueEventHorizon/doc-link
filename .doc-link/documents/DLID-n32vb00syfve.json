@@ -1,40 +1,37 @@
 {
-  "content_hash": "6c74e9d6f9d50c142843856465a1f8763d995b463eaff8fd596701e135281494",
+  "content_hash": "44790bab2fd9d8d494f50d875844e12ce728e244059bc0cefb9590ff1c93c155",
   "doc_link_id": "DLID-n32vb00syfve",
   "keywords": [
     "Claude Code",
-    "launch path",
-    "fork SKILL",
-    "custom Agent",
+    "launch route",
+    "context fork",
     "subagent_type",
+    "custom Agent",
     "background Agent",
-    "context: fork",
     "AskUserQuestion",
     "ScheduleWakeup",
-    "plugin namespace"
+    "official issue",
+    "source citation"
   ],
   "path": "docs/rules/plugin_claude_code_reference.md",
-  "purpose": "Collects Claude Code facts and vocabulary needed to combine SKILLs and Agents in a plugin: launch paths, subagent_type values, and observed Agent launch behavior, with sourcing conventions.",
+  "purpose": "Reference of Claude Code facts and vocabulary relied on when composing plugins from SKILLs and Agents: launch routes, fork bugs, subagent_type values, and Agent launch observations, with sources.",
   "summary": [
-    "How to cite sources for Claude Code behavior (date, version, official/observed/issue)",
-    "Five launch paths with short names: inheriting SKILL, fork SKILL, general-purpose Agent, custom Agent, Bash subprocess",
-    "Comparison of launch paths by procedure source, parent context, and output form",
+    "How to cite sources: date, version, official docs, observation, or official issue",
+    "Five launch routes with short names: inherited SKILL, fork SKILL, general-purpose Agent, custom Agent, Bash subprocess",
+    "Comparison table of route invocation, procedure source, parent context, and output",
     "Known context: fork bugs table with issue numbers and Anthropic responses",
-    "Reasons for avoiding fork-type SKILLs",
     "Valid subagent_type values: built-in Agent names and plugin-namespaced custom Agents",
-    "Invalid subagent_type values: SKILL names, slash notation, file paths",
-    "Observations: Agent tool always runs in background in interactive sessions",
+    "Observation: Agent tool in interactive sessions always runs in background",
     "Observation: AskUserQuestion is unavailable in background subagents",
     "ScheduleWakeup is for /loop dynamic mode only; harness notifies background completion"
   ],
   "tasks": [
-    "Designing a plugin that combines SKILLs and custom Agents",
-    "Choosing a launch path for a SKILL or Agent",
-    "Deciding whether to adopt context: fork SKILLs",
-    "Specifying subagent_type when launching an Agent",
-    "Waiting for background Agent completion",
-    "Recording Claude Code behavior facts with sources",
-    "Writing or reviewing SKILL.md and agent definitions"
+    "Choosing between SKILL and Agent launch routes",
+    "Deciding whether to adopt fork-type SKILLs",
+    "Setting subagent_type in an Agent call",
+    "Writing source citations for Claude Code behavior",
+    "Designing background Agent workflows",
+    "Reviewing plugin docs for correct terminology"
   ],
   "title": "Claude Code リファレンス（SKILL / プラグイン / Agent）"
 }

@@ -54,9 +54,15 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
   （完了の待機は、この `action` に含まれる SKILL の動作である）。依頼の中身（対象文書の絶対パスと `limits`）は、
   この script が組み立てて置く（下の「`toc-updater` との受け渡し」）。依頼の元になる文書のパスと生成する
   フィールドは、`build_id` の作業状態に記録する
-- `done`: [確定 ToC]を一括して公開した。確定結果（`version`・`published`）、変更集合、参照検査結果（`reference_check`）、
-  除外した文書（`excluded`）を返す。同じ入力の再実行は、[確定 ToC]・[文書情報]を書き換えず（`published` が偽）、
-  生成対象を出さない
+- `done`: [確定 ToC]を一括して公開した。判断に要る項目と件数だけを返し、全件の明細は明細ファイルへ書く（D-059）。
+  確定結果（`version`・`published`）、変更の種別ごとの件数（`change_summary`）、生成した文書の件数（`generated_count`）、
+  参照検査結果（`reference_check`）、除外した文書（`excluded`）、問題と警告（`problems`・`warnings`）、明細ファイルの
+  絶対パス（`detail_path`）を返す。同じ入力の再実行は、[確定 ToC]・[文書情報]を書き換えず（`published` が偽）、
+  生成対象を出さない。`change_summary` は、文書（`documents`: `new`・`content_changed`・`references_changed`・
+  `path_changed`・`departed`・`unchanged`）とセクション（`sections`: `added`・`deleted`・`moved`・`heading_changed`・
+  `body_changed`）の件数を持つ。複数の種別に該当する文書・セクションは、それぞれの種別に数え、該当が無い種別も 0 で
+  持つ。`unchanged` は種別を持たない文書の数である。ほかに、初回構築か（`first_build`）と、[確定 Index 対象リスト]の
+  件数（`confirmed_documents`）を持つ
 
 ## 失敗
 
@@ -76,6 +82,27 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 すべて削除する。新しい構築を始めるとき、同じ[ToC 識別キー]の古い作業状態も削除する。作業状態が無くても、管理状態と
 現物から再判定して再開できる（識別値を付けずに `advance` を呼べばよい）。識別値を付けたのに作業状態が無い・
 [ToC 識別キー]か対象指定が合わないときは、前段の申告を信用せず、拒否する。
+
+## 完了結果の明細ファイル
+
+`done` の前に、script が全件の明細を `.temp/doc-link/index-docs/detail-<符号化した[ToC 識別キー]>.json` へ書く
+（D-059）。内容は、`toc_key`・`version`・`generated_documents`（生成した文書の[文書 ID]の一覧）・`change_set`
+（`first_build`・`confirmed_documents`・`excluded`・`documents`・`sections`。文書・セクションごとの変更前後の値を
+含む）である。[ToC 識別キー]ごとに 1 つで、同じキーの次の構築が置き換える。構築が終わっても削除しない（呼び出し元が
+読むため）。一時ファイルへ書き終えてから 1 回の置き換えで公開する。呼び出し元は、明細が要るときだけ、`detail_path`
+のファイルを読む。
+
+## 移動の記録
+
+移動（`path_changed`）だけは、比べる相手が構築の途中で書き換わる。[ToC]はパスを持たず、パスは[文書情報]が持ち、
+構築の最初の `advance` で新しくなる。そのため、あとの比較には移動が現れない。そこで `advance` は、移動を検出する
+たびに、パスを新しくする前に、`.temp/doc-link/index-docs/moves-<符号化した[ToC 識別キー]>.json` へ、
+`{"doc_link_id", "old_path", "new_path"}` を足す（同じ組は足さない。足すものが無ければ書かない）。この記録は、構築の
+作業状態（`BUILD-*`）とは別で、`build_id` なしのやり直しをまたいで残る。完了結果の変更集合は、最後の比較に、
+記録した移動を合わせて作る（`ChangeSet.with_first_old_paths`）。文書ごとに、記録の最初の `old_path` と現在のパスを
+比べ、違えば `path_changed`、同じなら（移動して元に戻した場合）移動なしとする。記録は、[確定 ToC]を公開した後に
+削除し、構築が失敗したときは残す。複数のキーで同じ文書を使うとき、移動を報告するのは、[文書情報]のパスを新しくした
+構築で、あとに構築するキーには現れない。
 
 ## `toc-updater` との受け渡し
 
@@ -105,9 +132,9 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 - 段階の判定: 生成が必要な文書（`update_plan` の生成対象）が残っていれば、情報確定（B-04）に進まず、依頼を返す。
   残っていなければ、そのまま参照検査・候補の検査・公開まで進める
 - 失敗の段階（`stage`）: `target_scope`（対象を展開できない。読めないディレクトリがある。B-01）、`id_confirmation`（文書を読めない。B-02）、`change_set`（[確定 ToC]・[文書情報]を読めない。B-03）、
-  `update_plan`・`path_update`（B-04 の前）、`information`（生成結果が検証に通らない・届かない。B-04）、
+  `update_plan`・`path_update`（B-04 の前。パスを更新できない、移動を記録できない・記録を読めない）、`information`（生成結果が検証に通らない・届かない。B-04）、
   `reference_check`（参照元を読めない。B-05）、`candidate_assembly`・`candidate_validation`・`publish`（`toc_candidate`
-  の段階。B-06・B-07）
+  の段階。B-06・B-07）、`result_detail`（明細ファイルを書けない。[確定 ToC]を公開する前に書くので、書けなければ公開しない）
 - 構築を失敗にする生成の失敗: 依頼した文書のうち、`advance` の再呼び出しの時点で生成対象のままの文書（結果が届かない、
   または検証に通らなかった）。Agent の完了の後に呼ぶ前提なので、待たず失敗にする
 - 対象文書の依頼の分け方: 生成対象を、ディレクトリごとにまとめて 3 文書ずつに分け、ディレクトリ名の昇順に並べ、
@@ -175,6 +202,10 @@ STAGE_PLAN = "update_plan"
 STAGE_PATHS = "path_update"
 STAGE_INFORMATION = "information"
 STAGE_REFERENCES = "reference_check"
+STAGE_DETAIL = "result_detail"
+
+DETAIL_PREFIX = "detail-"
+MOVES_PREFIX = "moves-"
 
 _BUILD_ID = re.compile(r"BUILD-[0-9a-f]{8}")
 
@@ -336,6 +367,118 @@ def _write_work_file(root: Path, path: Path, value: dict) -> None:
         ) from exc
 
 
+def _detail_path(root: Path, toc_key: str) -> Path:
+    """完了結果の明細ファイル。[ToC 識別キー]ごとに 1 つで、同じキーの次の構築が置き換える。"""
+    return (
+        _work_dir(root)
+        / f"{DETAIL_PREFIX}{state_store.encode_name(toc_key)}{state_store.FILE_SUFFIX}"
+    )
+
+
+def _write_detail(
+    root: Path,
+    toc_key: str,
+    version: int,
+    changes: cs.ChangeSet,
+    generated: list[str],
+) -> Path:
+    """完了結果の全件（変更集合と生成した文書の一覧）を明細ファイルへ書き、その絶対パスを返す。
+
+    [確定 ToC]を公開する前に呼ぶ。書けないときは、公開せずに構築の失敗（`result_detail`）にする。
+    """
+    detail = {
+        "toc_key": toc_key,
+        "version": version,
+        "generated_documents": list(generated),
+        "change_set": changes.to_dict(),
+    }
+    try:
+        path = _detail_path(root, toc_key)
+        state_store.write_if_changed(root, SKILL, path, state_store.serialize(detail))
+    except state_store.StateStoreError as exc:
+        raise BuildFailed(
+            STAGE_DETAIL,
+            [toc_candidate.CandidateProblem(None, toc_key, None, str(exc))],
+        ) from exc
+    return path
+
+
+def _moves_path(root: Path, toc_key: str) -> Path:
+    """移動の記録。[ToC 識別キー]ごとに 1 つで、構築の作業状態（`BUILD-*`）とは別に、やり直しをまたいで残る。"""
+    return (
+        _work_dir(root)
+        / f"{MOVES_PREFIX}{state_store.encode_name(toc_key)}{state_store.FILE_SUFFIX}"
+    )
+
+
+def _moves_failure(toc_key: str, cause: str) -> BuildFailed:
+    return BuildFailed(
+        STAGE_PATHS,
+        [toc_candidate.CandidateProblem(None, toc_key, None, cause)],
+    )
+
+
+def _read_moves(root: Path, toc_key: str) -> list[dict]:
+    """記録した移動（[文書 ID]・前のパス・後のパス）を、記録した順に返す。記録が無ければ空。"""
+    try:
+        path = _moves_path(root, toc_key)
+        try:
+            recorded = json.loads(path.read_bytes().decode("utf-8"))
+        except FileNotFoundError:
+            return []
+        return list(recorded["moves"])
+    except (
+        OSError,
+        UnicodeDecodeError,
+        json.JSONDecodeError,
+        KeyError,
+        TypeError,
+        state_store.StateStoreError,
+    ) as exc:
+        raise _moves_failure(toc_key, f"移動の記録を読めない: {exc}") from exc
+
+
+def _record_moves(root: Path, toc_key: str, changes: cs.ChangeSet) -> None:
+    """検出した移動を、パスを新しくする前に、記録へ足す。同じ組は足さない。足すものが無ければ書かない。"""
+    detected = [
+        {
+            "doc_link_id": document.doc_link_id,
+            "old_path": document.old_path,
+            "new_path": document.new_path,
+        }
+        for document in changes.documents
+        if cs.CHANGE_PATH in document.kinds
+    ]
+    if not detected:
+        return
+    moves = _read_moves(root, toc_key)
+    added = [move for move in detected if move not in moves]
+    if not added:
+        return
+    try:
+        state_store.write_if_changed(
+            root,
+            SKILL,
+            _moves_path(root, toc_key),
+            state_store.serialize({"toc_key": toc_key, "moves": moves + added}),
+        )
+    except state_store.StateStoreError as exc:
+        raise _moves_failure(toc_key, f"移動を記録できない: {exc}") from exc
+
+
+def _first_old_paths(moves: list[dict]) -> dict[str, str]:
+    """[文書 ID]ごとに、記録の最初の前のパスを返す。"""
+    first: dict[str, str] = {}
+    for move in moves:
+        first.setdefault(move["doc_link_id"], move["old_path"])
+    return first
+
+
+def _clear_moves(root: Path, toc_key: str) -> None:
+    """[確定 ToC]を公開した後に、記録を削除する。公開済みなので、構築の失敗にしない（`_remove_build` と同じ）。"""
+    _moves_path(root, toc_key).unlink(missing_ok=True)
+
+
 def _read_build(root: Path, build_id: str) -> dict:
     """識別値に対応する作業状態を読む。無い・読めない・識別値が合わないときは拒否する。"""
     if _BUILD_ID.fullmatch(build_id) is None:
@@ -432,6 +575,8 @@ def _prepare(root, spec, toc_key, session: bsm.BuildSession, write_paths: bool):
     except cs.ChangeFailure as exc:
         raise BuildFailed(STAGE_PLAN, _change_problems(exc)) from exc
     if write_paths:
+        # 移動は、パスを新しくする前に記録する。あとの比較には、移動が現れない
+        _record_moves(root, toc_key, changes)
         failed = [
             outcome
             for outcome in update_plan.apply_path_updates(root, SKILL, plan)
@@ -694,11 +839,20 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
         bsm.EVENT_VALIDATE_CANDIDATE, bsm.BuildFacts(required_and_consistent=True)
     )
 
+    generated = [] if build is None else list(build["generated"])
+    # 完了結果の変更集合は、最後の比較に、記録した移動を合わせて作る
+    reported = changes.with_first_old_paths(
+        _first_old_paths(_read_moves(root, toc_key))
+    )
+    detail_path = _write_detail(
+        root, toc_key, candidate["version"], reported, generated
+    )
     try:
         written = toc_candidate.publish_candidate(root, SKILL, candidate)
     except toc_candidate.CandidateFailure as exc:
         raise _candidate_failed(exc) from exc
     session.apply(bsm.EVENT_COMMIT, bsm.BuildFacts(commit_succeeded=True))
+    _clear_moves(root, toc_key)
     if build is not None:
         _remove_build(root, build["build_id"])
     return {
@@ -708,8 +862,9 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
         "toc_key": toc_key,
         "version": candidate["version"],
         "published": written,
-        "generated_documents": [] if build is None else list(build["generated"]),
-        "change_set": changes.to_dict(),
+        "generated_count": len(generated),
+        "change_summary": reported.summary(),
+        "detail_path": os.path.abspath(detail_path),
         "reference_check": _reference_report(results),
         "excluded": [item.to_dict() for item in changes.excluded],
         "problems": [problem.to_dict() for problem in expansion.problems],

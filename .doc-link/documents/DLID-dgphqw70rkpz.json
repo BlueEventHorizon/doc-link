@@ -1,37 +1,38 @@
 {
-  "content_hash": "1ccb35c93c6c88def2f7e1f1b6f86effe37ab60d07169f7aa78b1f7a914243e7",
+  "content_hash": "7a6a9ff076b49b3062d2bb3ff6d9c1cc7b57e83926119771a0caf17de6051e61",
   "doc_link_id": "DLID-dgphqw70rkpz",
   "keywords": [
-    "target determination",
-    "embed-dlid",
-    "ToC build",
+    "target resolution",
+    "DLID embedding",
     "change set",
+    "ToC build",
+    "index target",
     "section ID",
-    "duplicate DLID",
-    "exclusion patterns",
+    "path move",
+    "detail file",
     "atomic write",
-    "document info",
-    "rerun"
+    "exclude patterns"
   ],
   "path": "docs/specs/design/DES-005_indexing.md",
-  "purpose": "Designs target determination, DLID embedding, and ToC construction: input and output boundaries, argument rules, change-set detection, candidate confirmation, and write units.",
+  "purpose": "Designs target resolution, ID checking, DLID embedding, change-set determination, required-information acquisition, candidate finalization, and atomic writes for ToC building.",
   "summary": [
-    "Inputs and outputs of ToC construction and the execution boundary following the build states",
-    "Target determination: argument combination rules, directory and pattern expansion, exclusions, path normalization, symlinks",
-    "ID checks: documents without IDs or with duplicate IDs are excluded and reported",
-    "DLID embedding operation: duplicate original confirmation, issuing IDs for documents and sections, count-only results",
-    "ID issuance spec: 60-bit random Crockford Base32, 12 characters, probabilistic uniqueness, no rollback of verified writes",
-    "Change-set determination at document and section level (added, removed, moved, heading change, body change)",
-    "Information acquisition: reuse of unchanged document info, AI generation only when needed, candidate validation",
-    "Write units: atomic replace of document info and ToC, no locking, partial failure behavior",
-    "Completion and rerun: failure diagnostics and re-evaluation from confirmed ToC"
+    "Inputs, outputs, and execution boundary of ToC build following DES-004 stages",
+    "Argument combination rules and expansion of directories, patterns, and exclusions into target Markdown lists",
+    "Path normalization, Markdown detection, symlink handling, and nonexistent path reporting",
+    "ID check: documents without or with duplicate IDs are excluded and reported",
+    "DLID embedding operation: duplicate original confirmation, section ID issuance, writes limited to DLID",
+    "Change-set determination for documents and sections, including path-move recording across build advances",
+    "Required-information acquisition, reuse of document information, and candidate inspection",
+    "Completion result items and the detail file written atomically",
+    "Write units using os.replace, no locking, and failure and re-run behavior"
   ],
   "tasks": [
     "Implementing target expansion and exclusion logic",
-    "Implementing the embed-dlid script",
-    "Implementing ToC build and rebuild",
-    "Implementing change detection",
-    "Reviewing indexing design"
+    "Implementing the embed-dlid operation",
+    "Implementing change-set and move detection",
+    "Implementing the index-docs build and completion result",
+    "Designing section-level change detection",
+    "Reviewing write atomicity and failure handling"
   ],
   "title": "DES-005 対象確定・DLID 付与・[ToC]構築設計"
 }

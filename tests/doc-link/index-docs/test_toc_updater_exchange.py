@@ -169,9 +169,10 @@ class DeliverTest(ExchangeBase):
             "結果が置かれていない",
         )
         self.assertEqual(self.advance("k", ALL, "--build-id", build_id)[0], 0)
+        # 完了結果の明細ファイル（D-059）は、呼び出し元が読むので残る。残るのはそれだけである
         self.assertEqual(
-            [p for p in self.work_files() if p.is_file()],
-            [],
+            [p.name for p in self.work_files() if p.is_file()],
+            ["detail-k.json"],
         )
 
     def assert_generation_failure(self, build_id, doc_id, code, result):

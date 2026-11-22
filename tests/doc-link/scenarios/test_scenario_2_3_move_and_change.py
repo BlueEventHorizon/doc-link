@@ -4,6 +4,7 @@
 AI の生成は固定値の差し込みで代替し、`toc-updater` への生成依頼の有無は、`build` が記録する依頼の[文書 ID]で確かめる。
 """
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -74,7 +75,7 @@ class MoveScenarioTest(ScenarioBase):
 
         # toc-updater への生成依頼は 0 件
         self.assertEqual(self.requested, [])
-        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(result["generated_count"], 0)
         # [文書情報]は、パス以外が書き換わらない。ほかの文書の[文書情報]は変わらない
         info_after = self.info(ID_C)
         self.assertEqual(info_after["path"], "docs/sub/c.md")
@@ -140,7 +141,9 @@ class ContentChangeScenarioTest(ScenarioBase):
         # 本文が変わった文書は、要約の再生成が必要になる（記録の書き換えだけの場合と区別する）
         result = self.build_ok(KEY, self.paths)
         self.assertEqual(self.requested, [ID_C])
-        self.assertEqual(result["generated_documents"], [ID_C])
+        self.assertEqual(result["generated_count"], 1)
+        detail = json.loads(Path(result["detail_path"]).read_text(encoding="utf-8"))
+        self.assertEqual(detail["generated_documents"], [ID_C])
         c_hash_after = self.resolve_one(ID_C)["content_hash"]
         self.assertNotEqual(c_hash_after, self.c_hash_before)
 
@@ -184,7 +187,7 @@ class ContentChangeScenarioTest(ScenarioBase):
         # 記録の書き換えのための再構築は、要約の生成を依頼しない（[確定 ToC]の記録だけが更新される）
         result = self.build_ok(KEY, self.paths)
         self.assertEqual(self.requested, [])
-        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(result["generated_count"], 0)
         self.assertEqual(
             {r["recorded_content_hash"] for r in self.toc(KEY)["references"]},
             {c_hash_after},
@@ -231,7 +234,7 @@ class FirstTitleScenarioTest(ScenarioBase):
         self.assertEqual(stale["counts"]["references_changed"], 1)
         result = self.build_ok(KEY, self.paths)
         self.assertEqual(self.requested, [])
-        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(result["generated_count"], 0)
         self.assertEqual(self.info(ID_A), info_before)
 
         # 書いた記録は、書き直さずに、そのまま正しい

@@ -1,4 +1,4 @@
-"""[内容ハッシュ]の算出（[正式な参照]の title を除く）と、title の記録語の形式判定を持つ共通モジュール。
+"""[内容ハッシュ]の算出（リファレンスリンクの定義の行を除く）と、title の記録語の形式判定を持つ共通モジュール。
 
 DES-008 §3・DES-009 §1 と REQ-001 D-039 を実装する。入口 script ではないので、PEP 723 とロックは持たない。
 文書の解析は `markdown_reader.read_document` の結果を使い、独自の正規表現でブロック構造を判定しない。
@@ -11,16 +11,14 @@ title に記録するのは、その先頭 12 文字（REQ-001 D-058）。title 
 文書全体はファイル全体（frontmatter を含む）、セクションは `Heading.start_line` から `Heading.section_end_line`
 の直前までの原文を対象にする。
 
-仕様の解釈（設計書が値や形式を定めていない点）
+除く範囲（DES-008 §3）
 
-- 除く対象は、算出の範囲に開始行がある、[正式な参照]のリファレンスリンクの定義の title である
-  （`ReferenceDefinition.dlid` が値を持つ定義。title の最後の語が DLID のもの）。title の中身（記録語・DLID・
-  ほかの語）は問わず、title 全体を除く。インラインリンクの title と、DLID で終わらない title は除かない
-- 除く位置は、定義の行 `[start_line, end_line)` の原文から決める。原文で、定義の末尾に「空白（改行を含む）、
-  title の開き（`"`・`'`・`(`）、title、閉じ（`"`・`'`・`)`）、行末の空白」が続く形を探し、リンク先と title の間の
-  空白から閉じまでを除く。閉じのあとの空白（改行）は残す。title の中のバックスラッシュのエスケープは、1 文字の
-  まとまりとして読む
-- 原文でこの形が見つからないときは、その定義からは何も除かない。推測で別の位置を除かない
+- 除くのは、リファレンスリンクの定義の行 `[start_line, end_line)` の全体である（行末の改行を含む）。
+  [正式な参照]かどうか、title の有無、リンク先のスキームの有無を問わない。title が次の行に続く定義は、
+  その行も `end_line` の内側なので除く
+- 算出の範囲と定義の行が一部だけ重なるときは、重なった行だけを除く
+- 定義の前後の空行と、本文のリンク（インラインリンクの title を含む）は除かない
+- 同じラベルの 2 つ目以降の定義は、`MarkdownDocument.references` に現れないので、除かない
 """
 
 import hashlib
@@ -30,10 +28,6 @@ from markdown_reader import MarkdownDocument, ReferenceDefinition, read_document
 
 RECORD_LENGTH = 12
 _RECORD_WORD_PATTERN = re.compile(r"[0-9a-f]{%d}" % RECORD_LENGTH)
-_TITLE_IN_RAW_PATTERN = re.compile(
-    r"(?<=\S)(\s+(?:\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'|\((?:[^()\\]|\\.)*\)))\s*\Z",
-    re.DOTALL,
-)
 
 
 def is_record_word(word: str | None) -> bool:
@@ -62,13 +56,13 @@ def hash_bytes(data: bytes) -> str:
 
 
 def document_content_hash(text: str) -> str:
-    """文書全体の[内容ハッシュ]（[正式な参照]の title を除く）。"""
+    """文書全体の[内容ハッシュ]（リファレンスリンクの定義の行を除く）。"""
     document = read_document(text)
     return _hash_range(document, 0, len(document.lines))
 
 
 def section_content_hashes(text: str) -> list[str]:
-    """文書の見出しごと（出現順）のセクションの[内容ハッシュ]（[正式な参照]の title を除く）。"""
+    """文書の見出しごと（出現順）のセクションの[内容ハッシュ]（リファレンスリンクの定義の行を除く）。"""
     document = read_document(text)
     return [
         _hash_range(document, heading.start_line, heading.section_end_line)
@@ -81,29 +75,11 @@ def _hash_range(document: MarkdownDocument, start: int, end: int) -> str:
     pieces: list[str] = []
     cursor = start
     for definition in sorted(document.references, key=lambda item: item.start_line):
-        if not (start <= definition.start_line < end):
+        first = max(definition.start_line, cursor)
+        last = min(definition.end_line, end)
+        if first >= last:
             continue
-        if definition.start_line < cursor:
-            continue
-        if definition.dlid is None:
-            continue
-        span = _title_span(lines, definition)
-        if span is None:
-            continue
-        first_offset, last_offset = span
-        pieces.append("".join(lines[cursor : definition.start_line]))
-        raw = "".join(lines[definition.start_line : definition.end_line])
-        pieces.append(raw[:first_offset] + raw[last_offset:])
-        cursor = definition.end_line
+        pieces.append("".join(lines[cursor:first]))
+        cursor = last
     pieces.append("".join(lines[cursor:end]))
     return hash_bytes("".join(pieces).encode("utf-8"))
-
-
-def _title_span(
-    lines: tuple[str, ...], definition: ReferenceDefinition
-) -> tuple[int, int] | None:
-    raw = "".join(lines[definition.start_line : definition.end_line])
-    match = _TITLE_IN_RAW_PATTERN.search(raw)
-    if match is None:
-        return None
-    return match.start(1), match.end(1)

@@ -1,38 +1,37 @@
 {
-  "content_hash": "5d0596315129eac1bc9a7eaf8ad4ad5a7c2661238ae46deab5757145f8f33c34",
+  "content_hash": "93356ddc0c6c2b00e2c61551cb55893c6508620c0d9b56b8a941f542d0296a6a",
   "doc_link_id": "DLID-veg2nsjk8zw1",
   "keywords": [
     "doc-link",
-    "requirements overview",
     "DLID",
-    "document ID",
-    "ToC",
+    "requirements overview",
     "glossary",
-    "decision register",
+    "ToC",
     "non-functional requirements",
-    "change impact notification",
+    "write boundary",
+    "responsibility boundary",
+    "index-docs flow",
     "DocAdvisor replacement"
   ],
   "path": "docs/specs/requirement/REQ-001_overview.md",
-  "purpose": "Overview requirements for doc-link: purpose, background, glossary, scope, responsibility boundaries, non-functional requirements, findings, and the decision and open-issue registers for all requirement documents.",
+  "purpose": "Overview requirements for doc-link: goals, background, overall flows, glossary, scope, responsibility boundaries, common non-functional requirements, and error and warning candidates.",
   "summary": [
-    "Purpose and background of replacing DocAdvisor with permanent document-ID based management",
-    "Overall system flow for introduction, DLID assignment, link checks, ToC build and impact check",
-    "Document search flow with ToC rebuild confirmation",
-    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash",
-    "Scope: included and excluded items and responsibility split between doc-link and the project management AI",
-    "Non-functional requirements NFR-001 to NFR-008 (consistency, determinism, idempotency, write boundary, limits separation)",
-    "Error candidates and findings that do not block ToC confirmation",
-    "Decision register D-001 to D-058 covering ID format, write scope, reference notation, hashing and workflow",
-    "Open-issue register U-001 to U-024 with decided outcomes"
+    "Purpose and background: replacing DocAdvisor with permanent document-ID based management",
+    "Overall system flow from initial setup through DLID check, DLID embedding, link check, ToC build, and impact check",
+    "Document search flow and handling of stale ToC",
+    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash, and project management AI",
+    "Scope: what is included and what is excluded in the initial stage",
+    "Responsibility boundary between doc-link and the project management AI",
+    "Non-functional requirements NFR-001 to NFR-008: reproducibility, determinism, idempotence, write boundary, diagnosability, resumability, scalability, generation vs validation limits",
+    "Error candidates and findings that do not block ToC confirmation"
   ],
   "tasks": [
-    "Understanding the overall purpose and scope of doc-link",
-    "Looking up a glossary term or decision ID (D-xxx)",
-    "Writing or reviewing design documents against requirements",
-    "Implementing the DLID write boundary and ToC build flow",
-    "Designing the operation flow of check-dlid, embed-dlid, check-links, index-docs, check-impact",
-    "Checking non-functional requirements and error handling"
+    "Understanding the overall goals and scope of doc-link",
+    "Writing or reviewing requirement or design documents that use doc-link glossary terms",
+    "Designing the overall index, check, and notification flow",
+    "Checking what doc-link may write into user documents",
+    "Implementing error and warning handling",
+    "Reviewing non-functional requirements compliance"
   ],
   "title": "doc-link 要件定義書 — 総論"
 }

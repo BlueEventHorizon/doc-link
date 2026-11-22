@@ -1,37 +1,39 @@
 {
-  "content_hash": "e978f1de2a45514439060dcc0bc2a59234202750f9907818877c05e87a12e7e9",
+  "content_hash": "4030fe6bc515b0eeb550080bea0b13d0170e2baa2bfb70cd2e91c94bf5b3c140",
   "doc_link_id": "DLID-anz9vack2xzt",
   "keywords": [
     "responsibilities",
-    "write permission",
+    "permissions",
     "script operations",
     "Skill",
-    "information generation AI",
+    "information-generation AI",
     "search AI",
+    "management state",
     ".doc-link",
-    "JSON state files",
-    "DLID assignment",
-    "temporary files"
+    "temporary files",
+    "deterministic output"
   ],
   "path": "docs/specs/design/DES-002_execution-responsibilities.md",
-  "purpose": "Defines which actors execute doc-link processing and their responsibilities, write permissions, script operations, Skill-script connection rules, and the layout of the management state files.",
+  "purpose": "Defines the responsibilities and permissions of each actor in doc-link, the logical script operations, the Skill-script connection rules, and the storage of management state.",
   "summary": [
-    "Responsibility table of actors: caller/project AI, Skill, deterministic scripts, information-generation AI, search AI, user, with write permissions and prohibitions",
-    "Logical script operations with inputs, success results and side-effect or failure promises",
-    "Skill-script connection rules: no self-reported stage success, guarded transitions, hidden internal limit H from the generation AI",
-    "Impact notification is enumerated mechanically by scripts; no repair judgment or fix proposal inside doc-link",
-    "Re-check after a fix is a new operation; check, search, resolve, build and notify are distinct operations",
-    "Handling of partial failure in DLID assignment: written DLIDs are kept, failures are reported per document",
-    "All doc-link files stay inside the project; temporary files go under .temp/doc-link/<skill>/",
-    "Management state stored as JSON under .doc-link/ and tracked by git, split into per-document info files and per-key ToC files",
-    "Deterministic byte-for-byte output so merges converge by rebuilding"
+    "Responsibility and permission table for caller, Skill, scripts, information-generation AI, search AI and user",
+    "Logical operations provided by scripts with inputs, results and failure promises",
+    "Rules connecting Skills and scripts, including version and state checks that reject disallowed transitions",
+    "Information-generation AI receives only document content and the stated limit, never the internal upper limit",
+    "Impact notification lists changed documents and known referrers mechanically with no AI judgment",
+    "Recovery behavior when DLID assignment fails partway: written DLIDs are kept and reported",
+    "All files are created inside the project; temporary files go under .temp/doc-link/<skill>/",
+    "Management state stored as JSON under .doc-link/, split into per-document information and per-key confirmed ToC",
+    "Deterministic byte-identical output and unchanged files are not rewritten"
   ],
   "tasks": [
-    "Designing or reviewing doc-link Skills, scripts and custom Agents",
-    "Implementing script operations and their guards",
-    "Deciding who may write what in doc-link",
-    "Implementing DLID assignment error handling",
-    "Designing management state file layout and resolving merge conflicts"
+    "Implementing doc-link scripts",
+    "Designing Skill and script interaction",
+    "Defining actor permissions and write restrictions",
+    "Implementing DLID assignment and failure handling",
+    "Designing AI generation input and validation boundaries",
+    "Implementing management state file storage",
+    "Placing temporary files"
   ],
   "title": "DES-002 実行主体と処理責務"
 }

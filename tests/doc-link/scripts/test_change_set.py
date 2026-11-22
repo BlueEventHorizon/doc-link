@@ -152,12 +152,13 @@ class DocumentChangeTest(ChangeSetTestBase):
         )
 
     def test_new_departed_path_content_and_reference_are_independent(self):
-        self.write("a.md", doc(ID_A, "# A", "", '[r]: ./x.md "t DLID-00000000d001"'))
+        ref = '[r]: ./{}.md "t DLID-00000000d001"'
+        self.write("a.md", doc(ID_A, "# A", "", "text", "", ref.format("x")))
         self.write("b.md", doc(ID_B, "# B"))
         self.write("c.md", doc(ID_C, "# C"))
         self.commit(["a.md", "b.md", "c.md"])
         # a: 本文変更（参照も変える）、b: 移動、c: 対象離脱、d: 新規
-        self.write("a.md", doc(ID_A, "# A", "", '[r]: ./y.md "t DLID-00000000d001"'))
+        self.write("a.md", doc(ID_A, "# A", "", "changed", "", ref.format("y")))
         (self.root / "b.md").rename(self.root / "moved.md")
         self.write("d.md", doc("DLID-00000000d002", "# D"))
         result = self.build(["a.md", "moved.md", "d.md"])
@@ -191,9 +192,42 @@ class DocumentChangeTest(ChangeSetTestBase):
         self.commit(["a.md"])
         self.write("a.md", doc(ID_A, "# A", "", '[r]: ./x.md#h "t DLID-00000000d001"'))
         result = self.build(["a.md"])
-        kinds = self.doc_change(result, ID_A).kinds
-        self.assertIn(change_set.CHANGE_REFERENCES, kinds)
-        self.assertIn(change_set.CHANGE_CONTENT, kinds)
+        # 定義の行は内容ハッシュに入らない。リンク先の変更は、参照の変更としてだけ現れる（D-039）
+        self.assertEqual(
+            self.doc_change(result, ID_A).kinds, (change_set.CHANGE_REFERENCES,)
+        )
+        self.assertEqual(result.sections, ())
+
+    def test_added_definition_is_not_a_content_change(self):
+        self.write("a.md", doc(ID_A, f"# A {S1}", "", "text", ""))
+        self.commit(["a.md"])
+        # [正式な参照]の定義を足す: 参照の変更だけ。セクションも変わらない（前の空行は元からある）
+        self.write(
+            "a.md",
+            doc(ID_A, f"# A {S1}", "", "text", "", '[r]: ./x.md "DLID-00000000d001"'),
+        )
+        result = self.build(["a.md"])
+        self.assertEqual(
+            self.doc_change(result, ID_A).kinds, (change_set.CHANGE_REFERENCES,)
+        )
+        self.assertEqual(result.sections, ())
+        self.commit(["a.md"])
+        # [正式な参照]でない定義（外部 URL）を足す: 変更なし
+        self.write(
+            "a.md",
+            doc(
+                ID_A,
+                f"# A {S1}",
+                "",
+                "text",
+                "",
+                '[r]: ./x.md "DLID-00000000d001"',
+                "[u]: https://example.com/",
+            ),
+        )
+        result = self.build(["a.md"])
+        self.assertTrue(self.doc_change(result, ID_A).unchanged)
+        self.assertEqual(result.sections, ())
 
     def test_record_word_only_change_is_not_a_change(self):
         ref = '[r]: ./x.md "t {} DLID-00000000d001"'
@@ -447,6 +481,170 @@ class NoWriteTest(ChangeSetTestBase):
         self.assertEqual(data["documents"][0]["kinds"], ["content_changed"])
         self.assertEqual(data["sections"][0]["kinds"], ["body_changed"])
         self.assertEqual(data["excluded"][0]["reason"], "missing")
+
+
+def _document(doc_id, kinds):
+    return change_set.DocumentChange(
+        doc_link_id=doc_id,
+        kinds=tuple(kinds),
+        old_path=None,
+        new_path=None,
+        old_hash=None,
+        new_hash=None,
+        old_references=None,
+        new_references=None,
+    )
+
+
+def _section(section_id, kinds):
+    return change_set.SectionChange(
+        section_id=section_id, kinds=tuple(kinds), old=None, new=None
+    )
+
+
+class SummaryTest(unittest.TestCase):
+    def summary(self, documents=(), sections=(), confirmed=(), first_build=False):
+        return change_set.ChangeSet(
+            confirmed_documents=tuple(
+                change_set.ConfirmedDocument(doc_id, f"{doc_id}.md")
+                for doc_id in confirmed
+            ),
+            excluded=(),
+            documents=tuple(documents),
+            sections=tuple(sections),
+            first_build=first_build,
+        ).summary()
+
+    def test_empty_change_set_has_every_kind_with_zero(self):
+        summary = self.summary()
+        self.assertEqual(
+            summary,
+            {
+                "first_build": False,
+                "confirmed_documents": 0,
+                "documents": {
+                    "new": 0,
+                    "content_changed": 0,
+                    "references_changed": 0,
+                    "path_changed": 0,
+                    "departed": 0,
+                    "unchanged": 0,
+                },
+                "sections": {
+                    "added": 0,
+                    "deleted": 0,
+                    "moved": 0,
+                    "heading_changed": 0,
+                    "body_changed": 0,
+                },
+            },
+        )
+
+    def test_a_document_with_several_kinds_is_counted_in_each_kind(self):
+        summary = self.summary(
+            documents=[
+                _document(ID_A, ["content_changed", "path_changed"]),
+                _document(ID_B, []),
+                _document(ID_C, ["departed"]),
+            ],
+            confirmed=[ID_A, ID_B],
+        )
+        self.assertEqual(summary["confirmed_documents"], 2)
+        self.assertEqual(
+            summary["documents"],
+            {
+                "new": 0,
+                "content_changed": 1,
+                "references_changed": 0,
+                "path_changed": 1,
+                "departed": 1,
+                "unchanged": 1,
+            },
+        )
+
+    def test_a_section_with_several_kinds_is_counted_in_each_kind(self):
+        summary = self.summary(
+            sections=[
+                _section(S1, ["moved", "body_changed"]),
+                _section(S2, ["added"]),
+            ],
+            first_build=True,
+        )
+        self.assertTrue(summary["first_build"])
+        self.assertEqual(
+            summary["sections"],
+            {
+                "added": 1,
+                "deleted": 0,
+                "moved": 1,
+                "heading_changed": 0,
+                "body_changed": 1,
+            },
+        )
+
+
+def _change(doc_id, kinds, old_path, new_path):
+    return change_set.DocumentChange(
+        doc_link_id=doc_id,
+        kinds=tuple(kinds),
+        old_path=old_path,
+        new_path=new_path,
+        old_hash=None,
+        new_hash=None,
+        old_references=None,
+        new_references=None,
+    )
+
+
+class WithFirstOldPathsTest(unittest.TestCase):
+    """構築の途中で[文書情報]のパスが新しくなった移動を、変更集合へ合わせる。"""
+
+    def apply(self, documents, first_old_paths):
+        original = change_set.ChangeSet(
+            confirmed_documents=(),
+            excluded=(),
+            documents=tuple(documents),
+            sections=(),
+            first_build=False,
+        )
+        return original.with_first_old_paths(first_old_paths).documents
+
+    def test_a_recorded_move_is_added_before_the_other_kinds(self):
+        (document,) = self.apply(
+            [_change(ID_A, ["content_changed"], "b.md", "b.md")],
+            {ID_A: "a.md"},
+        )
+        self.assertEqual(document.kinds, ("path_changed", "content_changed"))
+        self.assertEqual(document.old_path, "a.md")
+        self.assertEqual(document.new_path, "b.md")
+        self.assertFalse(document.unchanged)
+
+    def test_a_move_that_was_undone_is_removed(self):
+        (document,) = self.apply(
+            [_change(ID_A, ["path_changed", "content_changed"], "b.md", "a.md")],
+            {ID_A: "a.md"},
+        )
+        self.assertEqual(document.kinds, ("content_changed",))
+        self.assertEqual(document.old_path, "a.md")
+
+    def test_a_document_that_is_only_moved_and_undone_is_unchanged(self):
+        (document,) = self.apply(
+            [_change(ID_A, ["path_changed"], "b.md", "a.md")], {ID_A: "a.md"}
+        )
+        self.assertEqual(document.kinds, ())
+        self.assertTrue(document.unchanged)
+
+    def test_documents_without_a_record_keep_their_own_comparison(self):
+        moved = _change(ID_A, ["path_changed"], "a.md", "b.md")
+        same = _change(ID_B, [], "c.md", "c.md")
+        documents = self.apply([moved, same], {})
+        self.assertEqual(documents, (moved, same))
+
+    def test_new_and_departed_documents_are_not_changed(self):
+        new = _change(ID_A, ["new"], None, "a.md")
+        departed = _change(ID_B, ["departed"], "b.md", None)
+        documents = self.apply([new, departed], {ID_A: "x.md", ID_B: "y.md"})
+        self.assertEqual(documents, (new, departed))
 
 
 if __name__ == "__main__":

@@ -62,11 +62,13 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-ro
 
 [確定 ToC]が公開された。標準出力の JSON から、次を報告する。
 
-- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない）と、生成した文書（`generated_documents`）
-- 変更集合（`change_set`）の要点
+- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない）と、生成した文書の件数（`generated_count`）
+- 変更の種別ごとの件数（`change_summary`）
 - 参照検査結果（`reference_check`）。`summary` の件数と、一致以外の `findings`
 - 除外した文書（`excluded`。ID 未付与は `missing`、ID 重複は `duplicate`）
 - `problems`・`warnings` があれば、あわせて報告する
+
+標準出力は件数までで、全件の明細（変更集合・生成した文書の一覧）は `detail_path` のファイルにある。報告に文書ごとの明細が要るときだけ、そのファイルを読む。明細が要らないときは読まない。
 
 ### 4. 構築が失敗したとき
 

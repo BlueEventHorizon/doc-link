@@ -52,7 +52,7 @@ stateDiagram-v2
 | B-04 | 変更確定                                                                | 必要情報の取得・AI 出力検証が成功    | 情報確定     | 未変更文書の要約は再利用する。[文書情報]は文書ごとに確定する                                                                         |
 | B-05 | 情報確定                                                                | 参照先の必要な実走査と結果分類が完了 | 参照検査確定 | 不在・パス不一致は結果として保持する                                                                                                 |
 | B-06 | 参照検査確定                                                            | 必須情報と整合条件が満たされた       | 候補検査済み | 指定ディレクトリ内不在・パス不一致は結果として記録し、確定を妨げない（決定: [U-020][req-001-u]）                                     |
-| B-07 | 候補検査済み                                                            | 一括確定が成功                       | 完了         | [確定 ToC]を P-01 または P-02 で切り替える                                                                                           |
+| B-07 | 候補検査済み                                                            | 一括確定が成功                       | 完了         | [確定 ToC]を P-01 または P-02 で切り替える。完了結果は、件数と明細ファイルのパスで返す（要件 [D-059][req-001-d]）                    |
 | B-08 | 開始／対象確定／ID 確定／変更確定／情報確定／参照検査確定／候補検査済み | 当該段階の処理が失敗                 | 失敗         | 候補を公開せず、旧[確定 ToC]を維持して報告する。報告には、失敗した文書・フィールド・理由を含める（要件 §11.2）。自動では再試行しない |
 | B-09 | 失敗                                                                    | 再実行を明示的に開始                 | 開始         | 未完了処理を再評価する                                                                                                               |
 
@@ -114,9 +114,9 @@ DLID 付与操作（`embed-dlid`）の実行ごとの状態は次の通り。[In
 | E-06 | 開始／対象確定／原本確認待ち／計画確定 | 当該段階の処理が失敗した（書き込めなかった文書が 1 件でもある場合を含む）、または利用者が原本を確定せずに終えた | 失敗         | 検証を通って書き込んだ[DLID]は戻さない。書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因を返す（要件 [FR-002][req-002-fr-002]、[D-040][req-001-d]、[NFR-005][req-001-nfr-005]） |
 | E-07 | 失敗                                   | 再実行を明示的に開始                                                                                            | 開始         | 書き込み済みの[DLID]を既存の[DLID]として照合し直す                                                                                                                                              |
 
-[des-009]: DES-009_verification.md "ab6bf50edb8f DLID-xmg0jcmep2h2"
+[des-009]: DES-009_verification.md "29b125164ccc DLID-xmg0jcmep2h2"
 [des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "4a3aa7696bd9 DLID-edwjjf150svm"

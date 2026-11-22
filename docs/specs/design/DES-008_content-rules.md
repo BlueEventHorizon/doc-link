@@ -91,8 +91,8 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 タイトルは文書の最初の H1 見出しのテキストから、行末の[セクション ID]を除いたものとする。H1 が無い文書のタイトルは `toc-updater` が生成する。目的・内容概要・適用作業・キーワード、および生成するタイトルは、`toc-updater` が対象文書の本文を読んで生成する（[DES-010 §4][des-010-sec-4]）。[情報生成 AI]に渡す上限はフィールド別の `L` のみとする。script の検証器は `H = floor(L × 1.3)` を用い、`L` 超・`H` 以下を受理し、`H` 超を拒否する。[情報生成 AI]が参照するプロンプト・ルール・再試行メッセージに `H` や余白の存在を含めない。`L` の値と文字数の数え方は要件 [D-044][req-001-d] に従う。配列のフィールドは要素数を `L`・`H` で検証する。要素数の下限は、内容概要 5、適用作業 1、キーワード 5 とし、下回れば拒否する。生成する値は、文書の言語にかかわらず英語で書く。検証器のエラーを[情報生成 AI]へ戻す場合も実際の拒否境界を開示しない。
 
-[des-005-sec-3]: DES-005_indexing.md#sec-3 "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-005-sec-3]: DES-005_indexing.md#sec-3 "226248ba364c DLID-dgphqw70rkpz"
 [des-007-sec-1]: DES-007_references-impact.md#sec-1 "463a2d89954a DLID-pr3jp4hzb8js"
-[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "ea5099a8e006 DLID-7e90gq3sdncc"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[des-010-sec-4]: DES-010_skill-composition.md#sec-4 "6f5e412f608f DLID-7e90gq3sdncc"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"

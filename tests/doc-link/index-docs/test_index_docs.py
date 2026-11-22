@@ -268,7 +268,7 @@ class FirstBuildTest(Base):
         self.assertEqual(result["version"], 1)
         self.assertTrue(result["published"])
         self.assertEqual(result["excluded"], [])
-        self.assertEqual(sorted(result["generated_documents"]), [ID_A, ID_B, ID_C])
+        self.assertEqual(result["generated_count"], 3)
         toc = state_store.load_confirmed_toc(self.root, "k")
         self.assertEqual(
             sorted(d["doc_link_id"] for d in toc["documents"]), [ID_A, ID_B, ID_C]
@@ -331,7 +331,7 @@ class IdempotenceTest(Base):
         self.assertEqual(code, 0)
         self.assertEqual(result["action"], "done")
         self.assertFalse(result["published"])
-        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(result["generated_count"], 0)
         self.assertEqual(self.state_snapshot(), state_before)
 
     def test_rerun_after_a_second_does_not_rewrite_toc(self):
@@ -374,6 +374,158 @@ class IdempotenceTest(Base):
         info = state_store.load_document_info(self.root, ID_C)
         self.assertEqual(info["path"], "docs/sub/c.md")
         self.assertEqual(info["purpose"], info_before["purpose"])
+
+
+DONE_KEYS = {
+    "action",
+    "state",
+    "publication_state",
+    "toc_key",
+    "version",
+    "published",
+    "generated_count",
+    "change_summary",
+    "detail_path",
+    "reference_check",
+    "excluded",
+    "problems",
+    "warnings",
+}
+DOCUMENT_COUNT_KEYS = {
+    "new",
+    "content_changed",
+    "references_changed",
+    "path_changed",
+    "departed",
+    "unchanged",
+}
+SECTION_COUNT_KEYS = {
+    "added",
+    "deleted",
+    "moved",
+    "heading_changed",
+    "body_changed",
+}
+
+
+class DetailFileTest(Base):
+    """D-059: 完了結果は判断に要る項目と件数だけを返し、全件は明細ファイルへ書く。"""
+
+    def detail_file(self, key):
+        return self.root / ".temp" / "doc-link" / "index-docs" / f"detail-{key}.json"
+
+    def read_detail(self, key):
+        return json.loads(self.detail_file(key).read_text(encoding="utf-8"))
+
+    def test_done_returns_only_decision_items_counts_and_the_detail_path(self):
+        code, result = self.build("k", ALL)
+        self.assertEqual(code, 0, result)
+        self.assertEqual(set(result), DONE_KEYS)
+        self.assertNotIn("change_set", result)
+        self.assertNotIn("generated_documents", result)
+
+    def test_first_build_counts_every_document_as_new_and_every_section_as_added(self):
+        _, result = self.build("k", ALL)
+        summary = result["change_summary"]
+        self.assertEqual(
+            set(summary),
+            {"first_build", "confirmed_documents", "documents", "sections"},
+        )
+        self.assertTrue(summary["first_build"])
+        self.assertEqual(summary["confirmed_documents"], 3)
+        self.assertEqual(set(summary["documents"]), DOCUMENT_COUNT_KEYS)
+        self.assertEqual(
+            summary["documents"],
+            {
+                "new": 3,
+                "content_changed": 0,
+                "references_changed": 0,
+                "path_changed": 0,
+                "departed": 0,
+                "unchanged": 0,
+            },
+        )
+        self.assertEqual(set(summary["sections"]), SECTION_COUNT_KEYS)
+        self.assertEqual(summary["sections"]["added"], 3)
+        self.assertEqual(sum(summary["sections"].values()), 3)
+
+    def test_detail_path_is_absolute_and_the_file_holds_every_item(self):
+        expected = build_change_set(self.root, "k", ALL).to_dict()
+        _, result = self.build("k", ALL)
+        path = Path(result["detail_path"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(path, self.detail_file("k"))
+        detail = self.read_detail("k")
+        self.assertEqual(
+            set(detail), {"toc_key", "version", "generated_documents", "change_set"}
+        )
+        self.assertEqual(detail["toc_key"], "k")
+        self.assertEqual(detail["version"], result["version"])
+        self.assertEqual(sorted(detail["generated_documents"]), [ID_A, ID_B, ID_C])
+        self.assertEqual(detail["change_set"], json.loads(json.dumps(expected)))
+
+    def test_detail_file_is_kept_after_the_build_ends(self):
+        self.build("k", ALL)
+        self.assertTrue(self.detail_file("k").is_file())
+        self.assertEqual(
+            list((self.root / ".temp" / "doc-link" / "index-docs").glob("BUILD-*")),
+            [],
+        )
+
+    def test_rerun_replaces_the_detail_file_with_the_unchanged_result(self):
+        self.build("k", ALL)
+        code, result = self.advance("k", ALL)
+        self.assertEqual(code, 0)
+        self.assertEqual(result["action"], "done")
+        self.assertEqual(result["detail_path"], str(self.detail_file("k")))
+        summary = result["change_summary"]
+        self.assertFalse(summary["first_build"])
+        self.assertEqual(summary["documents"]["unchanged"], 3)
+        self.assertEqual(summary["documents"]["new"], 0)
+        self.assertEqual(sum(summary["sections"].values()), 0)
+        detail = self.read_detail("k")
+        self.assertEqual(detail["generated_documents"], [])
+        self.assertFalse(detail["change_set"]["first_build"])
+
+    def test_document_with_several_kinds_is_counted_in_each_kind(self):
+        self.build("k", ALL)
+        # a.md に参照を足すと、本文変更と参照変更の両方に該当する
+        self.write(
+            "docs/a.md", A_TEXT + f'\n[to c][c]\n\n[c]: c.md "{RECORD} {ID_C}"\n'
+        )
+        _, result = self.build("k", ALL)
+        documents = result["change_summary"]["documents"]
+        self.assertEqual(documents["content_changed"], 1)
+        self.assertEqual(documents["references_changed"], 1)
+        self.assertEqual(documents["unchanged"], 2)
+        self.assertEqual(documents["new"], 0)
+        self.assertEqual(result["generated_count"], 1)
+
+    def test_detail_files_are_kept_per_toc_key(self):
+        self.build("k", ALL)
+        self.build("other", ALL)
+        self.assertTrue(self.detail_file("k").is_file())
+        self.assertTrue(self.detail_file("other").is_file())
+        self.assertEqual(self.read_detail("k")["toc_key"], "k")
+        self.assertEqual(self.read_detail("other")["toc_key"], "other")
+
+    def test_failure_to_write_the_detail_file_does_not_publish_the_toc(self):
+        real = state_store.write_if_changed
+
+        def failing(root, skill, target, data):
+            if Path(target).name.startswith("detail-"):
+                raise state_store.StateStoreError(
+                    state_store.KIND_WRITE, "書き込めない", Path(target)
+                )
+            return real(root, skill, target, data)
+
+        with mock.patch.object(state_store, "write_if_changed", side_effect=failing):
+            code, result = self.build("k", ALL)
+        self.assertEqual(code, 3, result)
+        self.assertEqual(result["stage"], "result_detail")
+        self.assertFalse(result["confirmed_toc_present"])
+        self.assertNotIn("detail_path", result)
+        self.assertFalse(state_store.confirmed_toc_path(self.root, "k").exists())
 
 
 class OldVersionKeptTest(Base):
@@ -718,7 +870,7 @@ class WaveTest(Base):
         code, done = self.advance("k", paths, "--build-id", build_id)
         self.assertEqual(code, 0)
         self.assertEqual(done["action"], "done")
-        self.assertEqual(len(done["generated_documents"]), 12)
+        self.assertEqual(done["generated_count"], 12)
 
 
 @unittest.skipUnless(shutil.which("uv"), "uv が使えない環境では実行しない")

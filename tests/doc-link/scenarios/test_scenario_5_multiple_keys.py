@@ -79,7 +79,7 @@ class MultipleKeysScenarioTest(ScenarioBase):
         # 同じ[文書 ID]・[内容ハッシュ]の検証済み[文書情報]がある文書だけを two に追加する
         result = self.build_ok("two", ["docs/b.md"])
         self.assertEqual(self.requested, [])
-        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(result["generated_count"], 0)
         self.assertEqual(self.info(ID_B), info_before)
         self.assertEqual(self.snapshot(".doc-link/documents"), info_bytes_before)
         self.assertEqual(
@@ -154,7 +154,7 @@ class MultipleKeysScenarioTest(ScenarioBase):
         # two を再構築しても、B の生成は依頼されない（検証済みの[文書情報]を再利用する）
         result = self.build_ok("two", KEYS["two"])
         self.assertEqual(self.requested, [])
-        self.assertEqual(result["generated_documents"], [])
+        self.assertEqual(result["generated_count"], 0)
         entry = next(
             d for d in self.toc("two")["documents"] if d["doc_link_id"] == ID_B
         )

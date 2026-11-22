@@ -29,7 +29,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 - [DLID]入りの title を持つインラインリンクを報告する。
 - title の[DLID]の直前の語が title の記録語の形（要件 [D-058][req-001-d]）のときだけ、記録として読む。それ以外は「記録なし」にする。
 
-状態遷移でない決定論的処理は別に単体テストを持つ。対象指定の展開、Markdown 解析、ID 認識・発行・重複、[DLID]の解決、パス解決、ディレクトリ走査結果の分類、比較値、AI 出力検証、[ToC 候補]整合性を対象にする。
+状態遷移でない決定論的処理は別に単体テストを持つ。対象指定の展開、Markdown 解析、ID 認識・発行・重複、[DLID]の解決、パス解決、ディレクトリ走査結果の分類、比較値、AI 出力検証、[ToC 候補]整合性、構築の完了結果の組み立て（種別ごとの件数、明細ファイルの内容と置き換え）を対象にする。
 
 <a id="sec-2"></a>
 
@@ -68,15 +68,15 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 要件の未決事項は、すべて決定済みである。設計書はレビューを経て承認済みである。
 
-[des-004]: DES-004_state-machines.md "676fc369ec46 DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "1ccb35c93c6c DLID-dgphqw70rkpz"
+[des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "226248ba364c DLID-dgphqw70rkpz"
 [des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
 [des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
 [des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
-[des-010]: DES-010_skill-composition.md "ea5099a8e006 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
 [des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
-[des-002]: DES-002_execution-responsibilities.md "e978f1de2a45 DLID-anz9vack2xzt"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "e6b9897d2771 DLID-phx3m5ynd4s4"
+[des-002]: DES-002_execution-responsibilities.md "5eb022745267 DLID-anz9vack2xzt"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-001-nfr-001]: ../requirement/REQ-001_overview.md#nfr-001-toc再構築の一貫性-dlid-j4xry3ca5rsb "1bfb73100c73 DLID-j4xry3ca5rsb"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "32719882644f DLID-kp2w32mbpdb8"
 [req-001-nfr-006]: ../requirement/REQ-001_overview.md#nfr-006-中断後の再実行-dlid-wwhfthxzv8pv "57d65dcd4e6a DLID-wwhfthxzv8pv"

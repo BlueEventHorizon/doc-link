@@ -449,5 +449,105 @@ class NoWriteTest(ChangeSetTestBase):
         self.assertEqual(data["excluded"][0]["reason"], "missing")
 
 
+def _document(doc_id, kinds):
+    return change_set.DocumentChange(
+        doc_link_id=doc_id,
+        kinds=tuple(kinds),
+        old_path=None,
+        new_path=None,
+        old_hash=None,
+        new_hash=None,
+        old_references=None,
+        new_references=None,
+    )
+
+
+def _section(section_id, kinds):
+    return change_set.SectionChange(
+        section_id=section_id, kinds=tuple(kinds), old=None, new=None
+    )
+
+
+class SummaryTest(unittest.TestCase):
+    def summary(self, documents=(), sections=(), confirmed=(), first_build=False):
+        return change_set.ChangeSet(
+            confirmed_documents=tuple(
+                change_set.ConfirmedDocument(doc_id, f"{doc_id}.md")
+                for doc_id in confirmed
+            ),
+            excluded=(),
+            documents=tuple(documents),
+            sections=tuple(sections),
+            first_build=first_build,
+        ).summary()
+
+    def test_empty_change_set_has_every_kind_with_zero(self):
+        summary = self.summary()
+        self.assertEqual(
+            summary,
+            {
+                "first_build": False,
+                "confirmed_documents": 0,
+                "documents": {
+                    "new": 0,
+                    "content_changed": 0,
+                    "references_changed": 0,
+                    "path_changed": 0,
+                    "departed": 0,
+                    "unchanged": 0,
+                },
+                "sections": {
+                    "added": 0,
+                    "deleted": 0,
+                    "moved": 0,
+                    "heading_changed": 0,
+                    "body_changed": 0,
+                },
+            },
+        )
+
+    def test_a_document_with_several_kinds_is_counted_in_each_kind(self):
+        summary = self.summary(
+            documents=[
+                _document(ID_A, ["content_changed", "path_changed"]),
+                _document(ID_B, []),
+                _document(ID_C, ["departed"]),
+            ],
+            confirmed=[ID_A, ID_B],
+        )
+        self.assertEqual(summary["confirmed_documents"], 2)
+        self.assertEqual(
+            summary["documents"],
+            {
+                "new": 0,
+                "content_changed": 1,
+                "references_changed": 0,
+                "path_changed": 1,
+                "departed": 1,
+                "unchanged": 1,
+            },
+        )
+
+    def test_a_section_with_several_kinds_is_counted_in_each_kind(self):
+        summary = self.summary(
+            sections=[
+                _section(S1, ["moved", "body_changed"]),
+                _section(S2, ["added"]),
+            ],
+            first_build=True,
+        )
+        self.assertTrue(summary["first_build"])
+        self.assertEqual(
+            summary["sections"],
+            {
+                "added": 1,
+                "deleted": 0,
+                "moved": 1,
+                "heading_changed": 0,
+                "body_changed": 1,
+            },
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

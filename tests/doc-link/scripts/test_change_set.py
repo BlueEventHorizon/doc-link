@@ -152,12 +152,13 @@ class DocumentChangeTest(ChangeSetTestBase):
         )
 
     def test_new_departed_path_content_and_reference_are_independent(self):
-        self.write("a.md", doc(ID_A, "# A", "", '[r]: ./x.md "t DLID-00000000d001"'))
+        ref = '[r]: ./{}.md "t DLID-00000000d001"'
+        self.write("a.md", doc(ID_A, "# A", "", "text", "", ref.format("x")))
         self.write("b.md", doc(ID_B, "# B"))
         self.write("c.md", doc(ID_C, "# C"))
         self.commit(["a.md", "b.md", "c.md"])
         # a: 本文変更（参照も変える）、b: 移動、c: 対象離脱、d: 新規
-        self.write("a.md", doc(ID_A, "# A", "", '[r]: ./y.md "t DLID-00000000d001"'))
+        self.write("a.md", doc(ID_A, "# A", "", "changed", "", ref.format("y")))
         (self.root / "b.md").rename(self.root / "moved.md")
         self.write("d.md", doc("DLID-00000000d002", "# D"))
         result = self.build(["a.md", "moved.md", "d.md"])
@@ -191,9 +192,42 @@ class DocumentChangeTest(ChangeSetTestBase):
         self.commit(["a.md"])
         self.write("a.md", doc(ID_A, "# A", "", '[r]: ./x.md#h "t DLID-00000000d001"'))
         result = self.build(["a.md"])
-        kinds = self.doc_change(result, ID_A).kinds
-        self.assertIn(change_set.CHANGE_REFERENCES, kinds)
-        self.assertIn(change_set.CHANGE_CONTENT, kinds)
+        # 定義の行は内容ハッシュに入らない。リンク先の変更は、参照の変更としてだけ現れる（D-039）
+        self.assertEqual(
+            self.doc_change(result, ID_A).kinds, (change_set.CHANGE_REFERENCES,)
+        )
+        self.assertEqual(result.sections, ())
+
+    def test_added_definition_is_not_a_content_change(self):
+        self.write("a.md", doc(ID_A, f"# A {S1}", "", "text", ""))
+        self.commit(["a.md"])
+        # [正式な参照]の定義を足す: 参照の変更だけ。セクションも変わらない（前の空行は元からある）
+        self.write(
+            "a.md",
+            doc(ID_A, f"# A {S1}", "", "text", "", '[r]: ./x.md "DLID-00000000d001"'),
+        )
+        result = self.build(["a.md"])
+        self.assertEqual(
+            self.doc_change(result, ID_A).kinds, (change_set.CHANGE_REFERENCES,)
+        )
+        self.assertEqual(result.sections, ())
+        self.commit(["a.md"])
+        # [正式な参照]でない定義（外部 URL）を足す: 変更なし
+        self.write(
+            "a.md",
+            doc(
+                ID_A,
+                f"# A {S1}",
+                "",
+                "text",
+                "",
+                '[r]: ./x.md "DLID-00000000d001"',
+                "[u]: https://example.com/",
+            ),
+        )
+        result = self.build(["a.md"])
+        self.assertTrue(self.doc_change(result, ID_A).unchanged)
+        self.assertEqual(result.sections, ())
 
     def test_record_word_only_change_is_not_a_change(self):
         ref = '[r]: ./x.md "t {} DLID-00000000d001"'

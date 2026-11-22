@@ -1,41 +1,41 @@
 {
-  "content_hash": "413c4c0e5fae245d378df5688a272c1c068d6ccb467dac1677d7bef4a7411f3b",
+  "content_hash": "a4d3c98ff0c7dab9ec2bb0b0c13be0a20a8a22543d2b4c58e7b8604540d8ee98",
   "doc_link_id": "DLID-pc44gkb54821",
   "keywords": [
+    "formal reference",
     "DLID",
-    "reference link",
-    "content hash",
     "section ID",
-    "check-links",
-    "check-impact",
+    "content hash",
+    "link check",
     "change impact",
     "path mismatch",
-    "inconsistency check",
-    "project management AI"
+    "consistency check",
+    "reference link definition",
+    "FR-016"
   ],
   "path": "docs/specs/requirement/REQ-005_references.md",
-  "purpose": "Requirements for DLID-based document references, link inspection, path-fix notification, section IDs, change-impact candidate listing and notification, and inconsistency checks.",
+  "purpose": "Requirements for DLID-based references, link checking, path-fix notification, section IDs, change impact candidates and notification, and consistency checks over Index target documents.",
   "summary": [
-    "FR-007 formal references use reference-link definitions whose title holds a content hash and DLID",
-    "FR-009 link inspection searches the actual referenced directory and checks DLID, path, relative resolution and fragments",
-    "FR-010 path-fix information is notified only when the current path is confirmed; doc-link never edits links",
-    "Section 13.1 section IDs: DLIDs appended to every heading, issued only by the DLID assignment operation",
-    "FR-013 change-impact candidates found by reverse lookup of references whose recorded hash differs from the current hash",
-    "FR-014 and FR-015 notification of candidates, with no notification state stored; reported until the project management AI updates the title hash",
-    "FR-016 inconsistency check lists missing or duplicate IDs, broken references, path mismatches and hash differences",
-    "Rewrites of user documents require showing a list to the user and approval; doc-link does not rewrite",
-    "Acceptance criteria AC-003, 004, 006, 007, 008, 009, 028, 032 and 033"
+    "FR-007: formal references are Markdown reference-link definitions whose title holds a content hash and a DLID",
+    "FR-009: link checks search the referenced directory and verify DLID, current path, relative path, and fragment resolution",
+    "FR-010: path mismatch notification with confirmed current path, without doc-link rewriting any link",
+    "Section 13.1: a section ID (DLID) is placed at the end of every heading, issued only by the DLID assignment operation",
+    "FR-013: impact candidates are source documents whose recorded hash differs from the target current hash",
+    "FR-014: change impact notification to the project management AI without judging whether fixes are needed",
+    "FR-015: notification state is not stored; references are reported until the AI rewrites the title hash after verification",
+    "FR-016: consistency check lists missing or duplicate IDs, broken references, path mismatches, and hash differences",
+    "Rewrite targets need user confirmation by the project management AI before any document is rewritten",
+    "Acceptance conditions AC-003, 004, 006 to 009, 028, 032, 033 for references, impact, and rewrite confirmation"
   ],
   "tasks": [
-    "Implementing check-links reference inspection",
-    "Implementing check-impact change-impact listing",
-    "Designing the reference notation and title format",
-    "Implementing DLID assignment for section IDs",
-    "Designing path-mismatch detection and notification",
-    "Writing the guidance returned for rewrite confirmation",
-    "Writing tests for reference acceptance criteria",
-    "Updating reference hashes after verifying referencing documents",
-    "Reviewing reference design against requirements"
+    "Implementing link checking (check-links) and reference extraction",
+    "Implementing change impact detection (check-impact) and notification",
+    "Writing reference links with content hash and DLID in titles",
+    "Adding section IDs to headings",
+    "Fixing stale link paths after moving or renaming documents",
+    "Designing consistency check output and guidance",
+    "Writing tests for reference and impact acceptance conditions",
+    "Confirming rewrites of links with the user"
   ],
   "title": "doc-link 要件定義書 — 参照と変更通知"
 }

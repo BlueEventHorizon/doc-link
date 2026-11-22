@@ -1,37 +1,39 @@
 {
-  "content_hash": "7de71bb422bb1b798739f04ecd81d2141e47b964088f2bd184a8d79305a4e93c",
+  "content_hash": "4465d730e152f2e310ab112064f6ca59e7cecc13024754bfebc5cb6791a841fa",
   "doc_link_id": "DLID-xmg0jcmep2h2",
   "keywords": [
     "verification",
-    "test principles",
+    "test norms",
     "state transitions",
-    "check-impact",
-    "check-links",
     "requirement mapping",
     "acceptance criteria",
-    "scenarios",
-    "multi-key",
-    "unit tests"
+    "check-impact",
+    "check-links",
+    "cross-cutting scenarios",
+    "unit tests",
+    "confirmed ToC"
   ],
   "path": "docs/specs/design/DES-009_verification.md",
-  "purpose": "Verification design: test principles, mapping from requirements to designs and verification points, cross-cutting scenarios, and approval status of the design.",
+  "purpose": "Verification design mapping requirements to designs and test viewpoints, defining test norms for state transitions and checks, and listing cross-cutting scenarios.",
   "summary": [
-    "Testing principles based on the state transition table",
-    "Test cases for check-impact behavior",
-    "Test cases for check-links behavior",
-    "Separate unit tests for deterministic processing",
-    "Requirement to design to verification mapping table",
-    "Cross-cutting scenarios: initial build, move, content change, failure",
-    "Multi-key isolation and out-of-scope reference scenarios",
-    "Later-reference scenario for section IDs",
-    "Approval status of requirements and design"
+    "Test norms treating the DES-004 transition table as the only allowed transitions",
+    "Absence of a referenced target does not block candidate confirmation",
+    "check-impact test items: no writes, hash comparison, no-record references, repeated notice",
+    "check-links test items: inline links with DLID titles and recorded hash form",
+    "Unit test targets for deterministic processing such as parsing, hashing, validation",
+    "Mapping table from requirements to main designs and verification viewpoints",
+    "Cross-cutting scenario: initial build through searchable state",
+    "Cross-cutting scenarios: move, content change, failure, multiple keys",
+    "Cross-cutting scenarios: out-of-scope references and later-written section references",
+    "Checks that DLID assignment writes nothing to links without a DLID"
   ],
   "tasks": [
-    "Writing or reviewing tests",
-    "Checking requirement coverage by design",
+    "Writing tests for state transitions",
+    "Writing tests for check-impact and check-links",
+    "Verifying requirement coverage by design",
     "Designing acceptance verification",
-    "Reviewing state machine test coverage",
-    "Planning cross-cutting scenario tests"
+    "Reviewing cross-cutting scenarios",
+    "Updating coverage maps"
   ],
   "title": "DES-009 要件対応と設計検証"
 }

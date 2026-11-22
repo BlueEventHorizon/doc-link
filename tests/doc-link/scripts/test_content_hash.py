@@ -108,12 +108,20 @@ class DocumentHashTest(unittest.TestCase):
             "body": doc(body="別の本文\n"),
             "heading": doc().replace("# 題", "# 別題"),
             "link text": doc(link_text="別の表示"),
-            "link dest": doc(dest="c.md"),
+            "link label": doc().replace("[参照][r]", "[参照][s]"),
             "dlid added": doc().replace("# 題", f"# 題 {ID_B}\n\n## 追加 {ID_A}\n# 題"),
         }
         for name, text in variants.items():
             with self.subTest(name=name):
                 self.assertNotEqual(document_content_hash(text), base)
+
+    def test_definition_line_is_removed(self):
+        # 定義の行は、行末の改行ごと除く。ほかのバイトは変えない。
+        body = f"# 題 {ID_A}\n\n本文\n\n[参照][r]\n\n"
+        for text in (doc(), doc(record=H1)):
+            with self.subTest(text=text):
+                self.assertTrue(text.startswith(body))
+                self.assertEqual(document_content_hash(text), sha(body))
 
     def test_record_rewrite_does_not_change_hash(self):
         self.assertEqual(
@@ -136,65 +144,80 @@ class DocumentHashTest(unittest.TestCase):
                 self.assertEqual(
                     document_content_hash(text), document_content_hash(untitled)
                 )
-        self.assertEqual(document_content_hash(untitled), sha(untitled))
 
-    def test_title_removed_bytes_only(self):
-        for text, title in (
-            (doc(record=H1), f' "{H1} {ID_B}"'),
-            (doc(), f' "{ID_B}"'),
-        ):
-            with self.subTest(title=title):
-                self.assertEqual(
-                    document_content_hash(text), sha(text.replace(title, ""))
-                )
-
-    def test_free_text_in_formal_title_is_removed(self):
-        text = f'[r]: b.md "説明 {H1} {ID_B}"\n'
-        self.assertEqual(document_content_hash(text), sha("[r]: b.md\n"))
-
-    def test_title_not_ending_in_dlid_is_not_removed(self):
-        for title in ("説明", H1, f"{ID_B} 後ろ"):
-            with self.subTest(title=title):
-                text = f'[r]: b.md "{title}"\n'
-                self.assertEqual(document_content_hash(text), sha(text))
-                self.assertNotEqual(
-                    document_content_hash(text), document_content_hash("[r]: b.md\n")
-                )
-
-    def test_link_destination_change_alters_hash(self):
-        self.assertNotEqual(
-            document_content_hash(f'[r]: b.md "{ID_B}"\n'),
-            document_content_hash(f'[r]: c.md "{ID_B}"\n'),
+    def test_link_destination_change_does_not_change_hash(self):
+        # リンク先のパスの変更は、参照記述の違いとして別に検出する。
+        self.assertEqual(
+            document_content_hash(doc()), document_content_hash(doc(dest="c.md"))
+        )
+        self.assertEqual(
+            document_content_hash(doc()), document_content_hash(doc(dest="b.md#h"))
         )
 
-    def test_inline_link_title_is_not_removed(self):
+    def test_adding_or_removing_a_definition_does_not_change_hash(self):
+        base = document_content_hash(doc())
+        added = doc() + f'[s]: c.md "{H1} {ID_A}"\n'
+        self.assertEqual(document_content_hash(added), base)
+        removed = doc().replace(f'[r]: b.md "{ID_B}"\n', "")
+        self.assertNotIn("[r]:", removed)
+        self.assertEqual(document_content_hash(removed), base)
+
+    def test_definition_that_is_not_a_formal_reference_is_removed(self):
+        for line in (
+            "[r]: b.md",
+            '[r]: b.md "説明"',
+            f'[r]: b.md "{H1}"',
+            f'[r]: b.md "{ID_B} 後ろ"',
+            "[r]: https://example.com/",
+            '[r]: https://example.com/ "説明"',
+            "[r]: <b c.md>",
+        ):
+            with self.subTest(line=line):
+                self.assertEqual(
+                    document_content_hash(f"前\n\n{line}\n"), sha("前\n\n")
+                )
+
+    def test_blank_lines_around_definitions_are_kept(self):
+        text = f'前\n\n[r]: b.md "{ID_B}"\n\n後\n'
+        self.assertEqual(document_content_hash(text), sha("前\n\n\n後\n"))
+
+    def test_consecutive_definitions_are_removed(self):
+        text = f'前\n\n[r]: b.md "{ID_B}"\n[s]: c.md\n[u]: https://example.com/\n'
+        self.assertEqual(document_content_hash(text), sha("前\n\n"))
+
+    def test_duplicate_label_definition_is_not_removed(self):
+        # 2 つ目の定義はリンクの解決に使わず、解析結果に現れない（DES-008 §2 の規則 2）。
+        text = "[r]: b.md\n[r]: c.md\n"
+        self.assertEqual(document_content_hash(text), sha("[r]: c.md\n"))
+
+    def test_inline_link_is_not_removed(self):
         text = f'[x](b.md "{H1} {ID_B}")\n'
         other = f'[x](b.md "{H2} {ID_B}")\n'
         self.assertEqual(document_content_hash(text), sha(text))
         self.assertNotEqual(document_content_hash(text), document_content_hash(other))
+        self.assertNotEqual(
+            document_content_hash("[x](b.md)\n"), document_content_hash("[x](c.md)\n")
+        )
 
     def test_title_quote_styles(self):
-        for opener, closer in (("'", "'"), ("(", ")")):
+        for opener, closer in (('"', '"'), ("'", "'"), ("(", ")")):
             with self.subTest(opener=opener):
-                title = f" {opener}{H1} {ID_B}{closer}"
-                text = f"[r]: b.md{title}\n"
-                self.assertEqual(
-                    document_content_hash(text), sha(text.replace(title, ""))
-                )
+                text = f"前\n\n[r]: b.md {opener}{H1} {ID_B}{closer}\n"
+                self.assertEqual(document_content_hash(text), sha("前\n\n"))
 
     def test_title_on_the_next_line_is_removed(self):
-        text = f'[r]: b.md\n  "{H1} {ID_B}"\n'
-        self.assertEqual(document_content_hash(text), sha("[r]: b.md\n"))
+        text = f'前\n\n[r]: b.md\n  "{H1} {ID_B}"\n後\n'
+        self.assertEqual(document_content_hash(text), sha("前\n\n後\n"))
 
     def test_escaped_or_entity_title_is_removed(self):
         for title in (f'"a\\" {H1} {ID_B}"', f'"&#97;{"a" * 63} {ID_B}"'):
             with self.subTest(title=title):
-                text = f"[r]: b.md {title}\n"
-                self.assertEqual(document_content_hash(text), sha("[r]: b.md\n"))
+                text = f"前\n\n[r]: b.md {title}\n"
+                self.assertEqual(document_content_hash(text), sha("前\n\n"))
 
-    def test_line_ending_after_title_is_kept(self):
-        text = f'[r]: b.md "{ID_B}"\r\n'
-        self.assertEqual(document_content_hash(text), sha("[r]: b.md\r\n"))
+    def test_line_ending_of_the_definition_is_removed(self):
+        text = f'前\r\n\r\n[r]: b.md "{ID_B}"\r\n後\r\n'
+        self.assertEqual(document_content_hash(text), sha("前\r\n\r\n後\r\n"))
 
     def test_two_documents_referencing_each_other_do_not_chain(self):
         a1 = f'# A {ID_A}\n\n[b][r]\n\n[r]: b.md "{H1} {ID_B}"\n'
@@ -221,9 +244,28 @@ class SectionHashTest(unittest.TestCase):
         document = read_document(text)
         heading = document.headings[1]
         raw = "".join(document.lines[heading.start_line : heading.section_end_line])
+        definition = f'[r]: b.md "{"c" * RECORD_LENGTH} {ID_B}"\n'
+        self.assertIn(definition, raw)
         self.assertEqual(
-            section_content_hashes(text)[1],
-            sha(raw.replace(f' "{"c" * RECORD_LENGTH} {ID_B}"', "")),
+            section_content_hashes(text)[1], sha(raw.replace(definition, ""))
+        )
+
+    def test_definitions_at_the_end_do_not_alter_the_last_section(self):
+        # 文書の末尾の定義は、最後のセクションの範囲に入る。足しても消しても、どのセクションも変わらない。
+        base = f"# 一 {ID_A}\n\n本文\n\n## 二 {ID_B}\n\n最後\n"
+        with_definitions = (
+            base + f'\n[r]: b.md "{H1} {ID_B}"\n[u]: https://example.com/\n'
+        )
+        self.assertEqual(
+            section_content_hashes(base + "\n"),
+            section_content_hashes(with_definitions),
+        )
+        more = with_definitions + f'[s]: c.md#h "{H2} {ID_A}"\n'
+        self.assertEqual(
+            section_content_hashes(with_definitions), section_content_hashes(more)
+        )
+        self.assertEqual(
+            document_content_hash(with_definitions), document_content_hash(more)
         )
 
     def test_outside_change_keeps_hash(self):

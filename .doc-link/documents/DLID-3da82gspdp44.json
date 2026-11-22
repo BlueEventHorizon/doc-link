@@ -1,39 +1,37 @@
 {
-  "content_hash": "5f91d48e8b97a29e0a51325f4e22ce35a60f276b63b3bb5782417f534114fda9",
+  "content_hash": "0e697feeedb660b49712a2a27309ca4f6dbb1d00d21ea10332bd1095d652ee5f",
   "doc_link_id": "DLID-3da82gspdp44",
   "keywords": [
+    "doc-link",
     "system overview",
     "system boundary",
+    "write boundary",
     "DLID",
     "ToC build",
-    "write boundary",
-    "change impact notification",
-    "invariants",
     "index-docs",
     "check-impact",
-    "reference check"
+    "invariants",
+    "sequence diagram"
   ],
   "path": "docs/specs/design/DES-001_system-overview.md",
-  "purpose": "Overall system design of doc-link: system boundary, operations and their connections, build sequence overview, and common invariants, including the write boundary limited to DLIDs.",
+  "purpose": "Overall system design of doc-link: system boundary, operations and their connections, build sequence, and common invariants.",
   "summary": [
-    "System boundary: doc-link handles document IDs, ToC, search, DLID resolution, reference checks, and change-impact candidate notification",
-    "Write boundary: only DLIDs are written, in frontmatter and heading line ends, only by the explicit DLID embedding operation",
-    "Operations table: inputs, results handed on, and write boundaries for each operation",
-    "ToC build order: target fixing, ID check, change detection, info retrieval, reference check, candidate check, commit",
-    "Excluded documents with missing or duplicate IDs are reported without stopping the build",
-    "Overall sequence diagram of index-docs followed by check-impact as a separate operation",
-    "Unreadable reference target directories are recorded as absent without blocking commit",
-    "Common invariants: stable document IDs, directory scan before asserting references, no partial candidate exposure, no stored notification state",
-    "Updating one key never touches other keys ToC",
-    "Pointers to individual designs for storage and multi-key visibility decisions"
+    "System boundary: doc-link handles document IDs, ToC, search, DLID resolution, reference checks and impact notifications",
+    "Write boundary: only DLIDs in frontmatter and heading ends may be written; links and body text are never modified",
+    "Table of operations with inputs, outputs and write boundaries",
+    "ToC build order: target fixing, ID check, change detection, information gathering, reference check, candidate check, commit",
+    "Documents without IDs or with duplicate IDs are excluded and reported without stopping the build",
+    "Overall sequence diagram of index-docs and the separate check-impact operation",
+    "Common invariants such as ID independence, no partial candidate exposure, and no stored notification state",
+    "Notes on decisions deferred to individual design documents"
   ],
   "tasks": [
-    "Understanding the overall doc-link architecture",
-    "Designing or changing a doc-link operation",
+    "Designing or reviewing doc-link overall architecture",
     "Checking the write boundary for user documents",
-    "Implementing index-docs or check-impact flow",
-    "Reviewing design consistency with requirements",
-    "Deciding where a new operation fits"
+    "Implementing ToC build or index-docs flow",
+    "Implementing check-impact notification",
+    "Verifying common invariants in tests",
+    "Locating the detailed design document for a given operation"
   ],
   "title": "DES-001 システム全体設計"
 }

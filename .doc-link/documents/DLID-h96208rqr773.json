@@ -1,42 +1,39 @@
 {
-  "content_hash": "1380e03c79c5b934ccad74be5237d69591d944b8aeff54e3ab5294cd87a2c93c",
+  "content_hash": "57aa98ffe8d13f53b2289a97f4dc381810817a1062d276eebcba95c3b384ab1c",
   "doc_link_id": "DLID-h96208rqr773",
   "keywords": [
     "document search",
     "FR-006",
     "AC-019",
     "ToC",
+    "recall priority",
     "rebuild confirmation",
-    "no false negatives",
     "stale ToC",
-    "ToC identification key",
-    "search result",
-    "target specification"
+    "search results",
+    "key all",
+    "Index target specification"
   ],
   "path": "docs/specs/requirement/REQ-004_search.md",
-  "purpose": "Requirements for document search: finding task-relevant documents from a ToC without false negatives, with a pre-search rebuild-necessity check and stale-ToC handling.",
+  "purpose": "Requirements for task-based document search over a ToC, including recall-first results, pre-search rebuild checks, failure handling, and the required fields of search results.",
   "summary": [
-    "FR-006 search requirement: return documents related to a task, prioritizing no omissions",
-    "Search targets the ToC given by --key, or the reserved key all in single mode when omitted",
-    "A missing ToC stops the search and reports that an initial build is required",
-    "An existing ToC is inspected for rebuild necessity before searching, using its stored target specification",
-    "When rebuild is needed the user chooses between rebuilding first or searching the existing ToC",
-    "The confirmation shows counts per change type and the number of documents needing AI summary generation",
-    "If necessity cannot be determined (permissions, read errors, unparsable spec), the search stops as a failure with the cause",
-    "Searching a stale ToC returns a notice that it may not reflect current targets and does not re-confirm the ToC",
-    "Search results include document ID, ToC path, reason for relevance, section, and ToC state",
-    "AC-019 acceptance criterion for the pre-search ToC rebuild confirmation"
+    "FR-006: search finds documents relevant to a task, prioritizing no omissions and including doubtful documents",
+    "Key selection: --key searches that ToC, and omitting it searches the reserved key all in single mode",
+    "Missing ToC: search is not run and an initial build with an Index target specification is required",
+    "Existing ToC: rebuild necessity is checked from the stored Index target specification before searching",
+    "When rebuild is needed, the user chooses between rebuilding first or searching the existing ToC as is",
+    "Confirmation shows counts per change type and the number of documents needing AI summary generation",
+    "Undeterminable rebuild necessity (permissions, read errors, unreadable specification) stops search as a failure",
+    "Searching a stale ToC notifies possible staleness and does not reconfirm the ToC as current",
+    "Search results include document ID, recorded path, reason for relevance, sections, and ToC state",
+    "AC-019: acceptance condition for the pre-search ToC rebuild confirmation"
   ],
   "tasks": [
-    "Implementing the document search feature",
-    "Designing search behavior and result format",
-    "Handling a missing ToC at search time",
-    "Implementing the rebuild-necessity check before search",
-    "Designing the rebuild confirmation prompt and its counts",
-    "Handling failures that prevent determining rebuild necessity",
-    "Searching with a stale ToC and notifying the user",
-    "Writing tests for search acceptance criteria AC-019",
-    "Reviewing search design against requirements"
+    "Implementing or changing the document search feature",
+    "Designing the search interface and its result format",
+    "Handling rebuild-or-continue prompts before searching",
+    "Implementing failure handling when rebuild necessity cannot be determined",
+    "Writing or reviewing tests for search acceptance condition AC-019",
+    "Finding relevant documents before starting a task via another skill"
   ],
   "title": "doc-link 要件定義書 — 文書検索"
 }

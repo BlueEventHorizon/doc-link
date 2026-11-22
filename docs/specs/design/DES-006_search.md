@@ -49,6 +49,6 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 [des-003-sec-2]: DES-003_data-model.md#sec-2 "c166e9748f2a DLID-yqqrwtycr379"
 [des-008-sec-1]: DES-008_content-rules.md#sec-1 "a535f218431f DLID-ywa6htx8vq09"
-[des-005]: DES-005_indexing.md "226248ba364c DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "0b9c834803b4 DLID-dgphqw70rkpz"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "ba12fbc70601 DLID-8vajyevfatkv"

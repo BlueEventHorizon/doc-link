@@ -69,7 +69,7 @@ script は同じ内容から常に同じバイト列を出力する（UTF-8、�
 [des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
 [des-006-sec-2]: DES-006_search.md#sec-2 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [des-006-sec-3]: DES-006_search.md#sec-3 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
-[des-005-sec-5]: DES-005_indexing.md#sec-5 "226248ba364c DLID-dgphqw70rkpz"
+[des-005-sec-5]: DES-005_indexing.md#sec-5 "0b9c834803b4 DLID-dgphqw70rkpz"
 [des-007-sec-3]: DES-007_references-impact.md#sec-3 "463a2d89954a DLID-pr3jp4hzb8js"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"

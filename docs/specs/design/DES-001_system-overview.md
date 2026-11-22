@@ -87,7 +87,7 @@ sequenceDiagram
 [des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
 [des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
 [des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
-[des-005]: DES-005_indexing.md "226248ba364c DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "0b9c834803b4 DLID-dgphqw70rkpz"
 [des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
 [des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"

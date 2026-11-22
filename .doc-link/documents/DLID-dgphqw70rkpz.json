@@ -1,40 +1,40 @@
 {
-  "content_hash": "226248ba364cf7b8c1eb16ab3fd22807a29ef987e40143747b1218fa77c0e918",
+  "content_hash": "0b9c834803b4d3958e5c92fee2faa3d7615d2ba5f9168d6810d774bcf43b6cea",
   "doc_link_id": "DLID-dgphqw70rkpz",
   "keywords": [
     "indexing",
     "ToC build",
-    "DLID embedding",
+    "DLID assignment",
     "change set",
+    "move detection",
     "target specification",
-    "detail file",
     "section ID",
-    "atomic write",
-    "confirmed ToC",
-    "duplicate ID"
+    "detail file",
+    "completion result",
+    "atomic publish"
   ],
   "path": "docs/specs/design/DES-005_indexing.md",
-  "purpose": "Design of target resolution, DLID embedding, and ToC build: argument rules, change-set detection, candidate finalization, completion output with a detail file, and write units.",
+  "purpose": "Design for the indexing build: fixing targets, confirming and assigning DLIDs, detecting change sets, generating needed info, committing the ToC candidate, and returning a count-only result with a detail file.",
   "summary": [
-    "I/O and execution boundary: build never rewrites Index target documents; completion returns only counts and items to stdout",
-    "Target resolution: argument combinations, directory/pattern expansion, exclusion, path normalization, symlinks, Markdown detection",
-    "ID confirmation: documents lacking or duplicating doc_link_id are excluded from the confirmed target list and reported",
-    "DLID embedding operation: explicit invocation, duplicate original selection, section ID issuance, 60-bit Crockford Base32 IDs",
-    "Change set: new, leaving, path change, content hash change, reference change, plus section-level add/delete/move/heading/body changes",
-    "Candidate building: reuse AI-generated info, generate only when needed, validate candidates, publish ToC atomically",
-    "Completion output: finalization result, per-type counts, generated count, reference check, excluded documents, detail file path",
-    "Detail file: full change set and generated documents, one per ToC key under .temp/doc-link/index-docs/, replaced atomically",
-    "Write units: os.replace for document info and ToC, no locking, earlier document info not rolled back on failure",
-    "Completion and rerun: no notification state, failure diagnostics, re-evaluation from confirmed ToC and actual files"
+    "I/O and execution boundary of the build, which never rewrites Index target documents",
+    "Target fixing: argument combination rules, directory/pattern expansion, exclusion, path normalization, symlinks, Markdown detection",
+    "ID confirmation: documents without a doc_link_id or with duplicates are excluded and reported while the build continues",
+    "DLID assignment operation: explicit start, duplicate original resolution, random 60-bit Crockford Base32 issuance, section IDs on headings",
+    "Change set determination: new, left target, path change, content hash change, reference change, and section-level add/delete/move/heading/body changes",
+    "Move detection via a per-key record file under .temp/doc-link/index-docs, aggregated by script and deleted after publishing",
+    "Information acquisition: reuse of AI-generated info, AI generation only for new or changed documents, candidate validation, atomic bulk publish",
+    "Completion result: stdout holds items and counts only, per-type counts, reference check results, and the detail file path",
+    "Detail file holding full change set and generated documents, written atomically before publishing the ToC",
+    "Write units using os.replace, no locking, and rerun behavior after failure"
   ],
   "tasks": [
-    "Implementing or modifying the index-docs build process",
-    "Implementing target specification parsing and expansion",
-    "Implementing DLID embedding (embed-dlid)",
-    "Implementing change-set detection between ToC and actual files",
-    "Designing or testing the build completion output and detail file",
-    "Reviewing ToC candidate validation and atomic publication",
-    "Handling build failure and rerun behavior"
+    "Implementing or modifying index-docs build script",
+    "Implementing the DLID assignment operation",
+    "Designing or testing target specification expansion and exclusion",
+    "Implementing change set and move detection",
+    "Implementing the completion result and detail file output",
+    "Reviewing ToC build and publish atomicity",
+    "Diagnosing build failures and rerun behavior"
   ],
   "title": "DES-005 対象確定・DLID 付与・[ToC]構築設計"
 }

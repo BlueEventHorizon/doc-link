@@ -549,5 +549,69 @@ class SummaryTest(unittest.TestCase):
         )
 
 
+def _change(doc_id, kinds, old_path, new_path):
+    return change_set.DocumentChange(
+        doc_link_id=doc_id,
+        kinds=tuple(kinds),
+        old_path=old_path,
+        new_path=new_path,
+        old_hash=None,
+        new_hash=None,
+        old_references=None,
+        new_references=None,
+    )
+
+
+class WithFirstOldPathsTest(unittest.TestCase):
+    """構築の途中で[文書情報]のパスが新しくなった移動を、変更集合へ合わせる。"""
+
+    def apply(self, documents, first_old_paths):
+        original = change_set.ChangeSet(
+            confirmed_documents=(),
+            excluded=(),
+            documents=tuple(documents),
+            sections=(),
+            first_build=False,
+        )
+        return original.with_first_old_paths(first_old_paths).documents
+
+    def test_a_recorded_move_is_added_before_the_other_kinds(self):
+        (document,) = self.apply(
+            [_change(ID_A, ["content_changed"], "b.md", "b.md")],
+            {ID_A: "a.md"},
+        )
+        self.assertEqual(document.kinds, ("path_changed", "content_changed"))
+        self.assertEqual(document.old_path, "a.md")
+        self.assertEqual(document.new_path, "b.md")
+        self.assertFalse(document.unchanged)
+
+    def test_a_move_that_was_undone_is_removed(self):
+        (document,) = self.apply(
+            [_change(ID_A, ["path_changed", "content_changed"], "b.md", "a.md")],
+            {ID_A: "a.md"},
+        )
+        self.assertEqual(document.kinds, ("content_changed",))
+        self.assertEqual(document.old_path, "a.md")
+
+    def test_a_document_that_is_only_moved_and_undone_is_unchanged(self):
+        (document,) = self.apply(
+            [_change(ID_A, ["path_changed"], "b.md", "a.md")], {ID_A: "a.md"}
+        )
+        self.assertEqual(document.kinds, ())
+        self.assertTrue(document.unchanged)
+
+    def test_documents_without_a_record_keep_their_own_comparison(self):
+        moved = _change(ID_A, ["path_changed"], "a.md", "b.md")
+        same = _change(ID_B, [], "c.md", "c.md")
+        documents = self.apply([moved, same], {})
+        self.assertEqual(documents, (moved, same))
+
+    def test_new_and_departed_documents_are_not_changed(self):
+        new = _change(ID_A, ["new"], None, "a.md")
+        departed = _change(ID_B, ["departed"], "b.md", None)
+        documents = self.apply([new, departed], {ID_A: "x.md", ID_B: "y.md"})
+        self.assertEqual(documents, (new, departed))
+
+
 if __name__ == "__main__":
     unittest.main()

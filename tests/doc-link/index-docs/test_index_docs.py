@@ -528,6 +528,125 @@ class DetailFileTest(Base):
         self.assertFalse(state_store.confirmed_toc_path(self.root, "k").exists())
 
 
+class PathMoveRecordTest(Base):
+    """移動は、[文書情報]のパスを新しくする前に記録し、完了結果の変更集合へ合わせる。"""
+
+    MOVED = ["docs/a.md", "docs/b.md", "docs/sub/c.md"]
+
+    def moves_file(self, key="k"):
+        return self.root / ".temp" / "doc-link" / "index-docs" / f"moves-{key}.json"
+
+    def move_c(self):
+        (self.root / "docs" / "sub").mkdir(exist_ok=True)
+        (self.root / "docs" / "c.md").rename(self.root / "docs" / "sub" / "c.md")
+
+    def edit_b(self):
+        self.write("docs/b.md", B_TEXT + "\nmore body\n")
+
+    def documents_of(self, result):
+        detail = json.loads(Path(result["detail_path"]).read_text(encoding="utf-8"))
+        return {d["doc_link_id"]: d for d in detail["change_set"]["documents"]}
+
+    def test_a_move_survives_a_build_that_generates_other_documents(self):
+        self.build("k", ALL)
+        self.move_c()
+        self.edit_b()
+        _, result = self.build("k", self.MOVED)
+        documents = result["change_summary"]["documents"]
+        self.assertEqual(documents["path_changed"], 1)
+        self.assertEqual(documents["content_changed"], 1)
+        self.assertEqual(documents["references_changed"], 0)
+        self.assertEqual(documents["unchanged"], 1)
+        moved = self.documents_of(result)[ID_C]
+        self.assertEqual(moved["kinds"], ["path_changed"])
+        self.assertEqual(moved["old_path"], "docs/c.md")
+        self.assertEqual(moved["new_path"], "docs/sub/c.md")
+        self.assertFalse(self.moves_file().exists())
+
+    def test_a_document_that_moved_and_changed_has_both_kinds(self):
+        self.build("k", ALL)
+        (self.root / "docs" / "sub").mkdir()
+        (self.root / "docs" / "b.md").unlink()
+        self.write("docs/sub/b.md", B_TEXT + "\nmore body\n")
+        _, result = self.build("k", ["docs/a.md", "docs/sub/b.md", "docs/c.md"])
+        moved = self.documents_of(result)[ID_B]
+        self.assertEqual(moved["kinds"], ["path_changed", "content_changed"])
+        self.assertEqual(moved["old_path"], "docs/b.md")
+        self.assertEqual(moved["new_path"], "docs/sub/b.md")
+
+    def test_a_move_is_kept_when_the_build_is_restarted_without_a_build_id(self):
+        self.build("k", ALL)
+        self.move_c()
+        self.edit_b()
+        _, first = self.advance("k", self.MOVED)
+        self.assertEqual(first["action"], "invoke_toc_updater")
+        self.assertTrue(self.moves_file().is_file())
+        _, result = self.build("k", self.MOVED)
+        self.assertEqual(result["change_summary"]["documents"]["path_changed"], 1)
+        self.assertFalse(self.moves_file().exists())
+
+    def test_a_move_that_was_undone_is_not_a_move(self):
+        self.build("k", ALL)
+        self.move_c()
+        self.edit_b()
+        self.advance("k", self.MOVED)
+        (self.root / "docs" / "sub" / "c.md").rename(self.root / "docs" / "c.md")
+        _, result = self.build("k", ALL)
+        documents = result["change_summary"]["documents"]
+        self.assertEqual(documents["path_changed"], 0)
+        self.assertEqual(documents["content_changed"], 1)
+        self.assertEqual(documents["unchanged"], 2)
+        self.assertEqual(self.documents_of(result)[ID_C]["kinds"], [])
+
+    def test_no_record_is_written_without_a_move(self):
+        self.build("k", ALL)
+        self.assertFalse(self.moves_file().exists())
+        self.edit_b()
+        self.build("k", ALL)
+        self.assertFalse(self.moves_file().exists())
+
+    def test_the_record_is_kept_when_the_build_fails_and_used_by_the_next_one(self):
+        self.build("k", ALL)
+        self.move_c()
+        real = state_store.write_if_changed
+
+        def failing(root, skill, target, data):
+            if Path(target).name.startswith("detail-"):
+                raise state_store.StateStoreError(
+                    state_store.KIND_WRITE, "書き込めない", Path(target)
+                )
+            return real(root, skill, target, data)
+
+        with mock.patch.object(state_store, "write_if_changed", side_effect=failing):
+            code, failed = self.build("k", self.MOVED)
+        self.assertEqual(code, 3, failed)
+        self.assertEqual(failed["stage"], "result_detail")
+        self.assertTrue(self.moves_file().is_file())
+        _, result = self.build("k", self.MOVED)
+        self.assertEqual(result["change_summary"]["documents"]["path_changed"], 1)
+        self.assertFalse(self.moves_file().exists())
+
+    def test_unreadable_record_stops_the_build_before_publishing(self):
+        self.build("k", ALL)
+        toc_before = self.toc_bytes("k")
+        self.moves_file().write_bytes(b"\xff not json")
+        code, result = self.advance("k", ALL)
+        self.assertEqual(code, 3, result)
+        self.assertEqual(result["stage"], "path_update")
+        self.assertEqual(self.toc_bytes("k"), toc_before)
+
+    def test_only_the_key_that_updates_the_path_records_the_move(self):
+        # 複数のキーで同じ文書を使うとき、移動を報告するのは、[文書情報]のパスを新しくした構築だけである
+        self.build("k", ALL)
+        self.build("other", ALL)
+        self.move_c()
+        self.edit_b()
+        self.advance("k", self.MOVED)
+        self.advance("other", self.MOVED)
+        self.assertTrue(self.moves_file("k").is_file())
+        self.assertFalse(self.moves_file("other").exists())
+
+
 class OldVersionKeptTest(Base):
     def test_candidate_validation_failure_keeps_old_toc(self):
         self.build("k", ALL)

@@ -62,7 +62,7 @@ DES-005 §2 の 3・§3、DES-004 §3（B-02・B-03）、DES-003 §2・§4、DES
 """
 
 from collections.abc import Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import state_store
@@ -252,6 +252,33 @@ class ChangeSet:
             "documents": [d.to_dict() for d in self.documents],
             "sections": [s.to_dict() for s in self.sections],
         }
+
+    def with_first_old_paths(self, first_old_paths: dict[str, str]) -> "ChangeSet":
+        """構築の途中で[文書情報]のパスが新しくなった文書の移動を、変更集合へ合わせる。
+
+        `first_old_paths` は、[文書 ID]から、構築で最初に検出した移動の前のパスへの対応である。
+        文書ごとに、その前のパス（無ければ今の比較の前のパス）と現在のパスを比べ、違えば移動（`path_changed`）を
+        持たせ、同じなら（移動して元に戻した場合）持たせない。新規と対象離脱の文書は、パスを比べないので変えない。
+        種別の並びは、判定の順（移動・本文変更・参照変更）に保つ。
+        """
+        documents = []
+        for document in self.documents:
+            if CHANGE_NEW in document.kinds or CHANGE_DEPARTED in document.kinds:
+                documents.append(document)
+                continue
+            old_path = first_old_paths.get(document.doc_link_id, document.old_path)
+            kinds = set(document.kinds)
+            if old_path != document.new_path:
+                kinds.add(CHANGE_PATH)
+            else:
+                kinds.discard(CHANGE_PATH)
+            ordered = tuple(
+                kind
+                for kind in (CHANGE_PATH, CHANGE_CONTENT, CHANGE_REFERENCES)
+                if kind in kinds
+            )
+            documents.append(replace(document, kinds=ordered, old_path=old_path))
+        return replace(self, documents=tuple(documents))
 
     def summary(self) -> dict:
         """種別ごとの件数。複数の種別に該当する文書・セクションは、それぞれの種別に数える。

@@ -29,7 +29,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 - [DLID]入りの title を持つインラインリンクを報告する。
 - title の[DLID]の直前の語が title の記録語の形（要件 [D-058][req-001-d]）のときだけ、記録として読む。それ以外は「記録なし」にする。
 
-状態遷移でない決定論的処理は別に単体テストを持つ。対象指定の展開、Markdown 解析、ID 認識・発行・重複、[DLID]の解決、パス解決、ディレクトリ走査結果の分類、比較値、AI 出力検証、[ToC 候補]整合性、構築の完了結果の組み立て（種別ごとの件数、明細ファイルの内容と置き換え）を対象にする。
+状態遷移でない決定論的処理は別に単体テストを持つ。対象指定の展開、Markdown 解析、ID 認識・発行・重複、[DLID]の解決、パス解決、ディレクトリ走査結果の分類、比較値、AI 出力検証、[ToC 候補]整合性、構築の完了結果の組み立て（種別ごとの件数、明細ファイルの内容と置き換え、移動の記録と集計）を対象にする。
 
 <a id="sec-2"></a>
 
@@ -69,7 +69,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 要件の未決事項は、すべて決定済みである。設計書はレビューを経て承認済みである。
 
 [des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "226248ba364c DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "0b9c834803b4 DLID-dgphqw70rkpz"
 [des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
 [des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
 [des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"

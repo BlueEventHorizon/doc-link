@@ -170,10 +170,10 @@ doc-link は、通知の状態を保存しない（[D-038][req-001-d]）。
 
 `check-links` が、[プロジェクト管理 AI]が書き直す対象の検出事項を返したとき、返す案内（`guidance`）が、利用者へ一覧（文書・行・書く値）を示して書き直しを確認し、承認された分だけを書き直すことを、[プロジェクト管理 AI]に指示すること。`check-links` が[Index 対象文書]を書き換えないこと。
 
-[req-001]: REQ-001_overview.md "e8dc3ac2a407 DLID-veg2nsjk8zw1"
+[req-001]: REQ-001_overview.md "8e3f2ae8779b DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "db100f7cc796 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "9b17a415c403 DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "1380e03c79c5 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "413c4c0e5fae DLID-pc44gkb54821"
 [req-005-sec-13-1]: REQ-005_references.md#sec-13-1 "413c4c0e5fae DLID-pc44gkb54821"
-[req-001-d]: REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
+[req-001-d]: REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "1cf2f29204b7 DLID-phx3m5ynd4s4"

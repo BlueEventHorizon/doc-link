@@ -1,39 +1,39 @@
 {
-  "content_hash": "5eb022745267e4fffe015fee0a664c4081c60981b76eac7acd92fde0235d4b3f",
+  "content_hash": "86aaa5f40c5fec8609fff9d0e97035ae5de62598a5365d6c45cc3a0625c90d91",
   "doc_link_id": "DLID-anz9vack2xzt",
   "keywords": [
     "responsibilities",
-    "write permissions",
+    "write permission",
     "script operations",
-    "Skill",
-    "information-generation AI",
+    "DLID assignment",
+    "information generation AI",
     "search AI",
-    ".doc-link",
-    "deterministic JSON",
-    "DLID embedding",
+    "Skill-script connection",
+    ".doc-link storage",
+    "deterministic output",
     "temporary files"
   ],
   "path": "docs/specs/design/DES-002_execution-responsibilities.md",
-  "purpose": "Defines execution actors, their responsibilities and write permissions, the logical script operations, Skill-script connection rules, and storage of doc-link management state.",
+  "purpose": "Defines which actors execute which processing in doc-link, their write permissions and prohibitions, the logical script operations, and the rules connecting Skills and scripts.",
   "summary": [
-    "Responsibility table for caller, Skill, scripts, information-generation AI, search AI, and user with write permissions and prohibitions",
-    "Logical script operations with inputs, success results, side effects, and failure promises",
-    "AI generation results are inputs to scripts, which validate type and length",
-    "Skills run in the caller context; only the information-generation AI is separated",
-    "Skills cannot advance on self-reported success; scripts reject disallowed transitions",
-    "Internal upper limit H is never disclosed to the information-generation AI",
-    "Change-impact notification enumerates mechanically with no AI judgment in doc-link",
-    "Partial DLID embedding failure keeps written DLIDs and reports per-document problems",
-    "All generated files stay inside the project under .temp/doc-link/<skill>/",
-    "Management state is stored as deterministic JSON under .doc-link/, split per document ID and per ToC key"
+    "Responsibility and write-permission table for caller, Skill, scripts, information-generation AI, search AI and user",
+    "Only DLID writes to user documents are allowed, limited to the DLID assignment operation",
+    "Logical script operations with inputs, results, side effects and failure promises",
+    "Skill-to-script connection rules: version/state checks, no self-reported stage success",
+    "Information-generation AI context isolation: internal upper limit H is never disclosed",
+    "Impact candidate notification is enumerated mechanically by scripts without AI judgment",
+    "Partial-failure handling of DLID assignment: written DLIDs are kept and reported",
+    "All generated files stay inside the project; temporary files go under .temp/doc-link",
+    "Management state stored as JSON under .doc-link, split per document ID and per ToC key, deterministic output"
   ],
   "tasks": [
-    "Implementing script operations or Skills",
-    "Deciding which actor may write or change what",
-    "Designing the information-generation AI prompt and validation",
-    "Implementing DLID embedding failure handling",
-    "Designing management state file layout",
-    "Reviewing Skill and script connection rules"
+    "Designing or changing actor responsibilities and write permissions",
+    "Implementing doc-link scripts and their logical operations",
+    "Writing or reviewing SKILL.md and Skill-to-script invocation order",
+    "Designing the information-generation AI prompt and input boundary",
+    "Implementing DLID assignment and handling partial failure",
+    "Deciding where management state and temporary files are stored",
+    "Resolving merge conflicts in .doc-link JSON files"
   ],
   "title": "DES-002 実行主体と処理責務"
 }

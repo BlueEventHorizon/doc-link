@@ -53,9 +53,8 @@ Index 対象から離脱した文書は、指定キーの[確定 ToC]から除�
 
 ## 5. 未決の関係 DLID-yakr636h28ce
 
-現時点で未決の関係はない。[文書 ID]の発行方式と一意性は要件 [D-028][req-001-d]／[D-030][req-001-d] で決定した（要件 [U-016][req-001-u]）。
+現時点で未決の関係はない。[文書 ID]の発行方式と一意性は要件 [D-028][req-001-d]／[D-030][req-001-d] で決定した。
 
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "5eb022745267 DLID-anz9vack2xzt"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "86aaa5f40c5f DLID-anz9vack2xzt"
 [des-010-sec-4]: DES-010_skill-composition.md#sec-4 "6f5e412f608f DLID-7e90gq3sdncc"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
-[req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "1cf2f29204b7 DLID-phx3m5ynd4s4"

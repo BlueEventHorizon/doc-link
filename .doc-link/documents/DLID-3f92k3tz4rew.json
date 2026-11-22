@@ -1,39 +1,39 @@
 {
-  "content_hash": "bad0bb8aa05a16cc235355516f1d2236d5261b89266b957bad4c68ee371572ea",
+  "content_hash": "ce664fe8017a3e1f5590158d68a78f1906688d20ce3daa4c8c0dbedc90f8698f",
   "doc_link_id": "DLID-3f92k3tz4rew",
   "keywords": [
     "state machine",
     "transitions",
     "confirmed ToC",
-    "build execution",
+    "build run",
     "embed-dlid",
-    "failure handling",
-    "guard",
+    "guards",
+    "failure and rerun",
     "reference check result",
     "duplicate DLID",
-    "rerun"
+    "candidate check"
   ],
   "path": "docs/specs/design/DES-004_state-machines.md",
-  "purpose": "Specifies state models and permitted transitions for ToC publication, build execution, and DLID embedding, as the normative transition tables that scripts enforce.",
+  "purpose": "Defines the states and permitted transitions for confirmed ToC publication, ToC build runs, and DLID assignment runs; the transition tables are normative and disallowed transitions are rejected.",
   "summary": [
-    "Separation of ToC publication state from build progress; rebuild-needed and reference-absent are results, not states",
-    "Transition tables are normative; disallowed combinations are rejected and no new confirmed ToC is created",
-    "Confirmed ToC states: unbuilt or published, with transitions P-01 to P-03",
-    "Build execution states and transitions B-01 to B-09 from start through completion or failure",
-    "AI generation requests are allowed only after changes are fixed",
-    "Failure keeps the old confirmed ToC and already confirmed document info is not rolled back",
-    "Reference check results: match, path mismatch, or absent in directory, with checked directory and time",
-    "State transition tests are defined in DES-009",
-    "DLID embedding execution states and transitions E-01 to E-07 including duplicate original confirmation",
-    "Search, DLID resolution, and checks hold no state"
+    "State separation: ToC publication state and build progress change independently",
+    "Transition tables are normative; unlisted combinations are rejected by scripts",
+    "Confirmed ToC states: unbuilt or published; failures keep the previous version",
+    "Build run transitions B-01 to B-09 from start through candidate check to completion or failure",
+    "AI generation requests are limited to stages after change determination",
+    "Build completion returns counts and a detail file path",
+    "Reference check results: match, path mismatch, or missing in directory, with directory and time",
+    "DLID assignment run transitions E-01 to E-07 including duplicate original confirmation",
+    "Written DLIDs are not rolled back on failure; per-document failures are reported",
+    "Search, DLID resolution and checks hold no state"
   ],
   "tasks": [
     "Implementing state transition guards in scripts",
+    "Implementing ToC build and rebuild flow",
+    "Implementing the DLID assignment operation embed-dlid",
     "Writing state transition tests",
-    "Designing build failure and retry behavior",
-    "Implementing embed-dlid duplicate handling",
-    "Reviewing allowed transitions",
-    "Designing reference check result recording"
+    "Designing failure and re-run handling",
+    "Handling duplicate DLID original confirmation"
   ],
   "title": "DES-004 状態モデルと許可遷移"
 }

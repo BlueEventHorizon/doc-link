@@ -59,7 +59,7 @@ DLID 付与操作が ID を一部の文書へ保存した後に失敗した場�
 
 doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に渡す[ToC]の写し、構築の完了結果の明細ファイル）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
 
-doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` に JSON ファイルとして保存し、git で追跡する（決定: 要件 [U-011][req-001-u]）。並行するブランチで更新しても衝突が差分として読めるよう、次の 2 種類のファイルに分ける。
+doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` に JSON ファイルとして保存し、git で追跡する。並行するブランチで更新しても衝突が差分として読めるよう、次の 2 種類のファイルに分ける。
 
 - [文書情報]：[文書 ID]ごとに 1 ファイルとする。二つのブランチで衝突するのは、両方で同じ文書を変えた場合に限られる。
 - [確定 ToC]：[ToC 識別キー]ごとに 1 ファイルとする。
@@ -69,10 +69,9 @@ script は同じ内容から常に同じバイト列を出力する（UTF-8、�
 [des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
 [des-006-sec-2]: DES-006_search.md#sec-2 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [des-006-sec-3]: DES-006_search.md#sec-3 "ce56d4ed6907 DLID-nnbgpzkkm5vq"
-[des-005-sec-5]: DES-005_indexing.md#sec-5 "0b9c834803b4 DLID-dgphqw70rkpz"
+[des-005-sec-5]: DES-005_indexing.md#sec-5 "21c80fc693ee DLID-dgphqw70rkpz"
 [des-007-sec-3]: DES-007_references-impact.md#sec-3 "463a2d89954a DLID-pr3jp4hzb8js"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "1cf2f29204b7 DLID-phx3m5ynd4s4"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
-[req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "4a3aa7696bd9 DLID-edwjjf150svm"

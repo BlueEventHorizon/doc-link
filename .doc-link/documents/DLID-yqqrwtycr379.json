@@ -1,37 +1,39 @@
 {
-  "content_hash": "c166e9748f2a4269180eb13c0b440383652b14f3ef0585cdfe584267ef935d30",
+  "content_hash": "f69f834201abcfcdc21b7823f48c1f8672c081f756a0c75ae211151b2a3e3b3e",
   "doc_link_id": "DLID-yqqrwtycr379",
   "keywords": [
-    "data model",
-    "document info",
-    "committed ToC",
-    "doc_link_id",
+    "logical data model",
+    "document ID",
     "content hash",
+    "confirmed ToC",
+    "document information",
+    "reference record",
     "section entry",
-    "reference description",
     "multiplicity",
     "freshness",
     "reverse reference"
   ],
   "path": "docs/specs/design/DES-003_data-model.md",
-  "purpose": "Defines the logical data model of doc-link: identity, relations, versions and primary sources of information, without specifying a physical schema.",
+  "purpose": "Defines the logical data model of doc-link: information entities, identifiers, sources, relations, multiplicity, and the meaning and freshness of values, without specifying a physical schema.",
   "summary": [
-    "Model boundary: current files versus last committed index are separate; no notification state is held",
-    "Table of logical information: document identity, target spec, observation, document info, reference description, check result, section entry, last check state, committed ToC, build run",
-    "Document info is stored once per doc_link_id and shared by all keys, never copied per key",
-    "Committed ToC holds membership, references, reflected hashes and check results but not document info",
-    "Multiplicity: a document may belong to many keys; at most one committed ToC per key",
-    "Reverse references are derived only from scanned sources, not a global list",
-    "Sections are identified by DLIDs at heading ends; headings are not permanent IDs",
-    "Document ID differs from content hash; reference check results hold only for the recorded directory and time",
-    "Documents leaving the Index target are removed from the committed ToC without searching outside"
+    "Model boundary: current actual files versus last confirmed index are separate information",
+    "Table of logical entities with identity, attributes, primary source and relations",
+    "Document information is stored once per document ID and shared across all keys",
+    "Confirmed ToC holds membership, references, reflected hashes, section entries and last check state",
+    "Multiplicity rules: a document may belong to many keys and have many reference records",
+    "Reverse references are derived only from scanned referrers",
+    "Sections identified by DLID at heading end; unassigned sections have no stable identity",
+    "Document ID differs from content hash; link path fixes change the hash",
+    "Reference check results are valid only for the recorded directory and time",
+    "No unresolved relations currently remain"
   ],
   "tasks": [
-    "Designing or reviewing doc-link data structures",
-    "Implementing JSON state file schemas",
-    "Deciding what information belongs to document info versus the committed ToC",
-    "Implementing reference checks and section entries",
-    "Reasoning about freshness of ToC and reference check results"
+    "Designing data structures for document information and ToC",
+    "Implementing storage of confirmed ToC and document information",
+    "Designing reference records and check results",
+    "Handling documents leaving the index scope",
+    "Deciding freshness semantics of reference check results",
+    "Designing section entries and section IDs"
   ],
   "title": "DES-003 論理データモデル"
 }

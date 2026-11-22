@@ -10,7 +10,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 状態を持つ処理は[DES-004 の遷移表][des-004]を唯一の許可遷移一覧とする。P-01〜P-03、B-01〜B-09、E-01〜E-07 の各行について、元状態・イベント・ガード成立で指定した次状態と効果になることを試す。同じ元状態でガード不成立、表にないイベント、別状態からのイベントを与えたときは拒否し、[確定 ToC]が変わらないことを試す。Mermaid 図は表と同じ遷移を可視化するだけであり、図にない暗黙の遷移を認めない。
 
-参照先の不在は候補確定ガードを不成立にしない（決定: [U-020][req-001-u]）。指定ディレクトリ内不在・指定ディレクトリ自体の不在・ディレクトリを読めない場合がいずれも「不在」として記録され、確定することを試す。途中中断、再実行、旧[確定 ToC]保持、部分的に保存済みの ID、複数キーの隔離も状態テストに含める。`check-impact` は、次を試す。
+参照先の不在は候補確定ガードを不成立にしない（要件 [D-025][req-001-d]）。指定ディレクトリ内不在・指定ディレクトリ自体の不在・ディレクトリを読めない場合がいずれも「不在」として記録され、確定することを試す。途中中断、再実行、旧[確定 ToC]保持、部分的に保存済みの ID、複数キーの隔離も状態テストに含める。`check-impact` は、次を試す。
 
 - 何も書き換えない。管理状態と[Index 対象文書]が変わらない。
 - title に記録した[内容ハッシュ]が参照先の[現在ハッシュ]と異なる参照を返す。
@@ -68,19 +68,18 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 要件の未決事項は、すべて決定済みである。設計書はレビューを経て承認済みである。
 
-[des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "0b9c834803b4 DLID-dgphqw70rkpz"
-[des-008]: DES-008_content-rules.md "a535f218431f DLID-ywa6htx8vq09"
+[des-004]: DES-004_state-machines.md "ce664fe8017a DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "21c80fc693ee DLID-dgphqw70rkpz"
+[des-008]: DES-008_content-rules.md "92d60a902533 DLID-ywa6htx8vq09"
 [des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
 [des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
 [des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
-[des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
-[des-002]: DES-002_execution-responsibilities.md "5eb022745267 DLID-anz9vack2xzt"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
+[des-003]: DES-003_data-model.md "f69f834201ab DLID-yqqrwtycr379"
+[des-002]: DES-002_execution-responsibilities.md "86aaa5f40c5f DLID-anz9vack2xzt"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "1cf2f29204b7 DLID-phx3m5ynd4s4"
 [req-001-nfr-001]: ../requirement/REQ-001_overview.md#nfr-001-toc再構築の一貫性-dlid-j4xry3ca5rsb "1bfb73100c73 DLID-j4xry3ca5rsb"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "32719882644f DLID-kp2w32mbpdb8"
 [req-001-nfr-006]: ../requirement/REQ-001_overview.md#nfr-006-中断後の再実行-dlid-wwhfthxzv8pv "57d65dcd4e6a DLID-wwhfthxzv8pv"
-[req-001-u]: ../requirement/REQ-001_overview.md#20-未決事項-dlid-p7frptr4vztx "f3b671adcef4 DLID-p7frptr4vztx"
 [req-002-ac-005]: ../requirement/REQ-002_document-id.md#ac-005-id-重複-dlid-zwwxj8ctqkn6 "9613468bd782 DLID-zwwxj8ctqkn6"
 [req-002-ac-021]: ../requirement/REQ-002_document-id.md#ac-021-toc-識別キーごとの-desired-state-dlid-rrhdkcqvbmgt "1bff7a3fbf43 DLID-rrhdkcqvbmgt"
 [req-002-ac-031]: ../requirement/REQ-002_document-id.md#ac-031-dlidの解決-dlid-3yrk3sey2krp "84de9aeb2b93 DLID-3yrk3sey2krp"

@@ -1,39 +1,39 @@
 {
-  "content_hash": "a535f218431fd008c2d52dc744950786ad1985ae4c8aff9a0dcaf48c9a9dfecf",
+  "content_hash": "92d60a9025336da1df39cbd36998892617bd4507252cb6193608ab2d8e68b220",
   "doc_link_id": "DLID-ywa6htx8vq09",
   "keywords": [
-    "DLID",
     "frontmatter",
-    "markdown-it-py",
-    "CommonMark",
-    "heading anchor",
+    "doc_link_id",
     "content hash",
-    "SHA-256",
+    "markdown-it-py",
+    "reference link",
+    "anchor",
     "section range",
     "AI-generated fields",
-    "validator"
+    "validator",
+    "CommonMark"
   ],
   "path": "docs/specs/design/DES-008_content-rules.md",
-  "purpose": "Design rules for reading and writing document IDs, Markdown parsing and positions, heading anchors, content hash comparison values, and AI-generated fields with their validation.",
+  "purpose": "Design rules for Markdown parsing, DLID reading and writing, link and anchor handling, content hash computation, and AI-generated field generation and validation.",
   "summary": [
-    "Frontmatter parsing and DLID recognition, issuance format, and write-only-DLID insertion with post-write verification",
-    "Markdown parsed with markdown-it-py following CommonMark; no custom regex for block structure",
-    "Reference link rules covering labels, titles, hrefs, schemes, images, autolinks and fragments",
-    "Heading anchor generation matching github-slugger rules, used only for checking and never written",
-    "Content hash is SHA-256 of the raw UTF-8 bytes, with 12-character recorded values in titles",
-    "Formal reference titles are excluded from hash calculation so recording hashes does not change the source hash",
-    "Section content hash covers the section range from heading to next same-or-higher heading",
-    "Test vectors are defined for hash invariance and sensitivity",
-    "AI-generated fields use limit L for generation and hidden threshold H for validation, with minimum array sizes"
+    "Frontmatter detection and document ID recognition rules",
+    "DLID writing positions, post-write verification and rollback",
+    "Markdown parsing with markdown-it-py and reference link rules",
+    "Formal reference extraction from link definition titles",
+    "Section range definition and section ID extraction from headings",
+    "Heading anchor generation rules matching GitHub slug behavior",
+    "Content hash computation and exclusion of reference titles",
+    "Test vectors for hash stability and sensitivity",
+    "AI-generated fields, length limits and validator boundaries"
   ],
   "tasks": [
-    "Implementing DLID reading, issuing and writing",
-    "Implementing Markdown parsing for links and headings",
+    "Implementing Markdown parsing and link extraction",
+    "Implementing DLID reading and writing",
+    "Implementing content hash computation",
     "Implementing heading anchor generation",
-    "Implementing content hash calculation",
-    "Implementing AI-generated field validation",
-    "Writing parser and hash tests",
-    "Reviewing write-boundary safety"
+    "Implementing AI output validation",
+    "Writing tests for parsing and hashing",
+    "Reviewing content rules against requirements"
   ],
   "title": "DES-008 Markdown 解析・比較値・生成情報の規則"
 }

@@ -83,12 +83,12 @@ sequenceDiagram
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録する。参照先を読めない場合も[ToC]の確定を止めないことは、要件 [D-025][req-001-d] が定める。
 
-[des-002]: DES-002_execution-responsibilities.md "5eb022745267 DLID-anz9vack2xzt"
+[des-002]: DES-002_execution-responsibilities.md "86aaa5f40c5f DLID-anz9vack2xzt"
 [des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
-[des-004]: DES-004_state-machines.md "bad0bb8aa05a DLID-3f92k3tz4rew"
+[des-004]: DES-004_state-machines.md "ce664fe8017a DLID-3f92k3tz4rew"
 [des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
-[des-005]: DES-005_indexing.md "0b9c834803b4 DLID-dgphqw70rkpz"
-[des-003]: DES-003_data-model.md "c166e9748f2a DLID-yqqrwtycr379"
+[des-005]: DES-005_indexing.md "21c80fc693ee DLID-dgphqw70rkpz"
+[des-003]: DES-003_data-model.md "f69f834201ab DLID-yqqrwtycr379"
 [des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
-[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "26fbb2524aa4 DLID-phx3m5ynd4s4"
+[req-001-d]: ../requirement/REQ-001_overview.md#19-決定事項-dlid-phx3m5ynd4s4 "1cf2f29204b7 DLID-phx3m5ynd4s4"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "ba12fbc70601 DLID-8vajyevfatkv"

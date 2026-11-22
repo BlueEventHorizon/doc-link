@@ -1,33 +1,33 @@
 {
-  "content_hash": "d2b92714274929d109d6fdeb50edf1d6ec999e56fd6cbc3e27d973fa0c0dccf9",
+  "content_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
   "doc_link_id": "DLID-zvepba87h7zk",
   "keywords": [
-    "design documents",
+    "design index",
     "doc-link",
     "DES-001",
     "DES-010",
-    "document map",
-    "requirements vs design",
-    "pending decisions",
-    "state machine"
+    "design documents",
+    "state machine",
+    "requirements vs design"
   ],
   "path": "docs/specs/design/README.md",
-  "purpose": "Index of the doc-link design documents DES-001 to DES-010, stating each one's scope, the requirement-design authority rule, and the status of pending decisions.",
+  "purpose": "Index of the doc-link design documents DES-001 to DES-010, stating what each covers and the principle that design must not override requirements.",
   "summary": [
-    "Requirements are authoritative for behavior and constraints; design documents for subjects, information, states and processing",
-    "Design must not override requirements when they conflict",
-    "Table mapping DES-001 to DES-010 to the content each covers",
-    "Diagrams are for understanding; the transition table in DES-004 is normative",
-    "Process details live only in the owning document, not duplicated in overall design",
-    "Pending decisions section: none remain",
-    "Storage method decided as JSON file; requirements and design reviewed and approved"
+    "Requirements are the source of truth for behavior and constraints; design is for subjects, information, states and processing",
+    "If requirements and design conflict, design alone does not override requirements",
+    "Table of DES-001 to DES-010 with the content each covers",
+    "DES-001 covers system boundary, overall sequence and common invariants",
+    "DES-002 to DES-004 cover execution subjects, data model and state machines",
+    "DES-005 to DES-007 cover ToC building, search, and references with impact notification",
+    "DES-008 to DES-010 cover content rules, verification design, and SKILL and Agent composition",
+    "Diagrams are for understanding; the transition table in DES-004 is normative"
   ],
   "tasks": [
     "Finding which design document covers a topic",
     "Starting design work on doc-link",
-    "Reviewing design documents",
-    "Checking whether any decision is pending",
-    "Adding or restructuring design documents"
+    "Resolving conflicts between requirements and design",
+    "Adding or restructuring design documents",
+    "Reviewing design documents"
   ],
   "title": "doc-link 設計書の構成"
 }

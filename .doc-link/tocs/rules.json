@@ -1,8 +1,12 @@
 {
   "documents": [
     {
-      "applied_hash": "0fd442bde5b1457d7f209a1056a5e1d95b559e9b2eecb4cf06bc795c345400fe",
+      "applied_hash": "38e543a39b0000dd605e56ece4afbf3f1098bbdd47ad6a1f464916b7a90d5c45",
       "doc_link_id": "DLID-55jqxg7r9qr1"
+    },
+    {
+      "applied_hash": "44790bab2fd9d8d494f50d875844e12ce728e244059bc0cefb9590ff1c93c155",
+      "doc_link_id": "DLID-n32vb00syfve"
     },
     {
       "applied_hash": "590998804bef5b2ad3e9ecc74303225cb274baf74e08afc006d689309f730ea3",
@@ -13,16 +17,12 @@
       "doc_link_id": "DLID-59vzewmxghxc"
     },
     {
-      "applied_hash": "6c74e9d6f9d50c142843856465a1f8763d995b463eaff8fd596701e135281494",
-      "doc_link_id": "DLID-n32vb00syfve"
+      "applied_hash": "73f3b09e6fbfdf1df290df2b886d2a1b1aa568bed4e92473e820053ac002b050",
+      "doc_link_id": "DLID-r079k4d191ym"
     },
     {
       "applied_hash": "a7037b12722536682aa371798acb684c51c7f9a9a88c6cc165fbccd4c2f107e4",
       "doc_link_id": "DLID-35fhyrzd02he"
-    },
-    {
-      "applied_hash": "d194bed7b52e882f193dd5ea2b11be86049d29e94700c1cfd187660724a86eb5",
-      "doc_link_id": "DLID-r079k4d191ym"
     },
     {
       "applied_hash": "de3932695d2ca756ff85dfc8c0dc64b4f2ed05a58e3c4c2be0d1c571aa2fa9e7",
@@ -31,37 +31,37 @@
   ],
   "last_checks": [
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-2g3cgnnry3bm",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-35fhyrzd02he",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-55jqxg7r9qr1",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-59vzewmxghxc",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-n32vb00syfve",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-r079k4d191ym",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-19T16:15:15+00:00",
+      "checked_at": "2026-11-22T06:44:28+00:00",
       "doc_link_id": "DLID-tq1tc0r4nnpn",
       "result": "success"
     }
@@ -69,14 +69,14 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-19T16:15:15+00:00",
+        "checked_at": "2026-11-22T06:44:28+00:00",
         "found_path": "docs/rules/plugin_claude_code_authoring_guide.md",
         "result": "match",
         "scope": "docs/rules"
       },
       "kind": "document",
       "position": 0,
-      "recorded_content_hash": "d194bed7b52e",
+      "recorded_content_hash": "73f3b09e6fbf",
       "recorded_path": "plugin_claude_code_authoring_guide.md",
       "source_doc_id": "DLID-n32vb00syfve",
       "source_section_id": null,
@@ -85,14 +85,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:15:15+00:00",
+        "checked_at": "2026-11-22T06:44:28+00:00",
         "found_path": "docs/rules/plugin_claude_code_reference.md",
         "result": "match",
         "scope": "docs/rules"
       },
       "kind": "document",
       "position": 0,
-      "recorded_content_hash": "6c74e9d6f9d5",
+      "recorded_content_hash": "44790bab2fd9",
       "recorded_path": "plugin_claude_code_reference.md",
       "source_doc_id": "DLID-r079k4d191ym",
       "source_section_id": null,
@@ -101,7 +101,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-19T16:15:15+00:00",
+        "checked_at": "2026-11-22T06:44:28+00:00",
         "found_path": "docs/rules/plugin_implementation_guidelines.md",
         "result": "match",
         "scope": "docs/rules"
@@ -150,6 +150,13 @@
       "heading": "確定してから書き、上書きしない",
       "position": 9,
       "section_id": "DLID-f7ma3cxc4we2"
+    },
+    {
+      "content_hash": "0d2ca4f3bf2bc8beb6a42a61aff6c50e908a90d6b01a30316b7657dde4df588f",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "Claude Code リファレンス（SKILL / プラグイン / Agent）",
+      "position": 0,
+      "section_id": "DLID-2a93hrp8cv46"
     },
     {
       "content_hash": "0e49c51b9b3140a1795369a5ff93ebdf7da0385dbfdee948d1dc3b2a8610748c",
@@ -292,27 +299,6 @@
       "section_id": "DLID-1qmnw1t0tgcm"
     },
     {
-      "content_hash": "731e35539b6c9c959889b2d6826c5b30caa655c157d939fbe16979e2ff67376f",
-      "doc_link_id": "DLID-r079k4d191ym",
-      "heading": "Agent の完了の待ち方 [MANDATORY]",
-      "position": 8,
-      "section_id": "DLID-jtpfexg1pajr"
-    },
-    {
-      "content_hash": "74c6166db89d3e3e474c1358cd6b25258168b9e90ed6d91d17bc33be41f04aa4",
-      "doc_link_id": "DLID-n32vb00syfve",
-      "heading": "Claude Code リファレンス（SKILL / プラグイン / Agent）",
-      "position": 0,
-      "section_id": "DLID-2a93hrp8cv46"
-    },
-    {
-      "content_hash": "79b95d03ce501e3dc46e47ef63d4a4f700f15de3b380e9c24a5cc1468fdc64ec",
-      "doc_link_id": "DLID-55jqxg7r9qr1",
-      "heading": "uv 利用ルール",
-      "position": 0,
-      "section_id": "DLID-6a28har6hrt1"
-    },
-    {
       "content_hash": "7af681003b9ed091c99a03a30ce49eb23d6921c2da747661607b2c64897a667c",
       "doc_link_id": "DLID-tq1tc0r4nnpn",
       "heading": "実行と依存 [MANDATORY]",
@@ -346,13 +332,6 @@
       "heading": "Node.js [MANDATORY]",
       "position": 3,
       "section_id": "DLID-6ehnfvsjn4yq"
-    },
-    {
-      "content_hash": "82f721d2f4a6094877807b4b6936fd8bea0a05c65a0a67e8097e40ee277b7847",
-      "doc_link_id": "DLID-r079k4d191ym",
-      "heading": "Claude Code 作成ガイド（SKILL / カスタム Agent）",
-      "position": 0,
-      "section_id": "DLID-p3ppj6znsh69"
     },
     {
       "content_hash": "845efbb0bbe3bc4e2c79fb23361bd8627ab6fae3a35fb2e542de145ce0da0d6c",
@@ -390,6 +369,13 @@
       "section_id": "DLID-dfvccr5n7rv9"
     },
     {
+      "content_hash": "92c223d5a92d35c51cca44365a461ddaa176ec12d199c4ed76e91aca1892879e",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "Claude Code 作成ガイド（SKILL / カスタム Agent）",
+      "position": 0,
+      "section_id": "DLID-p3ppj6znsh69"
+    },
+    {
       "content_hash": "94b5fef2c534c3fb12dca07dbd1fb555b9a4b04391921b2aa1953ea4f7e6a193",
       "doc_link_id": "DLID-2g3cgnnry3bm",
       "heading": "運ぶのは識別値だけ [MANDATORY]",
@@ -416,6 +402,13 @@
       "heading": "ロック",
       "position": 5,
       "section_id": "DLID-nz0m4aryvsg8"
+    },
+    {
+      "content_hash": "9cff1c2c0cadefccd751c4cfcbbac21da6b1b90e05a63c4c144cdb1a7f4fbafd",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "Python の版",
+      "position": 8,
+      "section_id": "DLID-y00mrvk1fnqr"
     },
     {
       "content_hash": "a08311fc8607935279dff590d94cfc794691f9ee80792f89aaf73a07cd3e4da5",
@@ -530,13 +523,6 @@
       "section_id": "DLID-4xy25dxb160k"
     },
     {
-      "content_hash": "c82fb07696db9a0dbf4ced5037ba673d47e1a37027ce8f071e01b25c91b3c108",
-      "doc_link_id": "DLID-n32vb00syfve",
-      "heading": "3. Agent の起動に関する観測",
-      "position": 5,
-      "section_id": "DLID-bgqd34m0admq"
-    },
-    {
       "content_hash": "caf3645a23b8646663b71e1d79eb9d1a9d2272046fe8af39b88e0a2755326f3e",
       "doc_link_id": "DLID-35fhyrzd02he",
       "heading": "スクリプト言語と依存 [IMPORTANT]",
@@ -544,11 +530,11 @@
       "section_id": "DLID-c5bk0wjjp0bm"
     },
     {
-      "content_hash": "cc2da7635be7c87c8dbfb2bdfca812fba68c1a2379d0758950c6f4636f56dd15",
-      "doc_link_id": "DLID-55jqxg7r9qr1",
-      "heading": "Python の版",
+      "content_hash": "d1f2349573397b8a98905a917f61c14fcae12cbef9a7e2161be10de1946ac8d6",
+      "doc_link_id": "DLID-r079k4d191ym",
+      "heading": "Agent の完了の待ち方 [MANDATORY]",
       "position": 8,
-      "section_id": "DLID-y00mrvk1fnqr"
+      "section_id": "DLID-jtpfexg1pajr"
     },
     {
       "content_hash": "d5e18cbf0c0c5cd2005e86831ba55eeb8fc21c7ad66cbc7ee20fe288c227467f",
@@ -570,6 +556,13 @@
       "heading": "継承型 SKILL",
       "position": 4,
       "section_id": "DLID-dmy5gkkra1qh"
+    },
+    {
+      "content_hash": "dbf9e5b2f941193c23c585a1f7a6d0097edb8f56c66dd441ed9a36402cf5311a",
+      "doc_link_id": "DLID-n32vb00syfve",
+      "heading": "3. Agent の起動に関する観測",
+      "position": 5,
+      "section_id": "DLID-bgqd34m0admq"
     },
     {
       "content_hash": "dc2985678ef5f8a4969ff01f782ae6b727aa0e1836f6a36ae9dad8d55cbca648",
@@ -621,6 +614,13 @@
       "section_id": "DLID-fdverfrzfema"
     },
     {
+      "content_hash": "fac92cdbef097cca5ebcbde249b4a7ecec6a15eed191fb799b0730be0a0185a7",
+      "doc_link_id": "DLID-55jqxg7r9qr1",
+      "heading": "uv 利用ルール",
+      "position": 0,
+      "section_id": "DLID-6a28har6hrt1"
+    },
+    {
       "content_hash": "faf63a77091b992aded79dd9bee48ba1a4da49384e039b45872d16699a31ae41",
       "doc_link_id": "DLID-59vzewmxghxc",
       "heading": "標準出力",
@@ -645,5 +645,5 @@
     "paths": []
   },
   "toc_key": "rules",
-  "version": 1
+  "version": 2
 }

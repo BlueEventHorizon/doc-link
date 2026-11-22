@@ -4,7 +4,7 @@ doc_link_id: DLID-zvepba87h7zk
 
 # doc-link 設計書の構成 DLID-2f3q114x45q6
 
-要件定義書は「実現する振る舞いと制約」の正本、ここにある設計書は「どの主体・情報・状態・処理で実現するか」の正本とする。要件と設計が食い違う場合、設計だけで要件を上書きしない。未決事項を解決するまで、該当する遷移や結果を確定仕様として扱わない。
+要件定義書は「実現する振る舞いと制約」の正本、ここにある設計書は「どの主体・情報・状態・処理で実現するか」の正本とする。要件と設計が食い違う場合、設計だけで要件を上書きしない。
 
 | 文書                                     | 担当する内容                                                                                          |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------- |
@@ -21,20 +21,13 @@ doc_link_id: DLID-zvepba87h7zk
 
 各図は理解用の表示であり、許可遷移の規範は DES-004 の遷移表とする。各処理の詳細は当該文書だけに置き、全体設計には重複して記載しない。
 
-## 確定を妨げる判断待ち DLID-w7ddwdx6jqa9
-
-- 無い
-
-要件の未決事項はすべて決定済みであり、保存方式は JSON ファイルに決定済みである（[DES-002 §4][des-002-sec-4]）。要件定義書と設計書はレビューを経て承認済みである。
-
-[des-001]: DES-001_system-overview.md "5f91d48e8b97 DLID-3da82gspdp44"
-[des-002]: DES-002_execution-responsibilities.md "86aaa5f40c5f DLID-anz9vack2xzt"
-[des-003]: DES-003_data-model.md "f69f834201ab DLID-yqqrwtycr379"
-[des-004]: DES-004_state-machines.md "ce664fe8017a DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "21c80fc693ee DLID-dgphqw70rkpz"
-[des-006]: DES-006_search.md "ce56d4ed6907 DLID-nnbgpzkkm5vq"
-[des-007]: DES-007_references-impact.md "463a2d89954a DLID-pr3jp4hzb8js"
-[des-008]: DES-008_content-rules.md "92d60a902533 DLID-ywa6htx8vq09"
-[des-009]: DES-009_verification.md "7de71bb422bb DLID-xmg0jcmep2h2"
-[des-010]: DES-010_skill-composition.md "6f5e412f608f DLID-7e90gq3sdncc"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#sec-4 "86aaa5f40c5f DLID-anz9vack2xzt"
+[des-001]: DES-001_system-overview.md "0e697feeedb6 DLID-3da82gspdp44"
+[des-002]: DES-002_execution-responsibilities.md "4030fe6bc515 DLID-anz9vack2xzt"
+[des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
+[des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
+[des-005]: DES-005_indexing.md "7a6a9ff076b4 DLID-dgphqw70rkpz"
+[des-006]: DES-006_search.md "e3bebfa5a5aa DLID-nnbgpzkkm5vq"
+[des-007]: DES-007_references-impact.md "6d46734b4b3c DLID-pr3jp4hzb8js"
+[des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
+[des-009]: DES-009_verification.md "4465d730e152 DLID-xmg0jcmep2h2"
+[des-010]: DES-010_skill-composition.md "7f57541f21c6 DLID-7e90gq3sdncc"

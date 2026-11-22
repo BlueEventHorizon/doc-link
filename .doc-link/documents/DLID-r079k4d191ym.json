@@ -1,38 +1,38 @@
 {
-  "content_hash": "d194bed7b52e882f193dd5ea2b11be86049d29e94700c1cfd187660724a86eb5",
+  "content_hash": "73f3b09e6fbfdf1df290df2b886d2a1b1aa568bed4e92473e820053ac002b050",
   "doc_link_id": "DLID-r079k4d191ym",
   "keywords": [
     "custom Agent",
-    "inheriting SKILL",
+    "SKILL",
+    "launch route",
     "fork SKILL",
-    "launch path",
-    "multi-layer defense",
-    "allowlist",
-    "self-invocation",
-    "ScheduleWakeup",
     "subagent_type",
-    "authoring guide"
+    "defense in depth",
+    "allowlist",
+    "ScheduleWakeup",
+    "Bash subprocess",
+    "self-invocation"
   ],
   "path": "docs/rules/plugin_claude_code_authoring_guide.md",
-  "purpose": "Project-independent conventions for building plugins by combining SKILLs and custom Agents: naming, launch path selection, defense layers, skill invocation, and waiting for Agent completion.",
+  "purpose": "Convention for composing plugins from SKILLs and custom Agents: naming, launch routes, selection order, defense layers, skill invocation, and waiting for Agent completion, independent of any project.",
   "summary": [
-    "Naming: use short launch-path names; never use subagent alone; subagent_type only names real agents",
-    "Isolated-context work goes into custom Agents; fork-type SKILLs are avoided by default",
-    "Launch path selection order: Bash subprocess, general Agent, custom Agent, inheriting SKILL",
-    "Inheriting SKILL: do not paste parent context into arguments or prompts",
-    "Custom Agent: frontmatter fields, prohibitions in negative form, prompt not treated as parent instruction",
-    "Writing Agents need limited targets, no unrelated refactor, syntax validation, allowlist recommended",
-    "Multi-layer defense: Agent boundary, role constraint, allowlist, physical deny",
-    "Invoke other skills via the Skill tool; never self-invoke",
+    "Naming rules: use short route names, never bare \"subagent\", valid subagent_type values only",
+    "Launch routes: isolated-context work goes to custom Agents; fork-type SKILLs are avoided by default",
+    "Selection order: Bash subprocess, general-purpose Agent, custom Agent, then inherited SKILL",
+    "Inherited SKILL rule: do not paste parent context into $ARGUMENTS or Agent prompts",
+    "Custom Agent requirements: frontmatter fields, negative-form prohibitions, write restrictions, allowlist",
+    "Defense in depth table: Agent boundary, role constraint, allowlist, physical deny",
+    "Invoking other skills via the Skill tool; no self-invocation to avoid infinite loops",
     "Do not wait for Agent completion with ScheduleWakeup; end the turn and await notification"
   ],
   "tasks": [
-    "Designing a plugin that combines SKILLs and custom Agents",
-    "Choosing a launch path for a process",
     "Writing a custom Agent definition",
-    "Writing instructions that call another skill",
-    "Waiting for background Agent completion",
-    "Reviewing SKILL or Agent definitions for compliance"
+    "Writing or reviewing a SKILL.md that launches Agents",
+    "Choosing a launch route for delegated processing",
+    "Designing a plugin composed of SKILLs and Agents",
+    "Writing an Agent prompt or SKILL arguments",
+    "Defining write boundaries and allowlists for Agents",
+    "Waiting for background Agent completion"
   ],
   "title": "Claude Code 作成ガイド（SKILL / カスタム Agent）"
 }

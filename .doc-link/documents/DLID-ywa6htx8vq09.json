@@ -1,39 +1,39 @@
 {
-  "content_hash": "92d60a9025336da1df39cbd36998892617bd4507252cb6193608ab2d8e68b220",
+  "content_hash": "f28039845959c73ab3192ba1f8b9ac006ef935343a70dff67e54ded8901f71c5",
   "doc_link_id": "DLID-ywa6htx8vq09",
   "keywords": [
+    "DLID",
     "frontmatter",
-    "doc_link_id",
-    "content hash",
     "markdown-it-py",
+    "content hash",
+    "SHA-256",
     "reference link",
-    "anchor",
-    "section range",
+    "heading anchor",
+    "section ID",
     "AI-generated fields",
-    "validator",
-    "CommonMark"
+    "write boundary"
   ],
   "path": "docs/specs/design/DES-008_content-rules.md",
-  "purpose": "Design rules for Markdown parsing, DLID reading and writing, link and anchor handling, content hash computation, and AI-generated field generation and validation.",
+  "purpose": "Design rules for reading and writing document IDs, parsing Markdown references and positions, computing content hashes, and generating AI-filled ToC fields.",
   "summary": [
-    "Frontmatter detection and document ID recognition rules",
-    "DLID writing positions, post-write verification and rollback",
-    "Markdown parsing with markdown-it-py and reference link rules",
-    "Formal reference extraction from link definition titles",
-    "Section range definition and section ID extraction from headings",
-    "Heading anchor generation rules matching GitHub slug behavior",
-    "Content hash computation and exclusion of reference titles",
-    "Test vectors for hash stability and sensitivity",
-    "AI-generated fields, length limits and validator boundaries"
+    "Reading document IDs from frontmatter and classifying missing or unrecognized values",
+    "Write boundary: only DLIDs at frontmatter and heading ends, with re-parse verification and atomic replace",
+    "Markdown parsing via markdown-it-py with reference link and heading section extraction",
+    "Ten link parsing rules following CommonMark behavior, including scheme, image, and autolink handling",
+    "Heading anchor generation rules matching github-slugger, used only for fragment checks",
+    "Content hash as SHA-256 of raw UTF-8 bytes, truncated to 12 characters in link titles",
+    "Reference link definition lines excluded from hash computation",
+    "Test vectors for content hash invariance and sensitivity",
+    "AI-generated field rules: title, purpose, summary, tasks, keywords, with limits and minimum counts"
   ],
   "tasks": [
-    "Implementing Markdown parsing and link extraction",
-    "Implementing DLID reading and writing",
+    "Implementing DLID reading and writing scripts",
+    "Implementing Markdown reference and heading parsing",
     "Implementing content hash computation",
-    "Implementing heading anchor generation",
-    "Implementing AI output validation",
-    "Writing tests for parsing and hashing",
-    "Reviewing content rules against requirements"
+    "Writing tests for hash test vectors and CommonMark link rules",
+    "Implementing heading anchor generation and fragment checks",
+    "Implementing validation of AI-generated fields",
+    "Reviewing document write safety and verification"
   ],
   "title": "DES-008 Markdown 解析・比較値・生成情報の規則"
 }

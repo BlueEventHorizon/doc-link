@@ -165,9 +165,9 @@ doc-link は[Index 対象指定]を解釈・検証して[Index 対象リスト]�
 
 認識できない値に対して「形式不正」という独立したエラー分類を設けない。[文書 ID]の発行仕様と異なる値も「[文書 ID]が存在しない」として扱う（D-003）。
 
-DLID 付与操作は、[文書 ID]が存在しない状態を検出した場合、FR-001 に従って[文書 ID]を発行する。[文書 ID]の発行または frontmatter への保存に失敗した場合は、DLID 付与操作を正常終了させず、書き込んだ件数と失敗した文書を報告すること。[ToC]の構築・再構築が[文書 ID]の存在しない文書を検出した場合は、[§9.1][req-002-sec-9-1]に従ってその文書を[ToC]に入れずに報告すること（[D-036][req-002-sec-9-1]）。
+DLID 付与操作は、[文書 ID]が存在しない状態を検出した場合、FR-001 に従って[文書 ID]を発行する。[文書 ID]の発行または frontmatter への保存に失敗した場合は、DLID 付与操作を正常終了させず、書き込んだ件数と失敗した文書を報告すること。[ToC]の構築・再構築が[文書 ID]の存在しない文書を検出した場合は、[§9.1][req-002-sec-9-1]に従ってその文書を[ToC]に入れずに報告すること。
 
-DLID 付与操作は、今回走査した[文書 ID]と[セクション ID]どうしを照合して重複を検出すること。重複を検出した場合は、管理状態に記録されたその[DLID]のパスと一致するものを原本の候補とし、重複した ID、すべての該当パスおよび原本の候補を利用者へ示すこと。利用者が原本を確定した後、原本以外に FR-001 に従って新しい[DLID]を発行すること。[文書 ID]を再発行する複製では、その文書の[セクション ID]もあわせて再発行すること。候補を一つに絞れない場合は、利用者に原本を指定させること（D-029）。[ToC]の構築・再構築が[文書 ID]の重複を検出した場合は、[§9.1][req-002-sec-9-1]に従って該当する文書を[ToC]に入れずに報告すること（[D-036][req-002-sec-9-1]）。[セクション ID]の重複は[ToC]の構築では扱わず、DLID 付与操作と不整合検査が検出する。
+DLID 付与操作は、今回走査した[文書 ID]と[セクション ID]どうしを照合して重複を検出すること。重複を検出した場合は、管理状態に記録されたその[DLID]のパスと一致するものを原本の候補とし、重複した ID、すべての該当パスおよび原本の候補を利用者へ示すこと。利用者が原本を確定した後、原本以外に FR-001 に従って新しい[DLID]を発行すること。[文書 ID]を再発行する複製では、その文書の[セクション ID]もあわせて再発行すること。候補を一つに絞れない場合は、利用者に原本を指定させること（D-029）。[ToC]の構築・再構築が[文書 ID]の重複を検出した場合は、[§9.1][req-002-sec-9-1]に従って該当する文書を[ToC]に入れずに報告すること。[セクション ID]の重複は[ToC]の構築では扱わず、DLID 付与操作と不整合検査が検出する。
 
 [DLID]の一意性は、60 ビット乱数による確率的な一意性とし、発行時に既存の ID と照合しない。複製で生じた重複は、DLID 付与操作が今回走査した[DLID]どうしを照合して検出する（D-030）。
 
@@ -332,17 +332,17 @@ Forge が `.doc_structure.yaml` から解決した[ToC 識別キー]と対象指
 文書の[DLID]と[セクション ID]を渡した場合、それぞれ現在のパスが返り、セクションには見出しとアンカーが添えられること。解決済みには、記録した[内容ハッシュ]が添えられること。文書を移動した後、[ToC]を再構築する前は「記録されたパスに無い」が返り、移動前のパスを現在のパスとして返さないこと。[ToC]を再構築した後は、同じ[DLID]から移動後のパスが返ること。管理状態に記録の無い[DLID]には「記録が無い」が返ること。解決の前後で、[Index 対象文書]、[ToC]および管理状態が変わらないこと（[D-047][req-002-fr-018]）。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "7313eb94bf53 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "504f32e6af85 DLID-kxe3nxfgk491"
+[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-003]: REQ-003_toc.md "bd611adfec0d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
-[req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "d3db400bbead DLID-dbs4rjzstadr"
+[req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "4fcba4cbc64c DLID-dbs4rjzstadr"
 [req-002-sec-9-1]: REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-002-sec-8]: REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w "041cb8a5da26 DLID-ephpayqvh78w"
 [req-005-fr-009]: REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
-[req-002-fr-002]: REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "8eae9ee77831 DLID-edwjjf150svm"
+[req-002-fr-002]: REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-002-fr-018]: REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-002-sec-9-2]: REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"

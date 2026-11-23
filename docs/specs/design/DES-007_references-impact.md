@@ -88,8 +88,8 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 
 不整合検査は ID 欠落・重複、壊れた参照、title に[DLID]の無いリンク、パス不一致、[ToC]と現物の差、title の記録と参照先の[現在ハッシュ]が異なる参照を一覧化する操作として扱う。検査内容ごとに `check-dlid`、`check-links`、`check-toc`、`check-impact` の SKILL に分ける（[DES-010][des-010]）。検査は管理状態を書き換えない。ID の付与は DLID 付与操作だけが行うので、検査は[Index 対象文書]を変更しない（要件 [D-035][req-002-fr-001]）。検出事項に重要度の分類は設けない。検出事項ごとの扱い（[ToC]の確定を妨げるか、検出後の作業）は、要件 [D-025][req-005-fr-009]・[D-036][req-002-sec-9-1] と[DES-010][des-010]が定める。「存在しないセクション」は、リンク先パスの文書は存在するが、title の[セクション ID]を行の末尾に持つ見出しがその文書にも指定ディレクトリ内の他の文書にも無いことで判定する（§1、要件 [D-033][req-005-sec-13-1]）。
 
-[des-010]: DES-010_skill-composition.md "7f57541f21c6 DLID-7e90gq3sdncc"
-[des-010-sec-1-2]: DES-010_skill-composition.md#12-検査の-skill-の責務-dlid-h9bg56gdypm5 "46602aefaf1b DLID-h9bg56gdypm5"
+[des-010]: DES-010_skill-composition.md "7004f5d82b53 DLID-7e90gq3sdncc"
+[des-010-sec-1-2]: DES-010_skill-composition.md#12-検査の-skill-の責務-dlid-h9bg56gdypm5 "5c9a4a2b1fc9 DLID-h9bg56gdypm5"
 [des-010-sec-3-7]: DES-010_skill-composition.md#37-check-impact-dlid-1nny3y551m4v "dd9a5fefa574 DLID-1nny3y551m4v"
 [des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"
 [des-008-sec-3]: DES-008_content-rules.md#3-比較値とハッシュ-dlid-2f452e4mna91 "80f6735d096d DLID-2f452e4mna91"

@@ -63,11 +63,11 @@ doc_link_id: DLID-xmg0jcmep2h2
 7. 後からの参照：DLID 付与操作が全見出しに[セクション ID]を付けた文書の見出しへ、別の文書から、title にその[セクション ID]を書いたリンクを新しく書く。参照先の文書へ書き込むことなく、そのリンクが[正式な参照]として抽出されることを確かめる（要件 [D-033][req-005-sec-13-1]）。DLID 付与操作が、title に[DLID]の無いリンクにも書き込まないことを確かめる（要件 [D-042][req-005-fr-016]）。
 
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "7a6a9ff076b4 DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "b0f04c2f3df2 DLID-dgphqw70rkpz"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-007]: DES-007_references-impact.md "6d46734b4b3c DLID-pr3jp4hzb8js"
-[des-006]: DES-006_search.md "e3bebfa5a5aa DLID-nnbgpzkkm5vq"
-[des-010]: DES-010_skill-composition.md "7f57541f21c6 DLID-7e90gq3sdncc"
+[des-006]: DES-006_search.md "611c8744aced DLID-nnbgpzkkm5vq"
+[des-010]: DES-010_skill-composition.md "7004f5d82b53 DLID-7e90gq3sdncc"
 [des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
 [des-002]: DES-002_execution-responsibilities.md "4030fe6bc515 DLID-anz9vack2xzt"
 [req-001-nfr-001]: ../requirement/REQ-001_overview.md#nfr-001-toc再構築の一貫性-dlid-j4xry3ca5rsb "1bfb73100c73 DLID-j4xry3ca5rsb"

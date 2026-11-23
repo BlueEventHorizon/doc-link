@@ -54,7 +54,7 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 
 ## 3. 変更集合の確定 DLID-ext9ze054hbx
 
-[確定 Index 対象リスト]を現在のキーの[ToC]と照合し、少なくとも「新規」「対象離脱」「同じ ID のパス変更」「[内容ハッシュ]の変更」「参照記述・物理パスの変更」を独立に記録する。参照記述は、title に記録した[内容ハッシュ]を除いて比べる（要件 [D-039][req-003-sec-10-1-2]）。一件が複数種別に該当してよい。対象離脱は今回の[Index 対象リスト]にないことだけで判定し、範囲外を探索して削除か移動かを決めない。
+[確定 Index 対象リスト]を現在のキーの[ToC]と照合し、少なくとも「新規」「対象離脱」「同じ ID のパス変更」「[内容ハッシュ]の変更」「参照記述・物理パスの変更」を独立に記録する。参照記述は、title に記録した[内容ハッシュ]を除いて比べる（要件 [REQ-003 §10.2][req-003-sec-10-2]）。一件が複数種別に該当してよい。対象離脱は今回の[Index 対象リスト]にないことだけで判定し、範囲外を探索して削除か移動かを決めない。
 
 セクション単位の変更検出（要件 [FR-012][req-003-fr-012]）は、[確定 ToC]のセクションエントリと現物のセクションを[セクション ID]で突き合わせて行う。区別は次のとおりとし、一つのセクションが複数に該当してよい。
 
@@ -62,7 +62,7 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 - [確定 ToC]にだけある[セクション ID]は、削除とする。
 - 同じ[セクション ID]で、所属する[文書 ID]または文書内の位置が違うものは、移動とする。
 - 同じ[セクション ID]で、見出しが違うものは、見出し変更とする。
-- 同じ[セクション ID]で、見出しが同じで、セクションの[内容ハッシュ]が違うものは、本文変更とする。見出しも違うときは、本文の変更の有無を区別しない（セクションの範囲に見出しを含むため。[DES-008 §3][des-008-sec-3]）。
+- 同じ[セクション ID]で、見出しが同じで、セクションの[内容ハッシュ]が違うものは、本文変更とする。見出しも違うときは、本文の変更の有無を区別しない（セクションの範囲に見出しを含むため。[DES-008 §2][des-008-sec-2]）。
 
 [ToC]の[反映済みハッシュ]と現物を比較して**索引更新対象**を決める。この段階では AI 要約、参照先の実走査、[ToC]書き込みを行わない。
 
@@ -108,16 +108,16 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 [des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "13625382e806 DLID-8ck587eq1qnd"
 [req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#61-index-対象範囲-dlid-aggqjh0wkhe9 "ec720c1bf636 DLID-aggqjh0wkhe9"
 [req-001-sec-17-1]: ../requirement/REQ-001_overview.md#171-エラー候補-dlid-8crwqpf21hbe "f6477b46e7bf DLID-8crwqpf21hbe"
-[des-008-sec-3]: DES-008_content-rules.md#sec-3 "f28039845959 DLID-ywa6htx8vq09"
+[des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
-[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "8eae9ee77831 DLID-edwjjf150svm"
+[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-003-fr-012]: ../requirement/REQ-003_toc.md#fr-012-セクション単位の変更検出-dlid-8kfhte6q4ywd "d342c3bdcb5c DLID-8kfhte6q4ywd"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
 [req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
-[req-003-sec-10-1-2]: ../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
+[req-003-sec-10-2]: ../requirement/REQ-003_toc.md#102-変更検出処理-dlid-kv0da6ws6th9 "236e3d68df87 DLID-kv0da6ws6th9"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "931ba28a2521 DLID-3mhrvbx44c87"
 [req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
 [req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"

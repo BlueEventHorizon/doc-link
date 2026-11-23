@@ -330,8 +330,8 @@ doc-link が[Index 対象文書]へ行う書き込みは、[文書 ID]管理シ�
 通知に重要度の分類は設けない。指定ディレクトリ内での参照先不在および参照パス不一致は[ToC]の確定を妨げず、検査結果として保持すること。参照先ディレクトリを検索できない場合も、「指定ディレクトリ内に不在」と記録して[ToC]を確定する（[D-025][req-005-fr-009]）。[文書 ID]が無い文書と[文書 ID]が重複する文書は[ToC]に入れずに報告し、[ToC]の確定を妨げない（[D-036][req-002-sec-9-1]）。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "7313eb94bf53 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "504f32e6af85 DLID-kxe3nxfgk491"
+[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-003]: REQ-003_toc.md "bd611adfec0d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
 [req-003-sec-7-4]: REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"

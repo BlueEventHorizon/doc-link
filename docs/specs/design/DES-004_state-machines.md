@@ -117,7 +117,7 @@ DLID 付与操作（`embed-dlid`）の実行ごとの状態は次の通り。[In
 [des-009]: DES-009_verification.md "4465d730e152 DLID-xmg0jcmep2h2"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
-[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "8eae9ee77831 DLID-edwjjf150svm"
+[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"

@@ -1,38 +1,41 @@
 {
-  "content_hash": "7a6a9ff076b49b3062d2bb3ff6d9c1cc7b57e83926119771a0caf17de6051e61",
+  "content_hash": "b0f04c2f3df23493e07070e328b8ab51671669551721144f0b5c60dfe069ca06",
   "doc_link_id": "DLID-dgphqw70rkpz",
   "keywords": [
-    "target resolution",
-    "DLID embedding",
-    "change set",
+    "indexing",
     "ToC build",
-    "index target",
+    "DLID assignment",
+    "target resolution",
+    "change set",
     "section ID",
-    "path move",
-    "detail file",
-    "atomic write",
-    "exclude patterns"
+    "move detection",
+    "content hash",
+    "atomic publish",
+    "detail file"
   ],
   "path": "docs/specs/design/DES-005_indexing.md",
-  "purpose": "Designs target resolution, ID checking, DLID embedding, change-set determination, required-information acquisition, candidate finalization, and atomic writes for ToC building.",
+  "purpose": "Design of the indexing pipeline: fixing the target set, confirming and assigning DLIDs, detecting changes, generating needed info, and publishing the ToC atomically.",
   "summary": [
-    "Inputs, outputs, and execution boundary of ToC build following DES-004 stages",
-    "Argument combination rules and expansion of directories, patterns, and exclusions into target Markdown lists",
-    "Path normalization, Markdown detection, symlink handling, and nonexistent path reporting",
-    "ID check: documents without or with duplicate IDs are excluded and reported",
-    "DLID embedding operation: duplicate original confirmation, section ID issuance, writes limited to DLID",
-    "Change-set determination for documents and sections, including path-move recording across build advances",
-    "Required-information acquisition, reuse of document information, and candidate inspection",
-    "Completion result items and the detail file written atomically",
-    "Write units using os.replace, no locking, and failure and re-run behavior"
+    "Inputs, outputs and execution boundary of a ToC build, including the rule that the build never rewrites index target documents",
+    "Target resolution: argument combination rules, directory and pattern expansion, exclusions, fixed excluded directories, path normalization, symlinks, and Markdown detection",
+    "DLID confirmation: reading doc_link_id from frontmatter, excluding documents with missing or duplicate IDs from the confirmed target list while continuing the build",
+    "DLID assignment operation: explicitly invoked, writes only DLIDs (document and section IDs), duplicate original resolution with the user, 60-bit Crockford Base32 issuance, and per-document rollback on non-DLID diffs",
+    "Change set determination: new, left target, path change, content hash change, and reference or physical path change, recorded independently per document",
+    "Section-level change detection by section ID: added, removed, moved, heading changed, and body changed",
+    "Move detection via a per-key record file that accumulates document ID, old path and new path across advance steps",
+    "Information acquisition and candidate finalization: reuse of document info, AI generation only where needed, candidate checks, and one-shot publishing of the confirmed ToC",
+    "Completion output contract: counts and key items on stdout, full details in a detail file published by a single replacement",
+    "Write units, atomic replacement via os.replace, no locking, and failure and re-run behavior"
   ],
   "tasks": [
-    "Implementing target expansion and exclusion logic",
-    "Implementing the embed-dlid operation",
-    "Implementing change-set and move detection",
-    "Implementing the index-docs build and completion result",
-    "Designing section-level change detection",
-    "Reviewing write atomicity and failure handling"
+    "Implementing or modifying the index-docs build script",
+    "Implementing or modifying the DLID assignment operation",
+    "Designing target resolution arguments and exclusion rules",
+    "Implementing change set and section-level change detection",
+    "Implementing move detection and its record file",
+    "Reviewing how the build output and detail file are structured",
+    "Investigating build failures and re-run behavior",
+    "Reviewing consistency between the requirements and the indexing design"
   ],
   "title": "DES-005 対象確定・DLID 付与・[ToC]構築設計"
 }

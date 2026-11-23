@@ -17,27 +17,19 @@
       "doc_link_id": "DLID-xmg0jcmep2h2"
     },
     {
-      "applied_hash": "504f32e6af85ded627b38b706a885b95c4b9b5a2da67f07d0f8cc0715a6b5284",
-      "doc_link_id": "DLID-kxe3nxfgk491"
-    },
-    {
       "applied_hash": "57aa98ffe8d13f53b2289a97f4dc381810817a1062d276eebcba95c3b384ab1c",
       "doc_link_id": "DLID-h96208rqr773"
+    },
+    {
+      "applied_hash": "611c8744aced3ddf531fb478ef3252550739208957c3df2303f8e88caa9d275f",
+      "doc_link_id": "DLID-nnbgpzkkm5vq"
     },
     {
       "applied_hash": "6d46734b4b3c6ec27742e2ce3afa682998463cbf6242f374d3244e59c195edce",
       "doc_link_id": "DLID-pr3jp4hzb8js"
     },
     {
-      "applied_hash": "7313eb94bf531f8448f0407e3681c949eb077a6adeefdb75885b9a8ac46b6d87",
-      "doc_link_id": "DLID-bk29x4s8tadq"
-    },
-    {
-      "applied_hash": "7a6a9ff076b49b3062d2bb3ff6d9c1cc7b57e83926119771a0caf17de6051e61",
-      "doc_link_id": "DLID-dgphqw70rkpz"
-    },
-    {
-      "applied_hash": "7f57541f21c617d5721c5d773a63423b9126884713589817b8fc030366bc3b65",
+      "applied_hash": "7004f5d82b53a028d1858f829b2965afc0843b75946faf034701575f375ddc6b",
       "doc_link_id": "DLID-7e90gq3sdncc"
     },
     {
@@ -49,16 +41,24 @@
       "doc_link_id": "DLID-pc44gkb54821"
     },
     {
+      "applied_hash": "b0f04c2f3df23493e07070e328b8ab51671669551721144f0b5c60dfe069ca06",
+      "doc_link_id": "DLID-dgphqw70rkpz"
+    },
+    {
+      "applied_hash": "bd611adfec0dbd0fad14659972b5b6a804c47d425e2a2e0a340dc98839a36dde",
+      "doc_link_id": "DLID-kxe3nxfgk491"
+    },
+    {
       "applied_hash": "d3b39867775ceec6052c3a3da96133a795e70a7814789bf7a1d9802373b29ace",
       "doc_link_id": "DLID-3f92k3tz4rew"
     },
     {
-      "applied_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
-      "doc_link_id": "DLID-zvepba87h7zk"
+      "applied_hash": "d4d21daf4f2215e46171f6dadfb88a1cef299c83af2293a324b757a7746ba518",
+      "doc_link_id": "DLID-bk29x4s8tadq"
     },
     {
-      "applied_hash": "e3bebfa5a5aa2985c4363f119ffe63445a5f7704bdc6a4c6b344b347de5aad23",
-      "doc_link_id": "DLID-nnbgpzkkm5vq"
+      "applied_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
+      "doc_link_id": "DLID-zvepba87h7zk"
     },
     {
       "applied_hash": "f28039845959c73ab3192ba1f8b9ac006ef935343a70dff67e54ded8901f71c5",
@@ -67,82 +67,82 @@
   ],
   "last_checks": [
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-3da82gspdp44",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-3f92k3tz4rew",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-7e90gq3sdncc",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-anz9vack2xzt",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-bk29x4s8tadq",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-dgphqw70rkpz",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-h96208rqr773",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-kxe3nxfgk491",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-nnbgpzkkm5vq",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-pc44gkb54821",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-pr3jp4hzb8js",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-veg2nsjk8zw1",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-xmg0jcmep2h2",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-yqqrwtycr379",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-ywa6htx8vq09",
       "result": "success"
     },
     {
-      "checked_at": "2026-11-22T06:52:30+00:00",
+      "checked_at": "2026-11-23T03:59:19+00:00",
       "doc_link_id": "DLID-zvepba87h7zk",
       "result": "success"
     }
@@ -150,13 +150,13 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/rules/agent_data_exchange_rules.md",
         "result": "match",
         "scope": "docs/rules"
       },
       "kind": "document",
-      "position": 28,
+      "position": 25,
       "recorded_content_hash": "590998804bef",
       "recorded_path": "../../rules/agent_data_exchange_rules.md",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -166,7 +166,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/rules/plugin_implementation_guidelines.md",
         "result": "match",
         "scope": "docs/rules"
@@ -182,7 +182,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-001_system-overview.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -198,7 +198,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -214,7 +214,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -230,7 +230,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -246,7 +246,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -262,7 +262,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -278,13 +278,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 13,
+      "position": 10,
       "recorded_content_hash": "02a83129fff4",
       "recorded_path": "DES-002_execution-responsibilities.md#3-skill-と-script-の接続規則-dlid-gjwba2n3mq4v",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -294,13 +294,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 29,
+      "position": 26,
       "recorded_content_hash": "13625382e806",
       "recorded_path": "DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -310,7 +310,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -326,7 +326,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -342,7 +342,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -358,7 +358,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -374,7 +374,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -390,7 +390,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -406,7 +406,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -422,7 +422,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -438,7 +438,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -454,13 +454,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 24,
+      "position": 21,
       "recorded_content_hash": "91ae910ea5fe",
       "recorded_path": "DES-004_state-machines.md#3-toc構築再構築の実行-dlid-kz06g0w7tsvs",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -470,14 +470,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 1,
-      "recorded_content_hash": "7a6a9ff076b4",
+      "recorded_content_hash": "b0f04c2f3df2",
       "recorded_path": "DES-005_indexing.md",
       "source_doc_id": "DLID-xmg0jcmep2h2",
       "source_section_id": null,
@@ -486,14 +486,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "7a6a9ff076b4",
+      "recorded_content_hash": "b0f04c2f3df2",
       "recorded_path": "DES-005_indexing.md",
       "source_doc_id": "DLID-nnbgpzkkm5vq",
       "source_section_id": null,
@@ -502,14 +502,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 4,
-      "recorded_content_hash": "7a6a9ff076b4",
+      "recorded_content_hash": "b0f04c2f3df2",
       "recorded_path": "DES-005_indexing.md",
       "source_doc_id": "DLID-3da82gspdp44",
       "source_section_id": null,
@@ -518,14 +518,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 4,
-      "recorded_content_hash": "7a6a9ff076b4",
+      "recorded_content_hash": "b0f04c2f3df2",
       "recorded_path": "DES-005_indexing.md",
       "source_doc_id": "DLID-zvepba87h7zk",
       "source_section_id": null,
@@ -534,14 +534,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
       "position": 0,
-      "recorded_content_hash": "9aef55f5de46",
+      "recorded_content_hash": "de8363e8b290",
       "recorded_path": "DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx",
       "source_doc_id": "DLID-ywa6htx8vq09",
       "source_section_id": null,
@@ -550,13 +550,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 17,
+      "position": 14,
       "recorded_content_hash": "ece4ef428c71",
       "recorded_path": "DES-005_indexing.md#21-dlid-付与操作-dlid-kxx8fczbwref",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -566,13 +566,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 19,
+      "position": 16,
       "recorded_content_hash": "c912c6930ae9",
       "recorded_path": "DES-005_indexing.md#2-対象確定id-確認と-dlid-付与-dlid-6b3d2nqzpw75",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -582,14 +582,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 20,
-      "recorded_content_hash": "9aef55f5de46",
+      "position": 17,
+      "recorded_content_hash": "de8363e8b290",
       "recorded_path": "DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx",
       "source_doc_id": "DLID-7e90gq3sdncc",
       "source_section_id": null,
@@ -598,13 +598,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 21,
+      "position": 18,
       "recorded_content_hash": "ab3f28403dd1",
       "recorded_path": "DES-005_indexing.md#4-必要情報の取得と候補確定-dlid-dfsegbf7p2q9",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -614,13 +614,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 22,
+      "position": 19,
       "recorded_content_hash": "32ce863741b3",
       "recorded_path": "DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -630,7 +630,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -646,7 +646,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -662,7 +662,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -678,7 +678,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -694,7 +694,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -710,13 +710,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 15,
+      "position": 12,
       "recorded_content_hash": "93cb7c345bc4",
       "recorded_path": "DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -726,13 +726,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 16,
+      "position": 13,
       "recorded_content_hash": "40bf228bfb23",
       "recorded_path": "DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -742,7 +742,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -758,13 +758,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 25,
+      "position": 22,
       "recorded_content_hash": "3c782e52339d",
       "recorded_path": "DES-006_search.md#1-検索前の判定-dlid-ksmh21dbz9zv",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -774,7 +774,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -790,7 +790,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -806,7 +806,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -822,7 +822,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -838,13 +838,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 23,
+      "position": 20,
       "recorded_content_hash": "801528b8eb29",
       "recorded_path": "DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -854,13 +854,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 26,
+      "position": 23,
       "recorded_content_hash": "15f263908fc6",
       "recorded_path": "DES-007_references-impact.md#2-逆参照と影響候補-dlid-9chw5bzdm8zm",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -870,13 +870,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 27,
+      "position": 24,
       "recorded_content_hash": "80e73caeef5c",
       "recorded_path": "DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -886,7 +886,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -902,14 +902,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 1,
-      "recorded_content_hash": "c20901933a1a",
+      "recorded_content_hash": "f28039845959",
       "recorded_path": "DES-008_content-rules.md",
       "source_doc_id": "DLID-3f92k3tz4rew",
       "source_section_id": null,
@@ -918,14 +918,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "c20901933a1a",
+      "recorded_content_hash": "f28039845959",
       "recorded_path": "DES-008_content-rules.md",
       "source_doc_id": "DLID-xmg0jcmep2h2",
       "source_section_id": null,
@@ -934,30 +934,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/design/DES-008_content-rules.md",
-        "result": "match",
-        "scope": "docs/specs/design"
-      },
-      "kind": "document",
-      "position": 4,
-      "recorded_content_hash": "c20901933a1a",
-      "recorded_path": "DES-008_content-rules.md#sec-3",
-      "source_doc_id": "DLID-dgphqw70rkpz",
-      "source_section_id": null,
-      "target_doc_id": "DLID-ywa6htx8vq09",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 7,
-      "recorded_content_hash": "c20901933a1a",
+      "recorded_content_hash": "f28039845959",
       "recorded_path": "DES-008_content-rules.md",
       "source_doc_id": "DLID-zvepba87h7zk",
       "source_section_id": null,
@@ -966,7 +950,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -982,13 +966,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 14,
+      "position": 11,
       "recorded_content_hash": "f67ca1c840f3",
       "recorded_path": "DES-008_content-rules.md#4-ai-生成フィールド-dlid-7et3ryybpbag",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -998,13 +982,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
-      "position": 18,
+      "position": 15,
       "recorded_content_hash": "e07d05aa8a87",
       "recorded_path": "DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -1014,7 +998,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1030,14 +1014,30 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
       "position": 4,
-      "recorded_content_hash": "b97d4e2fbb98",
+      "recorded_content_hash": "77f12128e9ca",
+      "recorded_path": "DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry",
+      "source_doc_id": "DLID-dgphqw70rkpz",
+      "source_section_id": null,
+      "target_doc_id": "DLID-ywa6htx8vq09",
+      "target_section_id": "DLID-7d2f9n4a3vry"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/design/DES-008_content-rules.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "80f6735d096d",
       "recorded_path": "DES-008_content-rules.md#3-比較値とハッシュ-dlid-2f452e4mna91",
       "source_doc_id": "DLID-pr3jp4hzb8js",
       "source_section_id": null,
@@ -1046,7 +1046,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1062,7 +1062,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1078,14 +1078,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 0,
-      "recorded_content_hash": "7f57541f21c6",
+      "recorded_content_hash": "9a766809e9fc",
       "recorded_path": "DES-010_skill-composition.md",
       "source_doc_id": "DLID-anz9vack2xzt",
       "source_section_id": null,
@@ -1094,14 +1094,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 0,
-      "recorded_content_hash": "7f57541f21c6",
+      "recorded_content_hash": "9a766809e9fc",
       "recorded_path": "DES-010_skill-composition.md",
       "source_doc_id": "DLID-pr3jp4hzb8js",
       "source_section_id": null,
@@ -1110,14 +1110,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 1,
-      "recorded_content_hash": "7f57541f21c6",
+      "recorded_content_hash": "9a766809e9fc",
       "recorded_path": "DES-010_skill-composition.md",
       "source_doc_id": "DLID-3da82gspdp44",
       "source_section_id": null,
@@ -1126,14 +1126,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 5,
-      "recorded_content_hash": "7f57541f21c6",
+      "recorded_content_hash": "9a766809e9fc",
       "recorded_path": "DES-010_skill-composition.md",
       "source_doc_id": "DLID-xmg0jcmep2h2",
       "source_section_id": null,
@@ -1142,14 +1142,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 9,
-      "recorded_content_hash": "7f57541f21c6",
+      "recorded_content_hash": "9a766809e9fc",
       "recorded_path": "DES-010_skill-composition.md",
       "source_doc_id": "DLID-zvepba87h7zk",
       "source_section_id": null,
@@ -1158,14 +1158,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
       "position": 1,
-      "recorded_content_hash": "46602aefaf1b",
+      "recorded_content_hash": "5c9a4a2b1fc9",
       "recorded_path": "DES-010_skill-composition.md#12-検査の-skill-の責務-dlid-h9bg56gdypm5",
       "source_doc_id": "DLID-pr3jp4hzb8js",
       "source_section_id": null,
@@ -1174,7 +1174,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1190,7 +1190,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1206,7 +1206,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -1222,7 +1222,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1238,7 +1238,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1254,7 +1254,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1270,7 +1270,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1286,7 +1286,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1302,7 +1302,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1318,7 +1318,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1334,7 +1334,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1350,7 +1350,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1366,7 +1366,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1382,7 +1382,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1398,7 +1398,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 27,
+      "recorded_content_hash": "7c7778285762",
+      "recorded_path": "../requirement/REQ-001_overview.md#nfr-008-生成指示と検証基準の分離-dlid-fc5e4s6nctp9",
+      "source_doc_id": "DLID-7e90gq3sdncc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-fc5e4s6nctp9"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1414,7 +1430,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1430,29 +1446,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 30,
-      "recorded_content_hash": "7c7778285762",
-      "recorded_path": "../requirement/REQ-001_overview.md#nfr-008-生成指示と検証基準の分離-dlid-fc5e4s6nctp9",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-veg2nsjk8zw1",
-      "target_section_id": "DLID-fc5e4s6nctp9"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-001_overview.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 46,
+      "position": 43,
       "recorded_content_hash": "4ca9ecf3d971",
       "recorded_path": "../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -1462,13 +1462,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 47,
+      "position": 44,
       "recorded_content_hash": "a1500a8117ce",
       "recorded_path": "../requirement/REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -1478,7 +1478,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1494,7 +1494,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1510,7 +1510,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1526,7 +1526,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1542,7 +1542,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1558,7 +1558,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1574,7 +1574,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1590,7 +1590,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1606,7 +1606,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1622,7 +1622,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1638,7 +1638,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1654,7 +1654,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1670,7 +1670,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1686,7 +1686,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1702,7 +1702,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1718,7 +1718,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1734,7 +1734,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1750,7 +1750,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1766,7 +1766,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1782,7 +1782,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1798,7 +1798,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1814,7 +1814,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1830,7 +1830,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1846,7 +1846,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1862,23 +1862,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 11,
-      "recorded_content_hash": "041cb8a5da26",
-      "recorded_path": "../requirement/REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-ephpayqvh78w"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1894,7 +1878,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1910,7 +1894,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1926,7 +1910,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1942,7 +1926,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1958,7 +1942,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1974,7 +1958,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -1990,7 +1974,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2006,7 +1990,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2022,7 +2006,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2038,7 +2022,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2054,7 +2038,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2070,7 +2054,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2086,7 +2070,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2102,7 +2086,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2118,7 +2102,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2134,7 +2118,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2150,7 +2134,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2166,7 +2150,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2182,7 +2166,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2198,7 +2182,39 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 28,
+      "recorded_content_hash": "594d2964b515",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
+      "source_doc_id": "DLID-7e90gq3sdncc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-z0g4zx0wr0cn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 29,
+      "recorded_content_hash": "8eae9ee77831",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
+      "source_doc_id": "DLID-7e90gq3sdncc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-edwjjf150svm"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2214,7 +2230,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2230,7 +2246,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2246,45 +2262,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 31,
-      "recorded_content_hash": "594d2964b515",
-      "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-z0g4zx0wr0cn"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 32,
-      "recorded_content_hash": "8eae9ee77831",
-      "recorded_path": "../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-edwjjf150svm"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 33,
+      "position": 30,
       "recorded_content_hash": "ab2973434c9d",
       "recorded_path": "../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -2294,13 +2278,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 34,
+      "position": 31,
       "recorded_content_hash": "cf5307ccef85",
       "recorded_path": "../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -2310,7 +2294,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2326,7 +2310,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2342,7 +2326,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2358,7 +2342,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2374,7 +2358,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2390,23 +2374,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 5,
-      "recorded_content_hash": "d3db400bbead",
-      "recorded_path": "../requirement/REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-dbs4rjzstadr"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2422,7 +2390,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2438,7 +2406,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2454,7 +2422,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2470,7 +2438,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2486,7 +2454,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2502,7 +2470,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2518,7 +2486,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2534,7 +2502,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2550,7 +2518,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2566,7 +2534,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "041cb8a5da26",
+      "recorded_path": "../requirement/REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w",
+      "source_doc_id": "DLID-7e90gq3sdncc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-ephpayqvh78w"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2582,7 +2566,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2598,7 +2582,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2614,7 +2598,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2630,7 +2614,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2646,7 +2630,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2662,7 +2646,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2678,7 +2662,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2694,7 +2678,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2710,14 +2694,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "2ea5b106694d",
+      "recorded_content_hash": "504f32e6af85",
       "recorded_path": "REQ-003_toc.md",
       "source_doc_id": "DLID-bk29x4s8tadq",
       "source_section_id": null,
@@ -2726,14 +2710,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "2ea5b106694d",
+      "recorded_content_hash": "504f32e6af85",
       "recorded_path": "REQ-003_toc.md",
       "source_doc_id": "DLID-h96208rqr773",
       "source_section_id": null,
@@ -2742,14 +2726,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "2ea5b106694d",
+      "recorded_content_hash": "504f32e6af85",
       "recorded_path": "REQ-003_toc.md",
       "source_doc_id": "DLID-kxe3nxfgk491",
       "source_section_id": null,
@@ -2758,14 +2742,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "2ea5b106694d",
+      "recorded_content_hash": "504f32e6af85",
       "recorded_path": "REQ-003_toc.md",
       "source_doc_id": "DLID-pc44gkb54821",
       "source_section_id": null,
@@ -2774,14 +2758,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
       "position": 2,
-      "recorded_content_hash": "2ea5b106694d",
+      "recorded_content_hash": "504f32e6af85",
       "recorded_path": "REQ-003_toc.md",
       "source_doc_id": "DLID-veg2nsjk8zw1",
       "source_section_id": null,
@@ -2790,14 +2774,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 10,
-      "recorded_content_hash": "ce8ae746cf32",
+      "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_doc_id": "DLID-pc44gkb54821",
       "source_section_id": null,
@@ -2806,14 +2790,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 11,
-      "recorded_content_hash": "4639ecf6891b",
+      "recorded_content_hash": "53e14e5297d5",
       "recorded_path": "REQ-003_toc.md#10-既存tocとの比較による変更検出-dlid-djxbs1zd8bwk",
       "source_doc_id": "DLID-kxe3nxfgk491",
       "source_section_id": null,
@@ -2822,14 +2806,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 11,
-      "recorded_content_hash": "ce8ae746cf32",
+      "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_doc_id": "DLID-veg2nsjk8zw1",
       "source_section_id": null,
@@ -2838,7 +2822,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2854,23 +2838,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 12,
-      "recorded_content_hash": "931ba28a2521",
-      "recorded_path": "../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-3mhrvbx44c87"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2886,7 +2854,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 13,
+      "recorded_content_hash": "236e3d68df87",
+      "recorded_path": "../requirement/REQ-003_toc.md#102-変更検出処理-dlid-kv0da6ws6th9",
+      "source_doc_id": "DLID-dgphqw70rkpz",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-kv0da6ws6th9"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2902,23 +2886,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 13,
-      "recorded_content_hash": "ce8ae746cf32",
-      "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
-      "source_doc_id": "DLID-dgphqw70rkpz",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-c3prh9y4nbzw"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2934,14 +2902,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 14,
-      "recorded_content_hash": "ce8ae746cf32",
+      "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_doc_id": "DLID-pr3jp4hzb8js",
       "source_section_id": null,
@@ -2950,14 +2918,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 16,
-      "recorded_content_hash": "ce8ae746cf32",
+      "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_doc_id": "DLID-kxe3nxfgk491",
       "source_section_id": null,
@@ -2966,7 +2934,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2982,7 +2950,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -2998,7 +2966,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3014,7 +2982,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3030,7 +2998,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3046,7 +3014,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3062,7 +3030,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3078,14 +3046,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 30,
-      "recorded_content_hash": "ce8ae746cf32",
+      "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_doc_id": "DLID-xmg0jcmep2h2",
       "source_section_id": null,
@@ -3094,13 +3062,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 35,
+      "position": 32,
       "recorded_content_hash": "5e0072a4ce7a",
       "recorded_path": "../requirement/REQ-003_toc.md#fr-003-文書の移動改名の認識-dlid-grzqdx81bakh",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -3110,13 +3078,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 36,
+      "position": 33,
       "recorded_content_hash": "47be50aa7f05",
       "recorded_path": "../requirement/REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -3126,13 +3094,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 37,
+      "position": 34,
       "recorded_content_hash": "c8d953d1fad0",
       "recorded_path": "../requirement/REQ-003_toc.md#fr-011-文書全体の変更検出-dlid-a7nqc4aq8zwb",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -3142,13 +3110,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 38,
+      "position": 35,
       "recorded_content_hash": "d342c3bdcb5c",
       "recorded_path": "../requirement/REQ-003_toc.md#fr-012-セクション単位の変更検出-dlid-8kfhte6q4ywd",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -3158,7 +3126,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "53e14e5297d5",
+      "recorded_path": "../requirement/REQ-003_toc.md#10-既存tocとの比較による変更検出-dlid-djxbs1zd8bwk",
+      "source_doc_id": "DLID-7e90gq3sdncc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-djxbs1zd8bwk"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3174,7 +3158,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 5,
+      "recorded_content_hash": "2cdcc9befbb7",
+      "recorded_path": "../requirement/REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n",
+      "source_doc_id": "DLID-7e90gq3sdncc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-afs68x15mq0n"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3190,7 +3190,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3206,7 +3206,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3222,14 +3222,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 5,
-      "recorded_content_hash": "ce8ae746cf32",
+      "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_doc_id": "DLID-yqqrwtycr379",
       "source_section_id": null,
@@ -3238,39 +3238,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 6,
-      "recorded_content_hash": "4639ecf6891b",
-      "recorded_path": "../requirement/REQ-003_toc.md#10-既存tocとの比較による変更検出-dlid-djxbs1zd8bwk",
+      "recorded_content_hash": "e4f7a9b2bfde",
+      "recorded_path": "../requirement/REQ-003_toc.md#1122-文書情報の取得と生成-dlid-6vjpqdstr90y",
       "source_doc_id": "DLID-7e90gq3sdncc",
       "source_section_id": null,
       "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-djxbs1zd8bwk"
+      "target_section_id": "DLID-6vjpqdstr90y"
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 7,
-      "recorded_content_hash": "02f55f8fa567",
-      "recorded_path": "REQ-003_toc.md#101-変更検出に使用するハッシュ-dlid-dmkbxbz5ph81",
-      "source_doc_id": "DLID-kxe3nxfgk491",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-dmkbxbz5ph81"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3286,23 +3270,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 7,
-      "recorded_content_hash": "ce8ae746cf32",
-      "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
-      "source_doc_id": "DLID-ywa6htx8vq09",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-c3prh9y4nbzw"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3318,23 +3286,39 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 8,
-      "recorded_content_hash": "2cdcc9befbb7",
-      "recorded_path": "../requirement/REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n",
-      "source_doc_id": "DLID-7e90gq3sdncc",
+      "position": 7,
+      "recorded_content_hash": "d8d85fb70432",
+      "recorded_path": "REQ-003_toc.md#101-変更検出に使用するハッシュ-dlid-dmkbxbz5ph81",
+      "source_doc_id": "DLID-kxe3nxfgk491",
       "source_section_id": null,
       "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-afs68x15mq0n"
+      "target_section_id": "DLID-dmkbxbz5ph81"
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "dfb119ed393a",
+      "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
+      "source_doc_id": "DLID-ywa6htx8vq09",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-c3prh9y4nbzw"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3350,7 +3334,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3366,7 +3350,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3382,23 +3366,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 9,
-      "recorded_content_hash": "e4f7a9b2bfde",
-      "recorded_path": "../requirement/REQ-003_toc.md#1122-文書情報の取得と生成-dlid-6vjpqdstr90y",
+      "recorded_content_hash": "931ba28a2521",
+      "recorded_path": "../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87",
       "source_doc_id": "DLID-7e90gq3sdncc",
       "source_section_id": null,
       "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-6vjpqdstr90y"
+      "target_section_id": "DLID-3mhrvbx44c87"
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3414,7 +3398,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3430,7 +3414,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3446,7 +3430,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3462,7 +3446,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3478,7 +3462,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3494,7 +3478,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3510,7 +3494,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3526,7 +3510,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3542,13 +3526,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 39,
+      "position": 36,
       "recorded_content_hash": "9b494fa9ab14",
       "recorded_path": "../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -3558,7 +3542,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3574,7 +3558,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3590,7 +3574,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3606,7 +3590,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3622,7 +3606,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3638,7 +3622,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3654,23 +3638,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 10,
-      "recorded_content_hash": "275305521655",
-      "recorded_path": "../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-5p5ms6a74w73"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3686,7 +3654,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3702,7 +3670,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3718,7 +3686,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3734,7 +3702,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3750,7 +3718,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3766,7 +3734,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3782,7 +3750,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3798,7 +3766,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3814,7 +3782,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3830,7 +3798,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3846,7 +3814,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3862,7 +3830,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3878,7 +3846,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3894,7 +3862,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3910,7 +3878,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3926,7 +3894,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3942,7 +3910,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3958,7 +3926,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3974,7 +3942,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -3990,7 +3958,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4006,7 +3974,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4022,7 +3990,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4038,7 +4006,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4054,7 +4022,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4070,7 +4038,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4086,7 +4054,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4102,7 +4070,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4118,7 +4086,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4134,7 +4102,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4150,7 +4118,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4166,7 +4134,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4182,7 +4150,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4198,7 +4166,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4214,7 +4182,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4230,7 +4198,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4246,7 +4214,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4262,29 +4230,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 4,
-      "recorded_content_hash": "d08fc24e778c",
-      "recorded_path": "../requirement/REQ-005_references.md#15-不整合検査-dlid-vkwbbsp9rg76",
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-vkwbbsp9rg76"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 40,
+      "position": 37,
       "recorded_content_hash": "c12d0e9fadbb",
       "recorded_path": "../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -4294,13 +4246,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 41,
+      "position": 38,
       "recorded_content_hash": "46f991bc5caa",
       "recorded_path": "../requirement/REQ-005_references.md#fr-010-参照パス修正情報の通知-dlid-ev07yszprm9m",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -4310,13 +4262,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 42,
+      "position": 39,
       "recorded_content_hash": "6af5f019bff6",
       "recorded_path": "../requirement/REQ-005_references.md#fr-013-変更影響候補の特定-dlid-cnw6h5pzv3wz",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -4326,13 +4278,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 43,
+      "position": 40,
       "recorded_content_hash": "6a036ff75fc1",
       "recorded_path": "../requirement/REQ-005_references.md#fr-014-変更影響候補の通知-dlid-j0z4w1wm0g4p",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -4342,13 +4294,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 44,
+      "position": 41,
       "recorded_content_hash": "c1135544f245",
       "recorded_path": "../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -4358,13 +4310,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 45,
+      "position": 42,
       "recorded_content_hash": "3627fec77afd",
       "recorded_path": "../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn",
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -4374,7 +4326,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4390,7 +4342,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4406,7 +4358,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4422,7 +4374,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4438,23 +4390,23 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 7,
-      "recorded_content_hash": "19dfeaf93ee4",
-      "recorded_path": "../requirement/REQ-005_references.md#14-変更影響候補の列挙と通知-dlid-1g7ec6b0rtyv",
+      "recorded_content_hash": "275305521655",
+      "recorded_path": "../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73",
       "source_doc_id": "DLID-7e90gq3sdncc",
       "source_section_id": null,
       "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-1g7ec6b0rtyv"
+      "target_section_id": "DLID-5p5ms6a74w73"
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4470,7 +4422,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4486,7 +4438,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4502,7 +4454,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4518,7 +4470,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4534,7 +4486,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4550,7 +4502,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4566,7 +4518,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4582,7 +4534,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-22T06:52:30+00:00",
+        "checked_at": "2026-11-23T03:59:19+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -4794,12 +4746,6 @@
       "source_doc_id": "DLID-7e90gq3sdncc",
       "source_section_id": null,
       "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-dbs4rjzstadr"
-    },
-    {
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
       "target_section_id": "DLID-edwjjf150svm"
     },
     {
@@ -4932,12 +4878,6 @@
       "source_doc_id": "DLID-7e90gq3sdncc",
       "source_section_id": null,
       "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-1g7ec6b0rtyv"
-    },
-    {
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
       "target_section_id": "DLID-5p5ms6a74w73"
     },
     {
@@ -4975,12 +4915,6 @@
       "source_section_id": null,
       "target_doc_id": "DLID-pc44gkb54821",
       "target_section_id": "DLID-jhkngqtfdnhn"
-    },
-    {
-      "source_doc_id": "DLID-7e90gq3sdncc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-vkwbbsp9rg76"
     },
     {
       "source_doc_id": "DLID-7e90gq3sdncc",
@@ -5286,13 +5220,13 @@
       "source_doc_id": "DLID-dgphqw70rkpz",
       "source_section_id": null,
       "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-c3prh9y4nbzw"
+      "target_section_id": "DLID-ef9szvy6w2cj"
     },
     {
       "source_doc_id": "DLID-dgphqw70rkpz",
       "source_section_id": null,
       "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-ef9szvy6w2cj"
+      "target_section_id": "DLID-kv0da6ws6th9"
     },
     {
       "source_doc_id": "DLID-dgphqw70rkpz",
@@ -5340,7 +5274,7 @@
       "source_doc_id": "DLID-dgphqw70rkpz",
       "source_section_id": null,
       "target_doc_id": "DLID-ywa6htx8vq09",
-      "target_section_id": null
+      "target_section_id": "DLID-7d2f9n4a3vry"
     },
     {
       "source_doc_id": "DLID-h96208rqr773",
@@ -6339,13 +6273,6 @@
       "section_id": "DLID-y8grft64a0qp"
     },
     {
-      "content_hash": "130ca80490b26bde8d9912b42800421325cdb4725a86a4787e495aea121946b3",
-      "doc_link_id": "DLID-bk29x4s8tadq",
-      "heading": "doc-link 要件定義書 — Index 対象と[文書 ID]",
-      "position": 0,
-      "section_id": "DLID-rqcgktp23k3p"
-    },
-    {
       "content_hash": "13625382e8067e1c98f593e59e40feffa66d2371106f840a99325efb51826984",
       "doc_link_id": "DLID-anz9vack2xzt",
       "heading": "4. 保留と後続設計",
@@ -6353,18 +6280,18 @@
       "section_id": "DLID-8ck587eq1qnd"
     },
     {
-      "content_hash": "137b65f971c8426b1cceb43d60ac35285b5c7058ce041d31d783b925677357d5",
-      "doc_link_id": "DLID-kxe3nxfgk491",
-      "heading": "7.2 セクションエントリ",
-      "position": 3,
-      "section_id": "DLID-gq27wn8ztw78"
-    },
-    {
       "content_hash": "15f263908fc6388ce34a0424e68d0e623439b3360cc35565aac3bc479fc9cecd",
       "doc_link_id": "DLID-pr3jp4hzb8js",
       "heading": "2. 逆参照と影響候補",
       "position": 2,
       "section_id": "DLID-9chw5bzdm8zm"
+    },
+    {
+      "content_hash": "15fad7f788c1a377bbe32ceeab0c62ebb92a61f67ae7f14431fb62708164cdff",
+      "doc_link_id": "DLID-kxe3nxfgk491",
+      "heading": "7.2 セクションエントリ",
+      "position": 3,
+      "section_id": "DLID-gq27wn8ztw78"
     },
     {
       "content_hash": "185b07f5fc1c8acb880f55bb9f4b0a80b68079bca64843a9585d63ef99152cd7",
@@ -6416,6 +6343,13 @@
       "section_id": "DLID-7abvxracbbba"
     },
     {
+      "content_hash": "21396219c157971039337ebf98292a2649d902a2818591bbefb9220a72cbfcff",
+      "doc_link_id": "DLID-7e90gq3sdncc",
+      "heading": "1.1 操作と照会の SKILL の責務",
+      "position": 2,
+      "section_id": "DLID-qd4t2gvpvqfw"
+    },
+    {
       "content_hash": "236e3d68df8738271652edcd78d26239de9c3f2552128c2977ac014d1f564b09",
       "doc_link_id": "DLID-kxe3nxfgk491",
       "heading": "10.2 変更検出処理",
@@ -6437,6 +6371,13 @@
       "section_id": "DLID-5p5ms6a74w73"
     },
     {
+      "content_hash": "2856096b5bdff8804828f3cb0ba343252208d9ca6b0404c90e02e80ae2f692b2",
+      "doc_link_id": "DLID-dgphqw70rkpz",
+      "heading": "DES-005 対象確定・DLID 付与・[ToC]構築設計",
+      "position": 0,
+      "section_id": "DLID-yhb7552z92k6"
+    },
+    {
       "content_hash": "28c6e80a0d94d023ef33b68d5397c0d6c99947a534b51dc2f7e2cacdee014db1",
       "doc_link_id": "DLID-3f92k3tz4rew",
       "heading": "2. [確定 ToC]",
@@ -6449,6 +6390,13 @@
       "heading": "5. 本書で確定しないこと",
       "position": 5,
       "section_id": "DLID-mzr6cep22ym1"
+    },
+    {
+      "content_hash": "2bd4a534eee23500884b178ad98e48f70c26efff004969c5f2f3a42b87415be0",
+      "doc_link_id": "DLID-nnbgpzkkm5vq",
+      "heading": "3. [DLID]の解決",
+      "position": 3,
+      "section_id": "DLID-m0xegzfyhc3k"
     },
     {
       "content_hash": "2cd9a279c19e292bfc290758df32e24a6bebc4d625b1498361cbd985893d8c26",
@@ -6507,6 +6455,13 @@
       "section_id": "DLID-jhkngqtfdnhn"
     },
     {
+      "content_hash": "3819f192c1711e87a0e0d89d65bd5b5059159d105bb82e058d31eaa4646bd6d6",
+      "doc_link_id": "DLID-kxe3nxfgk491",
+      "heading": "doc-link 要件定義書 — [ToC]管理",
+      "position": 0,
+      "section_id": "DLID-4pgmjg3my8bn"
+    },
+    {
       "content_hash": "3c33f06a03d8648dc7fc82f2fc6e70d7c9c6c2eb67eda41451fa3e6126eb2542",
       "doc_link_id": "DLID-7e90gq3sdncc",
       "heading": "3.6 check-toc",
@@ -6549,25 +6504,11 @@
       "section_id": "DLID-5btzbc2qvhqz"
     },
     {
-      "content_hash": "40bf228bfb23bc7cf89b98fa98586334dd79862a2ecb965cb34196f2d06a41b8",
-      "doc_link_id": "DLID-nnbgpzkkm5vq",
-      "heading": "3. [DLID]の解決",
-      "position": 3,
-      "section_id": "DLID-m0xegzfyhc3k"
-    },
-    {
       "content_hash": "44e286ac766fdada84090a15761c6bd56bf2d4ffb3c92544b34de90f9adff939",
       "doc_link_id": "DLID-veg2nsjk8zw1",
       "heading": "NFR-003 冪等性",
       "position": 15,
       "section_id": "DLID-vwg7kb3g5efa"
-    },
-    {
-      "content_hash": "46602aefaf1bb148ba9e4d7d665a121a37988098305eaaae952f2578acf38325",
-      "doc_link_id": "DLID-7e90gq3sdncc",
-      "heading": "1.2 検査の SKILL の責務",
-      "position": 3,
-      "section_id": "DLID-h9bg56gdypm5"
     },
     {
       "content_hash": "46f991bc5caa8e7942937a3108aebcf111b2d1d3f9e80e4ae88f6d74d4767b75",
@@ -6631,6 +6572,13 @@
       "heading": "doc-link 要件定義書 — 参照と変更通知",
       "position": 0,
       "section_id": "DLID-yv3r915903qx"
+    },
+    {
+      "content_hash": "4fcba4cbc64c91b2ae5e862ce6d44ac7833092175630f800279292b40f97e26f",
+      "doc_link_id": "DLID-bk29x4s8tadq",
+      "heading": "9. [文書 ID]の付与・確認・解決",
+      "position": 14,
+      "section_id": "DLID-dbs4rjzstadr"
     },
     {
       "content_hash": "517558acd014cc0114078aa5b209d48350e5a5c92eae3a3f5b6a6925c90640e3",
@@ -6701,6 +6649,13 @@
       "heading": "6.2 Markdown への[文書 ID]記載",
       "position": 11,
       "section_id": "DLID-5h2et5v540gs"
+    },
+    {
+      "content_hash": "5c9a4a2b1fc9a746e27bd45cf71c4424ecd6afa271304fa0c34340c7987a7b1e",
+      "doc_link_id": "DLID-7e90gq3sdncc",
+      "heading": "1.2 検査の SKILL の責務",
+      "position": 3,
+      "section_id": "DLID-h9bg56gdypm5"
     },
     {
       "content_hash": "5d6774d493ed142e2c4e6b80326aed7fd0d9bdf3624f5867d4ef3924eb8209b4",
@@ -6787,6 +6742,13 @@
       "section_id": "DLID-m8vs7s3gahbx"
     },
     {
+      "content_hash": "6de27aa96e7999ed81caafce6b36b0b4fc74fcf506608564a977cb583430d072",
+      "doc_link_id": "DLID-bk29x4s8tadq",
+      "heading": "FR-002 [文書 ID]の検証",
+      "position": 16,
+      "section_id": "DLID-edwjjf150svm"
+    },
+    {
       "content_hash": "6e7b8a091dcfd0681aa441bd0b3d3bbb86105c7e5c0fbae1e3e58b37befc426a",
       "doc_link_id": "DLID-pc44gkb54821",
       "heading": "AC-009 [変更影響候補の通知]",
@@ -6801,7 +6763,7 @@
       "section_id": "DLID-ytajmhsv2p1t"
     },
     {
-      "content_hash": "6f07fa9571cdd4bc34789e1289e4fa82794dee76360ed5c68a5be44e0a113ce5",
+      "content_hash": "6f897fe9ab7ba85c103dba34d4b788ffad8dec355a3ac9d9916359b1ed75c976",
       "doc_link_id": "DLID-nnbgpzkkm5vq",
       "heading": "DES-006 文書検索設計",
       "position": 0,
@@ -6813,13 +6775,6 @@
       "heading": "AC-002 パス変更時の再解析抑制",
       "position": 28,
       "section_id": "DLID-h22ydwbzj6ev"
-    },
-    {
-      "content_hash": "70d243f2efc7e5f97c32698eac901b9ad6be42a5c07f7b370aefff71ebb94974",
-      "doc_link_id": "DLID-7e90gq3sdncc",
-      "heading": "1.1 操作と照会の SKILL の責務",
-      "position": 2,
-      "section_id": "DLID-qd4t2gvpvqfw"
     },
     {
       "content_hash": "711fdb7203f8ca9b46a5d6a93503e272813c5160b76acaaa6b4c8a7d2b888363",
@@ -6990,13 +6945,6 @@
       "section_id": "DLID-wpjybjaee1df"
     },
     {
-      "content_hash": "8eae9ee77831ef9f5e08d8d5a428e9812a66e3c1e692b656b4e229ce5e6a4590",
-      "doc_link_id": "DLID-bk29x4s8tadq",
-      "heading": "FR-002 [文書 ID]の検証",
-      "position": 16,
-      "section_id": "DLID-edwjjf150svm"
-    },
-    {
       "content_hash": "90570ded7b011eef518c1f757b440dbe538e3929a50310cc6d8ac26a9ab4df70",
       "doc_link_id": "DLID-anz9vack2xzt",
       "heading": "1. 責務と権限",
@@ -7060,18 +7008,18 @@
       "section_id": "DLID-h3jskvbkf79h"
     },
     {
-      "content_hash": "9aef55f5de46e010c602ff045765ab27b6a6536451f5bef840e086434fe48835",
-      "doc_link_id": "DLID-dgphqw70rkpz",
-      "heading": "3. 変更集合の確定",
-      "position": 4,
-      "section_id": "DLID-ext9ze054hbx"
-    },
-    {
       "content_hash": "9b494fa9ab142599c61c0657a79f108e3f06c975d90b21bb9f5babf5504d3116",
       "doc_link_id": "DLID-h96208rqr773",
       "heading": "FR-006 文書検索",
       "position": 2,
       "section_id": "DLID-481cwc8365a3"
+    },
+    {
+      "content_hash": "9cadc0461d61315dc308e0c69fe866cc8b253a6723c2f058cfa9abdce1f031c5",
+      "doc_link_id": "DLID-7e90gq3sdncc",
+      "heading": "DES-010 SKILL と Agent の構成",
+      "position": 0,
+      "section_id": "DLID-gf7dehdq4tpd"
     },
     {
       "content_hash": "9df06be6890cf97a9d3d31feb160e554003d5ab1ce2be28b4f686de40bcfe977",
@@ -7100,13 +7048,6 @@
       "heading": "3.1 embed-dlid",
       "position": 6,
       "section_id": "DLID-z9j2ys29jx12"
-    },
-    {
-      "content_hash": "a3a6090213773c767ac1351670e6bfffb207b2af7f0ed9383339e263500fa0c8",
-      "doc_link_id": "DLID-7e90gq3sdncc",
-      "heading": "DES-010 SKILL と Agent の構成",
-      "position": 0,
-      "section_id": "DLID-gf7dehdq4tpd"
     },
     {
       "content_hash": "a56208b020e155c3f544bd76a67e885a7f9f4c24de6757ff4c7c17f557963202",
@@ -7142,6 +7083,13 @@
       "heading": "6.1.2 パターンの照合",
       "position": 4,
       "section_id": "DLID-fhfbhsf0svej"
+    },
+    {
+      "content_hash": "ad9c8c7d6e0c7d6a3dd9997ef23ae33d3f85e8cd5e2836a38924c26c73ab4551",
+      "doc_link_id": "DLID-kxe3nxfgk491",
+      "heading": "7. [ToC]の情報要件",
+      "position": 1,
+      "section_id": "DLID-3x56epwte9qn"
     },
     {
       "content_hash": "ad9ea6acff20734a3d2ac705c16f2c41371db853e070febbd3eaae1ca4ef602d",
@@ -7186,13 +7134,6 @@
       "section_id": "DLID-3wwk8rkdkpam"
     },
     {
-      "content_hash": "b341150dc3670079b7d61439153495e8a46b293cd5e118b2d2b3ae61df3ebe62",
-      "doc_link_id": "DLID-7e90gq3sdncc",
-      "heading": "1. 構成",
-      "position": 1,
-      "section_id": "DLID-154xfxg7rkzy"
-    },
-    {
       "content_hash": "b4072e5735adc5f981dfee094ee8f8968fdacf745a986f669e0d3618526f2d8d",
       "doc_link_id": "DLID-xmg0jcmep2h2",
       "heading": "1. テストの規範",
@@ -7207,25 +7148,11 @@
       "section_id": "DLID-5ht9ebyeq2m3"
     },
     {
-      "content_hash": "b996072fab18c23ae51a71195e38d3ebee434d7d52ba77ff3b80d90f407f0af4",
-      "doc_link_id": "DLID-dgphqw70rkpz",
-      "heading": "DES-005 対象確定・DLID 付与・[ToC]構築設計",
-      "position": 0,
-      "section_id": "DLID-yhb7552z92k6"
-    },
-    {
       "content_hash": "ba2baf55e29ba1932e6f6d9dd6cfa476c792ce5fd33afc6075323ab73a08da61",
       "doc_link_id": "DLID-kxe3nxfgk491",
       "heading": "7.3 参照エントリ",
       "position": 4,
       "section_id": "DLID-r2n99ygsnvcd"
-    },
-    {
-      "content_hash": "bb27595fb5ab4b9f7875e435d724e7fa8a56a5b2d4797e7f9c03b4c9b60b2015",
-      "doc_link_id": "DLID-kxe3nxfgk491",
-      "heading": "doc-link 要件定義書 — [ToC]管理",
-      "position": 0,
-      "section_id": "DLID-4pgmjg3my8bn"
     },
     {
       "content_hash": "bb60d45e12152e9bf6f7b634f79ee7a0e1743106910fca4bbae6c50699ac445d",
@@ -7240,6 +7167,13 @@
       "heading": "AC-013 [文書 ID]のシステム発行",
       "position": 23,
       "section_id": "DLID-dxz2fxfybpqc"
+    },
+    {
+      "content_hash": "c0bb8a49c178435eb15de33b9379ae2f26024e3317cec5c5858674eb90327b56",
+      "doc_link_id": "DLID-7e90gq3sdncc",
+      "heading": "1. 構成",
+      "position": 1,
+      "section_id": "DLID-154xfxg7rkzy"
     },
     {
       "content_hash": "c1135544f245761cae8353515bd06494517d67debea6b7889838e652dcb774f8",
@@ -7282,6 +7216,13 @@
       "heading": "2. 対象確定・ID 確認と DLID 付与",
       "position": 2,
       "section_id": "DLID-6b3d2nqzpw75"
+    },
+    {
+      "content_hash": "caceaf03679146885d05e2bdbb931bafc924aff376c7eed9332de4208cd8b91a",
+      "doc_link_id": "DLID-bk29x4s8tadq",
+      "heading": "doc-link 要件定義書 — Index 対象と[文書 ID]",
+      "position": 0,
+      "section_id": "DLID-rqcgktp23k3p"
     },
     {
       "content_hash": "cc61e9cf3f360aa02a6c3238f53f709f14e309592c01ca625f3265c6d6821df6",
@@ -7333,13 +7274,6 @@
       "section_id": "DLID-8kfhte6q4ywd"
     },
     {
-      "content_hash": "d3db400bbeadd1976333a8b8c09c4a26bc0f05654155d98f859199b7b5dd4973",
-      "doc_link_id": "DLID-bk29x4s8tadq",
-      "heading": "9. [文書 ID]の付与・確認・解決",
-      "position": 14,
-      "section_id": "DLID-dbs4rjzstadr"
-    },
-    {
       "content_hash": "d6cab5ccfaa79a1e33aa2985256d199a5756c0710261b23530a80d7d0e6eee83",
       "doc_link_id": "DLID-bk29x4s8tadq",
       "heading": "6.1.3 固定の除外",
@@ -7368,13 +7302,6 @@
       "section_id": "DLID-a15zpxfdm683"
     },
     {
-      "content_hash": "db6620213e1828db0ca0a5b80dc1ad12163f6e1653269913cb9b419035f7fd28",
-      "doc_link_id": "DLID-kxe3nxfgk491",
-      "heading": "7. [ToC]の情報要件",
-      "position": 1,
-      "section_id": "DLID-3x56epwte9qn"
-    },
-    {
       "content_hash": "dcb20703c844fe51d0cb70a1452669befa1a865d1a212fb1ec552ee701a34237",
       "doc_link_id": "DLID-bk29x4s8tadq",
       "heading": "6.1.5 完全な desired state と Index 対象からの離脱",
@@ -7401,6 +7328,13 @@
       "heading": "4. 検査結果と鮮度",
       "position": 4,
       "section_id": "DLID-dq5y0vdrzhbk"
+    },
+    {
+      "content_hash": "de8363e8b290989256b4320905ebe8eadfe5881e24f09c9a392661f0fc99a158",
+      "doc_link_id": "DLID-dgphqw70rkpz",
+      "heading": "3. 変更集合の確定",
+      "position": 4,
+      "section_id": "DLID-ext9ze054hbx"
     },
     {
       "content_hash": "de8d1c751377ebb30d0d85fd23c6488f31be3843764f11322607aa0cbb4669cc",
@@ -7593,5 +7527,5 @@
     "paths": []
   },
   "toc_key": "specs",
-  "version": 28
+  "version": 31
 }

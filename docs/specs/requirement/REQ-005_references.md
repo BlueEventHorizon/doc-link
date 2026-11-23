@@ -176,14 +176,14 @@ doc-link は、通知の状態を保存しない（D-038）。
 `check-links` が、[プロジェクト管理 AI]が書き直す対象の検出事項を返したとき、返す案内（`guidance`）が、利用者へ一覧（文書・行・書く値）を示して書き直しを確認し、承認された分だけを書き直すことを、[プロジェクト管理 AI]に指示すること。`check-links` が[Index 対象文書]を書き換えないこと。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "7313eb94bf53 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "504f32e6af85 DLID-kxe3nxfgk491"
+[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-003]: REQ-003_toc.md "bd611adfec0d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
 [req-005-sec-13-1]: REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-001-sec-3-1]: REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me "a1500a8117ce DLID-5e8mpztyp4me"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
-[req-002-fr-002]: REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "8eae9ee77831 DLID-edwjjf150svm"
+[req-002-fr-002]: REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-003-sec-10-1-2]: REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"

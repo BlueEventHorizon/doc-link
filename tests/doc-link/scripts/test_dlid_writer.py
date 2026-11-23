@@ -139,6 +139,8 @@ class ExactBytesTest(WriterTestBase):
             "'doc_link_id' : bogus": f"'doc_link_id' : {D1}",
             "doc_link_id: [a, b] # note": f"doc_link_id: {D1} # note",
             "doc_link_id:": f"doc_link_id: {D1}",
+            "doc_link_id: ": f"doc_link_id: {D1}",
+            "doc_link_id:  ": f"doc_link_id:  {D1}",
             "doc_link_id: # note": f"doc_link_id: {D1} # note",
             "doc_link_id:\t# note": f"doc_link_id:\t{D1} # note",
         }

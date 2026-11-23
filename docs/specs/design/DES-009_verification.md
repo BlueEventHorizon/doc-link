@@ -34,7 +34,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 - 標準出力が件数までで、検出事項・変更のある文書とセクション・変更影響候補の全件が明細ファイルにある。
 - 検出の件数を増やしても、標準出力の大きさが変わらない。
-- 検出が 0 件でも明細ファイルを書き、同じ[ToC 識別キー]の次の実行が置き換える。
+- 検出が 0 件でも明細ファイルを書き、同じ[ToC 識別キー]の次の実行が置き換える。検索前検査は、再構築の確認を返すときに書く。
 - 明細ファイルを書けないとき、件数だけを返さず、エラーとして終了する。
 - 検査の前後で、対象文書と管理状態が変わらず、書くのが明細ファイルだけである。
 
@@ -74,7 +74,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
 [des-005]: DES-005_indexing.md "52ed2959d4d0 DLID-dgphqw70rkpz"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
-[des-007]: DES-007_references-impact.md "fdeb71fae505 DLID-pr3jp4hzb8js"
+[des-007]: DES-007_references-impact.md "debedfd1b155 DLID-pr3jp4hzb8js"
 [des-006]: DES-006_search.md "96dc8a0cdfe8 DLID-nnbgpzkkm5vq"
 [des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
 [des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
@@ -100,9 +100,9 @@ doc_link_id: DLID-xmg0jcmep2h2
 [req-005-ac-032]: ../requirement/REQ-005_references.md#ac-032-title-に書く値の提示-dlid-nc6z2c2w5wx3 "d2b830d42495 DLID-nc6z2c2w5wx3"
 [req-005-ac-033]: ../requirement/REQ-005_references.md#ac-033-書き直しの確認-dlid-p2nyvmexdjg3 "18e6e981cdbb DLID-p2nyvmexdjg3"
 [req-005-fr-013]: ../requirement/REQ-005_references.md#fr-013-変更影響候補の特定-dlid-cnw6h5pzv3wz "6af5f019bff6 DLID-cnw6h5pzv3wz"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "00a4a4df7313 DLID-jhkngqtfdnhn"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"
 [req-003-sec-10-1-2]: ../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
-[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "1a232498a7af DLID-zacf5tmy6x4x"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
-[req-005-ac-034]: ../requirement/REQ-005_references.md#ac-034-検査の結果の件数と明細ファイル-dlid-gm124n5abz9h "b8819e66d8b7 DLID-gm124n5abz9h"
+[req-005-ac-034]: ../requirement/REQ-005_references.md#ac-034-検査の結果の件数と明細ファイル-dlid-gm124n5abz9h "dcfc996365ae DLID-gm124n5abz9h"
 [req-005-ac-035]: ../requirement/REQ-005_references.md#ac-035-対象文書の中の移動先の提示-dlid-gk7ss8dm7q0w "fc3411739362 DLID-gk7ss8dm7q0w"

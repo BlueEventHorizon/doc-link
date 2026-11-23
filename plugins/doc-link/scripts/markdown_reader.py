@@ -220,7 +220,7 @@ def key_value_span(line: str) -> tuple[str, int, int] | None:
     if raw is None:
         return key, match.end(4), match.end(4)
     start = match.start(5)
-    if raw.startswith("#"):
+    if raw == "" or raw.startswith("#"):
         return key, start, start
     if raw[:1] in "\"'":
         close = raw.find(raw[0], 1)

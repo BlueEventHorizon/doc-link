@@ -1,40 +1,38 @@
 {
-  "content_hash": "c3c169a73d29f1787accb13e8fab631a17c412f280ca5f7d66c9b64276d3bba0",
+  "content_hash": "762ad095b9648e5353e262ab8219453dd3140922d8c1c06ea83a2113a32a1577",
   "doc_link_id": "DLID-pc44gkb54821",
   "keywords": [
-    "formal reference",
-    "reference link definition",
+    "document reference",
     "DLID",
-    "section ID",
+    "reference link definition",
     "content hash",
     "link check",
     "path mismatch",
     "change impact candidates",
-    "detail file",
-    "inconsistency check"
+    "section ID",
+    "inconsistency check",
+    "detail file"
   ],
   "path": "docs/specs/requirement/REQ-005_references.md",
-  "purpose": "Requirements for DLID-based document references, link checking, path-fix and change-impact notices, inconsistency checks, and check output as counts plus a detail file.",
+  "purpose": "Requirements for formal document references by document ID, link checking, path-fix notification, change-impact candidate notification, and inconsistency checks, including output split into counts and a detail file.",
   "summary": [
-    "FR-007: formal references are reference-link definitions whose title holds a content hash and a DLID; inline links are not formal references",
-    "FR-009: link checks search the referenced directory and verify DLID, current path, relative path resolution, and fragment anchors (GitHub slug rules)",
-    "FR-010: path-fix notices give the old and confirmed current path, and fall back to documents in the current Index target list when the directory lacks the target",
-    "13.1: section IDs (DLIDs) are placed at the end of every heading and issued only by the DLID assignment operation",
-    "FR-013 to FR-015: change impact candidates are direct referrers whose recorded hash differs from the current hash, reported every time with no stored notification state",
-    "doc-link never rewrites links or hashes and never judges whether a referrer needs fixing; the project management AI does that after confirming with the user",
-    "FR-016: inconsistency check lists missing or duplicate IDs, broken references, path and fragment mismatches, ToC mismatches, and hash differences",
-    "Check results return counts and a detail file path on standard output, writing the detail file even for zero findings and reporting failure if it cannot be written",
-    "Acceptance conditions AC-003 to AC-035 cover path mismatch detection, impact listing, section scoping, directory search verification, and move target presentation"
+    "FR-007: formal references use reference-link definitions whose title holds a content hash and a DLID",
+    "FR-009: link checks search the referenced directory and verify DLID, current path, relative path resolution and fragments",
+    "FR-010: path-fix notification, including looking up moved documents in the current Index target list",
+    "Section 13.1: section IDs (DLIDs) placed at the end of every heading to reference sections stably",
+    "FR-013 to FR-015: enumerating direct referrers when a recorded content hash differs from the current hash, with no stored notification state",
+    "FR-016: inconsistency check items, user confirmation before rewriting, and the stdout counts plus detail file output contract",
+    "Acceptance criteria AC-003 to AC-035 covering path mismatch, impact listing, directory-search verification, title values, rewrite confirmation and detail files",
+    "Boundary that doc-link never rewrites link definitions or target documents; the project management AI does"
   ],
   "tasks": [
-    "Implementing or modifying the check-links skill and its script",
-    "Implementing or modifying the check-impact change impact detection",
-    "Designing reference notation and DLID-bearing link titles in Markdown documents",
-    "Writing or reviewing design documents for references and impact notification",
-    "Implementing check output as counts and a detail file",
-    "Fixing broken or outdated links after documents are moved or renamed",
-    "Writing tests for link inspection and move-target detection",
-    "Updating content hashes in link titles after verifying referrers"
+    "Writing or revising reference links between documents",
+    "Designing or implementing link checking (check-links)",
+    "Designing or implementing change impact detection (check-impact)",
+    "Implementing path mismatch and moved-document detection",
+    "Designing inconsistency check output and detail files",
+    "Reviewing acceptance criteria for references",
+    "Rewriting link titles with content hashes and DLIDs"
   ],
   "title": "doc-link 要件定義書 — 参照と変更通知"
 }

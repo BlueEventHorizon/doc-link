@@ -129,6 +129,8 @@ class FrontmatterTest(unittest.TestCase):
             'doc_link_id: "a b" # memo': ("doc_link_id", '"a b"', " # memo"),
             '"doc_link_id": abc': ("doc_link_id", "abc", ""),
             "doc_link_id:": ("doc_link_id", "", ""),
+            "doc_link_id: ": ("doc_link_id", "", ""),
+            "doc_link_id: \t": ("doc_link_id", "", ""),
             "doc_link_id: # memo": ("doc_link_id", "", "# memo"),
             "doc_link_id: [a, b] # memo": ("doc_link_id", "[a, b]", " # memo"),
             "doc_link_id: abc\r\n": ("doc_link_id", "abc", ""),

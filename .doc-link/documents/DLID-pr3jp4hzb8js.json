@@ -1,39 +1,38 @@
 {
-  "content_hash": "fdeb71fae5056fd6c26b08469b4be3ed4c27399a45619fe6b4687a81ddabf240",
+  "content_hash": "debedfd1b15515683adfd3885e0a339c209047bdea84a4e24a6c1c2be36afa1c",
   "doc_link_id": "DLID-pr3jp4hzb8js",
   "keywords": [
     "formal reference",
     "reference link title",
-    "DLID",
     "content hash",
-    "change impact candidates",
+    "change impact candidate",
     "check-links",
     "check-impact",
     "path mismatch",
     "detail file",
-    "reverse reference"
+    "section ID",
+    "directory scan"
   ],
   "path": "docs/specs/design/DES-007_references-impact.md",
-  "purpose": "Design for extracting formal references, checking them against scanned files, notifying change-impact candidates, and running consistency checks with detail files.",
+  "purpose": "Design for reference checking and change-impact notification: extracting formal references, scanning directories to verify link targets, finding impact candidates by hash comparison, and writing check results as counts plus detail files.",
   "summary": [
-    "Formal references are extracted from reference-link definitions whose title ends with a DLID, with an optional recorded content hash",
-    "Directory scan classifies each reference as match, path mismatch, or absent, and checks fragments against anchors",
-    "Moved documents are located via the DLID-to-path map built from the current Index target list",
-    "Links without a DLID in the title get a suggested title value computed from the current file contents",
-    "Reverse references are built from scanned sources and limited to documents and sections in the confirmed ToC",
-    "Impact candidates are references whose recorded content hash differs from, or is missing against, the current hash",
-    "Change-impact notification returns facts to the project management AI; doc-link holds no notification state and edits nothing",
-    "Consistency checks are split into check-dlid, check-links, check-toc, and check-impact skills",
-    "Checks print counts to stdout and write full details to a detail JSON file under .temp, returning its absolute path",
-    "Missing-section detection rule and the write boundary that checks never modify Index target documents"
+    "Formal reference extraction from reference-link definitions whose title ends with a DLID, including the recorded content hash in the title",
+    "Real directory scan classifying targets as match, path mismatch, or absent, plus fragment mismatch checks and duplicate diagnosis",
+    "Looking up moved targets in the current Index target list to report the new path, never guessing from stored state",
+    "Values to write in titles of links lacking a DLID, decided from the current content of the target",
+    "Reverse references and impact candidates by comparing recorded hashes with current hashes in the confirmed ToC",
+    "Change-impact notification content returned to the project management AI, with no notification state kept by doc-link",
+    "Consistency checks split into check-dlid, check-links, check-toc, and check-impact skills that do not rewrite managed state",
+    "Output contract: stdout carries counts only, full details go to a detail file under .temp/doc-link written atomically"
   ],
   "tasks": [
-    "Implementing or modifying check-links reference checking",
-    "Implementing check-impact change-impact candidate detection",
-    "Designing reference path-mismatch correction notifications",
+    "Implementing or modifying check-links reference scanning",
+    "Implementing or modifying check-impact change-impact detection",
+    "Designing how moved or missing reference targets are resolved",
     "Implementing check output as counts plus detail files",
-    "Reviewing reference and hash comparison rules",
-    "Writing the title value suggestion for links without a DLID"
+    "Writing tests for reference checks and impact notification",
+    "Reviewing consistency between reference design and requirements",
+    "Handling links without a DLID in titles"
   ],
   "title": "DES-007 参照検査と[変更影響候補の通知]"
 }

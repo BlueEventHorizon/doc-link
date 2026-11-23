@@ -32,6 +32,19 @@ A_TEXT = f"---\ndoc_link_id: {ID_A}\n---\n# A DLID-00000000s001\n\nbody\n"
 B_TEXT = f"---\ndoc_link_id: {ID_B}\n---\n# B DLID-00000000s002\n"
 
 
+def with_detail(stdout: dict) -> dict:
+    """標準出力の JSON に、明細ファイル（`detail_path`）の全件を重ねて返す。同じ名前の項目は標準出力を優先する。
+
+    標準出力は件数までで、明細は作業ファイルにある（要件 D-061）。内容の検査は、両方を合わせた形で行う。
+    標準出力に明細が載っていないことは、標準出力だけを読むテストで確かめる。
+    """
+    path = stdout.get("detail_path")
+    if path is None:
+        return stdout
+    detail = json.loads(Path(path).read_bytes().decode("utf-8"))
+    return {**detail, **stdout}
+
+
 class CheckTestBase(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -73,17 +86,32 @@ class CheckTestBase(unittest.TestCase):
         toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results, WHEN)
 
     def snapshot(self):
+        """対象文書と管理状態（`.temp/` の作業ファイルを除く、すべてのファイル）の内容。"""
         return {
             str(p.relative_to(self.root)): p.read_bytes()
             for p in sorted(self.root.rglob("*"))
-            if p.is_file()
+            if p.is_file() and ".temp" not in p.relative_to(self.root).parts
         }
 
-    def run_main(self, *args):
+    def work_files(self):
+        """`.temp/` の下に書かれた作業ファイルの、ルートからの相対パス。"""
+        return sorted(
+            str(p.relative_to(self.root))
+            for p in self.root.rglob("*")
+            if p.is_file() and ".temp" in p.relative_to(self.root).parts
+        )
+
+    def run_stdout(self, *args):
+        """（終了コード、標準出力の JSON）を返す。"""
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = check_toc.main(["--project-root", str(self.root), *args])
         return code, json.loads(out.getvalue())
+
+    def run_main(self, *args):
+        """（終了コード、標準出力の JSON に明細ファイルの全件を重ねたもの）を返す。"""
+        code, stdout = self.run_stdout(*args)
+        return code, with_detail(stdout)
 
 
 class StatusTest(CheckTestBase):
@@ -114,6 +142,53 @@ class StatusTest(CheckTestBase):
         )
         self.assertEqual(result["scale"]["content_changed"], 1)
         self.assertEqual(result["scale"]["ai_generation"], 1)
+
+    def test_stdout_holds_counts_and_the_detail_file_holds_every_item(self):
+        """D-061: 標準出力は件数までで、変更のある文書・セクションの全件は明細ファイルにある。"""
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        code, stdout = self.run_stdout(*self.ARGS)
+        self.assertEqual(code, 0)
+        for name in ("documents", "sections", "excluded", "excluded_in_toc"):
+            self.assertNotIn(name, stdout)
+        self.assertEqual(stdout["counts"]["content_changed"], 1)
+        self.assertEqual(stdout["counts"]["excluded_in_toc"], 0)
+        path = Path(stdout["detail_path"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(
+            path, self.root / ".temp" / "doc-link" / "check-toc" / f"detail-{KEY}.json"
+        )
+        detail = json.loads(path.read_bytes().decode("utf-8"))
+        self.assertEqual(
+            set(detail),
+            {
+                "status",
+                "toc_key",
+                "version",
+                "documents",
+                "sections",
+                "excluded",
+                "excluded_in_toc",
+            },
+        )
+        self.assertEqual([d["doc_link_id"] for d in detail["documents"]], [ID_A])
+
+    def test_detail_file_is_written_even_when_nothing_is_found(self):
+        self.build()
+        code, stdout = self.run_stdout(*self.ARGS)
+        self.assertEqual(code, 0)
+        detail = json.loads(Path(stdout["detail_path"]).read_bytes().decode("utf-8"))
+        self.assertEqual((detail["documents"], detail["sections"]), ([], []))
+
+    def test_rerun_replaces_the_detail_file(self):
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        _, first = self.run_stdout(*self.ARGS)
+        self.write("a.md", A_TEXT)
+        _, second = self.run_stdout(*self.ARGS)
+        self.assertEqual(first["detail_path"], second["detail_path"])
+        detail = json.loads(Path(second["detail_path"]).read_bytes().decode("utf-8"))
+        self.assertEqual(detail["documents"], [])
 
     def test_given_spec_takes_priority_over_the_saved_one(self):
         self.build()
@@ -149,6 +224,14 @@ class ReadOnlyTest(CheckTestBase):
         self.run_main("--key", KEY, "--paths", "a.md", "b.md")
         self.run_main("--key", "unbuilt", "--paths", "a.md")
         self.assertEqual(self.snapshot(), before)
+        # 書くのは、明細の作業ファイルだけである（[ToC 識別キー]ごとに 1 つ）
+        self.assertEqual(
+            [name for name in self.work_files() if "check-toc" in name],
+            [
+                f".temp/doc-link/check-toc/detail-{KEY}.json",
+                ".temp/doc-link/check-toc/detail-unbuilt.json",
+            ],
+        )
 
 
 class FailureTest(CheckTestBase):
@@ -223,7 +306,10 @@ class EntryScriptWithUvTest(CheckTestBase):
             "b.md",
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertEqual(json.loads(completed.stdout)["status"], "rebuild_needed")
+        result = json.loads(completed.stdout)
+        self.assertEqual(result["status"], "rebuild_needed")
+        self.assertNotIn("documents", result)
+        self.assertTrue(Path(result["detail_path"]).is_file())
         self.assertEqual(self.snapshot(), before)
 
     def test_rejected_target_exits_1(self):

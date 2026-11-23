@@ -74,7 +74,7 @@ class OutOfScopeReferenceScenarioTest(ScenarioBase):
             found["checked_at"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$"
         )
         # 同じ範囲・時点が、構築の結果にも付く
-        for finding in result["reference_check"]["findings"]:
+        for finding in result["reference_findings"]:
             self.assertIn("directory", finding["scope"])
             self.assertEqual(
                 finding["scope"]["checked_at"],
@@ -86,7 +86,7 @@ class OutOfScopeReferenceScenarioTest(ScenarioBase):
     def test_scenario_6_target_moved_outside_the_scope_is_absent_and_not_guessed(self):
         self.build_ok(KEY, PATHS)
         self.assertEqual(self.references()[ID_M]["check"]["result"], "match")
-        # 指定ディレクトリの外へ移動する。移動先は、プロジェクト内にあっても探さない
+        # 指定ディレクトリの外へ移動する。移動先は[Index 対象リスト]の外なので、プロジェクト内にあっても探さない
         self.write("elsewhere/m.md", M_TEXT)
         (self.root / "ext" / "m.md").unlink()
         documents_before = self.snapshot("docs")
@@ -96,9 +96,7 @@ class OutOfScopeReferenceScenarioTest(ScenarioBase):
         self.assertIsNone(absent["found_path"])
         self.assertEqual(absent["scope"], "ext")
         finding = next(
-            f
-            for f in result["reference_check"]["findings"]
-            if f["reference"]["dlid"] == ID_M
+            f for f in result["reference_findings"] if f["reference"]["dlid"] == ID_M
         )
         self.assertEqual(finding["status"], "absent")
         self.assertEqual(finding["absent_reason"], "not_found")
@@ -119,7 +117,7 @@ class OutOfScopeReferenceScenarioTest(ScenarioBase):
         self.assertEqual(absent["scope"], "nodir")
         reasons = {
             f["reference"]["dlid"]: f["absent_reason"]
-            for f in result["reference_check"]["findings"]
+            for f in result["reference_findings"]
         }
         self.assertEqual(reasons[ID_N], "directory_missing")
         self.assertFalse((self.root / "nodir").exists())
@@ -135,7 +133,7 @@ class OutOfScopeReferenceScenarioTest(ScenarioBase):
         self.assertEqual(absent["scope"], "locked")
         reasons = {
             f["reference"]["dlid"]: f["absent_reason"]
-            for f in result["reference_check"]["findings"]
+            for f in result["reference_findings"]
         }
         self.assertEqual(reasons[ID_Y], "directory_unreadable")
         self.assertTrue(self.toc_bytes(KEY))

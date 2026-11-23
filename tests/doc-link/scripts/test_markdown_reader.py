@@ -111,6 +111,41 @@ class FrontmatterTest(unittest.TestCase):
                     frontmatter_of(f"---\n{body}\n---\n").doc_link_id, ID_A
                 )
 
+    def test_quoted_key_is_the_same_key(self):
+        for body in (
+            f'"doc_link_id": {ID_A}',
+            f"'doc_link_id': {ID_A}",
+            f'"doc_link_id" : "{ID_A}" # memo',
+        ):
+            with self.subTest(body=body):
+                self.assertEqual(
+                    frontmatter_of(f"---\n{body}\n---\n").doc_link_id, ID_A
+                )
+
+    def test_key_value_span(self):
+        cases = {
+            "doc_link_id: abc": ("doc_link_id", "abc", ""),
+            "doc_link_id:  abc  # memo": ("doc_link_id", "abc", "  # memo"),
+            'doc_link_id: "a b" # memo': ("doc_link_id", '"a b"', " # memo"),
+            '"doc_link_id": abc': ("doc_link_id", "abc", ""),
+            "doc_link_id:": ("doc_link_id", "", ""),
+            "doc_link_id: ": ("doc_link_id", "", ""),
+            "doc_link_id: \t": ("doc_link_id", "", ""),
+            "doc_link_id: # memo": ("doc_link_id", "", "# memo"),
+            "doc_link_id: [a, b] # memo": ("doc_link_id", "[a, b]", " # memo"),
+            "doc_link_id: abc\r\n": ("doc_link_id", "abc", ""),
+        }
+        for line, (key, value, rest) in cases.items():
+            with self.subTest(line=line):
+                found_key, start, end = markdown_reader.key_value_span(line)
+                body = line.rstrip("\r\n")
+                self.assertEqual(
+                    (found_key, body[start:end], body[end:]), (key, value, rest)
+                )
+        for line in ("  indented: x", "- item", "no colon", ""):
+            with self.subTest(line=line):
+                self.assertIsNone(markdown_reader.key_value_span(line))
+
     def test_yaml_syntax_error_does_not_hide_doc_link_id(self):
         text = f"---\ntitle: [unclosed\n: broken: : :\n\tbad indent\ndoc_link_id: {ID_A}\n---\n"
         self.assertEqual(frontmatter_of(text).doc_link_id, ID_A)

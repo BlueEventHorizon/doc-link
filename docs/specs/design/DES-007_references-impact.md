@@ -19,7 +19,7 @@ doc_link_id: DLID-pr3jp4hzb8js
 
 script は参照元からリンク定義の相対パスを解決し、指定された**ディレクトリ**を実走査する。title の[DLID]が文書の[DLID]なら候補文書の frontmatter の `doc_link_id` と、[セクション ID]なら候補文書の中の見出しの行の末尾の[DLID]と照合する。[セクション ID]は、それを含む文書を所属文書とし、所属文書のパスをリンク先パスと比べる。リンク先のフラグメント（`#…`）は参照先の同一性の判定に使わない。結果は「一致」「同ディレクトリ内の別パスに同 ID がありパス不一致」「指定ディレクトリ内に不在」のいずれか。指定ディレクトリ自体が存在しない場合と、ディレクトリを読めない場合も「不在」とする（要件 [D-025][req-005-fr-009]）。指定ディレクトリの名前が固定の除外の名前（`build`・`vendor` など）、またはその配下のときも、そのディレクトリを走査する。参照が明示しているためで、固定の除外は[Index 対象リスト]を作る走査と展開に限る。走査の中で見つけた、その配下の固定の除外の名前のディレクトリは走査しない（要件 [D-055][req-002-sec-6-1-3]）。「一致」の場合、フラグメントがあれば別に到達先を確かめる。フラグメントを参照先文書の明示アンカー（`<a id>`）または見出しから生成されるアンカー（[DES-008 §2][des-008-sec-2]）に解決し、解決できない場合は「フラグメント不一致」とする。title が[セクション ID]なら、フラグメントがそのセクションの見出しのアンカーに解決しない場合（明示アンカーに解決した場合を含む）も「フラグメント不一致」とする（要件 [FR-009][req-005-fr-009]）。フラグメント不一致には、その[DLID]のセクションへ届く現在のアンカーを添える。結果は検査ディレクトリ・時点・証拠を伴う。同一 ID が複数見つかった場合は一意の現在パスを推定せず、重複診断にする。参照先が[ToC 識別キー]の対象外でも、この走査を省略しない。
 
-パス不一致の修正先は、実走査で同じ ID の実体を一意に確認した場合にだけ通知する。指定ディレクトリの外へ移動した文書は、そのディレクトリの検索では発見できない。保存済みパスや別キーの情報から「現在パス」を推測して確定値として返さない（要件 [FR-010][req-005-fr-010]）。指定ディレクトリ内不在とパス不一致は[ToC]確定を妨げない（要件 [D-025][req-005-fr-009]）。
+パス不一致の修正先は、実走査で同じ ID の実体を一意に確認した場合にだけ通知する。指定ディレクトリの外へ移動した文書は、そのディレクトリの検索では発見できない。そこで、指定ディレクトリに無い参照先（指定ディレクトリ自体が無い・読めない場合を含む）は、今回の[Index 対象リスト]の文書の中から、同じ[DLID]を持つ文書・見出しを探す。一意に見つかれば、そのパスを現在パスとして、パス不一致にする。複数見つかれば重複にし、見つからなければ不在のままにする。[Index 対象リスト]の外へ移動した文書は探さない（要件 [D-062][req-005-fr-010]）。探すのに使うのは、今回の検査で読んだ現物から作った、[DLID]と現在のパスの対応だけである。`check-links` は参照元を読みながらこの対応を作り、すべての参照元を読み終えてから、不在だった参照を引き直す。[ToC]の構築は、不在の参照があるときだけ、[Index 対象リスト]の文書を読んで対応を作る。保存済みパスや別キーの情報から「現在パス」を推測して確定値として返さない（要件 [FR-010][req-005-fr-010]）。指定ディレクトリ内不在とパス不一致は[ToC]確定を妨げない（要件 [D-025][req-005-fr-009]）。
 
 title に[DLID]の無いリンク（`link_without_dlid`）には、title に書く値を添える（要件 [FR-016][req-005-fr-016]・[AC-032][req-005-ac-032]）。値は `<内容ハッシュ> DLID-…` の形で、実走査で読んだ参照先の現物から決める。保存済みの[ToC]・管理状態の記録は使わない（`resolve-dlid` が返す記録とは異なり、検査時点の現物の値である）。リンクの種別ごとの値は次のとおり。
 
@@ -86,19 +86,27 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 
 ## 4. 不整合検査 DLID-wpjybjaee1df
 
-不整合検査は ID 欠落・重複、壊れた参照、title に[DLID]の無いリンク、パス不一致、[ToC]と現物の差、title の記録と参照先の[現在ハッシュ]が異なる参照を一覧化する操作として扱う。検査内容ごとに `check-dlid`、`check-links`、`check-toc`、`check-impact` の SKILL に分ける（[DES-010][des-010]）。検査は管理状態を書き換えない。ID の付与は DLID 付与操作だけが行うので、検査は[Index 対象文書]を変更しない（要件 [D-035][req-002-fr-001]）。検出事項に重要度の分類は設けない。検出事項ごとの扱い（[ToC]の確定を妨げるか、検出後の作業）は、要件 [D-025][req-005-fr-009]・[D-036][req-002-sec-9-1] と[DES-010][des-010]が定める。「存在しないセクション」は、リンク先パスの文書は存在するが、title の[セクション ID]を行の末尾に持つ見出しがその文書にも指定ディレクトリ内の他の文書にも無いことで判定する（§1、要件 [D-033][req-005-sec-13-1]）。
+不整合検査は ID 欠落・重複、壊れた参照、title に[DLID]の無いリンク、パス不一致、[ToC]と現物の差、title の記録と参照先の[現在ハッシュ]が異なる参照を一覧化する操作として扱う。検査内容ごとに `check-dlid`、`check-links`、`check-toc`、`check-impact` の SKILL に分ける（[DES-010][des-010]）。検査は管理状態を書き換えない。ID の付与は DLID 付与操作だけが行うので、検査は[Index 対象文書]を変更しない（要件 [D-035][req-002-fr-001]）。検出事項に重要度の分類は設けない。検出事項ごとの扱い（[ToC]の確定を妨げるか、検出後の作業）は、要件 [D-025][req-005-fr-009]・[D-036][req-002-sec-9-1] と[DES-010][des-010]が定める。「存在しないセクション」は、リンク先パスの文書は存在するが、title の[セクション ID]を行の末尾に持つ見出しがその文書にも、指定ディレクトリ内の他の文書にも、今回の[Index 対象リスト]の文書にも無いことで判定する（§1、要件 [D-033][req-005-sec-13-1]）。
 
-[des-010]: DES-010_skill-composition.md "7004f5d82b53 DLID-7e90gq3sdncc"
-[des-010-sec-1-2]: DES-010_skill-composition.md#12-検査の-skill-の責務-dlid-h9bg56gdypm5 "5c9a4a2b1fc9 DLID-h9bg56gdypm5"
+検査（`check-dlid`・`check-links`・`check-toc`・`check-impact`）と検索前検査は、標準出力に件数までを返し、全件の明細は作業ファイルへ書いて、その絶対パスを返す（要件 [D-061][req-005-fr-016]）。
+
+- 明細ファイルは `.temp/doc-link/<SKILL の名前>/detail-<符号化した[ToC 識別キー]>.json` に置く。SKILL と[ToC 識別キー]の組ごとに 1 つで、同じ組の次の実行が置き換える。単体モードの[ToC 識別キー]は `all` である。
+- script が一時ファイルへ書き終えてから 1 回の置き換えで公開する。書き方は、[ToC]の構築の完了結果の明細ファイル（[DES-005 §4][des-005-sec-4]）と同じ部品を使う。
+- 検出が 0 件でも書く。ただし、検索前検査が書くのは、再構築の確認を返すときだけである。書けないときは、件数だけを返さず、エラーとして終了する。
+- 標準出力に載せないのは、検出事項（`check-dlid`・`check-links`）、検査できなかったリンクと参照元の文書（`check-links`）、変更のある文書とセクション・除外した文書（`check-toc`・検索前検査）、変更影響候補と走査した参照元の文書（`check-impact`）である。件数は標準出力に持つ。
+- 検査は、[Index 対象文書]と管理状態を書き換えない。書くのは、この明細ファイルだけである。
+
+[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
+[des-010-sec-1-2]: DES-010_skill-composition.md#12-検査の-skill-の責務-dlid-h9bg56gdypm5 "ca66de9e8025 DLID-h9bg56gdypm5"
 [des-010-sec-3-7]: DES-010_skill-composition.md#37-check-impact-dlid-1nny3y551m4v "dd9a5fefa574 DLID-1nny3y551m4v"
 [des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"
 [des-008-sec-3]: DES-008_content-rules.md#3-比較値とハッシュ-dlid-2f452e4mna91 "80f6735d096d DLID-2f452e4mna91"
 [req-005-ac-032]: ../requirement/REQ-005_references.md#ac-032-title-に書く値の提示-dlid-nc6z2c2w5wx3 "d2b830d42495 DLID-nc6z2c2w5wx3"
-[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
-[req-005-fr-010]: ../requirement/REQ-005_references.md#fr-010-参照パス修正情報の通知-dlid-ev07yszprm9m "46f991bc5caa DLID-ev07yszprm9m"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
+[req-005-fr-010]: ../requirement/REQ-005_references.md#fr-010-参照パス修正情報の通知-dlid-ev07yszprm9m "52b105d38cac DLID-ev07yszprm9m"
 [req-005-fr-014]: ../requirement/REQ-005_references.md#fr-014-変更影響候補の通知-dlid-j0z4w1wm0g4p "6a036ff75fc1 DLID-j0z4w1wm0g4p"
 [req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "3627fec77afd DLID-jhkngqtfdnhn"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
@@ -107,3 +115,4 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 [req-005-fr-013]: ../requirement/REQ-005_references.md#fr-013-変更影響候補の特定-dlid-cnw6h5pzv3wz "6af5f019bff6 DLID-cnw6h5pzv3wz"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-002-sec-6-1-3]: ../requirement/REQ-002_document-id.md#613-固定の除外-dlid-ag3rwsh3paj1 "d6cab5ccfaa7 DLID-ag3rwsh3paj1"
+[des-005-sec-4]: DES-005_indexing.md#4-必要情報の取得と候補確定-dlid-dfsegbf7p2q9 "26e952075c9c DLID-dfsegbf7p2q9"

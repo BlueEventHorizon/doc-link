@@ -23,7 +23,7 @@ doc_link_id: DLID-h96208rqr773
 - [ToC]を再構築してから検索する
 - [ToC]を更新せず、既存の[ToC]のまま検索する
 
-この確認では、再構築の規模として、新規・離脱・パスだけの変更・内容の変更・[文書 ID]が無い文書・[文書 ID]が重複する文書の件数と、AI による要約生成が必要な文書の件数を示すこと。要約生成が必要な件数には、同じ内容の検証済み[文書情報]を再利用できる文書を含めない。ユーザーは、内訳から対象ディレクトリの消失などの異常にも気づける（D-027）。
+この確認では、再構築の規模として、新規・離脱・パスだけの変更・内容の変更・[文書 ID]が無い文書・[文書 ID]が重複する文書の件数と、AI による要約生成が必要な文書の件数を示すこと。要約生成が必要な件数には、同じ内容の検証済み[文書情報]を再利用できる文書を含めない。ユーザーは、内訳から対象ディレクトリの消失などの異常にも気づける（D-027）。この確認で標準出力に返すのは件数までとし、変更のある文書・セクションごとの明細は作業ファイルへ書いて、そのパスを返す（[D-061][req-005-fr-016]）。
 
 権限不足、読み取りエラー、保存済み[Index 対象指定]の解釈不能、管理状態の読取不能などにより再構築要否を判定できない場合は、障害として検索を停止し、判定できなかった対象と原因を返すこと。この場合、既存の[ToC]のまま検索する選択肢を提示してはならない（D-026）。
 
@@ -45,7 +45,8 @@ doc_link_id: DLID-h96208rqr773
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "bd611adfec0d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
+[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
+[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-003-fr-004]: REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
+[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"

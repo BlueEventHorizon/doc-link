@@ -412,12 +412,12 @@ sequenceDiagram
   - 確定結果（版・[確定 ToC]を書き換えたか）
   - 変更の種別ごとの件数（文書・セクション）
   - 生成した文書の件数
-  - 参照検査結果（分類ごとの件数と、一致以外の検出事項）
-  - ID 未付与・重複で除外した文書
+  - 参照検査結果（分類ごとの件数）
+  - ID 未付与・重複で除外した文書の件数
   - 報告すべき問題と警告
   - 明細ファイルのパス
-- 明細ファイルには、変更集合（文書・セクションごとの変更前後の値を含む）と、生成した文書の一覧を、全件書く。
-- 変更なしの文書の変更前後の値のように、呼び出し元が判断に使わない明細が、文書数に比例して大きくなり、呼び出し元の文脈を消費するためである。
+- 明細ファイルには、変更集合（文書・セクションごとの変更前後の値と、ID 未付与・重複で除外した文書を含む）、生成した文書の一覧、一致以外の参照の検出事項を、全件書く。
+- 変更なしの文書の変更前後の値のように、呼び出し元が判断に使わない明細が、文書数に比例して大きくなり、呼び出し元の文脈を消費するためである。参照の検出事項と除外した文書も、文書を大量に移動したときなどに、件数に比例して大きくなる。
 - 明細ファイルは `.temp/doc-link/index-docs/` に置き、同じ[ToC 識別キー]の次の構築で置き換える。
 - 明細ファイルは[確定 ToC]を公開する前に書く。書けないときは公開せずに、構築の失敗として報告する。
 - 構築が失敗したときは、明細ファイルのパスを返さない。
@@ -472,9 +472,9 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "bd611adfec0d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
+[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
+[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [des-003]: ../design/DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
 [req-002-sec-6-2]: REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs "5c219073abcb DLID-5h2et5v540gs"
 [req-003-sec-10-1]: REQ-003_toc.md#101-変更検出に使用するハッシュ-dlid-dmkbxbz5ph81 "d8d85fb70432 DLID-dmkbxbz5ph81"
@@ -487,12 +487,12 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 [req-001-sec-3-2]: REQ-001_overview.md#32-文書検索フロー-dlid-eeaqehrykrje "e881c27e4f9d DLID-eeaqehrykrje"
 [req-001-sec-3-1]: REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me "a1500a8117ce DLID-5e8mpztyp4me"
 [req-003-sec-10-1-2]: REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
-[req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "9b494fa9ab14 DLID-481cwc8365a3"
+[req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "002418132007 DLID-481cwc8365a3"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-2]: REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
-[req-003-sec-11-2-4]: REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "931ba28a2521 DLID-3mhrvbx44c87"
-[req-005-fr-009]: REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
+[req-003-sec-11-2-4]: REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "51b57b11c1e5 DLID-3mhrvbx44c87"
+[req-005-fr-009]: REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
 [req-005-fr-015]: REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"
-[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "3627fec77afd DLID-jhkngqtfdnhn"
+[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"

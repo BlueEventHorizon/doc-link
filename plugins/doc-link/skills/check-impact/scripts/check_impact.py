@@ -9,7 +9,8 @@
 # ///
 """変更影響候補を列挙する（check-impact の入口 script）。
 
-何も書き込まない。[確定 ToC]・[文書情報]・参照元の文書を読むだけで、通知の状態を持たない。判断・修正・title の
+[Index 対象文書]と管理状態（`.doc-link/`）へは書き込まない。[確定 ToC]・[文書情報]・参照元の文書を読むだけで、通知の
+状態を持たない。書くのは、結果の明細の作業ファイル（`.temp/doc-link/check-impact/`）だけである。判断・修正・title の
 [内容ハッシュ]の書き換えは[プロジェクト管理 AI]が行い、この script は行わない。対象は `index-docs` と同じ `--key` と
 [Index 対象指定]（`--paths`・`--dirs`・`--exclude`・`--all` など）で決め、引数の検証と展開は共通モジュール
 `target_spec` を使う。[ToC]が最新かの確認は共通モジュール `toc_check`（`check-toc` と同じもの）、列挙は共通モジュール
@@ -22,23 +23,35 @@
 
 ## 標準出力
 
-終了コード 0 のとき結果の JSON、1 のときエラーの JSON（`errors` は自然文の配列）を返す。
+終了コード 0 のとき結果の JSON、1 のときエラーの JSON（`errors` は自然文の配列）を返す。標準出力は件数までで、
+変更影響候補の明細は明細ファイルへ書く（要件 D-061。変更された文書と参照元が多くても、標準出力の大きさが
+変わらないようにするため）。どの場合も、`detail_path` に明細ファイルの絶対パスを持つ。
 
 [ToC]が未構築（`not_built`）・再構築必要（`rebuild_needed`）のとき、変更影響候補を返さず、`check-toc` と同じ検査結果
-（`check-toc` の標準出力と同じ項目）を返す。`changed_documents` と `guidance` は持たない。
+（`check-toc` の標準出力・明細ファイルと同じ項目）を返す。`guidance` は持たない。
 
 [ToC]が最新（`up_to_date`）のとき、次を返す。
 
 - `status`: `up_to_date`
+- `counts`: `changed_documents`（変更された文書の件数）・`referrers`（確かめる参照の件数）・`excluded`（ID 未付与・
+  ID 重複で除外した文書の件数）
+- `scope`: 検査範囲。`target`（対象指定）・`toc_key`・`toc_version`（[確定 ToC]の版）・`scanned_document_count`
+  （参照を調べた参照元の文書の件数）・`checked_at`（時点）・`note`（走査した範囲に限られること）
+- `problems`・`warnings`: `check-toc` と同じ意味
+- `guidance`: 検出後にすべきことの案内（自然文の配列）
+
+## 明細ファイル
+
+`.temp/doc-link/check-impact/detail-<符号化した[ToC 識別キー]>.json`。同じ[ToC 識別キー]の次の実行が置き換える。
+検出が 0 件でも書く。[ToC]が最新のとき、次を持つ。
+
 - `changed_documents`: 変更された文書の配列。要素は `doc_link_id`・`path` と、直接の参照元の配列 `referrers`。
   各参照元は、参照元の `source_doc_id`・`source_path`・`line`（1 始まり）・`definition`（参照記述）・`label`・
   `link_path`・`fragment`、参照先の `target_dlid`・`target_kind`（`document`・`section`）・`target_section_id`・
   `target_heading`、title に記録した[内容ハッシュ] `recorded_hash`（記録なしは `null`）、参照先の[現在ハッシュ]
   `current_hash` を持つ。異なる参照が無いときは空の配列である
-- `scope`: 検査範囲。`target`（対象指定）・`toc_key`・`toc_version`（[確定 ToC]の版）・`scanned_documents`（参照を
-  調べた参照元の文書）・`checked_at`（時点）・`note`（走査した範囲に限られること）
-- `excluded`・`problems`・`warnings`: `check-toc` と同じ意味
-- `guidance`: 検出後にすべきことの案内（自然文の配列）
+- `scanned_documents`: 参照を調べた参照元の文書
+- `excluded`: `check-toc` と同じ意味
 
 ## 仕様の解釈
 
@@ -46,13 +59,14 @@
 - 列挙・[ToC]の鮮度の判定のどちらかを完了できなかったとき（判定不能、参照元を読めない、[ToC]と現物の食い違い、など）は、
   エラーの JSON と終了コード 1 を返し、変更影響候補を返さない。判定不能を、最新・古いのどちらにも読み替えない
 - 列挙の規則と解釈は `impact_candidates` の module docstring に従う
+- 明細ファイルを書けないときは、件数だけを返さず、1 を返す
 
 ## 終了コード
 
 | code | 意味                                                                                           |
 | ---- | ---------------------------------------------------------------------------------------------- |
 | 0    | 検査が完了した（[ToC]が古い・未構築で候補を返さない場合と、変更影響候補が 0 件以上の場合を含む） |
-| 1    | 区別のないエラー（対象指定の拒否、判定不能、参照元を読めない、など）                           |
+| 1    | 区別のないエラー（対象指定の拒否、判定不能、参照元を読めない、明細ファイルを書けない、など）   |
 | 2    | 引数を受理できない（`argparse`）                                                               |
 """
 
@@ -64,18 +78,22 @@ from pathlib import Path
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
+import detail_file  # noqa: E402
 import impact_candidates  # noqa: E402
 from clock import utc_now  # noqa: E402
 import script_output  # noqa: E402
 import target_spec  # noqa: E402
 import toc_check  # noqa: E402
 
+SKILL = "check-impact"
+
 GUIDANCE_IMPACT = (
+    "変更影響候補は、明細ファイル（`detail_path`）の `changed_documents` にある。"
     "参照元ごとに、変更箇所と参照元の該当記述を読み、参照元の修正が必要かを[プロジェクト管理 AI]が判断する。必要なら参照元を直し、"
     "判断の結果（修正の要否と根拠）を報告に残す。"
     "確かめた参照の title に参照先の[現在ハッシュ]（`current_hash`）を書く。確かめていない参照の title は書き換えない。"
     "読まずに一括で書き換えない（書き換えると、その参照の通知が消える）。"
-    "書いたあとは `check-impact` をもう一度実行し、`changed_documents` が空になるまで繰り返す"
+    "書いたあとは `check-impact` をもう一度実行し、`counts.changed_documents` が 0 になるまで繰り返す"
 )
 NOTE_SCOPE = (
     "参照元は、[確定 ToC]の参照関係から把握した、走査した範囲の文書に限られる。"
@@ -90,26 +108,40 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _impact_output(check: toc_check.TocCheck, root: Path) -> dict:
+def _impact_output(check: toc_check.TocCheck, root: Path) -> tuple[dict, dict]:
+    """（標準出力へ返す要約、明細ファイルへ書く全件）を返す。"""
     checked_at = utc_now()
     result = impact_candidates.enumerate_impact(root, check.toc_key)
+    changed = [d.to_dict() for d in result.changed_documents]
     guidance = [GUIDANCE_IMPACT] if result.changed_documents else []
-    return {
+    summary = {
         "status": check.status,
-        "changed_documents": [d.to_dict() for d in result.changed_documents],
+        "counts": {
+            "changed_documents": len(changed),
+            "referrers": sum(len(document["referrers"]) for document in changed),
+            "excluded": len(check.excluded),
+        },
         "scope": {
             "target": check.target_spec,
             "toc_key": result.toc_key,
             "toc_version": result.toc_version,
-            "scanned_documents": list(result.scanned_documents),
+            "scanned_document_count": len(result.scanned_documents),
             "checked_at": checked_at,
             "note": NOTE_SCOPE,
         },
-        "excluded": [e.to_dict() for e in check.excluded],
         "problems": list(check.problems),
         "warnings": list(check.warnings),
         "guidance": guidance,
     }
+    detail = {
+        "status": check.status,
+        "toc_key": result.toc_key,
+        "toc_version": result.toc_version,
+        "changed_documents": changed,
+        "scanned_documents": list(result.scanned_documents),
+        "excluded": [e.to_dict() for e in check.excluded],
+    }
+    return summary, detail
 
 
 def execute(args: argparse.Namespace) -> int:
@@ -127,12 +159,14 @@ def execute(args: argparse.Namespace) -> int:
             + [cause.describe() for cause in check.causes]
         )
     if check.status != toc_check.STATUS_UP_TO_DATE:
-        return script_output.emit_result(check.to_dict())
+        return detail_file.emit_with_detail(
+            root, SKILL, check.toc_key, check.to_summary(), check.to_detail()
+        )
     try:
-        output = _impact_output(check, root)
+        summary, detail = _impact_output(check, root)
     except impact_candidates.ImpactFailure as failure:
         return script_output.emit_error(["変更影響候補を列挙できない"] + failure.errors)
-    return script_output.emit_result(output)
+    return detail_file.emit_with_detail(root, SKILL, check.toc_key, summary, detail)
 
 
 def main(argv: list[str] | None = None) -> int:

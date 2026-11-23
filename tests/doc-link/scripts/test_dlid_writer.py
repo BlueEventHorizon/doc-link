@@ -129,6 +129,34 @@ class ExactBytesTest(WriterTestBase):
             f"---\ndoc_link_id: {D1}\nother: 1\n---\n# T {D2}\n",
         )
 
+    def test_replacing_the_value_keeps_the_key_and_the_trailing_comment(self):
+        # 置き換えるのは値だけで、キーの書き方・区切りの空白・行末のコメントは変えない
+        cases = {
+            "doc_link_id: bogus # owner note": f"doc_link_id: {D1} # owner note",
+            "doc_link_id:   bogus   # note": f"doc_link_id:   {D1}   # note",
+            'doc_link_id: "bogus" # note': f"doc_link_id: {D1} # note",
+            '"doc_link_id": bogus # note': f'"doc_link_id": {D1} # note',
+            "'doc_link_id' : bogus": f"'doc_link_id' : {D1}",
+            "doc_link_id: [a, b] # note": f"doc_link_id: {D1} # note",
+            "doc_link_id:": f"doc_link_id: {D1}",
+            "doc_link_id: ": f"doc_link_id: {D1}",
+            "doc_link_id:  ": f"doc_link_id:  {D1}",
+            "doc_link_id: # note": f"doc_link_id: {D1} # note",
+            "doc_link_id:\t# note": f"doc_link_id:\t{D1} # note",
+        }
+        for before, after in cases.items():
+            with self.subTest(before=before):
+                self.assertEqual(
+                    self.embed(f"---\n{before}\nother: 1 # keep\n---\n# T {ID_B}\n"),
+                    f"---\n{after}\nother: 1 # keep\n---\n# T {ID_B}\n",
+                )
+
+    def test_quoted_key_with_a_valid_id_is_not_issued_again(self):
+        for key in ('"doc_link_id"', "'doc_link_id'"):
+            with self.subTest(key=key):
+                text = f"---\n{key}: {ID_A} # note\n---\n# T {ID_B}\n"
+                self.assertEqual(self.embed(text), text)
+
     def test_existing_ids_are_kept(self):
         text = f"---\ndoc_link_id: {ID_A}\n---\n# T {ID_B}\n\n## U\n"
         self.assertEqual(
@@ -544,6 +572,25 @@ class VerifyWrittenTest(unittest.TestCase):
         self.assertNotEqual(
             dlid_writer.verify_written(before, after, list(plan.items)), []
         )
+
+    def test_rejects_a_changed_comment_or_key_on_the_doc_link_id_line(self):
+        before = "---\ndoc_link_id: bogus # owner note\n---\n# T\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "a.md").write_text(before, encoding="utf-8")
+            plan = embed_plan.build_plan(tmp, ["a.md"], issue=fixed_issuer())
+        items = list(plan.items)
+        kept = f"---\ndoc_link_id: {D1} # owner note\n---\n# T {D2}\n"
+        self.assertEqual(dlid_writer.verify_written(before, kept, items), [])
+        for line in (
+            f"doc_link_id: {D1}",
+            f"doc_link_id: {D1} # other note",
+            f'"doc_link_id": {D1} # owner note',
+        ):
+            with self.subTest(line=line):
+                after = f"---\n{line}\n---\n# T {D2}\n"
+                self.assertNotEqual(
+                    dlid_writer.verify_written(before, after, items), []
+                )
 
     def test_rejects_removed_heading(self):
         before = "# T\n\n## U\n"

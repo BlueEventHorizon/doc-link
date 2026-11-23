@@ -59,6 +59,19 @@ no id target [n](../ref/plain.md) and missing target [m](../ref/none.md).
 """
 
 
+def with_detail(stdout: dict) -> dict:
+    """標準出力の JSON に、明細ファイル（`detail_path`）の全件を重ねて返す。同じ名前の項目は標準出力を優先する。
+
+    標準出力は件数までで、明細は作業ファイルにある（要件 D-061）。内容の検査は、両方を合わせた形で行う。
+    標準出力に明細が載っていないことは、標準出力だけを読むテストで確かめる。
+    """
+    path = stdout.get("detail_path")
+    if path is None:
+        return stdout
+    detail = json.loads(Path(path).read_bytes().decode("utf-8"))
+    return {**detail, **stdout}
+
+
 class CheckLinksTestBase(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -71,17 +84,32 @@ class CheckLinksTestBase(unittest.TestCase):
         target.write_bytes(text.encode("utf-8"))
 
     def snapshot(self):
+        """対象文書と管理状態（`.temp/` の作業ファイルを除く、すべてのファイル）の内容。"""
         return {
             str(p.relative_to(self.root)): p.read_bytes()
             for p in sorted(self.root.rglob("*"))
-            if p.is_file()
+            if p.is_file() and ".temp" not in p.relative_to(self.root).parts
         }
 
-    def run_main(self, *args):
+    def work_files(self):
+        """`.temp/` の下に書かれた作業ファイルの、ルートからの相対パス。"""
+        return sorted(
+            str(p.relative_to(self.root))
+            for p in self.root.rglob("*")
+            if p.is_file() and ".temp" in p.relative_to(self.root).parts
+        )
+
+    def run_stdout(self, *args):
+        """（終了コード、標準出力の JSON）を返す。"""
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = check_links.main(["--project-root", str(self.root), *args])
         return code, json.loads(out.getvalue())
+
+    def run_main(self, *args):
+        """（終了コード、標準出力の JSON に明細ファイルの全件を重ねたもの）を返す。"""
+        code, stdout = self.run_stdout(*args)
+        return code, with_detail(stdout)
 
     def make_fixture(self):
         self.write("ref/a.md", REF_A)
@@ -169,7 +197,9 @@ class CategoriesTest(CheckLinksTestBase):
 
     def test_scope(self):
         scope = self.result["scope"]
-        self.assertIn("ref", scope["directories"])
+        self.assertIn("ref", self.result["directories"])
+        self.assertEqual(scope["directory_count"], len(self.result["directories"]))
+        self.assertNotIn("directories", scope)
         self.assertTrue(scope["checked_at"])
 
     def test_writes_nothing(self):
@@ -389,7 +419,11 @@ class WithoutDocumentIdTest(CheckLinksTestBase):
         code, result = self.run_main("--key", "k", "--paths", "src/m.md")
         self.assertEqual(code, 0)
         self.assertEqual(len(result["warnings"]), 1)
-        self.assertIn("src/m.md", result["warnings"][0])
+        # 警告は件数だけを持ち、パスは明細ファイルにある
+        self.assertIn("1 件", result["warnings"][0])
+        self.assertNotIn("src/m.md", result["warnings"][0])
+        self.assertEqual(result["documents_without_id"], ["src/m.md"])
+        self.assertEqual(result["summary"]["documents_without_id"], 1)
 
     def test_documents_with_id_give_no_warning(self):
         self.write("src/m.md", f"---\ndoc_link_id: {DOC_MAIN}\n---\n# M {SEC_MAIN}\n")
@@ -466,7 +500,10 @@ class EntryScriptWithUvTest(CheckLinksTestBase):
             "--project-root", str(self.root), "--key", "k", "--paths", "src/main.md"
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertTrue(json.loads(completed.stdout)["findings"])
+        result = json.loads(completed.stdout)
+        self.assertNotIn("findings", result)
+        self.assertGreater(result["summary"]["findings"], 0)
+        self.assertTrue(Path(result["detail_path"]).is_file())
         self.assertEqual(self.snapshot(), before)
 
     def test_rejected_target_exits_1(self):
@@ -477,6 +514,175 @@ class EntryScriptWithUvTest(CheckLinksTestBase):
     def test_invalid_argument_exits_2(self):
         completed = self.uv_run("--unknown")
         self.assertEqual(completed.returncode, 2)
+
+
+class DetailFileTest(CheckLinksTestBase):
+    """D-061: 標準出力は件数までで、検出事項の全件は明細ファイルにある。"""
+
+    def detail_file(self, key):
+        return self.root / ".temp" / "doc-link" / "check-links" / f"detail-{key}.json"
+
+    def test_stdout_holds_counts_and_the_detail_file_holds_every_item(self):
+        self.make_fixture()
+        code, stdout = self.run_stdout("--key", "k", "--paths", "src/main.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            set(stdout),
+            {"summary", "scope", "problems", "warnings", "guidance", "detail_path"},
+        )
+        self.assertEqual(
+            set(stdout["scope"]), {"target", "directory_count", "checked_at"}
+        )
+        path = Path(stdout["detail_path"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(path, self.detail_file("k"))
+        detail = json.loads(path.read_bytes().decode("utf-8"))
+        self.assertEqual(
+            set(detail),
+            {
+                "findings",
+                "unverified_links",
+                "unreadable_documents",
+                "directories",
+                "documents_without_id",
+            },
+        )
+        summary = stdout["summary"]
+        self.assertEqual(summary["findings"], len(detail["findings"]))
+        self.assertEqual(
+            sum(summary["findings_by_category"].values()), len(detail["findings"])
+        )
+        self.assertEqual(summary["unverified_links"], len(detail["unverified_links"]))
+        self.assertEqual(
+            summary["unreadable_documents"], len(detail["unreadable_documents"])
+        )
+        self.assertEqual(stdout["scope"]["directory_count"], len(detail["directories"]))
+
+    def test_stdout_size_does_not_grow_with_the_number_of_findings(self):
+        def stdout_size(key, count):
+            definitions = "".join(
+                f'[r{i}]: ../gone/x{i}.md "{HASH} {DOC_GONE}"\n' for i in range(count)
+            )
+            path = f"src/{key}.md"
+            self.write(
+                path,
+                f"---\ndoc_link_id: {DOC_MAIN}\n---\n# M {SEC_MAIN}\n\n" + definitions,
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                check_links.main(
+                    ["--project-root", str(self.root), "--key", key, "--paths", path]
+                )
+            return len(out.getvalue())
+
+        self.assertLess(abs(stdout_size("many", 300) - stdout_size("few", 1)), 20)
+
+    def test_detail_file_is_written_even_when_nothing_is_found(self):
+        self.write("src/m.md", f"---\ndoc_link_id: {DOC_MAIN}\n---\n# M {SEC_MAIN}\n")
+        code, stdout = self.run_stdout("--key", "k", "--paths", "src/m.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(stdout["summary"]["findings"], 0)
+        self.assertEqual(stdout["guidance"], [])
+        detail = json.loads(Path(stdout["detail_path"]).read_bytes().decode("utf-8"))
+        self.assertEqual(detail["findings"], [])
+
+    def test_only_the_detail_file_is_written(self):
+        self.make_fixture()
+        before = self.snapshot()
+        self.run_main("--key", "k", "--paths", "src/main.md")
+        self.assertEqual(self.snapshot(), before)
+        self.assertEqual(
+            self.work_files(), [".temp/doc-link/check-links/detail-k.json"]
+        )
+
+    def test_unwritable_detail_file_exits_1(self):
+        self.make_fixture()
+        self.write(".temp/doc-link/check-links", "not a directory")
+        code, stdout = self.run_stdout("--key", "k", "--paths", "src/main.md")
+        self.assertEqual(code, 1)
+        self.assertTrue(any("明細ファイルを書けない" in e for e in stdout["errors"]))
+
+
+class MovedTargetTest(CheckLinksTestBase):
+    """D-062: リンク先のディレクトリに無い参照先を、今回の対象文書の中から探す。"""
+
+    SOURCE = f"""---
+doc_link_id: {DOC_MAIN}
+---
+# Main {SEC_MAIN}
+
+[doc]: ../old/a.md "{HASH} {DOC_A}"
+[sec]: ../old/a.md#beta-dlid-pqrstvwxyz01 "{HASH} {SEC_A2}"
+"""
+
+    def findings(self, *paths):
+        code, result = self.run_main("--key", "k", "--paths", *paths)
+        self.assertEqual(code, 0)
+        return {f["dlid"]: f for f in result["findings"]}, result
+
+    def test_target_moved_to_another_directory_in_the_targets_is_found(self):
+        self.write("src/main.md", self.SOURCE)
+        self.write("archive/a.md", REF_A)
+        found, result = self.findings("src/main.md", "archive/a.md")
+        for dlid, kind in ((DOC_A, "document"), (SEC_A2, "section")):
+            finding = found[dlid]
+            self.assertEqual(finding["category"], "path_mismatch")
+            self.assertEqual(finding["current_path"], "archive/a.md")
+            self.assertEqual(finding["target_kind"], kind)
+            self.assertEqual(finding["source_doc_id"], DOC_MAIN)
+            self.assertNotIn("absent_reason", finding)
+        self.assertEqual(
+            result["summary"]["findings_by_category"], {"path_mismatch": 2}
+        )
+
+    def test_order_of_the_targets_does_not_matter(self):
+        self.write("src/main.md", self.SOURCE)
+        self.write("archive/a.md", REF_A)
+        found, _ = self.findings("archive/a.md", "src/main.md")
+        self.assertEqual(found[DOC_A]["current_path"], "archive/a.md")
+
+    def test_target_moved_outside_the_targets_stays_absent(self):
+        self.write("src/main.md", self.SOURCE)
+        self.write("archive/a.md", REF_A)
+        found, _ = self.findings("src/main.md")
+        self.assertEqual(found[DOC_A]["category"], "absent")
+        self.assertEqual(found[DOC_A]["absent_reason"], "directory_missing")
+        self.assertNotIn("archive", str(found[DOC_A]))
+
+    def test_target_found_in_several_documents_is_a_duplicate(self):
+        self.write("src/main.md", self.SOURCE)
+        self.write("archive/a.md", REF_A)
+        self.write("copy/a.md", REF_A)
+        found, _ = self.findings("src/main.md", "archive/a.md", "copy/a.md")
+        self.assertEqual(found[DOC_A]["category"], "duplicate")
+        self.assertEqual(found[DOC_A]["duplicate_paths"], ["archive/a.md", "copy/a.md"])
+
+    def test_section_moved_to_another_document_is_not_a_missing_section(self):
+        # リンク先の文書は残っているが、セクションは別のディレクトリの文書へ移った
+        self.write("src/main.md", self.SOURCE)
+        self.write("old/a.md", f"---\ndoc_link_id: {DOC_A}\n---\n# Alpha {SEC_A1}\n")
+        self.write(
+            "new/b.md", f"---\ndoc_link_id: {DOC_B}\n---\n# Bee\n\n## Beta {SEC_A2}\n"
+        )
+        found, _ = self.findings("src/main.md", "old/a.md", "new/b.md")
+        self.assertNotIn(DOC_A, found)
+        self.assertEqual(found[SEC_A2]["category"], "path_mismatch")
+        self.assertEqual(found[SEC_A2]["current_path"], "new/b.md")
+
+    def test_dlid_in_no_target_document_stays_a_missing_section(self):
+        self.write("src/main.md", self.SOURCE)
+        self.write("old/a.md", f"---\ndoc_link_id: {DOC_A}\n---\n# Alpha {SEC_A1}\n")
+        found, _ = self.findings("src/main.md", "old/a.md")
+        self.assertEqual(found[SEC_A2]["category"], "missing_section")
+
+    def test_managed_state_is_not_used(self):
+        # 管理状態に移動先の記録があっても、対象文書の現物に無ければ、移動先を示さない
+        self.write("src/main.md", self.SOURCE)
+        self.write(".doc-link/documents/x.json", "{}")
+        before = self.snapshot()
+        found, _ = self.findings("src/main.md")
+        self.assertEqual(found[DOC_A]["category"], "absent")
+        self.assertEqual(self.snapshot(), before)
 
 
 if __name__ == "__main__":

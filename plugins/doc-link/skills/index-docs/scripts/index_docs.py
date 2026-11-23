@@ -56,8 +56,10 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
   フィールドは、`build_id` の作業状態に記録する
 - `done`: [確定 ToC]を一括して公開した。判断に要る項目と件数だけを返し、全件の明細は明細ファイルへ書く（D-059）。
   確定結果（`version`・`published`）、変更の種別ごとの件数（`change_summary`）、生成した文書の件数（`generated_count`）、
-  参照検査結果（`reference_check`）、除外した文書（`excluded`）、問題と警告（`problems`・`warnings`）、明細ファイルの
-  絶対パス（`detail_path`）を返す。同じ入力の再実行は、[確定 ToC]・[文書情報]を書き換えず（`published` が偽）、
+  参照検査結果の分類ごとの件数（`reference_check.summary`）、除外した文書の件数（`excluded_counts`: `missing`・
+  `duplicate`）、問題と警告（`problems`・`warnings`）、明細ファイルの絶対パス（`detail_path`）を返す。一致以外の
+  参照の検出事項と、除外した文書の一覧は、件数に比例して大きくなるので、標準出力に載せず、明細ファイルへ書く。
+  同じ入力の再実行は、[確定 ToC]・[文書情報]を書き換えず（`published` が偽）、
   生成対象を出さない。`change_summary` は、文書（`documents`: `new`・`content_changed`・`references_changed`・
   `path_changed`・`departed`・`unchanged`）とセクション（`sections`: `added`・`deleted`・`moved`・`heading_changed`・
   `body_changed`）の件数を持つ。複数の種別に該当する文書・セクションは、それぞれの種別に数え、該当が無い種別も 0 で
@@ -88,7 +90,8 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 `done` の前に、script が全件の明細を `.temp/doc-link/index-docs/detail-<符号化した[ToC 識別キー]>.json` へ書く
 （D-059）。内容は、`toc_key`・`version`・`generated_documents`（生成した文書の[文書 ID]の一覧）・`change_set`
 （`first_build`・`confirmed_documents`・`excluded`・`documents`・`sections`。文書・セクションごとの変更前後の値を
-含む）である。[ToC 識別キー]ごとに 1 つで、同じキーの次の構築が置き換える。構築が終わっても削除しない（呼び出し元が
+含む）・`reference_findings`（一致以外の参照の検出事項。参照元のパス・行・[DLID]の順）である。書き込みは共通モジュール
+`detail_file` を使う。[ToC 識別キー]ごとに 1 つで、同じキーの次の構築が置き換える。構築が終わっても削除しない（呼び出し元が
 読むため）。一時ファイルへ書き終えてから 1 回の置き換えで公開する。呼び出し元は、明細が要るときだけ、`detail_path`
 のファイルを読む。
 
@@ -168,16 +171,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 import build_state_machine as bsm  # noqa: E402
 import change_set as cs  # noqa: E402
 from clock import utc_now  # noqa: E402
+import detail_file  # noqa: E402
 import script_output  # noqa: E402
 import state_store  # noqa: E402
 import target_spec  # noqa: E402
 import toc_candidate  # noqa: E402
 import update_plan  # noqa: E402
 from reference_check import (  # noqa: E402
+    STATUS_ABSENT,
     STATUS_MATCH,
     DirectoryScanner,
     ReferenceCheckError,
+    build_index,
     check_document,
+    relocate,
 )
 
 SKILL = "index-docs"
@@ -204,7 +211,6 @@ STAGE_INFORMATION = "information"
 STAGE_REFERENCES = "reference_check"
 STAGE_DETAIL = "result_detail"
 
-DETAIL_PREFIX = "detail-"
 MOVES_PREFIX = "moves-"
 
 _BUILD_ID = re.compile(r"BUILD-[0-9a-f]{8}")
@@ -367,22 +373,16 @@ def _write_work_file(root: Path, path: Path, value: dict) -> None:
         ) from exc
 
 
-def _detail_path(root: Path, toc_key: str) -> Path:
-    """完了結果の明細ファイル。[ToC 識別キー]ごとに 1 つで、同じキーの次の構築が置き換える。"""
-    return (
-        _work_dir(root)
-        / f"{DETAIL_PREFIX}{state_store.encode_name(toc_key)}{state_store.FILE_SUFFIX}"
-    )
-
-
 def _write_detail(
     root: Path,
     toc_key: str,
     version: int,
     changes: cs.ChangeSet,
     generated: list[str],
-) -> Path:
-    """完了結果の全件（変更集合と生成した文書の一覧）を明細ファイルへ書き、その絶対パスを返す。
+    reference_findings: list[dict],
+) -> str:
+    """完了結果の全件（変更集合・生成した文書の一覧・一致以外の参照の検出事項）を明細ファイルへ書き、
+    その絶対パスを返す。
 
     [確定 ToC]を公開する前に呼ぶ。書けないときは、公開せずに構築の失敗（`result_detail`）にする。
     """
@@ -391,16 +391,15 @@ def _write_detail(
         "version": version,
         "generated_documents": list(generated),
         "change_set": changes.to_dict(),
+        "reference_findings": reference_findings,
     }
     try:
-        path = _detail_path(root, toc_key)
-        state_store.write_if_changed(root, SKILL, path, state_store.serialize(detail))
+        return detail_file.write_detail(root, SKILL, toc_key, detail)
     except state_store.StateStoreError as exc:
         raise BuildFailed(
             STAGE_DETAIL,
             [toc_candidate.CandidateProblem(None, toc_key, None, str(exc))],
         ) from exc
-    return path
 
 
 def _moves_path(root: Path, toc_key: str) -> Path:
@@ -784,7 +783,11 @@ def _assemble(root, toc_key, spec, changes, results, now: str) -> dict:
     return candidate
 
 
-def _reference_report(results) -> dict:
+def _reference_report(results) -> tuple[dict, list[dict]]:
+    """参照検査結果の（分類ごとの件数、一致以外の検出事項の全件）を返す。
+
+    件数は標準出力へ、検出事項は明細ファイルへ出す（検出事項は件数に比例して大きくなるため）。
+    """
     summary: dict[str, int] = {}
     findings = []
     for found in results.values():
@@ -799,7 +802,24 @@ def _reference_report(results) -> dict:
             item["reference"]["dlid"],
         )
     )
-    return {"summary": dict(sorted(summary.items())), "findings": findings}
+    return dict(sorted(summary.items())), findings
+
+
+def _relocate_absent(root: Path, files, results: dict) -> dict:
+    """指定ディレクトリ内に不在だった参照を、[Index 対象リスト]の文書の中から探し直す（要件 D-062）。
+
+    ID 未付与・ID 重複で[ToC]に入れなかった文書も、[Index 対象リスト]の文書なので探す対象である。
+    不在の参照が 1 件も無ければ、対象文書を読み直さない。
+    """
+    if not any(
+        result.status == STATUS_ABSENT for found in results.values() for result in found
+    ):
+        return results
+    index = build_index(root, files)
+    return {
+        doc_id: [relocate(result, index) for result in found]
+        for doc_id, found in results.items()
+    }
 
 
 def _candidate_failed(exc: toc_candidate.CandidateFailure) -> BuildFailed:
@@ -826,6 +846,7 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
             )
     if problems:
         raise BuildFailed(STAGE_REFERENCES, problems)
+    results = _relocate_absent(root, expansion.files, results)
     session.apply(
         bsm.EVENT_CHECK_REFERENCES, bsm.BuildFacts(references_classified=True)
     )
@@ -844,8 +865,9 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
     reported = changes.with_first_old_paths(
         _first_old_paths(_read_moves(root, toc_key))
     )
+    reference_summary, reference_findings = _reference_report(results)
     detail_path = _write_detail(
-        root, toc_key, candidate["version"], reported, generated
+        root, toc_key, candidate["version"], reported, generated, reference_findings
     )
     try:
         written = toc_candidate.publish_candidate(root, SKILL, candidate)
@@ -864,9 +886,12 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
         "published": written,
         "generated_count": len(generated),
         "change_summary": reported.summary(),
-        "detail_path": os.path.abspath(detail_path),
-        "reference_check": _reference_report(results),
-        "excluded": [item.to_dict() for item in changes.excluded],
+        "detail_path": detail_path,
+        "reference_check": {"summary": reference_summary},
+        "excluded_counts": {
+            reason: sum(1 for item in changes.excluded if item.reason == reason)
+            for reason in (cs.REASON_MISSING, cs.REASON_DUPLICATE)
+        },
         "problems": [problem.to_dict() for problem in expansion.problems],
         "warnings": list(expansion.warnings),
     }

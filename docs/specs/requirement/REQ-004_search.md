@@ -47,6 +47,6 @@ doc_link_id: DLID-h96208rqr773
 [req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "bc95b2f9abfb DLID-pc44gkb54821"
+[req-005]: REQ-005_references.md "c3c169a73d29 DLID-pc44gkb54821"
 [req-003-fr-004]: REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
-[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "8917b2e9e4d9 DLID-jhkngqtfdnhn"
+[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "00a4a4df7313 DLID-jhkngqtfdnhn"

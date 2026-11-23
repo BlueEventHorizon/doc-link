@@ -57,4 +57,4 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 [req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "1a232498a7af DLID-zacf5tmy6x4x"
 [req-002-sec-6-1-4]: ../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz "96d41fc90490 DLID-99p6p9nf7npz"
 [req-003-sec-7-5]: ../requirement/REQ-003_toc.md#75-tocのメタデータ-dlid-ef9szvy6w2cj "4b38b784fc3e DLID-ef9szvy6w2cj"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "8917b2e9e4d9 DLID-jhkngqtfdnhn"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "00a4a4df7313 DLID-jhkngqtfdnhn"

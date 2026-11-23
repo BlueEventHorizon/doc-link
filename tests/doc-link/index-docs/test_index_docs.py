@@ -329,6 +329,21 @@ doc_link_id: {ID_A}
             ["absent", "path_mismatch", "path_mismatch"],
         )
 
+    def test_moved_target_excluded_as_a_duplicate_id_is_recorded_as_duplicate(self):
+        # 移動先の文書が ID 重複で[ToC]に入らなくても、[Index 対象リスト]の文書なので探す（D-062）
+        dup = "DLID-dddddddddddd"
+        self.write(
+            "docs/a.md",
+            f"---\ndoc_link_id: {ID_A}\n---\n# A {S_A}\n\n[x][r]\n\n"
+            f'[r]: ../old/x.md "{dup}"\n',
+        )
+        for name in ("docs/one/x.md", "docs/two/x.md"):
+            self.write(name, f"---\ndoc_link_id: {dup}\n---\n# X\n")
+        code, result = self.build("k", ALL + ["docs/one/x.md", "docs/two/x.md"])
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["excluded_counts"]["duplicate"], 2)
+        self.assertEqual(result["reference_check"], {"summary": {"duplicate": 1}})
+
     def test_single_mode_uses_reserved_key(self):
         code, result = self.run_main("advance")
         self.assertEqual(code, 0)

@@ -27,7 +27,7 @@ doc_link_id: DLID-zvepba87h7zk
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
 [des-005]: DES-005_indexing.md "52ed2959d4d0 DLID-dgphqw70rkpz"
 [des-006]: DES-006_search.md "96dc8a0cdfe8 DLID-nnbgpzkkm5vq"
-[des-007]: DES-007_references-impact.md "7e173084b9a2 DLID-pr3jp4hzb8js"
+[des-007]: DES-007_references-impact.md "fdeb71fae505 DLID-pr3jp4hzb8js"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-009]: DES-009_verification.md "b763c5ab47f0 DLID-xmg0jcmep2h2"
 [des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"

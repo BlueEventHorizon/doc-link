@@ -121,7 +121,7 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "51b57b11c1e5 DLID-3mhrvbx44c87"
 [req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "1a232498a7af DLID-zacf5tmy6x4x"
 [req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "8917b2e9e4d9 DLID-jhkngqtfdnhn"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "00a4a4df7313 DLID-jhkngqtfdnhn"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-002-sec-6-1-2]: ../requirement/REQ-002_document-id.md#612-パターンの照合-dlid-fhfbhsf0svej "ac6985b3990a DLID-fhfbhsf0svej"
 [req-002-sec-6-1-4]: ../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz "96d41fc90490 DLID-99p6p9nf7npz"

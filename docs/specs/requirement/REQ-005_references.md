@@ -146,8 +146,8 @@ doc-link は、通知の状態を保存しない（D-038）。
 
 検査（`check-dlid`・`check-links`・`check-toc`・`check-impact`）と検索前検査の結果は、[プロジェクト管理 AI]の判断に要る項目だけを標準出力に返し、全件の明細は作業ファイルへ書いて、そのパスを返す（D-061）。
 
-- 標準出力に返すのは、状態、種別ごとの件数、検査した範囲、検査できなかった対象、報告すべき問題と警告、明細ファイルのパスである。
-- 明細ファイルには、検出事項、変更のある文書とセクション、変更影響候補を、全件書く。
+- 標準出力に返すのは、状態、種別ごとの件数、検査した範囲、検査できなかった対象の件数、報告すべき問題と警告、明細ファイルのパスである。
+- 明細ファイルには、検出事項、変更のある文書とセクション、変更影響候補、検査できなかった対象を、全件書く。
 - 明細が件数に比例して大きくなり、呼び出し元の文脈を消費するためである。文書を大量に移動・変更したときも、標準出力の大きさは変わらない。
 - 明細ファイルは `.temp/doc-link/<SKILL の名前>/` に置き、同じ[ToC 識別キー]の次の実行で置き換える。
 - 検出が 0 件のときも、明細ファイルを書き、パスを返す。
@@ -206,7 +206,7 @@ doc-link は、通知の状態を保存しない（D-038）。
 [req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "bc95b2f9abfb DLID-pc44gkb54821"
+[req-005]: REQ-005_references.md "c3c169a73d29 DLID-pc44gkb54821"
 [req-005-sec-13-1]: REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-001-sec-3-1]: REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me "a1500a8117ce DLID-5e8mpztyp4me"

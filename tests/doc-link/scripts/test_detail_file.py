@@ -86,6 +86,18 @@ class WriteTest(Base):
         with self.assertRaises(state_store.StateStoreError):
             detail_file.write_detail(self.root, SKILL, "k", {})
 
+    def test_missing_project_root_raises_and_creates_nothing(self):
+        missing = self.root / "nonexistent" / "deep"
+        with self.assertRaises(state_store.StateStoreError):
+            detail_file.write_detail(missing, SKILL, "k", {})
+        self.assertFalse((self.root / "nonexistent").exists())
+
+    def test_project_root_that_is_a_file_raises(self):
+        target = self.root / "file"
+        target.write_text("x", encoding="utf-8")
+        with self.assertRaises(state_store.StateStoreError):
+            detail_file.write_detail(target, SKILL, "k", {})
+
 
 class EmitTest(Base):
     def emit(self, summary, detail):

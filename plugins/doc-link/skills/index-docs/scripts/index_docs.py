@@ -805,16 +805,17 @@ def _reference_report(results) -> tuple[dict, list[dict]]:
     return dict(sorted(summary.items())), findings
 
 
-def _relocate_absent(root: Path, changes: cs.ChangeSet, results: dict) -> dict:
-    """指定ディレクトリ内に不在だった参照を、[確定 Index 対象リスト]の文書の中から探し直す（要件 D-062）。
+def _relocate_absent(root: Path, files, results: dict) -> dict:
+    """指定ディレクトリ内に不在だった参照を、[Index 対象リスト]の文書の中から探し直す（要件 D-062）。
 
+    ID 未付与・ID 重複で[ToC]に入れなかった文書も、[Index 対象リスト]の文書なので探す対象である。
     不在の参照が 1 件も無ければ、対象文書を読み直さない。
     """
     if not any(
         result.status == STATUS_ABSENT for found in results.values() for result in found
     ):
         return results
-    index = build_index(root, [item.path for item in changes.confirmed_documents])
+    index = build_index(root, files)
     return {
         doc_id: [relocate(result, index) for result in found]
         for doc_id, found in results.items()
@@ -845,7 +846,7 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
             )
     if problems:
         raise BuildFailed(STAGE_REFERENCES, problems)
-    results = _relocate_absent(root, changes, results)
+    results = _relocate_absent(root, expansion.files, results)
     session.apply(
         bsm.EVENT_CHECK_REFERENCES, bsm.BuildFacts(references_classified=True)
     )

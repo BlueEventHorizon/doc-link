@@ -17,6 +17,8 @@
 
 - 明細が 0 件でも書く。呼び出し元が、パスの有無で分岐しなくて済むようにするためである
 - [Index 対象文書]と管理状態（`.doc-link/`）へは書き込まない。書くのは上の作業ファイルだけである
+- プロジェクトルートが既存のディレクトリでないときは、書かない（書けない場合として扱う）。存在しないルートの下に
+  ディレクトリを作らないためである
 - 書けないときは、既定値で代替せず、`state_store.StateStoreError` を呼び出し側へ伝える。`emit_with_detail` は、
   それをエラーの JSON（終了コード 1）にする。明細を捨てて件数だけを返すことはしない
 """
@@ -45,6 +47,12 @@ def write_detail(
 ) -> str:
     """明細を作業ファイルへ書き、その絶対パスを返す。書けないときは `StateStoreError`。"""
     root = Path(project_root)
+    if not root.is_dir():
+        raise state_store.StateStoreError(
+            state_store.KIND_MISSING,
+            f"プロジェクトルートが既存のディレクトリでない: {root}",
+            root,
+        )
     path = detail_path(root, skill, toc_key)
     state_store.write_if_changed(root, skill, path, state_store.serialize(detail))
     return os.path.abspath(path)

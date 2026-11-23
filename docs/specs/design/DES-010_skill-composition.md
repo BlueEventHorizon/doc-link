@@ -149,15 +149,16 @@ sequenceDiagram
     participant Docs as Index 対象文書
 
     PM->>Skill: ToC 識別キーと Index 対象指定を渡して起動
-    Skill->>Scripts: 付与計画の作成
+    Skill->>Scripts: 書き込みを依頼する
     Scripts->>Docs: doc_link_id・見出しを読み取る
     Scripts->>State: 既存の ID と照合する
-    Scripts-->>Skill: ID 未付与の文書、重複と原本候補、発行するセクション DLID
-    opt ID の重複がある
+    Scripts->>Scripts: 付与計画を作る
+    opt 原本の指定を求める重複がある
+        Scripts-->>Skill: 何も書き込まず、重複と原本候補を返す
         Skill->>User: 原本候補を示す
         User-->>Skill: 原本を確定する
+        Skill->>Scripts: 確定した原本を添えて、書き込みを依頼し直す
     end
-    Skill->>Scripts: 付与計画と確定した原本を渡して書き込む
     loop 文書ごと
         Scripts->>Docs: DLID を書き込む
         Scripts->>Docs: 再解析して差分が DLID だけかを検証する
@@ -165,6 +166,8 @@ sequenceDiagram
     Scripts-->>Skill: 書き込み結果
     Skill-->>PM: 書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因
 ```
+
+書き込むか、原本の確定を求めて止まるかは、script が決める。SKILL は、script の終了コードに従い、付与計画の内容を読んで書き込みへ進むかを判断しない。原本の指定を求める重複があるとき、script は何も書き込まずに終え（[DES-004 §5][des-004-sec-5] の E-06）、SKILL が原本を添えて依頼し直す（同 E-07）。
 
 <a id="sec-3-2"></a>
 
@@ -471,6 +474,7 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "32ce863741b3 DLID-hs82xgzwkpyz"
 [des-007-sec-1]: DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05 "d84f6c33a9b5 DLID-pnrn5dyy7z05"
 [des-004-sec-3]: DES-004_state-machines.md#3-toc構築再構築の実行-dlid-kz06g0w7tsvs "91ae910ea5fe DLID-kz06g0w7tsvs"
+[des-004-sec-5]: DES-004_state-machines.md#5-dlid-付与操作の実行-dlid-evgp45p8prf7 "5d6774d493ed DLID-evgp45p8prf7"
 [des-006-sec-1]: DES-006_search.md#1-検索前の判定-dlid-ksmh21dbz9zv "9a58e4009a6f DLID-ksmh21dbz9zv"
 [des-007-sec-2]: DES-007_references-impact.md#2-逆参照と影響候補-dlid-9chw5bzdm8zm "15f263908fc6 DLID-9chw5bzdm8zm"
 [des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "80e73caeef5c DLID-mjeyc85ak4w3"

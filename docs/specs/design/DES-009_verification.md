@@ -76,7 +76,7 @@ doc_link_id: DLID-xmg0jcmep2h2
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-007]: DES-007_references-impact.md "debedfd1b155 DLID-pr3jp4hzb8js"
 [des-006]: DES-006_search.md "96dc8a0cdfe8 DLID-nnbgpzkkm5vq"
-[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "cfd486c17cc5 DLID-7e90gq3sdncc"
 [des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
 [des-002]: DES-002_execution-responsibilities.md "9c2bea9cc41e DLID-anz9vack2xzt"
 [req-001-nfr-001]: ../requirement/REQ-001_overview.md#nfr-001-toc再構築の一貫性-dlid-j4xry3ca5rsb "1bfb73100c73 DLID-j4xry3ca5rsb"

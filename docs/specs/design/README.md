@@ -30,4 +30,4 @@ doc_link_id: DLID-zvepba87h7zk
 [des-007]: DES-007_references-impact.md "debedfd1b155 DLID-pr3jp4hzb8js"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-009]: DES-009_verification.md "b39bd102e418 DLID-xmg0jcmep2h2"
-[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "cfd486c17cc5 DLID-7e90gq3sdncc"

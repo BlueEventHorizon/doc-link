@@ -35,7 +35,7 @@ doc_link_id: DLID-anz9vack2xzt
 | 候補の検査・確定     | [確定 Index 対象リスト]、比較値、[文書情報]、参照検査結果 | 検査済みの新しい[ToC]版                                                      | 途中状態を公開せず、失敗時は最後の[確定 ToC]を維持する                                                                                                                 |
 | 検索・逆引きの読取り | キー、[確定 ToC]、検索条件                                | 文書・参照元の候補と使用版                                                   | 現物を見ずに現在の参照の正しさを断定しない                                                                                                                             |
 | [DLID]の解決         | [DLID]の並び、管理状態、[確定 ToC]                        | [DLID]ごとの現在パスと記録した[内容ハッシュ]、または記録されたパスに無いこと | 書き込まない。記録されたパスの文書がその[DLID]を持つことを確かめてから返し、ほかの場所を探索しない（[DES-006 §3][des-006-sec-3]）                                      |
-| 不整合検査           | 対象指定、現物、[確定 ToC]                                | 問題の一覧                                                                   | 書き込まない。ID の付与・修復は DLID 付与操作が行う（要件 [D-035][req-002-fr-001]）                                                                                    |
+| 不整合検査           | 対象指定、現物、[確定 ToC]                                | 問題の件数と、全件を収めた明細ファイル                                       | [Index 対象文書]と管理状態へは書き込まない。書くのは明細ファイルだけである。ID の付与・修復は DLID 付与操作が行う（要件 [D-035][req-002-fr-001]）                      |
 
 検索の意味的な関連度は、読み取り専用の[検索 AI]（カスタム Agent）が[ToC]を読んで判定する（[DES-006 §2][des-006-sec-2]）。script は使用版・キー・[文書 ID]・パスを確定したデータから渡し、[検索 AI]は索引の状態を変更しない。
 
@@ -57,7 +57,7 @@ doc-link の各 Skill は、呼び出し元（[プロジェクト管理 AI]）�
 
 DLID 付与操作が ID を一部の文書へ保存した後に失敗した場合、既発行 ID は不変として再実行時に再利用する必要がある（要件 [D-004][req-002-fr-001]）。検証を通って書き込んだ[DLID]は正しい値なのでロールバックせず、発行済みとして報告する。操作は正常終了させず、書き込めなかった文書ごとにパス・問題箇所・原因を報告する（要件 [FR-002][req-002-fr-002]、[NFR-005][req-001-nfr-005]）。再実行すると残りの文書を処理する。script の分割、CLI の引数形式は後続設計で扱う。Python の script は `uv run` で実行し、Python 本体と外部依存（markdown-it-py）は uv が用意する。利用者の環境の前提は uv だけとする。
 
-doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に渡す[ToC]の写し、構築の完了結果の明細ファイル）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
+doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に渡す[ToC]の写し、構築の完了結果と検査の結果の明細ファイル）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
 
 doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` に JSON ファイルとして保存し、git で追跡する。並行するブランチで更新しても衝突が差分として読めるよう、次の 2 種類のファイルに分ける。
 
@@ -66,14 +66,14 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[des-010]: DES-010_skill-composition.md "7f57541f21c6 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
 [des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "93cb7c345bc4 DLID-p07g3hc4e4xd"
-[des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "40bf228bfb23 DLID-m0xegzfyhc3k"
+[des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "2bd4a534eee2 DLID-m0xegzfyhc3k"
 [des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "32ce863741b3 DLID-hs82xgzwkpyz"
 [des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "80e73caeef5c DLID-mjeyc85ak4w3"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
-[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "8eae9ee77831 DLID-edwjjf150svm"
+[req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"

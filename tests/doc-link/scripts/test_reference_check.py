@@ -341,5 +341,101 @@ class ScopeAndReadOnlyTest(CheckBase):
         }
 
 
+class RelocateTest(CheckBase):
+    """D-062: リンク先のディレクトリに無い参照先を、[Index 対象リスト]の文書の中から探す。"""
+
+    def absent(self, dest="b.md", title_id=ID_DOC):
+        self.write("docs/src.md", source_doc(dest, title_id=title_id))
+        result = self.check()
+        self.assertEqual(result.status, rc.STATUS_ABSENT)
+        return result
+
+    def test_document_found_in_the_index_becomes_a_path_mismatch(self):
+        self.write("archive/b.md", target_doc())
+        result = self.absent()
+        index = rc.build_index(self.root, ["docs/src.md", "archive/b.md"])
+        moved = rc.relocate(result, index)
+        self.assertEqual(moved.status, rc.STATUS_PATH_MISMATCH)
+        self.assertEqual(moved.current_path, "archive/b.md")
+        self.assertEqual(moved.target_kind, rc.KIND_DOCUMENT)
+        self.assertIsNone(moved.absent_reason)
+        self.assertEqual(moved.directory, result.directory)
+
+    def test_section_found_in_the_index_reports_the_owner_document(self):
+        self.write("archive/b.md", target_doc())
+        result = self.absent(title_id=ID_SEC)
+        moved = rc.relocate(result, rc.build_index(self.root, ["archive/b.md"]))
+        self.assertEqual(moved.status, rc.STATUS_PATH_MISMATCH)
+        self.assertEqual(moved.current_path, "archive/b.md")
+        self.assertEqual(moved.target_kind, rc.KIND_SECTION)
+
+    def test_missing_directory_is_relocated_too(self):
+        self.write("archive/b.md", target_doc())
+        self.write("docs/src.md", source_doc("../gone/b.md"))
+        result = self.check()
+        self.assertEqual(result.absent_reason, rc.ABSENT_DIRECTORY_MISSING)
+        moved = rc.relocate(result, rc.build_index(self.root, ["archive/b.md"]))
+        self.assertEqual(moved.status, rc.STATUS_PATH_MISMATCH)
+        self.assertEqual(moved.current_path, "archive/b.md")
+
+    def test_document_outside_the_index_stays_absent(self):
+        self.write("archive/b.md", target_doc())
+        result = self.absent()
+        same = rc.relocate(result, rc.build_index(self.root, ["docs/src.md"]))
+        self.assertIs(same, result)
+
+    def test_several_hits_become_a_duplicate(self):
+        self.write("archive/b.md", target_doc())
+        self.write("copy/b.md", target_doc())
+        result = self.absent()
+        moved = rc.relocate(
+            result, rc.build_index(self.root, ["copy/b.md", "archive/b.md"])
+        )
+        self.assertEqual(moved.status, rc.STATUS_DUPLICATE)
+        self.assertEqual(moved.duplicate_paths, ("archive/b.md", "copy/b.md"))
+        self.assertIsNone(moved.current_path)
+
+    def test_same_section_id_twice_in_one_document_is_a_duplicate(self):
+        self.write(
+            "archive/b.md",
+            f"# 題\n\n## 一 {ID_SEC}\n\n## 二 {ID_SEC}\n",
+        )
+        result = self.absent(title_id=ID_SEC)
+        moved = rc.relocate(result, rc.build_index(self.root, ["archive/b.md"]))
+        self.assertEqual(moved.status, rc.STATUS_DUPLICATE)
+        self.assertEqual(moved.duplicate_paths, ("archive/b.md",))
+
+    def test_results_other_than_absent_are_returned_as_they_are(self):
+        self.write("docs/b.md", target_doc())
+        self.write("archive/b.md", target_doc())
+        self.write("docs/src.md", source_doc("b.md"))
+        result = self.check()
+        self.assertEqual(result.status, rc.STATUS_MATCH)
+        index = rc.build_index(self.root, ["archive/b.md"])
+        self.assertIs(rc.relocate(result, index), result)
+
+    def test_hit_at_the_link_path_itself_stays_absent(self):
+        # ディレクトリを走査できず不在になった参照は、リンク先のパスに現物があっても、パスの不一致にしない
+        result = self.absent()
+        index = rc.DlidIndex()
+        index.add_document("docs/b.md", ID_DOC, ())
+        self.assertIs(rc.relocate(result, index), result)
+
+    def test_unreadable_document_is_not_in_the_index(self):
+        self.write("archive/b.md", target_doc())
+        (self.root / "archive" / "bad.md").write_bytes(b"\xff\xfe\x00")
+        index = rc.build_index(
+            self.root, ["archive/b.md", "archive/bad.md", "archive/none.md"]
+        )
+        self.assertEqual(index.find(ID_DOC), (("archive/b.md", rc.KIND_DOCUMENT),))
+        self.assertEqual(index.find(ID_OTHER), ())
+
+    def test_building_the_index_writes_nothing(self):
+        self.write("archive/b.md", target_doc())
+        before = sorted(str(p) for p in self.root.rglob("*"))
+        rc.build_index(self.root, ["archive/b.md"])
+        self.assertEqual(sorted(str(p) for p in self.root.rglob("*")), before)
+
+
 if __name__ == "__main__":
     unittest.main()

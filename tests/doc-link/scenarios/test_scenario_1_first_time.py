@@ -94,7 +94,7 @@ class FirstTimeScenarioTest(ScenarioBase):
         self.assertEqual(done["state"], "完了")
         self.assertEqual(done["publication_state"], "確定 ToC あり")
         self.assertEqual((done["version"], done["published"]), (1, True))
-        self.assertEqual(done["excluded"], [])
+        self.assertEqual(done["excluded_counts"], {"missing": 0, "duplicate": 0})
         self.assertEqual(done["reference_check"]["summary"], {})
         self.assertEqual(self.snapshot("docs"), docs_before)
 

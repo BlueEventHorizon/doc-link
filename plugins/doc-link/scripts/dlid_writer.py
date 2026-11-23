@@ -26,8 +26,8 @@ DES-005 §2.1、DES-008 §1、REQ-001 D-031・NFR-004 を実装する。利用�
 本文は書き込まず、書き換えない。コードブロック・HTML ブロック内は、計画が `markdown_reader` の解析した見出しだけを
 指すので、書き込まれない。
 
-- frontmatter の `doc_link_id`: キーがあればその行を `doc_link_id: <DLID>` に置き換え、無ければ閉じる行の直前へ
-  足す。frontmatter が無い文書は、先頭に `doc_link_id` だけの frontmatter を新設する
+- frontmatter の `doc_link_id`: キーがあればその行の値だけを[DLID]に置き換え、無ければ閉じる行の直前へ
+  `doc_link_id: <DLID>` の行を足す。frontmatter が無い文書は、先頭に `doc_link_id` だけの frontmatter を新設する
 - 見出しの行の末尾: 見出しのテキストの末尾に、空白 1 つで区切って[DLID]を置く。ATX 見出しに閉じの `#` の列が
   あればその前に置く。setext 見出しはテキストの最後の行の末尾に置く。再発行（`replaces` が値を持つ）では、見出しの
   末尾の語を置き換える
@@ -39,8 +39,9 @@ DES-005 §2.1、DES-008 §1、REQ-001 D-031・NFR-004 を実装する。利用�
 - frontmatter を新設する位置は、文書の先頭（先頭の空行より前）とする。新設する frontmatter は
   `---`・`doc_link_id: <DLID>`・`---` の 3 行である。文書の先頭の行が空行でないときは、その後に空行を
   1 行足す（要件 D-051。frontmatter の直後に本文を置かない）
-- 既存の `doc_link_id` の行を置き換えるときは、その行全体を `doc_link_id: <DLID>` にする（古い値と、その行末の
-  コメントは残らない。この行が[DLID]の位置であり、認識できない値を置き換える位置だからである）
+- 既存の `doc_link_id` の行は、値の部分だけを[DLID]に置き換える。キーの書き方（引用符で囲んだキーを含む）、
+  `:` の前後の空白、行末のコメントは変えない（[DLID]以外を書き換えないため）。値の範囲は
+  `markdown_reader.key_value_span` が決める。値が無い行では、値を置く位置に[DLID]を足す
 - 行末の空白: ATX 見出しは、見出しのテキストの直後に ` <DLID>` を挿入し、後続の空白・閉じの `#` はそのまま残す。
   setext 見出しは、最後のテキスト行の末尾の空白を除いた位置の直後に挿入し、末尾の空白は残す
 - 閉じる行の無い frontmatter の文書には書き込まず、失敗として報告する。計画（`FrontmatterPosition`）は、
@@ -78,6 +79,7 @@ from markdown_reader import (
     FRONTMATTER_DELIMITER,
     MarkdownDocument,
     has_unclosed_frontmatter,
+    key_value_span,
     parse_markdown,
     read_document,
     read_frontmatter,
@@ -435,11 +437,32 @@ def _edit_frontmatter(
         index = _find_key_line(document)
         if index is None:
             raise _Refused(location, "doc_link_id の行を特定できない")
-        _, newline = _split_newline(lines[index])
-        lines[index] = value + newline
+        body, newline = _split_newline(lines[index])
+        replaced = _replace_key_value(body, item.dlid)
+        if replaced is None:
+            raise _Refused(location, "doc_link_id の行から値の位置を特定できない")
+        lines[index] = replaced + newline
     else:
         _, newline = _split_newline(lines[frontmatter.start_line])
         lines.insert(frontmatter.end_line, value + newline)
+
+
+def _replace_key_value(body: str, dlid: str) -> str | None:
+    """`doc_link_id` の行（改行を除く）の値だけを[DLID]に置き換える。キー・区切り・行末のコメントは変えない。
+
+    値が無い行（`doc_link_id:`、`doc_link_id: # メモ`）では、値を置く位置に[DLID]を足し、隣が空白でなければ
+    空白 1 つで区切る。`doc_link_id` の行として読めなければ `None`。
+    """
+    span = key_value_span(body)
+    if span is None or span[0] != DOC_LINK_ID_KEY:
+        return None
+    _, start, end = span
+    prefix, suffix = body[:start], body[end:]
+    if not prefix.endswith((" ", "\t")):
+        prefix += " "
+    if suffix and not suffix.startswith((" ", "\t")):
+        suffix = " " + suffix
+    return prefix + dlid + suffix
 
 
 def _needs_separator(lines: list[str]) -> bool:
@@ -597,14 +620,27 @@ def _verify_inserted_lines(
 
 def _verify_key_line(old_line: str, new_line: str, item: IssueItem | None) -> list[str]:
     assert item is not None
+    old_body, old_newline = _split_newline(old_line)
     body, newline = _split_newline(new_line)
-    if newline != _split_newline(old_line)[1]:
+    if newline != old_newline:
         return ["doc_link_id の行の改行コードが変わった"]
     probe = read_frontmatter(
         [f"{FRONTMATTER_DELIMITER}\n", body + "\n", f"{FRONTMATTER_DELIMITER}\n"]
     )
     if probe.keys.get(DOC_LINK_ID_KEY) != item.dlid:
         return ["doc_link_id の行の値が計画の[DLID]でない"]
+    old_span = key_value_span(old_body)
+    new_span = key_value_span(body)
+    if old_span is None or new_span is None:
+        return ["doc_link_id の行から値の位置を特定できない"]
+    old_prefix, old_suffix = old_body[: old_span[1]], old_body[old_span[2] :]
+    new_prefix, new_suffix = body[: new_span[1]], body[new_span[2] :]
+    # 値が無かった行に足したときだけ、値の隣に区切りの空白 1 つが増える
+    if new_prefix not in (old_prefix, old_prefix + " ") or new_suffix not in (
+        old_suffix,
+        " " + old_suffix,
+    ):
+        return ["doc_link_id の行の、値以外の部分（キー・行末のコメント）が変わった"]
     return []
 
 

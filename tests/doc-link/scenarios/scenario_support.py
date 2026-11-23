@@ -91,6 +91,19 @@ def submit_args(doc_id, values=None):
     return args
 
 
+def with_detail(stdout: dict) -> dict:
+    """標準出力の JSON に、明細ファイル（`detail_path`）の全件を重ねて返す。同じ名前の項目は標準出力を優先する。
+
+    標準出力は件数までで、明細は作業ファイルにある（要件 D-061）。内容の検査は、両方を合わせた形で行う。
+    標準出力に明細が載っていないことは、標準出力だけを読むテストで確かめる。
+    """
+    path = stdout.get("detail_path")
+    if path is None:
+        return stdout
+    detail = json.loads(Path(path).read_bytes().decode("utf-8"))
+    return {**detail, **stdout}
+
+
 class ScenarioBase(unittest.TestCase):
     """一時ディレクトリをプロジェクトルートとする、シナリオの共通の土台。"""
 
@@ -142,7 +155,7 @@ class ScenarioBase(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = module.main([*prefix, "--project-root", str(self.root), *args])
-        return code, json.loads(out.getvalue())
+        return code, with_detail(json.loads(out.getvalue()))
 
     def embed(self, key, paths, *extra):
         return self.run_script(

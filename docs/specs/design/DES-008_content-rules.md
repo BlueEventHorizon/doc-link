@@ -99,8 +99,8 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 タイトルは文書の最初の H1 見出しのテキストから、行末の[セクション ID]を除いたものとする。H1 が無い文書のタイトルは `toc-updater` が生成する。目的・内容概要・適用作業・キーワード、および生成するタイトルは、`toc-updater` が対象文書の本文を読んで生成する（[DES-010 §4][des-010-sec-4]）。[情報生成 AI]に渡す上限はフィールド別の `L` のみとする。script の検証器は `H = floor(L × 1.3)` を用い、`L` 超・`H` 以下を受理し、`H` 超を拒否する。[情報生成 AI]が参照するプロンプト・ルール・再試行メッセージに `H` や余白の存在を含めない。`L` の値と文字数の数え方は要件 [D-044][req-003-sec-7-4] に従う。配列のフィールドは要素数を `L`・`H` で検証する。要素数の下限は、内容概要 5、適用作業 1、キーワード 5 とし、下回れば拒否する。生成する値は、文書の言語にかかわらず英語で書く。検証器のエラーを[情報生成 AI]へ戻す場合も実際の拒否境界を開示しない。
 
-[des-005-sec-3]: DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx "9aef55f5de46 DLID-ext9ze054hbx"
-[des-007-sec-1]: DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05 "801528b8eb29 DLID-pnrn5dyy7z05"
+[des-005-sec-3]: DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx "de8363e8b290 DLID-ext9ze054hbx"
+[des-007-sec-1]: DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05 "d84f6c33a9b5 DLID-pnrn5dyy7z05"
 [des-010-sec-4]: DES-010_skill-composition.md#4-カスタム-agent-との受け渡し-dlid-ytajmhsv2p1t "6e85a7620780 DLID-ytajmhsv2p1t"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
@@ -109,7 +109,7 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 [req-003-sec-10-1-2]: ../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
 [req-003-sec-7-4]: ../requirement/REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"
 [req-005-fr-007]: ../requirement/REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"
-[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "3627fec77afd DLID-jhkngqtfdnhn"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-002-sec-6-1-4]: ../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz "96d41fc90490 DLID-99p6p9nf7npz"

@@ -20,6 +20,17 @@ DES-007 §1、DES-009 §1 と REQ-005 FR-009・FR-010、REQ-001 D-025・D-048 �
 - `duplicate`: 同じ[DLID]が複数見つかった。一意の現在パスを推定せず、`duplicate_paths` に見つけたものを並べる
 - `unresolved`: リンク先パスを参照元から解決できない（設計書が分類を定めていない入力。下の解釈を参照）
 
+不在の参照先を[Index 対象リスト]の中から探す（要件 D-062）
+
+- `check_reference` は、リンク先のパスが示すディレクトリだけを走査する。別のディレクトリへ移動した文書は、そこでは
+  `absent` になる
+- `relocate` は、`absent` の結果を、`DlidIndex`（[Index 対象リスト]の文書を読んで作った、[DLID]と現在のパスの対応）で
+  引き直す。一意に見つかれば `path_mismatch`（`current_path` に現在のパス）、複数見つかれば `duplicate`、見つからな
+  ければ `absent` のままにする。指定ディレクトリが無い・読めない場合の `absent` も引き直す（ディレクトリごと
+  移動した場合に当たる）
+- `DlidIndex` は現物を読んだ結果だけを持つ。保存済みの[ToC]・管理状態は使わない。[Index 対象リスト]の外へ移動した
+  文書は探さない
+
 仕様の解釈（設計書が値や形式を定めていない点）
 
 - 走査は、指定ディレクトリ（リンク先パスの親ディレクトリ）の配下を再帰的に行う。DES-005 §2 でディレクトリの指定が
@@ -49,7 +60,7 @@ DES-007 §1、DES-009 §1 と REQ-005 FR-009・FR-010、REQ-001 D-025・D-048 �
 import os
 import posixpath
 import unicodedata
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -374,6 +385,78 @@ def check_reference(
         current_path=hit.path,
         current_anchor=None if resolved else current_anchor,
         **common,
+    )
+
+
+class DlidIndex:
+    """[Index 対象リスト]の文書から読んだ、[DLID]と現在のパスの対応（要件 D-062）。
+
+    現物を読んだ結果だけを持つ。保存済みの[ToC]・管理状態は入力に取らない。
+    """
+
+    def __init__(self) -> None:
+        self._hits: dict[str, list[tuple[str, str]]] = {}
+
+    def add_document(
+        self, path: str, doc_id: str | None, headings: tuple[Heading, ...]
+    ) -> None:
+        """文書 1 件の[文書 ID]と、見出しの[セクション ID]を足す。"""
+        if doc_id is not None:
+            self._hits.setdefault(doc_id, []).append((path, KIND_DOCUMENT))
+        for heading in headings:
+            if heading.section_id is not None:
+                self._hits.setdefault(heading.section_id, []).append(
+                    (path, KIND_SECTION)
+                )
+
+    def find(self, dlid: str) -> tuple[tuple[str, str], ...]:
+        """その[DLID]を持つ箇所の（パス、種別）。同じ文書の中の重複も、別の箇所として数える。"""
+        return tuple(self._hits.get(dlid, ()))
+
+
+def build_index(root: str | Path, paths) -> DlidIndex:
+    """[Index 対象リスト]の文書を読んで、対応を作る。読めない文書は、見つかったとは扱わない。"""
+    index = DlidIndex()
+    base = os.path.abspath(root)
+    for path in paths:
+        try:
+            text = _read_text(os.path.join(base, path))
+        except (OSError, UnicodeDecodeError):
+            continue
+        document = read_document(text)
+        index.add_document(path, document.frontmatter.doc_link_id, document.headings)
+    return index
+
+
+def relocate(result: ReferenceCheckResult, index: DlidIndex) -> ReferenceCheckResult:
+    """不在の参照先を、[Index 対象リスト]の文書の中から探す（要件 D-062）。
+
+    リンク先のパスが示すディレクトリに参照先が無い（`absent`）ときだけ働く。一意に見つかればパスの不一致
+    （`current_path` に現在のパス）、複数見つかれば重複にする。見つからなければ、不在のまま返す。
+    [Index 対象リスト]の外へ移動した文書は探さない。
+    """
+    if result.status != STATUS_ABSENT:
+        return result
+    hits = index.find(result.reference.dlid)
+    if not hits:
+        return result
+    if len(hits) > 1:
+        return replace(
+            result,
+            status=STATUS_DUPLICATE,
+            absent_reason=None,
+            duplicate_paths=tuple(sorted({path for path, _kind in hits})),
+        )
+    path, kind = hits[0]
+    if path == result.resolved_path:
+        # リンク先のパスそのものにある。ディレクトリを走査できなかった不在であり、パスは違っていない
+        return result
+    return replace(
+        result,
+        status=STATUS_PATH_MISMATCH,
+        absent_reason=None,
+        target_kind=kind,
+        current_path=path,
     )
 
 

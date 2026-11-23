@@ -655,5 +655,17 @@ class ArgparseIntegrationTest(TreeTestCase):
         self.assertEqual(context.exception.code, 2)
 
 
+class TocKeyTest(unittest.TestCase):
+    def test_targets_mode_uses_its_key(self):
+        spec = target_spec.TargetSpec(
+            mode=target_spec.MODE_TARGETS, key="specs", paths=("a.md",)
+        )
+        self.assertEqual(target_spec.toc_key_of(spec), "specs")
+
+    def test_all_mode_uses_the_reserved_key(self):
+        spec = target_spec.TargetSpec(mode=target_spec.MODE_ALL)
+        self.assertEqual(target_spec.toc_key_of(spec), target_spec.RESERVED_KEY)
+
+
 if __name__ == "__main__":
     unittest.main()

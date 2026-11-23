@@ -1,42 +1,41 @@
 {
-  "content_hash": "504f32e6af85ded627b38b706a885b95c4b9b5a2da67f07d0f8cc0715a6b5284",
+  "content_hash": "02035bac0fcae99cc4d86df2712ca9c009a7a0a6e6706b086bc831150e296011",
   "doc_link_id": "DLID-kxe3nxfgk491",
   "keywords": [
     "ToC",
+    "document information",
     "content hash",
     "change detection",
-    "change set",
     "rebuild",
     "AI-generated fields",
     "description limit",
     "section ID",
-    "move and rename",
-    "acceptance criteria"
+    "detail file",
+    "DLID"
   ],
   "path": "docs/specs/requirement/REQ-003_toc.md",
-  "purpose": "Requirements for the information a ToC manages, AI-generated field limits, change detection via content hashes, and the build/rebuild flow that updates and commits a ToC.",
+  "purpose": "Requirements for the ToC: managed document information, AI-generated field limits, change detection by hashes, and the build and rebuild flow with candidate validation and atomic commit.",
   "summary": [
-    "Information requirements for document info, section entries, and reference entries, including acquisition method and whether user documents are written to",
-    "Limits on AI-generated fields: description limit L and internal tolerance limit H = floor(L x 1.3), with H never shown to the generating AI",
-    "ToC metadata: ToC identification key and normalized Index target specification stored for re-interpretation and rebuild detection",
-    "Change detection (FR-003, FR-011, FR-012): move/rename recognition, document-level and section-level change detection",
-    "Content hash definition: SHA-256 of raw text, reference link definition lines excluded, 12-digit prefix recorded in link titles",
-    "Timing of updating reflected hashes: updated together with ToC commit, unchanged on failure",
-    "Change set detection process: classifying new, body change, reference change, move/rename, departure, and unchanged",
-    "ToC build/rebuild (FR-004, FR-005): update plan, document info generation, reference reconstruction, candidate validation, and atomic commit",
-    "Completion result: counts on standard output and full details written to a work file (D-059)",
-    "Acceptance criteria AC-001 to AC-027 for moves, regeneration suppression, tolerance, rebuild failure, and change types"
+    "Information requirements for ToC document entries, section entries and reference entries, with acquisition methods",
+    "Only DLIDs may be written to user documents; no manual ID numbering or duplicate metadata",
+    "Limits on AI-generated fields (purpose 200 characters, arrays 10 items) and the internal tolerance H = floor(L x 1.3) that must never be shown to the generating AI",
+    "ToC metadata: key and normalized Index target specification, with rebuild detection when the specification changes",
+    "Change detection (FR-003, FR-011, FR-012): new, body change, reference change, move/rename, removal from index target, unchanged",
+    "Content hash definition: SHA-256 of raw text excluding reference link definition lines; 12-character recorded form in link titles",
+    "ToC build and rebuild in three stages with update plan, reuse of existing AI fields, and reference check state reconstruction",
+    "Candidate validation and atomic commit; failure keeps the last committed ToC",
+    "Build result returns counts on stdout and full details in a work file",
+    "Acceptance criteria AC-001, AC-002, AC-010, AC-011, AC-017, AC-018, AC-020, AC-026, AC-027"
   ],
   "tasks": [
     "Designing or implementing ToC build and rebuild",
-    "Implementing change detection and change set classification",
-    "Implementing content hash calculation",
-    "Implementing AI-generated field generation and validation",
-    "Defining the ToC data model and metadata",
-    "Handling document moves and renames",
-    "Designing completion result output of index building",
-    "Writing tests for ToC acceptance criteria",
-    "Reviewing the reference check result recording in ToC"
+    "Implementing change detection between ToC and current documents",
+    "Implementing content hash and section hash computation",
+    "Implementing AI-generated field generation and validation limits",
+    "Designing the ToC data model and metadata storage",
+    "Implementing the index-docs skill and its result output",
+    "Reviewing ToC-related requirements and acceptance criteria",
+    "Writing tests for rebuild, move/rename and hash behavior"
   ],
   "title": "doc-link 要件定義書 — [ToC]管理"
 }

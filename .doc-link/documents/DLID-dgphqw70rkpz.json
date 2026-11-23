@@ -1,38 +1,40 @@
 {
-  "content_hash": "7a6a9ff076b49b3062d2bb3ff6d9c1cc7b57e83926119771a0caf17de6051e61",
+  "content_hash": "52ed2959d4d09361577f7e083ae994f74dc17eb45806ef3edeb19ee62d20d55f",
   "doc_link_id": "DLID-dgphqw70rkpz",
   "keywords": [
-    "target resolution",
-    "DLID embedding",
-    "change set",
     "ToC build",
-    "index target",
+    "DLID assignment",
+    "target expansion",
+    "change set",
     "section ID",
-    "path move",
+    "content hash",
+    "move detection",
     "detail file",
     "atomic write",
-    "exclude patterns"
+    "index-docs"
   ],
   "path": "docs/specs/design/DES-005_indexing.md",
-  "purpose": "Designs target resolution, ID checking, DLID embedding, change-set determination, required-information acquisition, candidate finalization, and atomic writes for ToC building.",
+  "purpose": "Designs target fixing, ID checking, DLID assignment and ToC building: argument rules, target expansion, change set detection, candidate commit, completion output and write units.",
   "summary": [
-    "Inputs, outputs, and execution boundary of ToC build following DES-004 stages",
-    "Argument combination rules and expansion of directories, patterns, and exclusions into target Markdown lists",
-    "Path normalization, Markdown detection, symlink handling, and nonexistent path reporting",
-    "ID check: documents without or with duplicate IDs are excluded and reported",
-    "DLID embedding operation: duplicate original confirmation, section ID issuance, writes limited to DLID",
-    "Change-set determination for documents and sections, including path-move recording across build advances",
-    "Required-information acquisition, reuse of document information, and candidate inspection",
-    "Completion result items and the detail file written atomically",
-    "Write units using os.replace, no locking, and failure and re-run behavior"
+    "Inputs and outputs of the build; the completion result returns only items and counts to stdout while full details go to a detail file",
+    "Target fixing: argument combination rules, directory and pattern expansion, exclusion matching, fixed excluded names, path normalization, Markdown detection and symlink handling",
+    "ID check excludes documents without IDs or with duplicates and continues the build; an unreadable document stops it",
+    "DLID assignment operation: explicit invocation, duplicate original confirmation by the user, new ID issuance, section ID writing, count-only reporting, and rollback of non-DLID diffs",
+    "Change set: new, left target, path change, content hash change, reference or physical path change, plus section-level add, delete, move, heading change and body change by section ID",
+    "Move detection records previous and new paths per key in a temporary record file used to build the final result",
+    "Update plan reuses existing generated information, and the AI generates only for new or changed documents with script validation",
+    "Candidate validation and atomic publication of the confirmed ToC; document information is committed per document",
+    "Completion output fields and the detail file with full change sets, generated documents and reference findings",
+    "Write units use os.replace with no locks; reruns converge after failure"
   ],
   "tasks": [
-    "Implementing target expansion and exclusion logic",
-    "Implementing the embed-dlid operation",
-    "Implementing change-set and move detection",
-    "Implementing the index-docs build and completion result",
-    "Designing section-level change detection",
-    "Reviewing write atomicity and failure handling"
+    "Implementing index-docs or the target spec expansion",
+    "Implementing DLID assignment",
+    "Implementing change detection and section-level diff",
+    "Designing build completion output and detail files",
+    "Handling build failure and rerun behavior",
+    "Writing tests for target specification and exclusion rules",
+    "Reviewing ToC candidate commit and write atomicity"
   ],
   "title": "DES-005 対象確定・DLID 付与・[ToC]構築設計"
 }

@@ -31,8 +31,13 @@ REQ-001 D-026・D-027・D-036・D-039 を実装する。`check-toc` と `query-d
   [確定 ToC]に入っている[文書 ID]の文書
 - `target_spec_changed`: 渡された対象指定が、[確定 ToC]に保存した指定と違うか。`saved_target_spec` は、違うときの
   保存済みの指定（違わないとき、渡されないときは `None`）
-- `counts`: 変更種別ごとの件数。`scale`: 再構築が必要なときの規模の件数
+- `counts`: 変更種別ごとの件数と、除外した文書の件数（`missing_id`・`duplicate_id`・`excluded_in_toc`）。
+  `scale`: 再構築が必要なときの規模の件数
 - `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定など
+
+`TocCheck.to_summary()` は標準出力へ返す要約（件数まで）、`TocCheck.to_detail()` は明細ファイルへ書く全件
+（`documents`・`sections`・`excluded`・`excluded_in_toc`）である（要件 D-061）。明細は件数に比例して大きくなるので、
+呼び出す入口 script は、要約だけを標準出力へ返し、全件は `detail_file` で作業ファイルへ書く
 
 何も書き込まない。この処理の前後で、対象文書と管理状態（`.doc-link/` の全ファイル）はバイト単位で変わらない。
 
@@ -160,7 +165,8 @@ class TocCheck:
     problems: tuple[dict, ...] = ()
     warnings: tuple[str, ...] = ()
 
-    def to_dict(self) -> dict:
+    def to_summary(self) -> dict:
+        """標準出力へ返す要約（要件 D-061）。件数までで、文書・セクションごとの明細を持たない。"""
         return {
             "status": self.status,
             "toc_key": self.toc_key,
@@ -169,15 +175,23 @@ class TocCheck:
             "target_spec": self.target_spec,
             "target_spec_changed": self.target_spec_changed,
             "saved_target_spec": self.saved_target_spec,
-            "documents": [d.to_dict() for d in self.documents],
-            "sections": [s.to_dict() for s in self.sections],
-            "excluded": [e.to_dict() for e in self.excluded],
-            "excluded_in_toc": [e.to_dict() for e in self.excluded_in_toc],
             "counts": self.counts,
             "scale": self.scale.to_dict() if self.scale else None,
             "causes": [c.to_dict() for c in self.causes],
             "problems": list(self.problems),
             "warnings": list(self.warnings),
+        }
+
+    def to_detail(self) -> dict:
+        """明細ファイルへ書く全件（要件 D-061）。変更のある文書・セクションと、除外した文書である。"""
+        return {
+            "status": self.status,
+            "toc_key": self.toc_key,
+            "version": self.version,
+            "documents": [d.to_dict() for d in self.documents],
+            "sections": [s.to_dict() for s in self.sections],
+            "excluded": [e.to_dict() for e in self.excluded],
+            "excluded_in_toc": [e.to_dict() for e in self.excluded_in_toc],
         }
 
 
@@ -324,6 +338,7 @@ def check_toc(
         "duplicate_id": sum(
             1 for item in change_set.excluded if item.reason == REASON_DUPLICATE
         ),
+        "excluded_in_toc": len(excluded_in_toc),
     }
     result = {
         **common,

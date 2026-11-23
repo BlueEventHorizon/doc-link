@@ -14,7 +14,8 @@ markdown-it-py の解析結果を使い、独自の正規表現で判定しな�
 
 - 行は `\\r\\n`・`\\r`・`\\n` で区切る（markdown-it-py の改行の扱いと同じ）。frontmatter の判定は行の
   `str.strip()` が `---` になるかで行う
-- frontmatter の最上位のキーは、行頭（インデントなし）から始まる `キー: 値` の行から読む。値は、引用符（`"` か
+- frontmatter の最上位のキーは、行頭（インデントなし）から始まる `キー: 値` の行から読む。キーは、引用符（`"` か
+  `'`）で囲んだものも、囲みを除いた同じキーとして読む（`"doc_link_id": …` は `doc_link_id` である）。値は、引用符（`"` か
   `'`）で 1 行に閉じたもの、または引用符なしの 1 行の文字列（` #` から後ろはコメントとして除く）とする。
   複数行の値・ブロックスカラ（`|`・`>`）・コレクション・タグ・アンカー・エイリアスはスカラとして読まない。
   同じキーが複数あるときは、最初のものを採る
@@ -54,8 +55,9 @@ FRONTMATTER_DELIMITER = "---"
 _LINE_PATTERN = re.compile(r"[^\r\n]*(?:\r\n|\r|\n)|[^\r\n]+")
 _SCHEME_PATTERN = re.compile(r"[A-Za-z][A-Za-z0-9+.\-]*:")
 _TOP_LEVEL_KEY_PATTERN = re.compile(
-    r"([^\s#\-:'\"\[\]{}][^:]*?)[ \t]*:(?:[ \t]+(.*))?$"
+    r"(?:\"([^\"]*)\"|'([^']*)'|([^\s#\-:'\"\[\]{}][^:]*?))[ \t]*(:)(?:[ \t]+(.*))?$"
 )
+_COMMENT_PATTERN = re.compile(r"[ \t]#")
 _NON_SCALAR_STARTS = "|>[{&*!%@`"
 _NULL_WORDS = frozenset({"null", "Null", "NULL", "~"})
 
@@ -187,11 +189,50 @@ def _read_top_level_keys(lines: list[str]) -> dict[str, str | None]:
         match = _TOP_LEVEL_KEY_PATTERN.match(line.rstrip("\r\n"))
         if match is None:
             continue
-        key = match.group(1).strip()
+        key = _key_of(match)
         if key in keys:
             continue
-        keys[key] = _read_scalar(match.group(2))
+        keys[key] = _read_scalar(match.group(5))
     return keys
+
+
+def _key_of(match: re.Match) -> str:
+    """キーの名前。引用符（`"` か `'`）で囲んだキーは、囲みを除いた中身である。"""
+    for group in (1, 2):
+        if match.group(group) is not None:
+            return match.group(group)
+    return match.group(3).strip()
+
+
+def key_value_span(line: str) -> tuple[str, int, int] | None:
+    """最上位のキーの行から、（キー、値の開始位置、値の終了位置）を返す。キーの行でなければ `None`。
+
+    位置は、改行を除いた行の中の `[開始, 終了)` である。値の後ろの空白と行末のコメント（空白に続く `#` から後ろ）は
+    値に含めない。値が無い行は、開始と終了が同じ位置（値を置く位置。`:` の直後、またはコメントの直前）である。
+    値だけを置き換える側（[DLID]の書き込み）が、キー・区切り・コメントを保つために使う。
+    """
+    body = line.rstrip("\r\n")
+    match = _TOP_LEVEL_KEY_PATTERN.match(body)
+    if match is None:
+        return None
+    key = _key_of(match)
+    raw = match.group(5)
+    if raw is None:
+        return key, match.end(4), match.end(4)
+    start = match.start(5)
+    if raw == "" or raw.startswith("#"):
+        return key, start, start
+    if raw[:1] in "\"'":
+        close = raw.find(raw[0], 1)
+        if close >= 0:
+            rest = raw[close + 1 :]
+            if rest.strip() == "" or (
+                rest[0] in " \t" and rest.lstrip().startswith("#")
+            ):
+                return key, start, start + close + 1
+    comment = _COMMENT_PATTERN.search(raw)
+    value = raw[: comment.start()] if comment is not None else raw
+    return key, start, start + len(value.rstrip())
 
 
 def _read_scalar(raw: str | None) -> str | None:
@@ -214,7 +255,7 @@ def _read_scalar(raw: str | None) -> str | None:
         ):
             return None
         return value[1:close]
-    comment = re.search(r"[ \t]#", value)
+    comment = _COMMENT_PATTERN.search(value)
     if comment is not None:
         value = value[: comment.start()].rstrip()
     if value in _NULL_WORDS or value == "":

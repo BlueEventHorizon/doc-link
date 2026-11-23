@@ -342,5 +342,36 @@ class PrepareTest(SearchTestBase):
         self.assertEqual(self.snapshot(), before)
 
 
+class ConfirmRebuildDetailTest(SearchTestBase):
+    """D-061: 再構築の確認は、検索前検査の要約と明細ファイルのパスを返す。"""
+
+    def test_confirm_rebuild_returns_the_summary_and_writes_the_detail(self):
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        payload = sp.prepare(self.root, KEY, None, TASK)
+        self.assertEqual(payload["action"], sp.ACTION_CONFIRM_REBUILD)
+        for name in ("documents", "sections", "excluded", "excluded_in_toc"):
+            self.assertNotIn(name, payload)
+        self.assertEqual(payload["scale"]["content_changed"], 1)
+        path = Path(payload["detail_path"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(
+            path,
+            self.root / ".temp" / "doc-link" / "query-docs" / f"detail-{KEY}.json",
+        )
+        detail = json.loads(path.read_bytes().decode("utf-8"))
+        self.assertEqual([d["doc_link_id"] for d in detail["documents"]], [ID_A])
+
+    def test_unwritable_detail_is_a_failure(self):
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        self.write(".temp/doc-link/query-docs", "not a directory")
+        with self.assertRaises(sp.SearchError) as caught:
+            sp.prepare(self.root, KEY, None, TASK)
+        self.assertTrue(
+            any("明細ファイルを書けない" in e for e in caught.exception.errors)
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

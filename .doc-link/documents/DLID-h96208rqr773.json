@@ -1,39 +1,39 @@
 {
-  "content_hash": "57aa98ffe8d13f53b2289a97f4dc381810817a1062d276eebcba95c3b384ab1c",
+  "content_hash": "d3d06afd5ba4993f7df43ec7d6b0227c976f65d40cf14617002036457965a63f",
   "doc_link_id": "DLID-h96208rqr773",
   "keywords": [
     "document search",
-    "FR-006",
-    "AC-019",
-    "ToC",
-    "recall priority",
+    "semantic search",
+    "no omission",
+    "ToC state",
+    "pre-search check",
     "rebuild confirmation",
-    "stale ToC",
-    "search results",
-    "key all",
-    "Index target specification"
+    "search result",
+    "reserved key all",
+    "query-docs"
   ],
   "path": "docs/specs/requirement/REQ-004_search.md",
-  "purpose": "Requirements for task-based document search over a ToC, including recall-first results, pre-search rebuild checks, failure handling, and the required fields of search results.",
+  "purpose": "Requirements for document search: finding task-relevant documents from the ToC without omissions, pre-search rebuild checks and user choices, and the contents of search results.",
   "summary": [
-    "FR-006: search finds documents relevant to a task, prioritizing no omissions and including doubtful documents",
-    "Key selection: --key searches that ToC, and omitting it searches the reserved key all in single mode",
-    "Missing ToC: search is not run and an initial build with an Index target specification is required",
-    "Existing ToC: rebuild necessity is checked from the stored Index target specification before searching",
-    "When rebuild is needed, the user chooses between rebuilding first or searching the existing ToC as is",
-    "Confirmation shows counts per change type and the number of documents needing AI summary generation",
-    "Undeterminable rebuild necessity (permissions, read errors, unreadable specification) stops search as a failure",
-    "Searching a stale ToC notifies possible staleness and does not reconfirm the ToC as current",
-    "Search results include document ID, recorded path, reason for relevance, sections, and ToC state",
-    "AC-019: acceptance condition for the pre-search ToC rebuild confirmation"
+    "FR-006 document search from a task, prioritizing no omissions over precision",
+    "Search uses the ToC of the specified key, or the reserved key all when omitted",
+    "If the ToC does not exist, search is refused and initial build is requested",
+    "Pre-search check of rebuild necessity using the stored Index target specification",
+    "When rebuild is needed, the user chooses between rebuilding first or searching the existing ToC",
+    "Confirmation shows rebuild scale counts; details go to a work file",
+    "If necessity cannot be determined, search stops as a failure with no stale-ToC option",
+    "Searching the existing ToC notifies that it may not reflect current documents and does not recommit it",
+    "Search results include document ID, recorded path, reason, sections and ToC state",
+    "Acceptance criterion AC-019 for pre-search ToC rebuild confirmation"
   ],
   "tasks": [
-    "Implementing or changing the document search feature",
-    "Designing the search interface and its result format",
-    "Handling rebuild-or-continue prompts before searching",
-    "Implementing failure handling when rebuild necessity cannot be determined",
-    "Writing or reviewing tests for search acceptance condition AC-019",
-    "Finding relevant documents before starting a task via another skill"
+    "Implementing the document search feature",
+    "Implementing pre-search ToC rebuild check",
+    "Designing search result format",
+    "Writing the query-docs skill",
+    "Handling search when the ToC is missing or stale",
+    "Reviewing search requirements and acceptance criteria",
+    "Writing search tests"
   ],
   "title": "doc-link 要件定義書 — 文書検索"
 }

@@ -41,7 +41,7 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-ro
 
 `confirm_rebuild`（再構築が必要）
 
-- 返った `scale`（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、AI による要約生成が必要な件数）を示して、AskUserQuestion で二択を確認する。選択肢は `options` のとおり、「再構築してから検索する」と「既存の ToC のまま検索する」である
+- 返った `scale`（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、AI による要約生成が必要な件数）を示して、AskUserQuestion で二択を確認する。標準出力は件数までで、変更のある文書・セクションごとの明細は `detail_path` のファイルにある。二択の確認には件数で足りるので、明細は、利用者が内訳を求めたときだけ読む。選択肢は `options` のとおり、「再構築してから検索する」と「既存の ToC のまま検索する」である
 - 「再構築してから検索する」: 呼び出し元（プロジェクト管理 AI）に `index-docs` の実行を求め、確定結果を受け取る。このスキルは `index-docs` を実行しない。その後、`prepare` の引数に `--choice rebuild` を足して、手順 1 をやり直す
   - `index-docs` には、検索前検査と同じ ToC 識別キーと Index 対象指定を、解釈せずそのまま渡す。引数なしで起動すると単体モード（`all`）になり、別の ToC を再構築してしまう
   - Index 対象指定を受け取っていなかったとき（`target_spec_source` が `saved`。保存済みの指定で検査した）は、返された `target_spec` の `paths`・`dirs`・`exclude` の要素を、変えずに `--paths`・`--dirs`・`--exclude` へ渡す。`target_spec` の `mode` が `all` のときは `--all` を渡す。ToC 識別キーは `target_spec` の `key` を `--key` へ渡す（`mode` が `all` のときは `--key` を渡さない）

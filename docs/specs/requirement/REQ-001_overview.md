@@ -330,10 +330,10 @@ doc-link が[Index 対象文書]へ行う書き込みは、[文書 ID]管理シ�
 通知に重要度の分類は設けない。指定ディレクトリ内での参照先不在および参照パス不一致は[ToC]の確定を妨げず、検査結果として保持すること。参照先ディレクトリを検索できない場合も、「指定ディレクトリ内に不在」と記録して[ToC]を確定する（[D-025][req-005-fr-009]）。[文書 ID]が無い文書と[文書 ID]が重複する文書は[ToC]に入れずに報告し、[ToC]の確定を妨げない（[D-036][req-002-sec-9-1]）。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "7313eb94bf53 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "504f32e6af85 DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
+[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
+[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-003-sec-7-4]: REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
@@ -342,6 +342,6 @@ doc-link が[Index 対象文書]へ行う書き込みは、[文書 ID]管理シ�
 [req-002-sec-9-2]: REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
 [req-003-sec-10-1-2]: REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"
-[req-005-fr-009]: REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
-[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "3627fec77afd DLID-jhkngqtfdnhn"
+[req-005-fr-009]: REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
+[req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"
 [req-005-sec-13-1]: REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"

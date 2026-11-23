@@ -267,7 +267,7 @@ class FirstBuildTest(Base):
         self.assertEqual(result["publication_state"], "確定 ToC あり")
         self.assertEqual(result["version"], 1)
         self.assertTrue(result["published"])
-        self.assertEqual(result["excluded"], [])
+        self.assertEqual(result["excluded_counts"], {"missing": 0, "duplicate": 0})
         self.assertEqual(result["generated_count"], 3)
         toc = state_store.load_confirmed_toc(self.root, "k")
         self.assertEqual(
@@ -306,16 +306,43 @@ doc_link_id: {ID_A}
         self.write("docs/a.md", broken)
         code, result = self.build("k", ALL)
         self.assertEqual(code, 0, result)
+        # ID_B は対象文書（docs/b.md）にあるので、リンク先のディレクトリに無くても、移動先が分かる（D-062）。
+        # どの対象文書にも無い DLID だけが、不在のまま残る
         report = result["reference_check"]
-        self.assertEqual(report["summary"], {"absent": 3})
+        self.assertEqual(report, {"summary": {"absent": 1, "path_mismatch": 2}})
+        findings = json.loads(Path(result["detail_path"]).read_text(encoding="utf-8"))[
+            "reference_findings"
+        ]
         self.assertEqual(
-            sorted(f["absent_reason"] for f in report["findings"]),
-            ["directory_missing", "directory_missing", "not_found"],
+            sorted(
+                (f["status"], f["absent_reason"], f["current_path"]) for f in findings
+            ),
+            [
+                ("absent", "not_found", None),
+                ("path_mismatch", None, "docs/b.md"),
+                ("path_mismatch", None, "docs/b.md"),
+            ],
         )
         toc = state_store.load_confirmed_toc(self.root, "k")
         self.assertEqual(
-            sorted(r["check"]["result"] for r in toc["references"]), ["absent"] * 3
+            sorted(r["check"]["result"] for r in toc["references"]),
+            ["absent", "path_mismatch", "path_mismatch"],
         )
+
+    def test_moved_target_excluded_as_a_duplicate_id_is_recorded_as_duplicate(self):
+        # 移動先の文書が ID 重複で[ToC]に入らなくても、[Index 対象リスト]の文書なので探す（D-062）
+        dup = "DLID-dddddddddddd"
+        self.write(
+            "docs/a.md",
+            f"---\ndoc_link_id: {ID_A}\n---\n# A {S_A}\n\n[x][r]\n\n"
+            f'[r]: ../old/x.md "{dup}"\n',
+        )
+        for name in ("docs/one/x.md", "docs/two/x.md"):
+            self.write(name, f"---\ndoc_link_id: {dup}\n---\n# X\n")
+        code, result = self.build("k", ALL + ["docs/one/x.md", "docs/two/x.md"])
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["excluded_counts"]["duplicate"], 2)
+        self.assertEqual(result["reference_check"], {"summary": {"duplicate": 1}})
 
     def test_single_mode_uses_reserved_key(self):
         code, result = self.run_main("advance")
@@ -387,7 +414,7 @@ DONE_KEYS = {
     "change_summary",
     "detail_path",
     "reference_check",
-    "excluded",
+    "excluded_counts",
     "problems",
     "warnings",
 }
@@ -457,8 +484,16 @@ class DetailFileTest(Base):
         self.assertEqual(path, self.detail_file("k"))
         detail = self.read_detail("k")
         self.assertEqual(
-            set(detail), {"toc_key", "version", "generated_documents", "change_set"}
+            set(detail),
+            {
+                "toc_key",
+                "version",
+                "generated_documents",
+                "change_set",
+                "reference_findings",
+            },
         )
+        self.assertEqual(detail["reference_findings"], [])
         self.assertEqual(detail["toc_key"], "k")
         self.assertEqual(detail["version"], result["version"])
         self.assertEqual(sorted(detail["generated_documents"]), [ID_A, ID_B, ID_C])
@@ -855,7 +890,11 @@ class ExcludedDocumentsTest(Base):
         paths = [*ALL, "docs/noid.md", "docs/dup1.md"]
         code, result = self.build("k", paths)
         self.assertEqual(code, 0, result)
-        excluded = {e["path"]: e for e in result["excluded"]}
+        # 標準出力は件数だけで、除外した文書の一覧は明細ファイルにある
+        self.assertNotIn("excluded", result)
+        self.assertEqual(result["excluded_counts"], {"missing": 1, "duplicate": 2})
+        detail = json.loads(Path(result["detail_path"]).read_text(encoding="utf-8"))
+        excluded = {e["path"]: e for e in detail["change_set"]["excluded"]}
         self.assertEqual(excluded["docs/noid.md"]["reason"], "missing")
         self.assertEqual(excluded["docs/c.md"]["reason"], "duplicate")
         self.assertEqual(excluded["docs/dup1.md"]["reason"], "duplicate")

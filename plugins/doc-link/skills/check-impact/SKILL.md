@@ -1,13 +1,13 @@
 ---
 name: check-impact
-description: 参照元の title に記録した内容ハッシュが、参照先の現在ハッシュと異なる参照（記録が無い参照を含む）を、変更された文書ごとに直接の参照元とともに返す。ToC が古い・未構築のときは変更影響候補を返さず、check-toc と同じ結果を返す。何も書き込まない。文書を変更した後に、その文書を参照している文書の修正が要るかを確かめたいときに使う。
+description: 参照元の title に記録した内容ハッシュが、参照先の現在ハッシュと異なる参照（記録が無い参照を含む）を、変更された文書ごとに直接の参照元とともに返す。ToC が古い・未構築のときは変更影響候補を返さず、check-toc と同じ結果を返す。件数を返し、参照元の一覧は作業ファイルに書く。対象の文書と管理状態には何も書き込まない。文書を変更した後に、その文書を参照している文書の修正が要るかを確かめたいときに使う。
 ---
 
 # check-impact
 
 このスキルは変更影響候補の列挙のみを行う。親が依頼している他の作業を引き継いではならない。自身を Skill ツールで呼ばない。
 
-何も書き込まない。ToC・文書情報・対象文書を読むだけで、通知の状態を持たない。参照元の修正が必要かの判断、参照元の修正、title の内容ハッシュの書き換えは、プロジェクト管理 AI（呼び出し元）が行う。このスキルと script は行わない。
+対象文書と管理状態には何も書き込まない。ToC・文書情報・対象文書を読むだけで、通知の状態を持たない。書くのは、結果の明細の作業ファイル（`.temp/doc-link/check-impact/`）だけである。参照元の修正が必要かの判断、参照元の修正、title の内容ハッシュの書き換えは、プロジェクト管理 AI（呼び出し元）が行う。このスキルと script は行わない。
 
 ## 引数
 
@@ -28,24 +28,29 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_impact.py" --project-root "${
 
 ### 2. 結果を報告する
 
+標準出力の JSON は件数までを持つ。変更影響候補の明細は、`detail_path` のファイル（明細ファイル）にある。変更された文書と参照元が多いと明細は大きくなるので、標準出力には載らない。
+
 標準出力の JSON の `status` に応じて、次を報告する。
 
-- `not_built`・`rebuild_needed`: ToC が古い（未構築、または現物と不一致がある）ので、変更影響候補を返していないこと。`check-toc` と同じ検査結果（`status`・`documents`・`sections`・`scale` など）をそのまま示す
-- `up_to_date`: ToC が最新であり、`changed_documents` を次のとおり報告する
-  - `changed_documents` が空: 記録と現在ハッシュが異なる参照は、走査した範囲では見つからなかったこと。あわせて `scope`（対象指定・ToC の版・走査した参照元の文書・時点）を示す。参照元は走査した範囲に限られ、世界全体に参照元が無いことを意味しない
-  - `changed_documents` がある: 変更された文書（`doc_link_id`・`path`）ごとに、直接の参照元（`source_doc_id`・`source_path`・`line`・`definition`）、参照先（`target_dlid`・セクションなら `target_section_id`・`target_heading`）、title に記録した内容ハッシュ（`recorded_hash`。`null` は記録なし）、参照先の現在ハッシュ（`current_hash`）を示す。間接の参照元は含まれない
-- `excluded`・`problems`・`warnings`: ID 未付与・ID 重複で ToC に入れなかった文書、存在しない・Markdown でない指定など。あれば、あわせて報告する
+- `not_built`・`rebuild_needed`: ToC が古い（未構築、または現物と不一致がある）ので、変更影響候補を返していないこと。`check-toc` と同じ検査結果（`status`・`counts`・`scale` など。明細ファイルも `check-toc` と同じ項目）をそのまま示す
+- `up_to_date`: ToC が最新であり、`counts` を次のとおり報告する
+  - `counts.changed_documents` が 0: 記録と現在ハッシュが異なる参照は、走査した範囲では見つからなかったこと。あわせて `scope`（対象指定・ToC の版・走査した参照元の文書の件数・時点）を示す。参照元は走査した範囲に限られ、世界全体に参照元が無いことを意味しない
+  - `counts.changed_documents` が 1 以上: 変更された文書の件数と、確かめる参照の件数（`counts.referrers`）を示し、手順 3 へ進む
+- `counts.excluded`・`problems`・`warnings`: ID 未付与・ID 重複で ToC に入れなかった文書の件数、存在しない・Markdown でない指定など。あれば、あわせて報告する
+
+明細ファイルの `changed_documents` は、変更された文書（`doc_link_id`・`path`）ごとに、直接の参照元（`source_doc_id`・`source_path`・`line`・`definition`）、参照先（`target_dlid`・セクションなら `target_section_id`・`target_heading`）、title に記録した内容ハッシュ（`recorded_hash`。`null` は記録なし）、参照先の現在ハッシュ（`current_hash`）を持つ。間接の参照元は含まれない。ほかに、走査した参照元の文書（`scanned_documents`）と、ID 未付与・ID 重複で ToC に入れなかった文書（`excluded`）を持つ。
 
 ### 3. 変更影響候補の扱い（プロジェクト管理 AI）
 
 `guidance` に従う。
 
 - 変更影響候補があるとき、プロジェクト管理 AI が次を行う
+  - 明細ファイルの `changed_documents` を読む。件数が多いときは、一度に全部を読まず、変更された文書ごとに分けて扱う
   - 参照元ごとに、変更箇所と参照元の該当記述を読み、参照元の修正が必要かを判断する
   - 必要なら、参照元を直す
   - 判断の結果（参照元ごとの、修正の要否と根拠）を、報告に残す
-  - 確かめた参照の title に、参照先の現在ハッシュを書く。値は `current_hash` に返されたものを使う
+  - 確かめた参照の title に、参照先の現在ハッシュを書く。値は、明細ファイルの `current_hash` を使う
   - 確かめていない参照の title は、書き換えない。読まずに一括で書き換えない。読まずに書き換えると、その参照の通知が消え、変更の検出が意味を失う
   - 書いたあとは、このスキルをもう一度実行する
-  - 報告が空になるまで、これを繰り返す
+  - `counts.changed_documents` が 0 になるまで、これを繰り返す
 - 書き換えるまで、同じ参照が毎回返る。判断・修正・title の書き換えは、プロジェクト管理 AI が行い、script は行わない

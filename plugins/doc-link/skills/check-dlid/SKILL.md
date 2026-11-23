@@ -1,13 +1,13 @@
 ---
 name: check-dlid
-description: 対象の Markdown 文書の DLID（文書 ID とセクション ID）を検査する。文書 ID が無い文書、セクション ID の無い見出し、重複する DLID（同じ文書の中を含む）を、該当パスつきで報告する。何も書き込まない。ToC を構築する前や、DLID の状態を確かめたいときに使う。
+description: 対象の Markdown 文書の DLID（文書 ID とセクション ID）を検査する。文書 ID が無い文書、セクション ID の無い見出し、重複する DLID（同じ文書の中を含む）を、件数で報告し、該当箇所の一覧は作業ファイルに書く。対象の文書と管理状態には何も書き込まない。ToC を構築する前や、DLID の状態を確かめたいときに使う。
 ---
 
 # check-dlid
 
 このスキルは文書 ID の検査のみを行う。親が依頼している他の作業を引き継いではならない。自身を Skill ツールで呼ばない。
 
-何も書き込まない。対象文書と管理状態を読むだけである。DLID の付与・重複の修復は `embed-dlid` の責務であり、このスキルでは行わない。
+対象文書と管理状態には何も書き込まない。読むだけである。書くのは、検出事項の明細の作業ファイル（`.temp/doc-link/check-dlid/`）だけである。DLID の付与・重複の修復は `embed-dlid` の責務であり、このスキルでは行わない。
 
 ## 引数
 
@@ -28,10 +28,17 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_dlid.py" --project-root "${CL
 
 ### 2. 結果を報告する
 
+標準出力の JSON は件数までを持つ。検出事項の明細は、`detail_path` のファイル（明細ファイル）にある。検出が多いと明細は大きくなるので、標準出力には載らない。
+
 標準出力の JSON から、次を報告する。
 
-- `missing_document_id`: 文書 ID が無い文書のパス。`unclosed_frontmatter` が真の文書は、frontmatter の閉じる行が無く、`embed-dlid` が書き込めないことも伝える
+- `clean` が真のときは、検出事項が無いことを報告する
+- `counts`: 文書 ID が無い文書（`missing_document_id`）、セクション ID の無い見出し（`missing_section_id`）、重複する DLID（`duplicates`）、frontmatter の閉じる行が無い文書（`unclosed_frontmatter`）の件数。`unclosed_frontmatter` が 1 以上のときは、その文書に `embed-dlid` が書き込めないことも伝える
+- `problems`・`warnings`: 存在しない・Markdown でない指定など。あれば、あわせて報告する
+- `guidance`: あれば、そのまま案内する
+
+明細ファイルは、報告に該当箇所の一覧が要るときだけ読む。DLID の付与のために読む必要は無い（`embed-dlid` が同じ検出を行う）。件数が多いときは、一度に全部を読まない。
+
+- `missing_document_id`: 文書 ID が無い文書のパス。`unclosed_frontmatter` が真の文書は、frontmatter の閉じる行が無い
 - `missing_section_id`: セクション ID の無い見出しの、パス・行・見出しのテキスト
 - `duplicates`: 重複する DLID ごとに、すべての該当パス（`locations` の `path`・`kind`・`line`・`heading`）。`candidates` があれば、管理状態に記録されたパスと一致する原本の候補として示す
-- `problems`・`warnings`: 存在しない・Markdown でない指定など。あれば、あわせて報告する
-- `clean` が真のときは、検出事項が無いことを報告する

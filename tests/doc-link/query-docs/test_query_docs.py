@@ -137,6 +137,17 @@ class PrepareOutcomeTest(QueryTestBase):
         self.assertEqual(
             [o["choice"] for o in result["options"]], ["rebuild", "existing"]
         )
+        # D-061: 標準出力は件数と規模までで、変更のある文書・セクションの全件は明細ファイルにある
+        for name in ("documents", "sections", "excluded", "excluded_in_toc"):
+            self.assertNotIn(name, result)
+        self.assertEqual(result["counts"]["content_changed"], 1)
+        path = Path(result["detail_path"])
+        self.assertEqual(
+            path,
+            self.root / ".temp" / "doc-link" / "query-docs" / f"detail-{KEY}.json",
+        )
+        detail = json.loads(path.read_bytes().decode("utf-8"))
+        self.assertEqual(len(detail["documents"]), 2)
 
     def test_undeterminable_is_a_failure_without_old_version_option(self):
         self.build()

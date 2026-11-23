@@ -10,7 +10,7 @@ doc_link_id: DLID-nnbgpzkkm5vq
 
 検索要求はキー（省略時は予約キー `all`）とタスク・検索条件を持つ。指定キーの[確定 ToC]がなければ、検索せず初回構築が必要と返す。[確定 ToC]があれば、その版に保存した再解釈可能な対象指定で現在の一覧を走査し、ID、パス、比較値を版と照合する。新しい完全な対象指定が同時に与えられた場合はそれを優先する。その指定が版に保存した指定と違うときは、文書に差が無くても、再構築が必要と判定する（要件 [D-053][req-003-sec-7-5]）。対象指定の展開・現物の読取りが失敗した場合は「更新不要」と判定しない。
 
-検索前検査の結果は「再構築不要」「再構築必要」「判定不能」を区別する。比較で再構築不要なら[確定 ToC]を検索する。再構築が必要なら Skill がユーザーへ「再構築後に検索」「既存版のまま検索」の二択を確認する。確認時には script が照合結果から数えた再構築の規模（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、同じ[内容ハッシュ]の[文書情報]がなく AI 生成が必要な件数）を示す（要件 [D-027][req-004-fr-006]）。参照先の走査結果と生成にかかる時間はこの時点では分からないため示さない。前者は[DES-005][des-005]が正常確定した場合だけ新版を検索し、失敗時に旧版で黙って検索しない。後者は[ToC]に書き込まず、結果に古い版であることを明示する。古い版から使うのは[ToC]（所属、参照関係、[反映済みハッシュ]、検査結果）であり、[文書情報]は最新のものを表示する（要件 [D-024][req-003-fr-004]）。検索は確定済みのファイルを読む。
+検索前検査の結果は「再構築不要」「再構築必要」「判定不能」を区別する。比較で再構築不要なら[確定 ToC]を検索する。再構築が必要なら Skill がユーザーへ「再構築後に検索」「既存版のまま検索」の二択を確認する。確認時には script が照合結果から数えた再構築の規模（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、同じ[内容ハッシュ]の[文書情報]がなく AI 生成が必要な件数）を示す（要件 [D-027][req-004-fr-006]）。標準出力に返すのは件数までで、変更のある文書・セクションごとの明細は、`.temp/doc-link/query-docs/` の明細ファイルへ書いて、その絶対パスを返す（要件 [D-061][req-005-fr-016]）。参照先の走査結果と生成にかかる時間はこの時点では分からないため示さない。前者は[DES-005][des-005]が正常確定した場合だけ新版を検索し、失敗時に旧版で黙って検索しない。後者は[ToC]に書き込まず、結果に古い版であることを明示する。古い版から使うのは[ToC]（所属、参照関係、[反映済みハッシュ]、検査結果）であり、[文書情報]は最新のものを表示する（要件 [D-024][req-003-fr-004]）。検索は確定済みのファイルを読む。
 
 対象指定の展開または現物の読取りに失敗した「判定不能」は、再構築不要・再構築必要のどちらにも読み替えない。判定不能は障害として扱い、検索を停止して、判定できなかった対象と原因を返す。旧版での検索を利用者に提示しない（要件 [D-026][req-004-fr-006]）。frontmatter の解析不能（ID 欠落扱い）や対象ディレクトリの消失（対象離脱）は判定不能ではない。前者は ID 未付与として件数を示し（要件 [D-036][req-002-sec-9-1]）、後者は再構築必要に分類する。
 
@@ -49,11 +49,12 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 [des-003-sec-2]: DES-003_data-model.md#2-情報と識別子-dlid-m8vs7s3gahbx "6d9d489093bd DLID-m8vs7s3gahbx"
 [des-008-sec-1]: DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe "e07d05aa8a87 DLID-cf1n0ndmf0fe"
-[des-005]: DES-005_indexing.md "b0f04c2f3df2 DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "52ed2959d4d0 DLID-dgphqw70rkpz"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
-[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "9b494fa9ab14 DLID-481cwc8365a3"
-[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
+[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "002418132007 DLID-481cwc8365a3"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "1a232498a7af DLID-zacf5tmy6x4x"
 [req-002-sec-6-1-4]: ../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz "96d41fc90490 DLID-99p6p9nf7npz"
 [req-003-sec-7-5]: ../requirement/REQ-003_toc.md#75-tocのメタデータ-dlid-ef9szvy6w2cj "4b38b784fc3e DLID-ef9szvy6w2cj"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "8917b2e9e4d9 DLID-jhkngqtfdnhn"

@@ -126,6 +126,13 @@ class Expansion:
         }
 
 
+def toc_key_of(spec: TargetSpec) -> str:
+    """対象指定が示す[ToC 識別キー]。単体モード（`--all`・引数なし）は予約キー `all` である。"""
+    if spec.mode == MODE_TARGETS and spec.key is not None:
+        return spec.key
+    return RESERVED_KEY
+
+
 def add_target_arguments(parser: argparse.ArgumentParser) -> None:
     """`--key` と対象指定の引数を登録する。組み合わせの検証は `parse_target_arguments` が行う。"""
     parser.add_argument("--key", default=None, help="[ToC 識別キー]")

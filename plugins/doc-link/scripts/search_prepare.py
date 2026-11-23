@@ -21,6 +21,11 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 
 固定したときは `invoke_query_worker` を返し、検索 ID・[ToC 識別キー]・使用した[ToC]の版・鮮度を添える。
 
+`confirm_rebuild` は、検索前検査の要約（`toc_check.TocCheck.to_summary`。件数と再構築の規模まで）と二択を返す。
+変更のある文書・セクションの明細は、`.temp/doc-link/query-docs/detail-<符号化した[ToC 識別キー]>.json` へ書き、
+その絶対パスを `detail_path` に返す（要件 D-061。文書を大量に変更しても、標準出力の大きさが変わらないようにする
+ため）。同じ[ToC 識別キー]の次の検索前検査が置き換える。書けないときは、障害（`SearchError`）にする。
+
 ## `query-worker` との受け渡し
 
 置き場は `.temp/doc-link/query-docs/` で、識別値は検索 ID（`SEARCH-<8 桁の 16 進>`。script が生成する）である。
@@ -53,6 +58,7 @@ import secrets
 import tempfile
 from pathlib import Path
 
+import detail_file
 import state_store
 import toc_check
 
@@ -334,9 +340,16 @@ def prepare(
                 "旧版で黙って検索しない。`index-docs` の結果を確かめる"
             ]
         )
+    try:
+        detail_path = detail_file.write_detail(
+            root, SKILL, result.toc_key, result.to_detail()
+        )
+    except state_store.StateStoreError as exc:
+        raise SearchError([f"検索前検査の明細ファイルを書けない: {exc}"]) from exc
     return {
         "action": ACTION_CONFIRM_REBUILD,
-        **result.to_dict(),
+        **result.to_summary(),
+        detail_file.DETAIL_PATH_FIELD: detail_path,
         "options": [
             {
                 "choice": CHOICE_REBUILD,

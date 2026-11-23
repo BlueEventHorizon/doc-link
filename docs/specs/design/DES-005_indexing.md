@@ -81,12 +81,12 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 - 確定結果（版、[確定 ToC]を書き換えたか）
 - 変更の種別ごとの件数。文書は、新規・本文変更・参照変更・移動・改名・離脱・変更なしに分け、セクションは、追加・削除・移動・見出し変更・本文変更に分ける。複数の種別に該当する文書・セクションは、それぞれの種別に数える。該当が無い種別も、0 として必ず持つ。確定した文書の件数と、初回構築かも持つ
 - 生成した文書の件数
-- 参照検査結果（分類ごとの件数と、一致以外の検出事項）
-- ID 未付与・重複で除外した文書
+- 参照検査結果（分類ごとの件数）
+- ID 未付与・重複で除外した文書の件数
 - 報告すべき問題と警告
 - 明細ファイルの絶対パス
 
-明細ファイルは、変更集合（§3 の記録。文書・セクションごとの変更前後の値を含む）と、生成した文書の一覧を、全件持つ。[ToC 識別キー]ごとに 1 つを `.temp/doc-link/index-docs/` に置く。script が一時ファイルへ書き終えてから 1 回の置き換えで公開し（組み立て途中のものを読ませない）、同じ[ToC 識別キー]の次の構築で置き換える。[確定 ToC]を公開する前に書き、書けないときは公開せずに構築の失敗として報告する。構築が失敗したときは、パスを返さない。
+明細ファイルは、変更集合（§3 の記録。文書・セクションごとの変更前後の値と、ID 未付与・重複で除外した文書を含む）、生成した文書の一覧、一致以外の参照の検出事項を、全件持つ。参照の検出事項と除外した文書も、文書を大量に移動したときなどに件数に比例して大きくなるので、標準出力に載せない。[ToC 識別キー]ごとに 1 つを `.temp/doc-link/index-docs/` に置く。script が一時ファイルへ書き終えてから 1 回の置き換えで公開し（組み立て途中のものを読ませない）、同じ[ToC 識別キー]の次の構築で置き換える。[確定 ToC]を公開する前に書き、書けないときは公開せずに構築の失敗として報告する。構築が失敗したときは、パスを返さない。
 
 <a id="sec-5"></a>
 
@@ -105,7 +105,7 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 [ToC]の構築・再構築は、通知の状態を持たない（要件 [D-038][req-005-fr-015]）。失敗時は段階、対象 ID・パス、原因、[確定 ToC]の有無を返す。再実行時は[確定 ToC]と現物から再判定し、旧版に取り込まれた要約を不必要に繰り返さない。
 
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "13625382e806 DLID-8ck587eq1qnd"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "1b76ab2d7b24 DLID-8ck587eq1qnd"
 [req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#61-index-対象範囲-dlid-aggqjh0wkhe9 "ec720c1bf636 DLID-aggqjh0wkhe9"
 [req-001-sec-17-1]: ../requirement/REQ-001_overview.md#171-エラー候補-dlid-8crwqpf21hbe "f6477b46e7bf DLID-8crwqpf21hbe"
 [des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"
@@ -118,10 +118,10 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
 [req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
 [req-003-sec-10-2]: ../requirement/REQ-003_toc.md#102-変更検出処理-dlid-kv0da6ws6th9 "236e3d68df87 DLID-kv0da6ws6th9"
-[req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "931ba28a2521 DLID-3mhrvbx44c87"
-[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
+[req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "51b57b11c1e5 DLID-3mhrvbx44c87"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "1a232498a7af DLID-zacf5tmy6x4x"
 [req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "3627fec77afd DLID-jhkngqtfdnhn"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "8917b2e9e4d9 DLID-jhkngqtfdnhn"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-002-sec-6-1-2]: ../requirement/REQ-002_document-id.md#612-パターンの照合-dlid-fhfbhsf0svej "ac6985b3990a DLID-fhfbhsf0svej"
 [req-002-sec-6-1-4]: ../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz "96d41fc90490 DLID-99p6p9nf7npz"

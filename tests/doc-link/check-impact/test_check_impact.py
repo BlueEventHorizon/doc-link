@@ -51,6 +51,19 @@ def b_text(intro="intro", part="part"):
     return f"---\ndoc_link_id: {ID_B}\n---\n# B1 {S_B1}\n\n{intro}\n\n# B2 {S_B2}\n\n{part}\n"
 
 
+def with_detail(stdout: dict) -> dict:
+    """標準出力の JSON に、明細ファイル（`detail_path`）の全件を重ねて返す。同じ名前の項目は標準出力を優先する。
+
+    標準出力は件数までで、明細は作業ファイルにある（要件 D-061）。内容の検査は、両方を合わせた形で行う。
+    標準出力に明細が載っていないことは、標準出力だけを読むテストで確かめる。
+    """
+    path = stdout.get("detail_path")
+    if path is None:
+        return stdout
+    detail = json.loads(Path(path).read_bytes().decode("utf-8"))
+    return {**detail, **stdout}
+
+
 class CheckImpactTestBase(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -106,17 +119,32 @@ class CheckImpactTestBase(unittest.TestCase):
         )
 
     def snapshot(self):
+        """対象文書と管理状態（`.temp/` の作業ファイルを除く、すべてのファイル）の内容。"""
         return {
             str(p.relative_to(self.root)): p.read_bytes()
             for p in sorted(self.root.rglob("*"))
-            if p.is_file()
+            if p.is_file() and ".temp" not in p.relative_to(self.root).parts
         }
 
-    def run_main(self, *args):
+    def work_files(self):
+        """`.temp/` の下に書かれた作業ファイルの、ルートからの相対パス。"""
+        return sorted(
+            str(p.relative_to(self.root))
+            for p in self.root.rglob("*")
+            if p.is_file() and ".temp" in p.relative_to(self.root).parts
+        )
+
+    def run_stdout(self, *args):
+        """（終了コード、標準出力の JSON）を返す。"""
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = check_impact.main(["--project-root", str(self.root), *args])
         return code, json.loads(out.getvalue())
+
+    def run_main(self, *args):
+        """（終了コード、標準出力の JSON に明細ファイルの全件を重ねたもの）を返す。"""
+        code, stdout = self.run_stdout(*args)
+        return code, with_detail(stdout)
 
     @staticmethod
     def pairs(result):
@@ -146,7 +174,11 @@ class ImpactResultTest(CheckImpactTestBase):
         self.assertEqual(second["current_hash"], secs[S_B2])
         self.assertEqual(result["scope"]["toc_key"], KEY)
         self.assertEqual(result["scope"]["toc_version"], 1)
-        self.assertEqual(result["scope"]["scanned_documents"], ["a.md"])
+        self.assertEqual(result["scope"]["scanned_document_count"], 1)
+        self.assertEqual(result["scanned_documents"], ["a.md"])
+        self.assertEqual(
+            result["counts"], {"changed_documents": 1, "referrers": 2, "excluded": 0}
+        )
         self.assertEqual(result["scope"]["target"]["key"], KEY)
         self.assertTrue(result["scope"]["checked_at"])
 
@@ -159,8 +191,59 @@ class ImpactResultTest(CheckImpactTestBase):
         code, result = self.run_main(*ARGS)
         self.assertEqual(code, 0)
         self.assertEqual(result["changed_documents"], [])
-        self.assertEqual(result["scope"]["scanned_documents"], ["a.md"])
+        self.assertEqual(
+            result["counts"], {"changed_documents": 0, "referrers": 0, "excluded": 0}
+        )
+        self.assertEqual(result["scanned_documents"], ["a.md"])
         self.assertEqual(result["guidance"], [])
+
+    def test_stdout_holds_counts_and_the_detail_file_holds_every_item(self):
+        """D-061: 標準出力は件数までで、変更影響候補の全件は明細ファイルにある。"""
+        self.build()
+        code, stdout = self.run_stdout(*ARGS)
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            set(stdout),
+            {
+                "status",
+                "counts",
+                "scope",
+                "problems",
+                "warnings",
+                "guidance",
+                "detail_path",
+            },
+        )
+        self.assertNotIn("scanned_documents", stdout["scope"])
+        path = Path(stdout["detail_path"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(
+            path,
+            self.root / ".temp" / "doc-link" / "check-impact" / f"detail-{KEY}.json",
+        )
+        detail = json.loads(path.read_bytes().decode("utf-8"))
+        self.assertEqual(
+            set(detail),
+            {
+                "status",
+                "toc_key",
+                "toc_version",
+                "changed_documents",
+                "scanned_documents",
+                "excluded",
+            },
+        )
+        self.assertEqual(len(detail["changed_documents"]), 1)
+        self.assertEqual(len(detail["changed_documents"][0]["referrers"]), 2)
+
+    def test_detail_file_is_written_even_when_nothing_is_found(self):
+        self.build()
+        docs, secs = self.hashes()
+        self.write("a.md", a_text(doc=docs[ID_B], sec=secs[S_B2]))
+        code, stdout = self.run_stdout(*ARGS)
+        self.assertEqual(code, 0)
+        detail = json.loads(Path(stdout["detail_path"]).read_bytes().decode("utf-8"))
+        self.assertEqual(detail["changed_documents"], [])
 
     def test_mutual_references_settle_after_one_rewrite(self):
         b = b_text() + f'\n[a]: a.md "{ID_A}"\n'
@@ -216,11 +299,20 @@ class StaleTocTest(CheckImpactTestBase):
         self.build()
         self.write("b.md", b_text(intro="changed"))
         code, result = self.run_main(*ARGS)
-        expected = toc_check.check_toc(self.root, KEY, self.spec).to_dict()
+        check = toc_check.check_toc(self.root, KEY, self.spec)
         self.assertEqual(code, 0)
         self.assertNotIn("changed_documents", result)
         self.assertEqual(result["status"], "rebuild_needed")
-        self.assertEqual(result, expected)
+        # 標準出力は check-toc の要約、明細ファイルは check-toc の明細と同じ項目である
+        path = result.pop("detail_path")
+        self.assertEqual(result, {**check.to_detail(), **check.to_summary()})
+        self.assertEqual(
+            Path(path),
+            self.root / ".temp" / "doc-link" / "check-impact" / f"detail-{KEY}.json",
+        )
+        _, stdout = self.run_stdout(*ARGS)
+        self.assertNotIn("documents", stdout)
+        self.assertNotIn("sections", stdout)
 
     def test_not_built_returns_the_check_toc_result(self):
         self.write("a.md", a_text())
@@ -249,6 +341,14 @@ class ReadOnlyTest(CheckImpactTestBase):
         self.run_main("--key", "unbuilt", "--paths", "a.md")
         self.assertEqual(self.snapshot(), stale)
         self.assertNotEqual(before, stale)
+        # 書くのは、明細の作業ファイルだけである（[ToC 識別キー]ごとに 1 つ）
+        self.assertEqual(
+            [name for name in self.work_files() if "check-impact" in name],
+            [
+                f".temp/doc-link/check-impact/detail-{KEY}.json",
+                ".temp/doc-link/check-impact/detail-unbuilt.json",
+            ],
+        )
 
 
 class FailureTest(CheckImpactTestBase):
@@ -328,7 +428,9 @@ class EntryScriptWithUvTest(CheckImpactTestBase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         result = json.loads(completed.stdout)
         self.assertEqual(result["status"], "up_to_date")
-        self.assertEqual(len(result["changed_documents"]), 1)
+        self.assertEqual(result["counts"]["changed_documents"], 1)
+        self.assertNotIn("changed_documents", result)
+        self.assertTrue(Path(result["detail_path"]).is_file())
         self.assertEqual(self.snapshot(), before)
 
     def test_rejected_target_exits_1(self):

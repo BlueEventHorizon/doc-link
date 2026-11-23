@@ -26,6 +26,19 @@ ID_C = "DLID-cdefghjkmnpq"
 DOC = f"---\ndoc_link_id: {ID_A}\n---\n# T {ID_B}\n\nbody\n"
 
 
+def with_detail(stdout: dict) -> dict:
+    """標準出力の JSON に、明細ファイル（`detail_path`）の全件を重ねて返す。同じ名前の項目は標準出力を優先する。
+
+    標準出力は件数までで、明細は作業ファイルにある（要件 D-061）。内容の検査は、両方を合わせた形で行う。
+    標準出力に明細が載っていないことは、標準出力だけを読むテストで確かめる。
+    """
+    path = stdout.get("detail_path")
+    if path is None:
+        return stdout
+    detail = json.loads(Path(path).read_bytes().decode("utf-8"))
+    return {**detail, **stdout}
+
+
 class CheckTestBase(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -80,17 +93,32 @@ class CheckTestBase(unittest.TestCase):
         )
 
     def snapshot(self):
+        """対象文書と管理状態（`.temp/` の作業ファイルを除く、すべてのファイル）の内容。"""
         return {
             str(p.relative_to(self.root)): p.read_bytes()
             for p in sorted(self.root.rglob("*"))
-            if p.is_file()
+            if p.is_file() and ".temp" not in p.relative_to(self.root).parts
         }
 
-    def run_main(self, *args):
+    def work_files(self):
+        """`.temp/` の下に書かれた作業ファイルの、ルートからの相対パス。"""
+        return sorted(
+            str(p.relative_to(self.root))
+            for p in self.root.rglob("*")
+            if p.is_file() and ".temp" in p.relative_to(self.root).parts
+        )
+
+    def run_stdout(self, *args):
+        """（終了コード、標準出力の JSON）を返す。"""
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = check_dlid.main(["--project-root", str(self.root), *args])
         return code, json.loads(out.getvalue())
+
+    def run_main(self, *args):
+        """（終了コード、標準出力の JSON に明細ファイルの全件を重ねたもの）を返す。"""
+        code, stdout = self.run_stdout(*args)
+        return code, with_detail(stdout)
 
 
 class DetectionTest(CheckTestBase):
@@ -114,7 +142,12 @@ class DetectionTest(CheckTestBase):
         self.assertEqual(result["duplicates"], [])
         self.assertEqual(
             result["counts"],
-            {"missing_document_id": 1, "missing_section_id": 2, "duplicates": 0},
+            {
+                "missing_document_id": 1,
+                "missing_section_id": 2,
+                "duplicates": 0,
+                "unclosed_frontmatter": 0,
+            },
         )
 
     def test_unrecognized_doc_link_id_is_missing_document_id(self):
@@ -203,7 +236,7 @@ class DetectionTest(CheckTestBase):
         code, result = self.run_main("--key", "k", "--paths", "a.md")
         self.assertEqual(code, 0)
         self.assertFalse(result["clean"])
-        self.assertEqual(result["guidance"], [])
+        self.assertEqual(result["guidance"], [check_dlid.GUIDANCE_DETAIL])
 
     def test_missing_target_is_reported_and_processing_continues(self):
         self.write("a.md", "# T\n")
@@ -354,6 +387,98 @@ class EntryScriptWithUvTest(CheckTestBase):
 
     def test_invalid_argument_exits_2(self):
         self.assertEqual(self.uv_run("--unknown").returncode, 2)
+
+
+class DetailFileTest(CheckTestBase):
+    """D-061: 標準出力は件数までで、検出事項の全件は明細ファイルにある。"""
+
+    def detail_file(self, key):
+        return self.root / ".temp" / "doc-link" / "check-dlid" / f"detail-{key}.json"
+
+    def test_stdout_holds_counts_and_the_detail_file_holds_every_item(self):
+        self.write("a.md", "# T\n\n## U\n")
+        code, stdout = self.run_stdout("--key", "k", "--paths", "a.md")
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            set(stdout),
+            {"clean", "counts", "guidance", "problems", "warnings", "detail_path"},
+        )
+        self.assertEqual(
+            stdout["counts"],
+            {
+                "missing_document_id": 1,
+                "missing_section_id": 2,
+                "duplicates": 0,
+                "unclosed_frontmatter": 0,
+            },
+        )
+        path = Path(stdout["detail_path"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(path, self.detail_file("k"))
+        detail = json.loads(path.read_bytes().decode("utf-8"))
+        self.assertEqual(
+            set(detail), {"missing_document_id", "missing_section_id", "duplicates"}
+        )
+        self.assertEqual([d["path"] for d in detail["missing_document_id"]], ["a.md"])
+        self.assertEqual(
+            [(s["line"], s["heading"]) for s in detail["missing_section_id"]],
+            [(1, "T"), (3, "U")],
+        )
+
+    def test_stdout_size_does_not_grow_with_the_number_of_findings(self):
+        self.write("few.md", "# T\n")
+        self.write("many.md", "# T\n" + "".join(f"\n## H{i}\n" for i in range(200)))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            check_dlid.main(
+                ["--project-root", str(self.root), "--key", "few", "--paths", "few.md"]
+            )
+        few = len(out.getvalue())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            check_dlid.main(
+                [
+                    "--project-root",
+                    str(self.root),
+                    "--key",
+                    "many",
+                    "--paths",
+                    "many.md",
+                ]
+            )
+        many = len(out.getvalue())
+        self.assertLess(abs(many - few), 20)
+
+    def test_detail_file_is_written_even_when_nothing_is_found(self):
+        self.write("a.md", DOC)
+        code, stdout = self.run_stdout("--key", "k", "--paths", "a.md")
+        self.assertEqual(code, 0)
+        self.assertTrue(stdout["clean"])
+        detail = json.loads(Path(stdout["detail_path"]).read_bytes().decode("utf-8"))
+        self.assertEqual(
+            detail,
+            {"missing_document_id": [], "missing_section_id": [], "duplicates": []},
+        )
+
+    def test_all_mode_uses_the_reserved_key(self):
+        self.write("a.md", "# T\n")
+        code, stdout = self.run_stdout()
+        self.assertEqual(code, 0)
+        self.assertEqual(Path(stdout["detail_path"]), self.detail_file("all"))
+
+    def test_only_the_detail_file_is_written(self):
+        self.write("a.md", "# T\n")
+        before = self.snapshot()
+        self.run_main("--key", "k", "--paths", "a.md")
+        self.assertEqual(self.snapshot(), before)
+        self.assertEqual(self.work_files(), [".temp/doc-link/check-dlid/detail-k.json"])
+
+    def test_unwritable_detail_file_exits_1(self):
+        self.write("a.md", "# T\n")
+        self.write(".temp/doc-link/check-dlid", "not a directory")
+        code, stdout = self.run_stdout("--key", "k", "--paths", "a.md")
+        self.assertEqual(code, 1)
+        self.assertTrue(any("明細ファイルを書けない" in e for e in stdout["errors"]))
 
 
 if __name__ == "__main__":

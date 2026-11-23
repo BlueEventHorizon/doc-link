@@ -345,7 +345,41 @@ class TargetSpecChangeTest(Base):
         )
         self.assertEqual(result.documents, ())
         self.assertEqual(result.scale.ai_generation, 0)
-        self.assertEqual(result.to_dict()["target_spec_changed"], True)
+        self.assertEqual(result.to_summary()["target_spec_changed"], True)
+
+    def test_summary_holds_counts_and_detail_holds_every_item(self):
+        """D-061: 要約は件数までで、文書・セクション・除外した文書の全件は明細が持つ。"""
+        self.build()
+        self.write("docs/a.md", a_text(body="changed"))
+        result = toc_check.check_toc(self.root, KEY, SPEC)
+        self.assertEqual(result.status, toc_check.STATUS_REBUILD_NEEDED)
+        summary, detail = result.to_summary(), result.to_detail()
+        for name in ("documents", "sections", "excluded", "excluded_in_toc"):
+            self.assertNotIn(name, summary)
+            self.assertIn(name, detail)
+        self.assertEqual(
+            set(summary),
+            {
+                "status",
+                "toc_key",
+                "version",
+                "target_spec_source",
+                "target_spec",
+                "target_spec_changed",
+                "saved_target_spec",
+                "counts",
+                "scale",
+                "causes",
+                "problems",
+                "warnings",
+            },
+        )
+        self.assertEqual(
+            [d["doc_link_id"] for d in detail["documents"]],
+            [d.doc_link_id for d in result.documents],
+        )
+        self.assertEqual(summary["counts"]["content_changed"], len(detail["documents"]))
+        self.assertEqual(summary["counts"]["excluded_in_toc"], 0)
 
     def test_a_rebuild_with_the_new_spec_ends_the_difference(self):
         self.build()

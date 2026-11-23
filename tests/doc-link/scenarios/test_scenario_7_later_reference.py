@@ -78,7 +78,7 @@ class LaterReferenceScenarioTest(ScenarioBase):
         self.assertEqual(self.read("docs/target.md"), target_before)
         # index-docs の参照検査: [正式な参照]として抽出され、フラグメントが解決して一致する
         self.assertEqual(result["reference_check"]["summary"], {"match": 1})
-        self.assertEqual(result["reference_check"]["findings"], [])
+        self.assertEqual(result["reference_findings"], [])
         references = self.toc(KEY)["references"]
         self.assertEqual(len(references), 1)
         self.assertEqual(references[0]["target_doc_id"], self.target_doc_id)

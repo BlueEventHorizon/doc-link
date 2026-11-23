@@ -1,39 +1,37 @@
 {
-  "content_hash": "4465d730e152f2e310ab112064f6ca59e7cecc13024754bfebc5cb6791a841fa",
+  "content_hash": "b763c5ab47f0c05c84cdafb55de0592e80d97f6bf14a04e981a464081eddc2ec",
   "doc_link_id": "DLID-xmg0jcmep2h2",
   "keywords": [
     "verification",
     "test norms",
-    "state transitions",
-    "requirement mapping",
+    "state transition table",
+    "requirement traceability",
     "acceptance criteria",
     "check-impact",
     "check-links",
+    "detail file",
     "cross-cutting scenarios",
-    "unit tests",
-    "confirmed ToC"
+    "DLID"
   ],
   "path": "docs/specs/design/DES-009_verification.md",
-  "purpose": "Verification design mapping requirements to designs and test viewpoints, defining test norms for state transitions and checks, and listing cross-cutting scenarios.",
+  "purpose": "Defines the test principles, the requirement-to-design-to-acceptance verification mapping, and the cross-cutting scenarios used to verify the doc-link design.",
   "summary": [
-    "Test norms treating the DES-004 transition table as the only allowed transitions",
-    "Absence of a referenced target does not block candidate confirmation",
-    "check-impact test items: no writes, hash comparison, no-record references, repeated notice",
-    "check-links test items: inline links with DLID titles and recorded hash form",
-    "Unit test targets for deterministic processing such as parsing, hashing, validation",
-    "Mapping table from requirements to main designs and verification viewpoints",
-    "Cross-cutting scenario: initial build through searchable state",
-    "Cross-cutting scenarios: move, content change, failure, multiple keys",
-    "Cross-cutting scenarios: out-of-scope references and later-written section references",
-    "Checks that DLID assignment writes nothing to links without a DLID"
+    "Test norms for stateful processing: the DES-004 transition table is the only allowed transition list, with guard-failure, unlisted-event and wrong-state events rejected",
+    "Missing referenced targets do not block candidate confirmation; interruption, rerun, old confirmed ToC retention and multi-key isolation are covered by state tests",
+    "Test cases for check-impact: read-only behavior, comparing recorded content hashes with current hashes, repeated reporting until the record is rewritten, no notification chaining or loops",
+    "Test cases for check-links: DLID-bearing inline links, record-word form in titles, path mismatch after moves within targets, duplicates and absence, no use of managed-state records",
+    "Test cases for inspection and pre-search checks: stdout limited to counts, full details in a detail file, constant stdout size, zero-finding runs, write failure as error, nothing written except the detail file",
+    "List of deterministic non-stateful processing that gets separate unit tests, such as target expansion, Markdown parsing, ID handling, DLID resolution and detail file writing",
+    "Mapping table from requirements (FR, NFR) to main design documents and main verification points with acceptance criteria",
+    "Seven cross-cutting scenarios: first build, move, content change, failure, multiple keys, out-of-scope references, and later-added section references"
   ],
   "tasks": [
-    "Writing tests for state transitions",
-    "Writing tests for check-impact and check-links",
-    "Verifying requirement coverage by design",
-    "Designing acceptance verification",
-    "Reviewing cross-cutting scenarios",
-    "Updating coverage maps"
+    "Writing tests for doc-link scripts and state machines",
+    "Designing or reviewing verification of check-impact, check-links, check-toc and check-dlid",
+    "Tracing a requirement to its design document and acceptance criteria",
+    "Checking acceptance coverage of the doc-link design",
+    "Designing end-to-end scenarios for indexing, moves, content changes and failures",
+    "Reviewing test coverage maps for the doc-link plugin"
   ],
   "title": "DES-009 要件対応と設計検証"
 }

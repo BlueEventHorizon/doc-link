@@ -55,7 +55,7 @@ Index 対象から離脱した文書は、指定キーの[確定 ToC]から除�
 
 現時点で未決の関係はない。[文書 ID]の発行方式と一意性は要件 [D-028][req-002-fr-001]／[D-030][req-002-fr-002] で決定した。
 
-[des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "13625382e806 DLID-8ck587eq1qnd"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "1b76ab2d7b24 DLID-8ck587eq1qnd"
 [des-010-sec-4]: DES-010_skill-composition.md#4-カスタム-agent-との受け渡し-dlid-ytajmhsv2p1t "6e85a7620780 DLID-ytajmhsv2p1t"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"

@@ -16,15 +16,15 @@ doc-link が[Index 対象文書]に書き込めるのは[DLID]だけであり、
 
 ## 2. 全体の操作と接続 DLID-xw8rpzytg31z
 
-| 操作                 | 主な入力                                                                          | 後続へ渡す結果                                                                                                        | 書き込み境界                                                                                          |
-| -------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| DLID 付与            | 対象の指定、現物、管理状態の ID                                                   | 発行・書き込みした[DLID]、重複の原本候補                                                                              | [DLID]だけを書く（要件 [D-031][req-001-nfr-004]）。重複の原本は利用者が確定する                       |
-| [ToC]構築・再構築    | [ToC 識別キー]、完全な[Index 対象指定]、現物、既存の[確定 ToC]                    | [確定 ToC]の版、変更集合（種別ごとの件数と、全件を収めた明細のファイル）、参照検査結果、ID 未付与・重複で除外した文書 | [Index 対象文書]を書き換えない。doc-link 管理状態の確定                                               |
-| 文書検索             | キー、検索条件、[確定 ToC]                                                        | [文書 ID]、パス、関連理由、使用版・鮮度                                                                               | 古い版での検索を選んでも[ToC]は変更しない                                                             |
-| [DLID]の解決         | [DLID]の並び、管理状態の記録、記録されたパスの現物                                | [DLID]ごとのパスと記録した[内容ハッシュ]（セクションは見出しとアンカー）、記録されたパスに無いこと、記録が無いこと    | 何も書き換えない（要件 [FR-018][req-002-fr-018]）                                                     |
-| 参照検査             | 参照記述と、記載パスが示すディレクトリ                                            | 検査範囲・時点を伴う一致／不一致／不在とフラグメントの到達                                                            | [Index 対象文書]のリンクは変更しない                                                                  |
-| [変更影響候補の通知] | 参照元の title に記録した[内容ハッシュ]、参照先の[現在ハッシュ]、把握済みの逆参照 | 変更文書、参照元、検査範囲                                                                                            | 何も書き換えない（要件 [D-038][req-005-fr-015]）                                                      |
-| 不整合検査           | [Index 対象指定]、現物、[確定 ToC]                                                | 不整合一覧                                                                                                            | [Index 対象文書]を書き換えない。ID の付与・修復は DLID 付与操作が行う（要件 [D-035][req-002-fr-001]） |
+| 操作                 | 主な入力                                                                          | 後続へ渡す結果                                                                                                               | 書き込み境界                                                                                                    |
+| -------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| DLID 付与            | 対象の指定、現物、管理状態の ID                                                   | 発行・書き込みした[DLID]、重複の原本候補                                                                                     | [DLID]だけを書く（要件 [D-031][req-001-nfr-004]）。重複の原本は利用者が確定する                                 |
+| [ToC]構築・再構築    | [ToC 識別キー]、完全な[Index 対象指定]、現物、既存の[確定 ToC]                    | [確定 ToC]の版、変更集合（種別ごとの件数と、全件を収めた明細のファイル）、参照検査結果と ID 未付与・重複で除外した文書の件数 | [Index 対象文書]を書き換えない。doc-link 管理状態の確定                                                         |
+| 文書検索             | キー、検索条件、[確定 ToC]                                                        | [文書 ID]、パス、関連理由、使用版・鮮度                                                                                      | 古い版での検索を選んでも[ToC]は変更しない                                                                       |
+| [DLID]の解決         | [DLID]の並び、管理状態の記録、記録されたパスの現物                                | [DLID]ごとのパスと記録した[内容ハッシュ]（セクションは見出しとアンカー）、記録されたパスに無いこと、記録が無いこと           | 何も書き換えない（要件 [FR-018][req-002-fr-018]）                                                               |
+| 参照検査             | 参照記述と、記載パスが示すディレクトリ、今回の[Index 対象リスト]の文書            | 検査範囲・時点を伴う一致／不一致／不在とフラグメントの到達                                                                   | [Index 対象文書]のリンクは変更しない                                                                            |
+| [変更影響候補の通知] | 参照元の title に記録した[内容ハッシュ]、参照先の[現在ハッシュ]、把握済みの逆参照 | 変更文書と参照元の件数、検査範囲、全件を収めた明細のファイル                                                                 | [Index 対象文書]と管理状態を書き換えない（要件 [D-038][req-005-fr-015]）                                        |
+| 不整合検査           | [Index 対象指定]、現物、[確定 ToC]                                                | 不整合の件数と、全件を収めた明細のファイル                                                                                   | [Index 対象文書]と管理状態を書き換えない。ID の付与・修復は DLID 付与操作が行う（要件 [D-035][req-002-fr-001]） |
 
 [ToC]構築・再構築は、対象確定、ID 確認、変更検出、必要情報の取得、参照検査、候補検査、確定の順に行う。ID 確認では ID 未付与・重複の文書を除外して報告し、構築を止めない（要件 [D-036][req-002-sec-9-1]）。初回[ToC]がないキーでは検索できない。検索、[DLID]の解決、[変更影響候補の通知]は、[ToC]確定後の別操作である。通知の成功は、[ToC]更新の成功と同義ではない。
 
@@ -83,17 +83,17 @@ sequenceDiagram
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録する。参照先を読めない場合も[ToC]の確定を止めないことは、要件 [D-025][req-005-fr-009] が定める。
 
-[des-002]: DES-002_execution-responsibilities.md "4030fe6bc515 DLID-anz9vack2xzt"
-[des-010]: DES-010_skill-composition.md "7004f5d82b53 DLID-7e90gq3sdncc"
+[des-002]: DES-002_execution-responsibilities.md "9c2bea9cc41e DLID-anz9vack2xzt"
+[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-007]: DES-007_references-impact.md "6d46734b4b3c DLID-pr3jp4hzb8js"
-[des-005]: DES-005_indexing.md "b0f04c2f3df2 DLID-dgphqw70rkpz"
+[des-007]: DES-007_references-impact.md "7e173084b9a2 DLID-pr3jp4hzb8js"
+[des-005]: DES-005_indexing.md "52ed2959d4d0 DLID-dgphqw70rkpz"
 [des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
-[des-006]: DES-006_search.md "611c8744aced DLID-nnbgpzkkm5vq"
+[des-006]: DES-006_search.md "96dc8a0cdfe8 DLID-nnbgpzkkm5vq"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
-[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "c12d0e9fadbb DLID-zacf5tmy6x4x"
+[req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "1a232498a7af DLID-zacf5tmy6x4x"
 [req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"
-[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "3627fec77afd DLID-jhkngqtfdnhn"
+[req-005-fr-016]: ../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "8917b2e9e4d9 DLID-jhkngqtfdnhn"

@@ -35,7 +35,7 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 ## 3. [DLID]の解決 DLID-m0xegzfyhc3k
 
-`resolve-dlid` は[DLID]の並びを受け取り、[DLID]ごとに解決結果を返す（要件 [FR-018][req-002-fr-018]、[D-047][req-002-fr-018]）。[ToC 識別キー]は受け取らない。解決は確定済みの管理状態の記録と、記録されたパスの現物だけで行う。
+`resolve-dlid` は[DLID]の並びを受け取り、[DLID]ごとに解決結果を返す（要件 [FR-018][req-002-fr-018]）。[ToC 識別キー]は受け取らない。解決は確定済みの管理状態の記録と、記録されたパスの現物だけで行う。
 
 1. 文書の[DLID]は、その[文書情報]に記録された現在パスを引く（[DES-003 §2][des-003-sec-2]）。[セクション ID]は、全キーの[確定 ToC]のセクションエントリから所属する[文書 ID]を引き、その[文書情報]の現在パスを使う。セクションを別の文書へ移した後に一部のキーだけを再構築すると、所属する文書の記録がキーごとに異なる。この場合は記録された所属文書をすべて候補にする。
 2. 記録されたパスのファイルを読み、文書の[DLID]は frontmatter の `doc_link_id` と、[セクション ID]は見出しの行の末尾の[DLID]と照合する（[DES-008 §1][des-008-sec-1]）。一致すれば「解決済み」としてパスを返す。セクションには見出しの文字列と、見出しから生成されるアンカー（要件 [D-048][req-005-fr-009]）を添える。
@@ -49,7 +49,7 @@ worker は存在しない ID を補わず、索引の版・パスを訂正せず
 
 [des-003-sec-2]: DES-003_data-model.md#2-情報と識別子-dlid-m8vs7s3gahbx "6d9d489093bd DLID-m8vs7s3gahbx"
 [des-008-sec-1]: DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe "e07d05aa8a87 DLID-cf1n0ndmf0fe"
-[des-005]: DES-005_indexing.md "7a6a9ff076b4 DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "b0f04c2f3df2 DLID-dgphqw70rkpz"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"

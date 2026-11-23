@@ -1,37 +1,39 @@
 {
-  "content_hash": "e3bebfa5a5aa2985c4363f119ffe63445a5f7704bdc6a4c6b344b347de5aad23",
+  "content_hash": "611c8744aced3ddf531fb478ef3252550739208957c3df2303f8e88caa9d275f",
   "doc_link_id": "DLID-nnbgpzkkm5vq",
   "keywords": [
-    "search",
-    "freshness",
+    "document search",
+    "pre-search check",
     "rebuild decision",
-    "search AI",
+    "undeterminable",
+    "search result contract",
     "ToC copy",
+    "search AI",
     "resolve-dlid",
     "DLID resolution",
-    "recorded path",
-    "undeterminable",
-    "content hash"
+    "freshness"
   ],
   "path": "docs/specs/design/DES-006_search.md",
-  "purpose": "Designs document search: pre-search freshness judgment, the search result contract, the AI-readable ToC copy, and DLID resolution via recorded paths without modifying any managed state.",
+  "purpose": "Design for document search: pre-search freshness checks, the search result contract with the search AI, and resolution of DLIDs to recorded paths via resolve-dlid.",
   "summary": [
-    "Pre-search judgment: no confirmed ToC, rebuild not needed, rebuild needed, or undeterminable",
-    "User choice between rebuild-then-search and searching the existing version, with rebuild scale shown",
-    "Undeterminable cases are treated as failures and stop search without falling back to old version",
-    "Search result contract: document ID, recorded path, reason, section, key, version, freshness",
-    "Search AI reads all entries of the ToC copy and prioritizes avoiding missed documents",
-    "Contents of the ToC copy given to the search AI: document info and section headings, no paths",
-    "resolve-dlid resolves DLIDs from recorded paths and verifies them against actual files",
-    "Resolution outcomes: resolved, not at recorded path, no record; content hash attached when available",
-    "Search and resolution do not write to ToC, management state, or index target documents"
+    "Pre-search check distinguishes rebuild-not-needed, rebuild-needed, and undeterminable, and the user chooses between rebuild-then-search and searching the existing version",
+    "Undeterminable results are treated as failures: search stops and the cause is returned, never falling back silently to an old version",
+    "Rebuild scale shown to the user is counted by script from the comparison (new, departed, moved, changed, no-ID, duplicate-ID, AI-generation needed)",
+    "Each search candidate carries document ID, recorded path, reason, optional section, ToC key, version, and freshness",
+    "Read-only search AI reads every entry of a ToC copy and favors recall over precision when choosing candidates",
+    "ToC copy contains document info and section IDs with headings, but no paths, content hashes, references, or check results",
+    "resolve-dlid resolves each DLID from recorded state and the file at the recorded path, verifying frontmatter doc_link_id or heading-end section DLID",
+    "Unresolved DLIDs return recorded path not found or no record, without exploring other locations or asserting the path as current",
+    "Resolved results include recorded content hash; the ToC, state, and target documents are never written to"
   ],
   "tasks": [
-    "Implementing search pre-check and freshness judgment",
-    "Implementing the search skill and search AI agent",
-    "Implementing resolve-dlid",
-    "Designing search result output",
-    "Reviewing handling of stale or undeterminable ToC versions"
+    "Designing or implementing the query-docs search flow",
+    "Implementing the pre-search freshness check script",
+    "Implementing or modifying the resolve-dlid script",
+    "Writing the query-worker search AI instructions",
+    "Reviewing search result format and freshness reporting",
+    "Deciding handling of stale or undeterminable ToC during search",
+    "Writing tests for search and DLID resolution"
   ],
   "title": "DES-006 文書検索設計"
 }

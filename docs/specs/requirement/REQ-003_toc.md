@@ -50,13 +50,13 @@ doc_link_id: DLID-kxe3nxfgk491
 
 [ToC]内の各セクションエントリは、少なくとも次の情報を管理する。
 
-| 情報                     | 取得・生成方法 | ユーザー文書への記載 | 説明                                                                                                   |
-| ------------------------ | -------------- | -------------------- | ------------------------------------------------------------------------------------------------------ |
-| 所属する[文書 ID]        | 機械取得       | 不要                 | セクションを含むファイルの `doc_link_id` から取得する                                                  |
-| [セクション ID]          | プラグイン発行 | すべての見出し       | 見出しの行の末尾に置く[DLID]。[§13.1][req-005-sec-13-1]と [D-033][req-005-sec-13-1] に従う             |
-| 見出し                   | 機械取得       | 追加記載不要         | ユーザーが通常の文書本文として記載した見出しから取得する                                               |
-| 文書内の現在位置         | 機械取得       | 不要                 | 構文解析によって取得し、文書編集のたびに更新し得る                                                     |
-| セクション単位のハッシュ | 機械取得       | 不要                 | セクションの範囲の原文から[§10.1.2][req-003-sec-10-1-2]の規則で算出する（[D-039][req-003-sec-10-1-2]） |
+| 情報                     | 取得・生成方法 | ユーザー文書への記載 | 説明                                                                    |
+| ------------------------ | -------------- | -------------------- | ----------------------------------------------------------------------- |
+| 所属する[文書 ID]        | 機械取得       | 不要                 | セクションを含むファイルの `doc_link_id` から取得する                   |
+| [セクション ID]          | プラグイン発行 | すべての見出し       | 見出しの行の末尾に置く[DLID]。[§13.1][req-005-sec-13-1]に従う           |
+| 見出し                   | 機械取得       | 追加記載不要         | ユーザーが通常の文書本文として記載した見出しから取得する                |
+| 文書内の現在位置         | 機械取得       | 不要                 | 構文解析によって取得し、文書編集のたびに更新し得る                      |
+| セクション単位のハッシュ | 機械取得       | 不要                 | セクションの範囲の原文から[§10.1.2][req-003-sec-10-1-2]の規則で算出する |
 
 <a id="sec-7-3"></a>
 
@@ -471,15 +471,15 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 参照情報だけが変更された文書（[内容ハッシュ]が同じもの）では参照関係を更新し、[AI 生成フィールド]を再利用すること。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "7313eb94bf53 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "504f32e6af85 DLID-kxe3nxfgk491"
+[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-003]: REQ-003_toc.md "bd611adfec0d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "57aa98ffe8d1 DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "a4d3c98ff0c7 DLID-pc44gkb54821"
 [des-003]: ../design/DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
 [req-002-sec-6-2]: REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs "5c219073abcb DLID-5h2et5v540gs"
 [req-003-sec-10-1]: REQ-003_toc.md#101-変更検出に使用するハッシュ-dlid-dmkbxbz5ph81 "d8d85fb70432 DLID-dmkbxbz5ph81"
 [req-005-sec-13-1]: REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
-[req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "d3db400bbead DLID-dbs4rjzstadr"
+[req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "4fcba4cbc64c DLID-dbs4rjzstadr"
 [req-002-sec-9-1]: REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-003-sec-10]: REQ-003_toc.md#10-既存tocとの比較による変更検出-dlid-djxbs1zd8bwk "53e14e5297d5 DLID-djxbs1zd8bwk"
 [req-003-sec-7-4]: REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"

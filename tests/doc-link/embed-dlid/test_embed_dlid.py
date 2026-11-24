@@ -266,6 +266,35 @@ class ApplyCommandTest(EntryTestBase):
         self.assertEqual({d["dlid"] for d in result["duplicates"]}, {ID_A, ID_B})
         self.assertEqual(self.snapshot(), before)
 
+    def test_origin_args_from_the_exit_3_output_are_enough_to_apply(self):
+        # SKILL は plan を呼ばず、apply の終了コード 3 の出力だけで原本を確定して、もう一度 apply を呼ぶ
+        self.write("orig.md", DOC)
+        self.write("copy.md", DOC)
+        target = ("--key", "k", "--paths", "orig.md", "copy.md")
+        code, awaiting = self.run_main("apply", *target)
+        self.assertEqual(code, embed_dlid.EXIT_AWAITING_ORIGIN)
+        origin_options = []
+        for duplicate in awaiting["duplicates"]:
+            self.assertTrue(duplicate["needs_origin"])
+            location = next(
+                loc for loc in duplicate["locations"] if loc["path"] == "orig.md"
+            )
+            origin_options += ["--origin", *location["origin_args"]]
+        code, result = self.run_main("apply", *target, *origin_options)
+        self.assertEqual(code, 0, result)
+        self.assertEqual(self.read("orig.md"), DOC)
+        self.assertEqual(result["written_counts"], counts(1, 1, replaced=2))
+
+    def test_apply_reports_problems_and_writes_the_rest(self):
+        # plan を呼ばなくても、存在しない指定は apply の結果で届く
+        self.write("a.md", "# T\n")
+        code, result = self.run_main(
+            "apply", "--key", "k", "--paths", "a.md", "nope.md"
+        )
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["problems"], [{"path": "nope.md", "reason": "missing"}])
+        self.assertEqual(result["written_counts"], counts(1, 1))
+
     def test_apply_with_origin_args_from_plan_reissues_the_copy(self):
         self.write("orig.md", DOC)
         self.write("copy.md", DOC)

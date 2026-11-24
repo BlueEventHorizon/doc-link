@@ -16,18 +16,25 @@ PEP 723 とロックは持たない。[確定 ToC]・[文書情報]・参照元�
 - 参照元の現物を読み、[正式な参照]を定義の開始行の順に取り出す。[確定 ToC]の参照エントリの `position`（同じ順の
   0 始まりの通し番号）で、現物の参照と対応づける。title の記録は現物から読み、[確定 ToC]に保存した
   `recorded_content_hash` は使わない（記録だけを書き換えても[内容ハッシュ]は変わらず、[ToC]が古いと判定されない。D-039）
-- 参照先の[現在ハッシュ]は、現物から計算せず、[確定 ToC]に記録した値を使う。参照先が[セクション ID]なら、[確定 ToC]の
-  `sections` のそのセクションの `content_hash`。文書の[DLID]なら、`documents` のその[文書 ID]の `applied_hash`
+- 参照先の[現在ハッシュ]は、現物から計算せず、参照先の文書の[文書情報]に記録した値を使う。参照先が[セクション ID]
+  なら、そのセクションの `content_hash`。文書の[DLID]なら、その文書の `applied_hash`
+- 参照先は、検査するキーの[確定 ToC]に所属する文書（`sections`・`documents`）から先に引く。そこに無いときは、
+  保存済みのすべての[文書情報]から引く。同じ文書の値は[ToC 識別キー]が違っても 1 つなので、参照先が別のキーに
+  だけ所属していても比べられる。そのときの値は、その文書を含む[ToC]を最後に構築した時点のものである
 - 記録と[現在ハッシュ]の比較は `content_hash.record_matches`、返す `current_hash`（title に書く値）は
   `content_hash.title_value` が決める。一致しない参照と、記録なしの参照を影響候補にする
-- 参照先の[DLID]が[確定 ToC]の `sections` にも `documents` にも無い参照は、比べず、影響候補にしない（`check-links` が検出する）
+- 参照先の[DLID]が、どの[文書情報]にも確定した値として記録されていない参照は、比べず、影響候補にしない
+  （`check-links` が検出する）
 - 間接の参照元は列挙しない（D-043）。直接の参照元だけを、変更された文書ごとにまとめる
 
 ## 仕様の解釈（設計書が値や形式を定めていない点）
 
 - 参照先が[セクション ID]か文書の[DLID]かは、参照エントリの `kind` に頼らず、参照先の[DLID]を `sections` の
   `section_id`、次に `documents` の `doc_link_id` と照合して決める。`kind` が `unknown`（検査で参照先を見つけられなかった）
-  でも、[確定 ToC]にその[DLID]があれば比べる
+  でも、記録にその[DLID]があれば比べる
+- 検査するキーに所属しない文書のうち、同じ[セクション ID]を記録した[文書情報]が複数あるとき（セクションを別の文書へ
+  移した後、移動元の文書を含む[ToC]をまだ再構築していないとき）は、どれが現在の所属かを記録だけでは決められない。
+  記録と異なる所属文書のそれぞれについて、影響候補にする
 - 「変更された文書」は、参照先の所属文書である。[セクション ID]を指す参照は、そのセクションの所属文書の要素にまとめ、
   参照元ごとに `target_section_id`・`target_heading` を添える。変更された文書の `path` は、所属文書の[文書情報]の
   `path` である
@@ -153,14 +160,80 @@ def _entry_dlid(entry: dict) -> str:
     return entry["target_section_id"] or entry["target_doc_id"]
 
 
+@dataclass(frozen=True)
+class _Target:
+    """参照先 1 件の記録。`owner` は所属文書の[文書 ID]、`current_hash` は記録した[内容ハッシュ]。"""
+
+    owner: str
+    current_hash: str
+    kind: str
+    section_id: str | None
+    heading: str | None
+
+
+def _section_target(section: dict) -> _Target:
+    return _Target(
+        section["doc_link_id"],
+        section["content_hash"],
+        TARGET_SECTION,
+        section["section_id"],
+        section["heading"],
+    )
+
+
+class _Targets:
+    """参照先の[DLID]から、記録した値を引く。検査するキーの[確定 ToC]を先に、次にすべての[文書情報]を見る。"""
+
+    def __init__(self, root: Path, toc: dict) -> None:
+        self._root = root
+        self._sections = {entry["section_id"]: entry for entry in toc["sections"]}
+        self._applied = {
+            entry["doc_link_id"]: entry["applied_hash"] for entry in toc["documents"]
+        }
+        self._outside: tuple[dict, dict] | None = None
+
+    def find(self, dlid: str) -> list[_Target]:
+        section = self._sections.get(dlid)
+        if section is not None:
+            return [_section_target(section)]
+        if dlid in self._applied:
+            return [_Target(dlid, self._applied[dlid], TARGET_DOCUMENT, None, None)]
+        sections, applied = self._outside_records()
+        if dlid in sections:
+            return [_section_target(section) for section in sections[dlid]]
+        if dlid in applied:
+            return [_Target(dlid, applied[dlid], TARGET_DOCUMENT, None, None)]
+        return []
+
+    def _outside_records(self) -> tuple[dict, dict]:
+        """検査するキーに所属しない文書の、確定した値。最初に要るときに 1 回だけ読む。"""
+        if self._outside is None:
+            try:
+                infos = state_store.load_all_document_infos(self._root)
+            except state_store.StateStoreError as exc:
+                raise ImpactFailure(
+                    [f"[文書情報]を読めない（{exc.kind}）: {exc}"]
+                ) from exc
+            sections: dict[str, list[dict]] = {}
+            applied: dict[str, str] = {}
+            for info in infos:
+                doc_id = info["doc_link_id"]
+                if doc_id in self._applied or info["applied_hash"] is None:
+                    continue
+                applied[doc_id] = info["applied_hash"]
+                for entry in info["sections"]:
+                    sections.setdefault(entry["section_id"], []).append(
+                        {"doc_link_id": doc_id, **entry}
+                    )
+            self._outside = (sections, applied)
+        return self._outside
+
+
 def enumerate_impact(project_root: str | Path, toc_key: str) -> ImpactResult:
     """記録と[現在ハッシュ]が異なる参照を、変更された文書ごとにまとめて返す。何も書き込まない。"""
     root = Path(project_root)
     toc = _load_toc(root, toc_key)
-    section_by_id = {entry["section_id"]: entry for entry in toc["sections"]}
-    applied_by_id = {
-        entry["doc_link_id"]: entry["applied_hash"] for entry in toc["documents"]
-    }
+    targets = _Targets(root, toc)
 
     entries_by_source: dict[str, list[dict]] = {}
     for entry in toc["references"]:
@@ -184,43 +257,30 @@ def enumerate_impact(project_root: str | Path, toc_key: str) -> ImpactResult:
                     ]
                 )
             reference = current[position]
-            section = section_by_id.get(dlid)
-            if section is not None:
-                owner = section["doc_link_id"]
-                current_hash = section["content_hash"]
-                kind, section_id, heading = (
-                    TARGET_SECTION,
-                    dlid,
-                    section["heading"],
-                )
-            elif dlid in applied_by_id:
-                owner = dlid
-                current_hash = applied_by_id[dlid]
-                kind, section_id, heading = TARGET_DOCUMENT, None, None
-            else:
-                continue  # 参照先が[確定 ToC]に無い（check-links が検出する）
-            if record_matches(reference.recorded_hash, current_hash):
-                continue
             definition = "".join(
                 document.lines[reference.line : end_lines[reference.line]]
             ).rstrip("\r\n")
-            changed.setdefault(owner, []).append(
-                Referrer(
-                    source_doc_id=source_id,
-                    source_path=source_path,
-                    line=reference.line + 1,
-                    definition=definition,
-                    label=reference.label,
-                    link_path=reference.path,
-                    fragment=reference.fragment,
-                    target_dlid=dlid,
-                    target_kind=kind,
-                    target_section_id=section_id,
-                    target_heading=heading,
-                    recorded_hash=reference.recorded_hash,
-                    current_hash=title_value(current_hash),
+            # 記録がどこにも無い参照先は、比べない（check-links が検出する）。
+            for target in targets.find(dlid):
+                if record_matches(reference.recorded_hash, target.current_hash):
+                    continue
+                changed.setdefault(target.owner, []).append(
+                    Referrer(
+                        source_doc_id=source_id,
+                        source_path=source_path,
+                        line=reference.line + 1,
+                        definition=definition,
+                        label=reference.label,
+                        link_path=reference.path,
+                        fragment=reference.fragment,
+                        target_dlid=dlid,
+                        target_kind=target.kind,
+                        target_section_id=target.section_id,
+                        target_heading=target.heading,
+                        recorded_hash=reference.recorded_hash,
+                        current_hash=title_value(target.current_hash),
+                    )
                 )
-            )
 
     documents = tuple(
         ChangedDocument(

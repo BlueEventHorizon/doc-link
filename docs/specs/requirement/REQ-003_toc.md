@@ -253,7 +253,7 @@ flowchart TB
 
 プラグインは、[ToC 識別キー]ごとに独立した[ToC]を持ち、各[ToC]では[文書 ID]を主キーとして検索・参照・変更検出に必要な情報を集中管理できること。
 
-[ToC]は保存方式にかかわらず、検索、逆参照、変更検出および変更影響候補の列挙が参照する、最後に正常確定した索引状態とする。現在の[Index 対象文書]を反映しているかは、[ToC]の構築・再構築要否の検査結果によって区別する（D-007）。JSON ファイル、RDB などの物理的な保存方式、スキーマおよび配置場所は後続設計で定義する。いずれを採用しても、書き込み途中の[文書情報]や確定途中の[ToC]を現在状態として公開してはならない（D-023）。[文書情報]は[文書 ID]ごとに常に最新の一つを持って全キーが共有し、[ToC]（所属、参照関係、[反映済みハッシュ]、検査結果）は各キーの[ToC]の版として管理する。このため、あるキーの[ToC]が古い版のままでも、そのキーから見える[文書情報]は最新の内容となる。過去の内容の履歴は持たないので、文書を元の内容に戻した場合も、[AI 生成フィールド]は再生成する（履歴の保存を増やさないため）（D-024）。
+[ToC]は保存方式にかかわらず、検索、逆参照、変更検出および変更影響候補の列挙が参照する、最後に正常確定した索引状態とする。現在の[Index 対象文書]を反映しているかは、[ToC]の構築・再構築要否の検査結果によって区別する（D-007）。JSON ファイル、RDB などの物理的な保存方式、スキーマおよび配置場所は後続設計で定義する。いずれを採用しても、書き込み途中の[文書情報]や確定途中の[ToC]を現在状態として公開してはならない（D-023）。[文書情報]のうち文書だけで決まる情報（現在の相対パス、要約、文書単位のハッシュ、セクション情報、参照先、最終検査状態）は[文書 ID]ごとに常に最新の一つを持って全キーが共有し、どの文書が所属するか、そのキーの[Index 対象文書]から逆引きした参照元、および[Index 対象指定]は各キーの[ToC]の版として管理する。このため、あるキーの[ToC]が古い版のままでも、そのキーから見える[文書情報]は最新の内容となる。過去の内容の履歴は持たないので、文書を元の内容に戻した場合も、[AI 生成フィールド]は再生成する（履歴の保存を増やさないため）（D-024）。
 
 プラグインは、指定された[ToC 識別キー]と、外部から与えられたそのキーの完全な[Index 対象指定]を使用すること。[Index 対象指定]に従って確定した現在の[Index 対象文書]を走査し、[文書 ID]、現在のパス、[内容ハッシュ]、セクション情報および参照関係から、そのキーの[ToC]の完全な期待状態を再構築できること。ただし、[文書 ID]が無い文書と[文書 ID]が重複する文書は期待状態に含めない（[D-036][req-002-sec-9-1]）。
 
@@ -471,11 +471,11 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 参照情報だけが変更された文書（[内容ハッシュ]が同じもの）では参照関係を更新し、[AI 生成フィールド]を再利用すること。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
+[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
+[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
-[des-003]: ../design/DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
+[des-003]: ../design/DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
 [req-002-sec-6-2]: REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs "5c219073abcb DLID-5h2et5v540gs"
 [req-003-sec-10-1]: REQ-003_toc.md#101-変更検出に使用するハッシュ-dlid-dmkbxbz5ph81 "d8d85fb70432 DLID-dmkbxbz5ph81"
 [req-005-sec-13-1]: REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
@@ -487,7 +487,7 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 [req-001-sec-3-2]: REQ-001_overview.md#32-文書検索フロー-dlid-eeaqehrykrje "e881c27e4f9d DLID-eeaqehrykrje"
 [req-001-sec-3-1]: REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me "a1500a8117ce DLID-5e8mpztyp4me"
 [req-003-sec-10-1-2]: REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
-[req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "002418132007 DLID-481cwc8365a3"
+[req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "5b1ed8d54266 DLID-481cwc8365a3"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"

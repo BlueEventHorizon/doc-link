@@ -58,37 +58,42 @@ class Base(unittest.TestCase):
             },
         )
 
-    def save_toc(self, key, sections):
+    def toc_of(self, key, sections):
         """sections は (所属する文書 ID, セクション ID, 見出し, ハッシュ) の並び。"""
         doc_ids = sorted({doc_id for doc_id, *_ in sections})
+        return {
+            "toc_key": key,
+            "version": 1,
+            "target_spec": {},
+            "documents": [{"doc_link_id": d, "applied_hash": "h"} for d in doc_ids],
+            "sections": [
+                {
+                    "doc_link_id": doc_id,
+                    "section_id": sid,
+                    "heading": heading,
+                    "position": index,
+                    "content_hash": content_hash,
+                }
+                for index, (doc_id, sid, heading, content_hash) in enumerate(sections)
+            ],
+            "references": [],
+            "reverse_references": [],
+            "last_checks": [
+                {"doc_link_id": d, "checked_at": None, "result": "unprocessed"}
+                for d in doc_ids
+            ],
+        }
+
+    def save_toc(self, key, sections):
         state_store.save_confirmed_toc(
-            self.root,
-            "index-docs",
-            {
-                "toc_key": key,
-                "version": 1,
-                "target_spec": {},
-                "documents": [{"doc_link_id": d, "applied_hash": "h"} for d in doc_ids],
-                "sections": [
-                    {
-                        "doc_link_id": doc_id,
-                        "section_id": sid,
-                        "heading": heading,
-                        "position": index,
-                        "content_hash": content_hash,
-                    }
-                    for index, (doc_id, sid, heading, content_hash) in enumerate(
-                        sections
-                    )
-                ],
-                "references": [],
-                "reverse_references": [],
-                "last_checks": [
-                    {"doc_link_id": d, "checked_at": None, "result": "unprocessed"}
-                    for d in doc_ids
-                ],
-            },
+            self.root, "index-docs", self.toc_of(key, sections)
         )
+
+    def write_previous_toc(self, key, sections):
+        """ひとつ前の保存形式（文書ごとの値を[確定 ToC]のファイルが持つ）で書く。"""
+        path = state_store.confirmed_toc_path(self.root, key)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(state_store.serialize(self.toc_of(key, sections)))
 
     def snapshot(self):
         return {
@@ -246,16 +251,19 @@ class NoRecordTest(Base):
         self.assertFalse((self.root / ".doc-link").exists())
 
     def test_section_whose_documents_have_no_info_is_no_record(self):
+        # ひとつ前の保存形式では、[確定 ToC]のファイルだけがあり[文書情報]が無い状態がありうる
         self.write("docs/a.md", doc_text(DOC_A, ("Sec One", SEC_1)))
-        self.save_toc("k", [(DOC_A, SEC_1, "Sec One", "h")])
+        self.write_previous_toc("k", [(DOC_A, SEC_1, "Sec One", "h")])
         item, _ = self.one(SEC_1)
         self.assertEqual(item["status"], "no_record")
 
 
 class ContentHashTest(Base):
     def test_section_hash_differing_between_records(self):
+        # 同じ文書の値は[ToC 識別キー]によらず 1 つである。記録が食い違うのは、ひとつ前の保存形式の
+        # [確定 ToC]が残っているときだけである
         self.basic_state()
-        self.save_toc("k2", [(DOC_A, SEC_1, "Sec One", "other-hash")])
+        self.write_previous_toc("k2", [(DOC_A, SEC_1, "Sec One", "other-hash")])
         item, _ = self.one(SEC_1)
         self.assertEqual(item["status"], "resolved")
         self.assertIsNone(item["content_hash"])
@@ -266,6 +274,14 @@ class ContentHashTest(Base):
         self.save_toc("k2", [(DOC_A, SEC_1, "Sec One", "sec-hash-1")])
         item, _ = self.one(SEC_1)
         self.assertEqual(item["content_hash"], "sec-hash-1")
+        self.assertEqual(item["content_hash_state"], "recorded")
+
+    def test_section_hash_saved_from_another_key_is_the_one_value(self):
+        # 別の[ToC 識別キー]の構築が保存した値が、その文書のただ 1 つの値になる
+        self.basic_state()
+        self.save_toc("k2", [(DOC_A, SEC_1, "Sec One", "newer-hash")])
+        item, _ = self.one(SEC_1)
+        self.assertEqual(item["content_hash"], "newer-hash")
         self.assertEqual(item["content_hash_state"], "recorded")
 
     def test_unavailable_hash(self):
@@ -323,6 +339,13 @@ class FailureTest(Base):
                 self.assertIn(Path(relative).name, result["errors"][0])
                 self.assertEqual(self.snapshot(), before)
                 (self.root / relative).unlink()
+
+    def test_missing_document_info_of_a_toc_document_is_a_failure(self):
+        self.basic_state()
+        state_store.document_info_path(self.root, DOC_A).unlink()
+        code, result = self.run_main(SEC_1)
+        self.assertEqual(code, 1)
+        self.assertIn("corrupt", result["errors"][0])
 
     def test_unreadable_state_is_a_failure(self):
         self.basic_state()

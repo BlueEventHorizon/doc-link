@@ -11,7 +11,7 @@ description: ToC（確定 ToC）を構築・再構築する。対象の文書の
 
 ## 引数
 
-- ToC 識別キーと Index 対象指定だけを受け取る。`embed-dlid` と同じ形式である（`--key <キー>` と、`--paths`・`--paths-json`・`--paths-file`・`--dirs`・`--dirs-json`・`--exclude`・`--exclude-json` のいずれか。単体モードは `--all`、または引数なし）
+- ToC 識別キーと Index 対象指定だけを受け取る。`embed-dlid` と同じ形式である（`--key <キー>` と、`--paths`・`--paths-json`・`--paths-file`・`--dirs`・`--dirs-json`・`--exclude`・`--exclude-json` のいずれか。単体モードは `--all`、または引数なし）。`--target-file <パス>` は、doc-link の script が書いた対象指定ファイルを渡す形式で、ほかの対象の引数と併せて渡されない
 - 受け取った引数を、解釈せずにそのまま script へ渡す。引数の検証は script が行い、反する指定は拒否される
 - 親の文脈（作業の指示・差分・文書の本文など）を引数へ足さない
 

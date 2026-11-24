@@ -1,4 +1,5 @@
 {
+  "applied_hash": "de3932695d2ca756ff85dfc8c0dc64b4f2ed05a58e3c4c2be0d1c571aa2fa9e7",
   "content_hash": "de3932695d2ca756ff85dfc8c0dc64b4f2ed05a58e3c4c2be0d1c571aa2fa9e7",
   "doc_link_id": "DLID-tq1tc0r4nnpn",
   "keywords": [
@@ -13,8 +14,51 @@
     "test placement",
     "implementation rules"
   ],
+  "last_check": {
+    "checked_at": "2026-11-22T06:44:28+00:00",
+    "result": "success"
+  },
   "path": "docs/rules/doc-link_implementation_rules.md",
   "purpose": "Implementation rules specific to doc-link that take precedence over the generic plugin_ norm documents for the listed items only.",
+  "references": [],
+  "sections": [
+    {
+      "content_hash": "638eb13242ea9ed5f270d9f5835cb1f6380c8003dadc3109e43418d1f122ee25",
+      "heading": "優先する範囲 [MANDATORY]",
+      "position": 1,
+      "section_id": "DLID-62m358p4cwbs"
+    },
+    {
+      "content_hash": "7af681003b9ed091c99a03a30ce49eb23d6921c2da747661607b2c64897a667c",
+      "heading": "実行と依存 [MANDATORY]",
+      "position": 2,
+      "section_id": "DLID-q71wr7vxtx6z"
+    },
+    {
+      "content_hash": "82e50b1e56fe040eff343192ee12b568043681d3b86ac0e70408c367e59abcef",
+      "heading": "Node.js [MANDATORY]",
+      "position": 3,
+      "section_id": "DLID-6ehnfvsjn4yq"
+    },
+    {
+      "content_hash": "845efbb0bbe3bc4e2c79fb23361bd8627ab6fae3a35fb2e542de145ce0da0d6c",
+      "heading": "テスト [MANDATORY]",
+      "position": 5,
+      "section_id": "DLID-avzfrasm4v19"
+    },
+    {
+      "content_hash": "be212d1f0f23b996a473bb199b7574314345fe5438e2b2bede7c9881be250f9e",
+      "heading": "SKILL の実行モデル [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-nrwvj497nqt8"
+    },
+    {
+      "content_hash": "dc2985678ef5f8a4969ff01f782ae6b727aa0e1836f6a36ae9dad8d55cbca648",
+      "heading": "doc-link 実装ルール",
+      "position": 0,
+      "section_id": "DLID-9qpga2gvjnmx"
+    }
+  ],
   "summary": [
     "Defines which items override the generic norm documents; others follow the generic ones",
     "Python scripts run via uv run with PEP 723 inline dependency metadata",

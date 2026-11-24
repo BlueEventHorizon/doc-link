@@ -222,6 +222,53 @@ class FirstBuildTest(Base):
             )
         self.assertFalse((self.root / ".doc-link" / "tocs").exists())
 
+    def test_target_file_builds_the_same_target_as_the_arguments(self):
+        # D-063: 対象指定ファイルだけを渡して、その[ToC 識別キー]と[Index 対象指定]で構築する
+        target = self.root / "target.json"
+        target.write_text(
+            json.dumps({"mode": "targets", "key": "k", "paths": ALL}), encoding="utf-8"
+        )
+        option = ("--target-file", str(target))
+        build_id = None
+        for _ in range(10):
+            extra = [] if build_id is None else ["--build-id", build_id]
+            code, result = self.run_main("advance", *option, *extra)
+            self.assertEqual(code, 0, result)
+            if result["action"] == "done":
+                break
+            build_id = result["build_id"]
+            for batch in result["batches"]:
+                for document in batch["documents"]:
+                    scode, sresult = self.run_main(
+                        "submit",
+                        *option,
+                        "--build-id",
+                        build_id,
+                        *submit_args(document["doc_link_id"], None),
+                    )
+                    self.assertEqual(scode, 0, sresult)
+        self.assertEqual(result["action"], "done")
+        self.assertEqual(result["toc_key"], "k")
+        from_file = self.toc_bytes("k")
+        shutil.rmtree(self.root / ".doc-link")
+        self.assertEqual(self.build("k", ALL)[0], 0)
+        self.assertEqual(
+            json.loads(from_file)["target_spec"],
+            json.loads(self.toc_bytes("k"))["target_spec"],
+        )
+
+    def test_target_file_with_other_target_arguments_is_rejected(self):
+        target = self.root / "target.json"
+        target.write_text(
+            json.dumps({"mode": "targets", "key": "k", "paths": ALL}), encoding="utf-8"
+        )
+        code, result = self.run_main(
+            "advance", "--target-file", str(target), "--key", "k", "--paths", *ALL
+        )
+        self.assertEqual(code, 1)
+        self.assertTrue(any("--target-file" in error for error in result["errors"]))
+        self.assertFalse((self.root / ".doc-link").exists())
+
     def test_request_does_not_contain_internal_limit_factor_or_margin(self):
         code, result = self.advance("k", ALL)
 
@@ -871,16 +918,46 @@ class MultipleKeysTest(Base):
         ids = [d["doc_link_id"] for b in result["batches"] for d in b["documents"]]
         self.assertEqual(ids, [ID_C])
 
-    def test_stale_toc_of_other_key_is_not_a_basis_for_the_build(self):
+    def test_value_confirmed_by_one_key_is_used_by_the_other_key(self):
         self.build("one", ["docs/a.md", "docs/b.md"])
         self.build("two", ["docs/b.md", "docs/c.md"])
         self.write("docs/b.md", B_TEXT + "\nmore\n")
         self.build("one", ["docs/a.md", "docs/b.md"])
-        # two の確定 ToC は古いが、two の再構築は文書情報（最新）と現物から決まる
+        # 同じ文書の値は 1 つである。one の構築が確定した b の値を、two も使う
+        applied = {
+            key: {
+                d["doc_link_id"]: d["applied_hash"]
+                for d in state_store.load_confirmed_toc(self.root, key)["documents"]
+            }
+            for key in ("one", "two")
+        }
+        self.assertEqual(applied["two"][ID_B], applied["one"][ID_B])
+        self.assertEqual(
+            applied["two"][ID_B],
+            state_store.load_document_info(self.root, ID_B)["content_hash"],
+        )
+        # two の再構築は、内容が同じなので版を変えず、何も書き換えない
+        state_before = self.state_snapshot()
         code, result = self.advance("two", ["docs/b.md", "docs/c.md"])
         self.assertEqual(code, 0)
         self.assertEqual(result["action"], "done")
-        self.assertEqual(result["version"], 2)
+        self.assertEqual((result["version"], result["published"]), (1, False))
+        self.assertEqual(self.state_snapshot(), state_before)
+
+    def test_rebuilding_keys_that_share_a_document_writes_nothing(self):
+        # 検査の時点は文書ごとの値である。共有する文書の時点が、別のキーの構築で変わっていても、
+        # 内容が同じ再構築は何も書き換えない
+        keys = {"one": ["docs/a.md", "docs/b.md"], "two": ["docs/b.md", "docs/c.md"]}
+        for key, paths in keys.items():
+            self.build(key, paths)
+        self.write("docs/b.md", B_TEXT + "\nmore\n")
+        self.build("one", keys["one"])
+        state_before = self.state_snapshot()
+        for key, paths in (*keys.items(), *keys.items()):
+            code, result = self.build(key, paths)
+            self.assertEqual(code, 0, result)
+            self.assertFalse(result["published"], key)
+        self.assertEqual(self.state_snapshot(), state_before)
 
 
 class ExcludedDocumentsTest(Base):

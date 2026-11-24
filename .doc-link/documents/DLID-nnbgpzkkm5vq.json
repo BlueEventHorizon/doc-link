@@ -1,39 +1,237 @@
 {
-  "content_hash": "96dc8a0cdfe8c152d50393cd2f5ddf69fbf7fbb09b696a668af11ab12ef9b335",
+  "applied_hash": "20d2b5d58257038aafd2ca4151fda8ce91dbb8a5e4468a45ad034472dfc0b9ef",
+  "content_hash": "20d2b5d58257038aafd2ca4151fda8ce91dbb8a5e4468a45ad034472dfc0b9ef",
   "doc_link_id": "DLID-nnbgpzkkm5vq",
   "keywords": [
-    "search",
+    "document search",
     "pre-search check",
-    "rebuild",
-    "resolve-dlid",
-    "DLID resolution",
+    "rebuild confirmation",
+    "target file",
     "search AI",
     "ToC copy",
+    "resolve-dlid",
+    "DLID resolution",
     "freshness",
-    "undeterminable",
-    "detail file"
+    "content hash"
   ],
+  "last_check": {
+    "checked_at": "2026-11-24T13:48:52+00:00",
+    "result": "success"
+  },
   "path": "docs/specs/design/DES-006_search.md",
-  "purpose": "Design of document search: pre-search staleness judgment, the search result contract with the read-only search AI, and DLID resolution via resolve-dlid.",
+  "purpose": "Design of document search: pre-search freshness checks, the search result contract, the search AI role, and DLID resolution by resolve-dlid.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-003_data-model.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 0,
+      "recorded_content_hash": "bb9fe7144acf",
+      "recorded_path": "DES-003_data-model.md#2-情報と識別子-dlid-m8vs7s3gahbx",
+      "source_section_id": null,
+      "target_doc_id": "DLID-yqqrwtycr379",
+      "target_section_id": "DLID-m8vs7s3gahbx"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 2,
+      "recorded_content_hash": "189c8ffcc88b",
+      "recorded_path": "DES-005_indexing.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-008_content-rules.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 1,
+      "recorded_content_hash": "e07d05aa8a87",
+      "recorded_path": "DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe",
+      "source_section_id": null,
+      "target_doc_id": "DLID-ywa6htx8vq09",
+      "target_section_id": "DLID-cf1n0ndmf0fe"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 3,
+      "recorded_content_hash": "cf5307ccef85",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-8vajyevfatkv"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "b6c21c9348ef",
+      "recorded_path": "../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-5ht9ebyeq2m3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "96d41fc90490",
+      "recorded_path": "../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-99p6p9nf7npz"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 5,
+      "recorded_content_hash": "f55cd670bc00",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-7hjmngynv8sb"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "4b38b784fc3e",
+      "recorded_path": "../requirement/REQ-003_toc.md#75-tocのメタデータ-dlid-ef9szvy6w2cj",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-ef9szvy6w2cj"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-004_search.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "5b1ed8d54266",
+      "recorded_path": "../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-h96208rqr773",
+      "target_section_id": "DLID-481cwc8365a3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 10,
+      "recorded_content_hash": "0cbc9091ee0f",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-jhkngqtfdnhn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "2351b357da12",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-zacf5tmy6x4x"
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "0bc4c3bc9d14f178b7445ac3a9af3d2d72088c41ed2adaf3d369bad796c13183",
+      "heading": "DES-006 文書検索設計",
+      "position": 0,
+      "section_id": "DLID-wwna81gbj3jz"
+    },
+    {
+      "content_hash": "35de75ac839132a6b0109e5e8c01c49c8f9a1ad9d3e9bad977c4f2aafff90bc4",
+      "heading": "2. 検索結果の契約",
+      "position": 2,
+      "section_id": "DLID-p07g3hc4e4xd"
+    },
+    {
+      "content_hash": "d132e95cb3bdf3a4cc7c96fba928c06529f13d756c0d63b01f2901c87b74b42e",
+      "heading": "1. 検索前の判定",
+      "position": 1,
+      "section_id": "DLID-ksmh21dbz9zv"
+    },
+    {
+      "content_hash": "fb28459057a6c052608e54fb7152ed00f67b4a17ecf4516c677fe642b3c0cf22",
+      "heading": "3. [DLID]の解決",
+      "position": 3,
+      "section_id": "DLID-m0xegzfyhc3k"
+    }
+  ],
   "summary": [
-    "Pre-search check distinguishes rebuild-not-needed, rebuild-needed and undeterminable states",
-    "Rebuild-needed prompts a user choice between rebuilding first or searching the existing version",
-    "Scale counts go to stdout while per-document details go to a detail file under .temp",
-    "Undeterminable state stops the search and reports the target and cause, never falling back to an old version",
-    "Search result candidates carry document ID, recorded path, reason, sections, ToC version and freshness",
-    "Search AI reads every entry of a ToC copy and prefers recall over precision",
-    "ToC copy contents: document info fields and section IDs with headings, no paths, hashes or references",
-    "resolve-dlid resolves DLIDs from recorded paths and verifies them against file frontmatter or heading suffix",
-    "Resolved results include content hashes; unresolved cases return recorded paths or no-record without exploring elsewhere",
-    "Search and resolution never write to the ToC, management state or indexed documents"
+    "Pre-search check outcomes: no rebuild needed, rebuild needed, or undeterminable",
+    "User two-way choice between rebuilding before search and searching the existing version",
+    "Rebuild scale counts and detail file written under .temp/doc-link/query-docs",
+    "Target-specification file passed to rebuild via --target-file",
+    "Undeterminable result stops the search and reports the cause",
+    "Search result contract: document ID, recorded path, reason, ToC version, freshness",
+    "Read-only search AI reads every entry of the ToC copy and prioritizes recall",
+    "Contents of the ToC copy given to the search AI, excluding paths and hashes",
+    "resolve-dlid resolves document and section DLIDs from recorded state and recorded paths",
+    "Resolution outcomes: resolved with content hash, not at recorded path, no record"
   ],
   "tasks": [
-    "Implementing or changing the query-docs search flow",
-    "Implementing the pre-search rebuild-necessity check",
-    "Designing the search AI input and output contract",
-    "Implementing the resolve-dlid DLID resolution",
-    "Reviewing search design against requirements",
-    "Handling stale ToC or undeterminable states in search"
+    "Designing or changing document search behavior",
+    "Implementing the pre-search ToC freshness check",
+    "Implementing or changing the resolve-dlid script",
+    "Designing the search AI agent input and output",
+    "Writing tests for search and DLID resolution",
+    "Reviewing search design against requirements"
   ],
   "title": "DES-006 文書検索設計"
 }

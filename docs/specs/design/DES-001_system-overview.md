@@ -83,13 +83,13 @@ sequenceDiagram
 
 保存方式（JSON ファイル）、同一 ID の複数キー間での見え方は個別設計で決定済みである（[DES-002][des-002]、[DES-003][des-003]、[DES-005][des-005]、[DES-006][des-006]、[DES-007][des-007]）。これらの選択は対応する個別設計に理由と帰結を記録する。参照先を読めない場合も[ToC]の確定を止めないことは、要件 [D-025][req-005-fr-009] が定める。
 
-[des-002]: DES-002_execution-responsibilities.md "9c2bea9cc41e DLID-anz9vack2xzt"
-[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
+[des-002]: DES-002_execution-responsibilities.md "f81b273666a9 DLID-anz9vack2xzt"
+[des-010]: DES-010_skill-composition.md "a37e588a4b86 DLID-7e90gq3sdncc"
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-007]: DES-007_references-impact.md "debedfd1b155 DLID-pr3jp4hzb8js"
-[des-005]: DES-005_indexing.md "52ed2959d4d0 DLID-dgphqw70rkpz"
-[des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
-[des-006]: DES-006_search.md "96dc8a0cdfe8 DLID-nnbgpzkkm5vq"
+[des-007]: DES-007_references-impact.md "27c0b9daf7fd DLID-pr3jp4hzb8js"
+[des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
+[des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
+[des-006]: DES-006_search.md "20d2b5d58257 DLID-nnbgpzkkm5vq"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"

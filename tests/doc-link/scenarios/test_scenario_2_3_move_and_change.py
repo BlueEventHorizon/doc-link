@@ -54,7 +54,7 @@ class MoveScenarioTest(ScenarioBase):
 
     def test_scenario_2_move_updates_current_path_without_regenerating(self):
         self.build_ok(KEY, PATHS)
-        info_before = self.info(ID_C)
+        info_before = self.summary(ID_C)
         toc_before = self.toc(KEY)
         paths = self.move_c()
 
@@ -70,21 +70,21 @@ class MoveScenarioTest(ScenarioBase):
         self.assertEqual(stale["scale"]["ai_generation"], 0)
 
         documents_before = self.snapshot("docs")
-        info_other_before = {doc_id: self.info(doc_id) for doc_id in (ID_A, ID_B)}
+        info_other_before = {doc_id: self.summary(doc_id) for doc_id in (ID_A, ID_B)}
         result = self.build_ok(KEY, paths)
 
         # toc-updater への生成依頼は 0 件
         self.assertEqual(self.requested, [])
         self.assertEqual(result["generated_count"], 0)
         # [文書情報]は、パス以外が書き換わらない。ほかの文書の[文書情報]は変わらない
-        info_after = self.info(ID_C)
+        info_after = self.summary(ID_C)
         self.assertEqual(info_after["path"], "docs/sub/c.md")
         self.assertEqual(
             {k: v for k, v in info_after.items() if k != "path"},
             {k: v for k, v in info_before.items() if k != "path"},
         )
         for doc_id, before in info_other_before.items():
-            self.assertEqual(self.info(doc_id), before)
+            self.assertEqual(self.summary(doc_id), before)
         # [確定 ToC]の現在パス（対象指定のパス）だけが更新される。文書の集合・ハッシュは変わらない
         toc_after = self.toc(KEY)
         self.assertEqual(toc_before["target_spec"]["paths"], PATHS)
@@ -197,13 +197,13 @@ class ContentChangeScenarioTest(ScenarioBase):
         self.assertEqual(self.resolve_one(ID_C)["content_hash"], c_hash_after)
 
     def test_rewriting_a_record_does_not_change_the_referrer_hash(self):
-        info_before = self.info(ID_A)
+        info_before = self.summary(ID_A)
         self.write("docs/a.md", a_text(record="d" * RECORD_LENGTH))
         code, fresh = self.check_toc(KEY, self.paths)
         self.assertEqual((code, fresh["status"]), (0, "up_to_date"))
         self.build_ok(KEY, self.paths)
         self.assertEqual(self.requested, [])
-        self.assertEqual(self.info(ID_A), info_before)
+        self.assertEqual(self.summary(ID_A), info_before)
 
 
 class FirstTitleScenarioTest(ScenarioBase):
@@ -223,7 +223,7 @@ class FirstTitleScenarioTest(ScenarioBase):
         self.build_ok(KEY, self.paths)
 
     def test_first_title_keeps_the_referrer_hash_and_the_record_is_correct(self):
-        info_before = self.info(ID_A)
+        info_before = self.summary(ID_A)
         c_hash = self.resolve_one(ID_C)["content_hash"]
 
         self.write("docs/a.md", a_text(record=c_hash))
@@ -235,7 +235,7 @@ class FirstTitleScenarioTest(ScenarioBase):
         result = self.build_ok(KEY, self.paths)
         self.assertEqual(self.requested, [])
         self.assertEqual(result["generated_count"], 0)
-        self.assertEqual(self.info(ID_A), info_before)
+        self.assertEqual(self.summary(ID_A), info_before)
 
         # 書いた記録は、書き直さずに、そのまま正しい
         code, fresh = self.check_toc(KEY, self.paths)

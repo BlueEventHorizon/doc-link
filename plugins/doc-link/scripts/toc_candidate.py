@@ -6,16 +6,19 @@ REQ-003 §11.2.3・§11.2.4・FR-004・AC-017・AC-018・AC-020、REQ-001 D-024�
 ときにこのモジュールの 3 つの操作を呼ぶ。状態遷移のガードは `build_state_machine` が持つ。
 
 使う部品（再実装しない）: 変更集合は `change_set`、[確定 ToC]の保存・読取り・検査・一括置き換えは `state_store`、
-参照の検査結果は `reference_check`、対象指定は `target_spec`。[文書情報]の保存は `update_plan` が先に行う
-（この処理は[文書情報]を書かない）。
+参照の検査結果は `reference_check`、対象指定は `target_spec`。[文書情報]の要約の保存は `update_plan` が先に行う。
+この処理が組み立てる候補は `state_store.CONFIRMED_TOC_FIELDS` の形であり、文書ごとに決まる値（[反映済みハッシュ]・
+セクションエントリ・参照・最終検査状態）を[文書情報]のファイルへ、キーごとに決まる値を[確定 ToC]のファイルへ
+分けて書くのは `state_store.save_confirmed_toc` である。
 
 ## 操作
 
 - `assemble_candidate(...)`: [ToC 候補]（`state_store.CONFIRMED_TOC_FIELDS` を過不足なく持つ dict）を組み立てる。
   何も書き込まない。失敗は `CandidateFailure`（段階 `candidate_assembly`）
 - `validate_candidate(...)`: 候補を検査する。何も書き込まない。失敗は `CandidateFailure`（段階 `candidate_validation`）
-- `publish_candidate(...)`: 検査済みの候補を、`state_store.save_confirmed_toc` でキーごとのファイルへ一括して
-  置き換える。失敗は `CandidateFailure`（段階 `publish`）。旧[確定 ToC]は残る
+- `publish_candidate(...)`: 検査済みの候補を、`state_store.save_confirmed_toc` で公開する。文書ごとの値を
+  [文書情報]へ書いてから、[確定 ToC]のファイルを置き換える。失敗は `CandidateFailure`（段階 `publish`）。
+  [確定 ToC]のファイルは置き換わらず、書き終えた[文書情報]は戻らない（残りは次の検査が変更として検出する）
 - `build_and_publish(...)`: 上の 3 つを順に行う
 
 DES-004 §3 の段階との対応: 組み立てと検査は B-06（参照検査確定 → 候補検査済み）の処理であり、その失敗は参照検査確定からの
@@ -44,8 +47,10 @@ B-08 にあたる。公開は B-07（候補検査済み → 完了）の処理�
   - `kind`: 検査で参照先が見つかったときの `target_kind`（`document`・`section`）。見つからない（不在・重複・
     解決不能）ときは、文書か[セクション ID]かが分からないので `unknown`
   - `target_section_id` / `target_doc_id`: `kind` が `section` なら、`target_section_id` に参照先の[DLID]を入れ、
-    `target_doc_id` に、その[セクション ID]を持つ所属文書の[文書 ID]を入れる。所属文書がこの候補の `sections` に
-    無い（[確定 ToC]に無い）ときは、所属文書を知る手段がないので参照先の[DLID]をそのまま入れる。
+    `target_doc_id` に、その[セクション ID]を持つ所属文書の[文書 ID]を入れる。所属文書は、この候補の `sections`
+    から先に引く。そこに無いときは、候補に入らない文書の[文書情報]に確定した値として記録されたセクションエントリ
+    から引く。記録がどこにも無い、または複数の文書に記録されていて 1 つに決められないときは、所属文書を知る手段が
+    ないので参照先の[DLID]をそのまま入れる。
     `kind` が `document` または `unknown` なら、`target_doc_id` に参照先の[DLID]を、`target_section_id` に
     `None` を入れる
   - `source_section_id`: `None`。設計書は、セクション単位の参照元の追跡を求めていない（REQ-003 §7.3 の「条件付き」）
@@ -54,7 +59,8 @@ B-08 にあたる。公開は B-07（候補検査済み → 完了）の処理�
     `fragment_mismatch`・`absent`・`duplicate`・`unresolved`）、`found_path` は確認できた現在のパス（無ければ `None`）。
     `absent` の細かい理由（ディレクトリが無い・読めない等）は、保存のスキーマに持たないので記録しない
 - `reverse_references`: `references` から機械的に作る（参照先 → 参照元）。同じ組は 1 件にまとめる
-- `last_checks`: 文書ごとに 1 件。`checked_at` は呼び出し側から渡された検査の時点。`result` は、その文書の全参照の
+- `last_checks`: 文書ごとに 1 件。`checked_at` は呼び出し側から渡された検査の時点（全文書に共通の 1 つの値、
+  または[文書 ID]から時点への対応）。`result` は、その文書の全参照の
   検査結果が `unresolved`（リンク先を解決できず走査できなかった）を含まなければ `success`、含めば `failure`。
   不在・パス不一致・フラグメント不一致・重複は、検査を完了した結果なので `success` である（D-025）。
   この処理は `unprocessed` を作らない（検査結果が渡されない文書は組み立ての失敗にする）
@@ -62,7 +68,8 @@ B-08 にあたる。公開は B-07（候補検査済み → 完了）の処理�
   を除く内容が同じなら前の版のまま（再実行で不要な差分を作らない。NFR-003）。違えば前の版に 1 を足す。前の版が
   整数でないときは次の版を決められないので、組み立ての失敗にする
 - `target_spec`: 渡された[Index 対象指定]の `to_dict()`
-- 保存済みの[文書情報]は候補に含めない（D-024）。指定されていないキーの[確定 ToC]は、読まず・書かず・根拠にしない
+- [文書情報]の要約（タイトル・目的・概要・適用作業・キーワード）は候補に含めない（D-024）。指定されていない
+  キーの[確定 ToC]のファイルは、読まず・書かず・根拠にしない
 - 離脱した文書（`UpdatePlan.departed`）と、ID 未付与・重複で除外した文書は、[確定 Index 対象リスト]に無いので
   候補に入らない
 
@@ -222,6 +229,42 @@ def _read_current(root: Path, toc_key: str, confirmed: Sequence[ConfirmedDocumen
     return current
 
 
+def _outside_section_owners(
+    root: Path, toc_key: str, member_ids: set[str], section_ids: set[str]
+) -> dict[str, str]:
+    """候補に入らない文書の[文書情報]から、[セクション ID]の所属文書を引く。1 つに決まるものだけを返す。"""
+    if not section_ids:
+        return {}
+    try:
+        infos = state_store.load_all_document_infos(root)
+    except state_store.StateStoreError as exc:
+        raise _failure(
+            root,
+            toc_key,
+            STAGE_ASSEMBLY,
+            [
+                CandidateProblem(
+                    None,
+                    str(exc.path) if exc.path else None,
+                    "references",
+                    f"[文書情報]を読めない（{exc.kind}）: {exc}",
+                )
+            ],
+        ) from exc
+    owners: dict[str, set[str]] = {}
+    for info in infos:
+        if info["doc_link_id"] in member_ids or info["applied_hash"] is None:
+            continue
+        for entry in info["sections"]:
+            if entry["section_id"] in section_ids:
+                owners.setdefault(entry["section_id"], set()).add(info["doc_link_id"])
+    return {
+        section_id: next(iter(found))
+        for section_id, found in owners.items()
+        if len(found) == 1
+    }
+
+
 def _reference_entry(
     doc_id: str, position: int, result: ReferenceCheckResult, section_owner: dict
 ) -> dict:
@@ -324,12 +367,13 @@ def assemble_candidate(
     target_spec: TargetSpec,
     change_set: ChangeSet,
     reference_results: Mapping[str, Sequence[ReferenceCheckResult]],
-    checked_at: str,
+    checked_at: str | Mapping[str, str],
 ) -> dict:
     """[ToC 候補]を組み立てる。何も書き込まない。同じ入力から常に同じ候補を返す。
 
     `reference_results` は[文書 ID]から、その文書の[正式な参照]の検査結果（定義の行の順）への対応。
-    [確定 Index 対象リスト]の全文書の結果を渡す（参照が無い文書は空の並び）。
+    [確定 Index 対象リスト]の全文書の結果を渡す（参照が無い文書は空の並び）。`checked_at` は検査の時点で、
+    全文書に共通の 1 つの値か、[文書 ID]から時点への対応である。
     """
     root = Path(project_root)
     confirmed = change_set.confirmed_documents
@@ -360,6 +404,19 @@ def assemble_candidate(
 
     section_values = current_sections(current)
     section_owner = {sid: value.doc_link_id for sid, value in section_values.items()}
+    member_ids = {item.doc_link_id for item in confirmed}
+    outside_ids = {
+        result.reference.dlid
+        for doc_id, results in reference_results.items()
+        if doc_id in member_ids
+        for result in results
+        if result.target_kind == "section"
+        and result.reference.dlid not in section_owner
+    }
+    section_owner = {
+        **_outside_section_owners(root, toc_key, member_ids, outside_ids),
+        **section_owner,
+    }
     sections = [
         {
             "doc_link_id": value.doc_link_id,
@@ -408,7 +465,11 @@ def assemble_candidate(
         last_checks.append(
             {
                 "doc_link_id": item.doc_link_id,
-                "checked_at": checked_at,
+                "checked_at": (
+                    checked_at
+                    if isinstance(checked_at, str)
+                    else checked_at[item.doc_link_id]
+                ),
                 "result": RESULT_FAILURE if failed else RESULT_SUCCESS,
             }
         )
@@ -552,9 +613,10 @@ def validate_candidate(
 
 
 def publish_candidate(project_root: str | Path, skill: str, candidate: dict) -> bool:
-    """検査済みの候補を、キーごとのファイルとして一括して置き換える。書き換えたとき真。
+    """検査済みの候補を公開する。[文書情報]か[確定 ToC]のファイルを書き換えたとき真。
 
-    失敗したときは `CandidateFailure`（段階 `publish`）で、旧[確定 ToC]は残る。
+    文書ごとの値を[文書情報]へ書いてから、[確定 ToC]のファイルを置き換える。失敗したときは `CandidateFailure`
+    （段階 `publish`）で、[確定 ToC]のファイルは置き換わらない。
     """
     root = Path(project_root)
     try:
@@ -583,7 +645,7 @@ def build_and_publish(
     target_spec: TargetSpec,
     change_set: ChangeSet,
     reference_results: Mapping[str, Sequence[ReferenceCheckResult]],
-    checked_at: str,
+    checked_at: str | Mapping[str, str],
 ) -> PublishResult:
     """組み立て → 検査 → 公開を順に行う。どの段階の失敗も `CandidateFailure`。"""
     candidate = assemble_candidate(

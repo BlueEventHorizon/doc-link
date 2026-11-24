@@ -21,7 +21,8 @@ doc_link_id: DLID-xmg0jcmep2h2
 - 互いを参照する 2 つの文書で、記録を書き換えても、通知が終わらなくならない。
 - 記録だけを書き換えても、`check-toc` は[ToC]を古いと判定しない。`index-docs` を実行せずに、同じ参照が返らなくなる。
 - 文書の[DLID]の参照は、文書内のどこが変わっても返す。[セクション ID]の参照は、そのセクションの範囲が変わったときだけ返す。
-- 参照先が[確定 ToC]に無い参照を返さず、`check-links` が検出する。
+- 参照先の構築が確定した値がどの[文書情報]にも無い参照を返さず、`check-links` が検出する。
+- 参照先が、検査するキーに所属せず別のキーにだけ所属する参照も、同じ規則で返す。参照先を含むキーだけを再構築した変更が、参照元のキーを再構築しなくても返る。
 - 失敗したときは、エラーの JSON を返し、通知しない。
 
 `check-links` は、次を試す。
@@ -46,12 +47,12 @@ doc_link_id: DLID-xmg0jcmep2h2
 
 | 要件                                                       | 主設計                                                     | 主な検証観点                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | ---------------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [FR-017][req-002-fr-017] [Index 対象指定]                  | [DES-005][des-005]                                         | 完全な desired state、対象離脱、他キー非変更、[AC-021][req-002-ac-021]／022／024                                                                                                                                                                                                                                                                                                                                                          |
+| [FR-017][req-002-fr-017] [Index 対象指定]                  | [DES-005][des-005]                                         | 完全な desired state、対象離脱、他キー非変更、対象指定ファイルの受領と併用の拒否、[AC-021][req-002-ac-021]／022／024                                                                                                                                                                                                                                                                                                                      |
 | [FR-001][req-002-fr-001]／002 [文書 ID]                    | [DES-005][des-005]、[DES-008][des-008]                     | 欠落統一、発行形式、不変、重複の原本候補の提示と利用者による確定、構築での ID 未付与・重複文書の除外と報告、構築・検索が[Index 対象文書]を書き換えないこと、[AC-005][req-002-ac-005]／012〜014／016／023／025／029／030                                                                                                                                                                                                                   |
 | [FR-003][req-003-fr-003]／011／012 変更検出                | [DES-005][des-005]、[DES-008][des-008]                     | パスのみ・本文・参照・離脱の差分、セクション単位の限定、[AC-001][req-003-ac-001]／002／020／026                                                                                                                                                                                                                                                                                                                                           |
 | [FR-004][req-003-fr-004]／005 [ToC]・要約                  | [DES-005][des-005]、[DES-004][des-004]、[DES-008][des-008] | 初回確定、更新計画、変更時のみ AI、長さ境界、失敗時旧版、[AC-010][req-003-ac-010]／011／017／018／027                                                                                                                                                                                                                                                                                                                                     |
 | [FR-008][req-003-fr-008]／007／009／010 参照               | [DES-007][des-007]、[DES-008][des-008]                     | ID 付き記法、実走査、一致・不一致・不在、見出しの改名後のフラグメント不一致、修正先の証拠、[AC-003][req-005-ac-003]／004／028／035                                                                                                                                                                                                                                                                                                        |
-| [FR-006][req-004-fr-006] 文書検索                          | [DES-006][des-006]                                         | 未構築、再構築要否、規模の件数、ユーザー二択、判定不能時の停止、古い版の表示、[AC-019][req-004-ac-019]                                                                                                                                                                                                                                                                                                                                    |
+| [FR-006][req-004-fr-006] 文書検索                          | [DES-006][des-006]                                         | 未構築、再構築要否、規模の件数、ユーザー二択、対象指定ファイルによる再構築と別の対象での再構築の検出、判定不能時の停止、古い版の表示、[AC-019][req-004-ac-019]                                                                                                                                                                                                                                                                            |
 | [FR-018][req-002-fr-018] [DLID]の解決                      | [DES-006][des-006]                                         | 文書・セクションの解決、移動後の再構築前後、記録の無い[DLID]、管理状態を読めないときの失敗、管理状態と[Index 対象文書]を変えないこと、解決済みに[内容ハッシュ]を添えること（文書、セクション、セクションの値が記録によって異なるとき、得られないとき）、[AC-031][req-002-ac-031]                                                                                                                                                          |
 | [FR-013][req-005-fr-013]／014／015 [変更影響候補の通知]    | [DES-007][des-007]                                         | 逆引き範囲、記録と現在ハッシュの比較、参照元の通知、記録を書き換えるまでの毎回の通知、[AC-006][req-005-ac-006]〜009                                                                                                                                                                                                                                                                                                                       |
 | [FR-016][req-005-fr-016] 不整合検査                        | [DES-007][des-007]、[DES-010][des-010]                     | ID、参照、[ToC]不整合（古いハッシュを含む）、記録と現在ハッシュが異なる参照の列挙。検査の SKILL が管理状態を書き換えないこと。[DLID]の無いリンクへ title に書く値を添えること（文書・セクションの値、解決しないフラグメントの理由、書いた参照が一致になること）、[AC-032][req-005-ac-032]。書き直す前に、利用者へ一覧を示して確認する案内、[AC-033][req-005-ac-033]。検査の結果を件数と明細ファイルに分けること、[AC-034][req-005-ac-034] |
@@ -67,18 +68,18 @@ doc_link_id: DLID-xmg0jcmep2h2
 2. 移動：同じ ID・同じ内容でパスだけ変更し、要約を再生成せず[ToC]の現在パスを更新する。参照元の古いパスは自動修正しない。
 3. 内容変更：参照先を変えると、[ToC]確定後も、参照元の記録は旧値のまま。`check-impact` が、記録を書き換えるまで毎回その参照を返す。要約は再生成しない。
 4. 失敗：AI 生成・参照走査・候補確定の各失敗位置で、旧[確定 ToC]の扱いを区別する。それまでに確定した[文書情報]は戻さず、[ToC]が旧版のキーからも最新の[文書情報]が見える（要件 [D-024][req-003-fr-004]）。
-5. 複数キー：同一 ID が A と B に所属し、A の更新・離脱が B の[ToC]を書き換えない。同じ ID・[内容ハッシュ]の検証済み情報を再利用できる場合、B への追加だけで AI 要約を再生成しない。B は A と同じ[文書情報]を参照するため表示は一致する（要件 [D-024][req-003-fr-004]）。
+5. 複数キー：同一 ID が A と B に所属し、A の更新・離脱が B の所属と版を書き換えない。A の構築が確定した文書の値は、B からも同じに見える。別のキーにだけ所属する文書への参照も、`check-impact` が比べる。同じ ID・[内容ハッシュ]の検証済み情報を再利用できる場合、B への追加だけで AI 要約を再生成しない。B は A と同じ[文書情報]を参照するため表示は一致する（要件 [D-024][req-003-fr-004]）。
 6. 範囲外参照：Index 対象外でも指定ディレクトリを実走査し、結果に範囲・時点を付ける。対象範囲外への移動先は推測しない。
 7. 後からの参照：DLID 付与操作が全見出しに[セクション ID]を付けた文書の見出しへ、別の文書から、title にその[セクション ID]を書いたリンクを新しく書く。参照先の文書へ書き込むことなく、そのリンクが[正式な参照]として抽出されることを確かめる（要件 [D-033][req-005-sec-13-1]）。DLID 付与操作が、title に[DLID]の無いリンクにも書き込まないことを確かめる（要件 [D-042][req-005-fr-016]）。
 
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "52ed2959d4d0 DLID-dgphqw70rkpz"
+[des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
-[des-007]: DES-007_references-impact.md "debedfd1b155 DLID-pr3jp4hzb8js"
-[des-006]: DES-006_search.md "96dc8a0cdfe8 DLID-nnbgpzkkm5vq"
-[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
-[des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
-[des-002]: DES-002_execution-responsibilities.md "9c2bea9cc41e DLID-anz9vack2xzt"
+[des-007]: DES-007_references-impact.md "27c0b9daf7fd DLID-pr3jp4hzb8js"
+[des-006]: DES-006_search.md "20d2b5d58257 DLID-nnbgpzkkm5vq"
+[des-010]: DES-010_skill-composition.md "a37e588a4b86 DLID-7e90gq3sdncc"
+[des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
+[des-002]: DES-002_execution-responsibilities.md "f81b273666a9 DLID-anz9vack2xzt"
 [req-001-nfr-001]: ../requirement/REQ-001_overview.md#nfr-001-toc再構築の一貫性-dlid-j4xry3ca5rsb "1bfb73100c73 DLID-j4xry3ca5rsb"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-001-nfr-006]: ../requirement/REQ-001_overview.md#nfr-006-中断後の再実行-dlid-wwhfthxzv8pv "57d65dcd4e6a DLID-wwhfthxzv8pv"
@@ -86,15 +87,15 @@ doc_link_id: DLID-xmg0jcmep2h2
 [req-002-ac-021]: ../requirement/REQ-002_document-id.md#ac-021-toc-識別キーごとの-desired-state-dlid-rrhdkcqvbmgt "1bff7a3fbf43 DLID-rrhdkcqvbmgt"
 [req-002-ac-031]: ../requirement/REQ-002_document-id.md#ac-031-dlidの解決-dlid-3yrk3sey2krp "bb60d45e1215 DLID-3yrk3sey2krp"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
-[req-002-fr-017]: ../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "ab2973434c9d DLID-3wc02prwb6x7"
+[req-002-fr-017]: ../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "0292868ab4b5 DLID-3wc02prwb6x7"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-003-ac-001]: ../requirement/REQ-003_toc.md#ac-001-文書移動-dlid-7z3rvbfsdwtq "7b75758d45bc DLID-7z3rvbfsdwtq"
 [req-003-ac-010]: ../requirement/REQ-003_toc.md#ac-010-ai-生成フィールドの許容余白-dlid-5btzbc2qvhqz "3fc42417518e DLID-5btzbc2qvhqz"
 [req-003-fr-003]: ../requirement/REQ-003_toc.md#fr-003-文書の移動改名の認識-dlid-grzqdx81bakh "5e0072a4ce7a DLID-grzqdx81bakh"
-[req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
+[req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "f55cd670bc00 DLID-7hjmngynv8sb"
 [req-003-fr-008]: ../requirement/REQ-003_toc.md#fr-008-参照関係の抽出-dlid-vdkqzhjf68hj "4714440a4fce DLID-vdkqzhjf68hj"
-[req-004-ac-019]: ../requirement/REQ-004_search.md#ac-019-検索前のtoc再構築確認-dlid-36g5pqvaxrh9 "b0b99bc75414 DLID-36g5pqvaxrh9"
-[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "002418132007 DLID-481cwc8365a3"
+[req-004-ac-019]: ../requirement/REQ-004_search.md#ac-019-検索前のtoc再構築確認-dlid-36g5pqvaxrh9 "84ce6a28500d DLID-36g5pqvaxrh9"
+[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "5b1ed8d54266 DLID-481cwc8365a3"
 [req-005-ac-003]: ../requirement/REQ-005_references.md#ac-003-参照パス不一致の検出-dlid-4wyyhbdg1we0 "67d4937046c6 DLID-4wyyhbdg1we0"
 [req-005-ac-006]: ../requirement/REQ-005_references.md#ac-006-変更影響候補の列挙-dlid-n874z4gfzc0v "744dbd0f14bc DLID-n874z4gfzc0v"
 [req-005-ac-032]: ../requirement/REQ-005_references.md#ac-032-title-に書く値の提示-dlid-nc6z2c2w5wx3 "d2b830d42495 DLID-nc6z2c2w5wx3"

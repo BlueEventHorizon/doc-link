@@ -752,10 +752,23 @@ def _previous_toc(root: Path, toc_key: str) -> dict | None:
         ) from exc
 
 
-def _recorded_times(previous: dict) -> set[str]:
-    times = {check["checked_at"] for check in previous["last_checks"]}
-    times |= {entry["check"]["checked_at"] for entry in previous["references"]}
-    return {value for value in times if value is not None}
+def _recorded_times(previous: dict) -> dict[str, str]:
+    """前回の確定で、文書ごとに記録した検査の時点。時点が 1 つに決まる文書だけを返す。
+
+    時点は文書ごとの値である。同じ文書を複数の[ToC 識別キー]で使うと、文書によって時点が異なりうる。
+    """
+    times: dict[str, set[str]] = {}
+    for check in previous["last_checks"]:
+        times.setdefault(check["doc_link_id"], set()).add(check["checked_at"])
+    for entry in previous["references"]:
+        times.setdefault(entry["source_doc_id"], set()).add(
+            entry["check"]["checked_at"]
+        )
+    return {
+        doc_id: next(iter(found))
+        for doc_id, found in times.items()
+        if len(found) == 1 and None not in found
+    }
 
 
 def _assemble(root, toc_key, spec, changes, results, now: str) -> dict:
@@ -766,16 +779,18 @@ def _assemble(root, toc_key, spec, changes, results, now: str) -> dict:
     previous = _previous_toc(root, toc_key)
     if previous is None:
         return candidate
-    times = _recorded_times(previous)
-    if len(times) != 1 or now in times:
+    recorded = _recorded_times(previous)
+    whens = {doc_id: recorded.get(doc_id, now) for doc_id in results}
+    if all(when == now for when in whens.values()):
         return candidate
-    (when,) = times
     carried = {
-        doc_id: [dataclasses.replace(result, checked_at=when) for result in found]
+        doc_id: [
+            dataclasses.replace(result, checked_at=whens[doc_id]) for result in found
+        ]
         for doc_id, found in results.items()
     }
     same_time = toc_candidate.assemble_candidate(
-        root, toc_key, spec, changes, carried, when
+        root, toc_key, spec, changes, carried, whens
     )
     # 版が前の版のままなのは、時点を除いて内容が同じとき（toc_candidate の版の決め方）。
     if same_time["version"] == previous["version"]:

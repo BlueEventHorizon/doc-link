@@ -114,14 +114,14 @@ DLID 付与操作（`embed-dlid`）の実行ごとの状態は次の通り。[In
 | E-06 | 開始／対象確定／原本確認待ち／計画確定 | 当該段階の処理が失敗した（書き込めなかった文書が 1 件でもある場合を含む）、または利用者が原本を確定せずに終えた | 失敗         | 検証を通って書き込んだ[DLID]は戻さない。書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因を返す（要件 [FR-002][req-002-fr-002]、[D-040][req-002-sec-9-2]、[NFR-005][req-001-nfr-005]） |
 | E-07 | 失敗                                   | 再実行を明示的に開始                                                                                            | 開始         | 書き込み済みの[DLID]を既存の[DLID]として照合し直す                                                                                                                                                    |
 
-[des-009]: DES-009_verification.md "b39bd102e418 DLID-xmg0jcmep2h2"
+[des-009]: DES-009_verification.md "d35ff8247ac2 DLID-xmg0jcmep2h2"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
-[req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
+[req-003-fr-004]: ../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "f55cd670bc00 DLID-7hjmngynv8sb"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "51b57b11c1e5 DLID-3mhrvbx44c87"
 [req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
 [req-005-fr-015]: ../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr "c1135544f245 DLID-8btcs80840gr"

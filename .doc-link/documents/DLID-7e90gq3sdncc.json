@@ -1,39 +1,849 @@
 {
-  "content_hash": "c24ddb837a66b09bda23a8d4b23c559b49efa4d2980c8fa1fb8a66642bc6f540",
+  "applied_hash": "a37e588a4b862b6640083eaec560efc31c8a3ad829e2c976c785e2f19771d3fb",
+  "content_hash": "a37e588a4b862b6640083eaec560efc31c8a3ad829e2c976c785e2f19771d3fb",
   "doc_link_id": "DLID-7e90gq3sdncc",
   "keywords": [
     "SKILL composition",
-    "custom Agent",
     "toc-updater",
     "query-worker",
     "embed-dlid",
     "index-docs",
     "check-impact",
-    "operational flow",
     "sequence diagram",
-    "Agent data exchange"
+    "operating flow",
+    "agent data exchange",
+    "check-links"
   ],
+  "last_check": {
+    "checked_at": "2026-11-24T13:48:52+00:00",
+    "result": "success"
+  },
   "path": "docs/specs/design/DES-010_skill-composition.md",
-  "purpose": "Defines how doc-link is composed of eight SKILLs and two custom Agents: responsibilities, per-SKILL sequences, the operational flow, and the data exchange with Agents.",
+  "purpose": "Design of the 8 SKILLs and 2 custom agents: responsibilities, per-skill sequences, the overall operating flow, and how data is exchanged with agents.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/rules/agent_data_exchange_rules.md",
+        "result": "match",
+        "scope": "docs/rules"
+      },
+      "kind": "document",
+      "position": 26,
+      "recorded_content_hash": "590998804bef",
+      "recorded_path": "../../rules/agent_data_exchange_rules.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-2g3cgnnry3bm",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 10,
+      "recorded_content_hash": "02a83129fff4",
+      "recorded_path": "DES-002_execution-responsibilities.md#3-skill-と-script-の接続規則-dlid-gjwba2n3mq4v",
+      "source_section_id": null,
+      "target_doc_id": "DLID-anz9vack2xzt",
+      "target_section_id": "DLID-gjwba2n3mq4v"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 27,
+      "recorded_content_hash": "758e6778944d",
+      "recorded_path": "DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd",
+      "source_section_id": null,
+      "target_doc_id": "DLID-anz9vack2xzt",
+      "target_section_id": "DLID-8ck587eq1qnd"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-004_state-machines.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 21,
+      "recorded_content_hash": "91ae910ea5fe",
+      "recorded_path": "DES-004_state-machines.md#3-toc構築再構築の実行-dlid-kz06g0w7tsvs",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3f92k3tz4rew",
+      "target_section_id": "DLID-kz06g0w7tsvs"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-004_state-machines.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 22,
+      "recorded_content_hash": "5d6774d493ed",
+      "recorded_path": "DES-004_state-machines.md#5-dlid-付与操作の実行-dlid-evgp45p8prf7",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3f92k3tz4rew",
+      "target_section_id": "DLID-evgp45p8prf7"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 14,
+      "recorded_content_hash": "ece4ef428c71",
+      "recorded_path": "DES-005_indexing.md#21-dlid-付与操作-dlid-kxx8fczbwref",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": "DLID-kxx8fczbwref"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 16,
+      "recorded_content_hash": "2ff63793a51e",
+      "recorded_path": "DES-005_indexing.md#2-対象確定id-確認と-dlid-付与-dlid-6b3d2nqzpw75",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": "DLID-6b3d2nqzpw75"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 17,
+      "recorded_content_hash": "e029f74cd706",
+      "recorded_path": "DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": "DLID-ext9ze054hbx"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 18,
+      "recorded_content_hash": "66dfc8d142d0",
+      "recorded_path": "DES-005_indexing.md#4-必要情報の取得と候補確定-dlid-dfsegbf7p2q9",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": "DLID-dfsegbf7p2q9"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 19,
+      "recorded_content_hash": "4603909aaf60",
+      "recorded_path": "DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": "DLID-hs82xgzwkpyz"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 12,
+      "recorded_content_hash": "35de75ac8391",
+      "recorded_path": "DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": "DLID-p07g3hc4e4xd"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 13,
+      "recorded_content_hash": "fb28459057a6",
+      "recorded_path": "DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": "DLID-m0xegzfyhc3k"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 23,
+      "recorded_content_hash": "d132e95cb3bd",
+      "recorded_path": "DES-006_search.md#1-検索前の判定-dlid-ksmh21dbz9zv",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": "DLID-ksmh21dbz9zv"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-007_references-impact.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 20,
+      "recorded_content_hash": "d84f6c33a9b5",
+      "recorded_path": "DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pr3jp4hzb8js",
+      "target_section_id": "DLID-pnrn5dyy7z05"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-007_references-impact.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 24,
+      "recorded_content_hash": "d3a292622d95",
+      "recorded_path": "DES-007_references-impact.md#2-逆参照と影響候補-dlid-9chw5bzdm8zm",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pr3jp4hzb8js",
+      "target_section_id": "DLID-9chw5bzdm8zm"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-007_references-impact.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 25,
+      "recorded_content_hash": "c3fe2a03c6cb",
+      "recorded_path": "DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pr3jp4hzb8js",
+      "target_section_id": "DLID-mjeyc85ak4w3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-007_references-impact.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 46,
+      "recorded_content_hash": "7c3252c49e87",
+      "recorded_path": "DES-007_references-impact.md#4-不整合検査-dlid-wpjybjaee1df",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pr3jp4hzb8js",
+      "target_section_id": "DLID-wpjybjaee1df"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-008_content-rules.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 11,
+      "recorded_content_hash": "f67ca1c840f3",
+      "recorded_path": "DES-008_content-rules.md#4-ai-生成フィールド-dlid-7et3ryybpbag",
+      "source_section_id": null,
+      "target_doc_id": "DLID-ywa6htx8vq09",
+      "target_section_id": "DLID-7et3ryybpbag"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-008_content-rules.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 15,
+      "recorded_content_hash": "e07d05aa8a87",
+      "recorded_path": "DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe",
+      "source_section_id": null,
+      "target_doc_id": "DLID-ywa6htx8vq09",
+      "target_section_id": "DLID-cf1n0ndmf0fe"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 28,
+      "recorded_content_hash": "7c7778285762",
+      "recorded_path": "../requirement/REQ-001_overview.md#nfr-008-生成指示と検証基準の分離-dlid-fc5e4s6nctp9",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-fc5e4s6nctp9"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 44,
+      "recorded_content_hash": "4ca9ecf3d971",
+      "recorded_path": "../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-kp2w32mbpdb8"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 45,
+      "recorded_content_hash": "a1500a8117ce",
+      "recorded_path": "../requirement/REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-5e8mpztyp4me"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 0,
+      "recorded_content_hash": "72f09c754e09",
+      "recorded_path": "../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-mkcvqte59nvc"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 1,
+      "recorded_content_hash": "b6c21c9348ef",
+      "recorded_path": "../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-5ht9ebyeq2m3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 29,
+      "recorded_content_hash": "594d2964b515",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-z0g4zx0wr0cn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 30,
+      "recorded_content_hash": "6de27aa96e79",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-edwjjf150svm"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 31,
+      "recorded_content_hash": "0292868ab4b5",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-3wc02prwb6x7"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 32,
+      "recorded_content_hash": "cf5307ccef85",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-8vajyevfatkv"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "f461017b2e2b",
+      "recorded_path": "../requirement/REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-ephpayqvh78w"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 33,
+      "recorded_content_hash": "5e0072a4ce7a",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-003-文書の移動改名の認識-dlid-grzqdx81bakh",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-grzqdx81bakh"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 34,
+      "recorded_content_hash": "47be50aa7f05",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-65nf6n2jax82"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 35,
+      "recorded_content_hash": "c8d953d1fad0",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-011-文書全体の変更検出-dlid-a7nqc4aq8zwb",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-a7nqc4aq8zwb"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 36,
+      "recorded_content_hash": "d342c3bdcb5c",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-012-セクション単位の変更検出-dlid-8kfhte6q4ywd",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-8kfhte6q4ywd"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "53e14e5297d5",
+      "recorded_path": "../requirement/REQ-003_toc.md#10-既存tocとの比較による変更検出-dlid-djxbs1zd8bwk",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-djxbs1zd8bwk"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 5,
+      "recorded_content_hash": "2cdcc9befbb7",
+      "recorded_path": "../requirement/REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-afs68x15mq0n"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "e4f7a9b2bfde",
+      "recorded_path": "../requirement/REQ-003_toc.md#1122-文書情報の取得と生成-dlid-6vjpqdstr90y",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-6vjpqdstr90y"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "51b57b11c1e5",
+      "recorded_path": "../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-3mhrvbx44c87"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-004_search.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 2,
+      "recorded_content_hash": "a08a148593ee",
+      "recorded_path": "../requirement/REQ-004_search.md#12-文書検索-dlid-r6j09pswcpzg",
+      "source_section_id": null,
+      "target_doc_id": "DLID-h96208rqr773",
+      "target_section_id": "DLID-r6j09pswcpzg"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-004_search.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 37,
+      "recorded_content_hash": "5b1ed8d54266",
+      "recorded_path": "../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-h96208rqr773",
+      "target_section_id": "DLID-481cwc8365a3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 3,
+      "recorded_content_hash": "01fe597df344",
+      "recorded_path": "../requirement/REQ-005_references.md#13-文書参照とリンク検査-dlid-9nc60w1jj966",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-9nc60w1jj966"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 38,
+      "recorded_content_hash": "2351b357da12",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-zacf5tmy6x4x"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 39,
+      "recorded_content_hash": "52b105d38cac",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-010-参照パス修正情報の通知-dlid-ev07yszprm9m",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-ev07yszprm9m"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 40,
+      "recorded_content_hash": "6af5f019bff6",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-013-変更影響候補の特定-dlid-cnw6h5pzv3wz",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-cnw6h5pzv3wz"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 41,
+      "recorded_content_hash": "6a036ff75fc1",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-014-変更影響候補の通知-dlid-j0z4w1wm0g4p",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-j0z4w1wm0g4p"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 42,
+      "recorded_content_hash": "c1135544f245",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-8btcs80840gr"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 43,
+      "recorded_content_hash": "0cbc9091ee0f",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-jhkngqtfdnhn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "275305521655",
+      "recorded_path": "../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-5p5ms6a74w73"
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "185b07f5fc1c8acb880f55bb9f4b0a80b68079bca64843a9585d63ef99152cd7",
+      "heading": "3.4 check-dlid",
+      "position": 9,
+      "section_id": "DLID-sxtd5pf1atkb"
+    },
+    {
+      "content_hash": "1f4ddcb490743a4428f8d02644342ac02e7fb4882734b6564c11633e1010e339",
+      "heading": "1. 構成",
+      "position": 1,
+      "section_id": "DLID-154xfxg7rkzy"
+    },
+    {
+      "content_hash": "21396219c157971039337ebf98292a2649d902a2818591bbefb9220a72cbfcff",
+      "heading": "1.1 操作と照会の SKILL の責務",
+      "position": 2,
+      "section_id": "DLID-qd4t2gvpvqfw"
+    },
+    {
+      "content_hash": "3c33f06a03d8648dc7fc82f2fc6e70d7c9c6c2eb67eda41451fa3e6126eb2542",
+      "heading": "3.6 check-toc",
+      "position": 11,
+      "section_id": "DLID-20xt1fpqm1k7"
+    },
+    {
+      "content_hash": "5e1090175f42158b5e7f1510b082ea07925f9efc8225fd47634849eb12d25991",
+      "heading": "3.1 embed-dlid",
+      "position": 6,
+      "section_id": "DLID-z9j2ys29jx12"
+    },
+    {
+      "content_hash": "6d036267748763d84fca3f32fc2b3f9cc9250e0d81817dfbca2b33f924cecd6e",
+      "heading": "3.8 resolve-dlid",
+      "position": 13,
+      "section_id": "DLID-venmkyh8532z"
+    },
+    {
+      "content_hash": "6e85a762078008d0d295c89510764c97c9bbc97aea5848a119d9bdbc44d38832",
+      "heading": "4. カスタム Agent との受け渡し",
+      "position": 15,
+      "section_id": "DLID-ytajmhsv2p1t"
+    },
+    {
+      "content_hash": "79cf28959010c7e42e65d23bc10124f3c288c658a51b9dd288a710148ce2a7e4",
+      "heading": "3. SKILL ごとのシーケンス",
+      "position": 5,
+      "section_id": "DLID-av4127n5ws5j"
+    },
+    {
+      "content_hash": "8dae1f520f7feb87aada2c167888192e2b90f5ade2ab3ce00dc014ab7283c2da",
+      "heading": "2. ユースケース",
+      "position": 4,
+      "section_id": "DLID-6tfvncts0q8x"
+    },
+    {
+      "content_hash": "9a2ba382c430b8b46e2df9733874bb820c9a3e82abc2645d365b1eff039177cc",
+      "heading": "DES-010 SKILL と Agent の構成",
+      "position": 0,
+      "section_id": "DLID-gf7dehdq4tpd"
+    },
+    {
+      "content_hash": "aa4ca5399f0b8cfb6972fa8bbf39168da95b7bc3d18f952ce8fc8d284952db94",
+      "heading": "3.2 index-docs",
+      "position": 7,
+      "section_id": "DLID-ryhengxjsv39"
+    },
+    {
+      "content_hash": "be77f709f2066ab2becf7f8fec95407384b4e57683261e14da8ef2e38ad42c82",
+      "heading": "3.3 query-docs",
+      "position": 8,
+      "section_id": "DLID-88bfc282eve1"
+    },
+    {
+      "content_hash": "ca66de9e8025fb94c1daea4cfb210435e2f07eccd41044cf159e9dcd97b01e06",
+      "heading": "1.2 検査の SKILL の責務",
+      "position": 3,
+      "section_id": "DLID-h9bg56gdypm5"
+    },
+    {
+      "content_hash": "cb983004769aa2c76ebd240b6ea1d8b80c2f34aee0ec9b2e6a0f69a760ea553c",
+      "heading": "3.5 check-links",
+      "position": 10,
+      "section_id": "DLID-nwn04tk644ex"
+    },
+    {
+      "content_hash": "dd9a5fefa574280d8b18f79205d7183de91dcd7163861b61e1bb72210181a6e7",
+      "heading": "3.7 check-impact",
+      "position": 12,
+      "section_id": "DLID-1nny3y551m4v"
+    },
+    {
+      "content_hash": "e828ab9f55a320fff87ca885b457871e16e9f10ef0a959555279425287415979",
+      "heading": "3.9 運用の流れ（導入と変更後で共通）",
+      "position": 14,
+      "section_id": "DLID-7abvxracbbba"
+    }
+  ],
   "summary": [
-    "Lists the eight SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, check-dlid, check-links, check-toc, check-impact) with kind, write scope to documents, state changes, and requirements",
-    "Describes the two custom Agents: toc-updater (generates document info, max 3 documents per launch) and query-worker (read-only search over the confirmed ToC)",
-    "Specifies responsibilities of operation and lookup SKILLs: DLID embedding, ToC build, search, and DLID resolution",
-    "Specifies what each check SKILL detects and who handles the findings, including check-impact reporting per changed document with direct referrers only",
-    "Gives the use-case diagram and a sequence diagram for each SKILL (embed-dlid through resolve-dlid)",
-    "Defines the common operational flow starting from index-docs: check-dlid, embed-dlid, check-links, index-docs, check-impact, with reasons for the ordering",
-    "Defines the instructions for the project management AI after check-impact: judge each referrer, fix, rewrite title content hash only for verified references, and repeat until empty",
-    "Defines the request/result exchange with custom Agents: identifiers, request and result contents, error value source_unreadable, script validation, and deletion timing"
+    "Composition table of 8 SKILLs and 2 custom Agents with write boundaries and related requirements",
+    "Responsibilities of embed-dlid, index-docs, query-docs and resolve-dlid",
+    "Check skills: check-dlid, check-links, check-toc, check-impact, what each detects and how findings are handled",
+    "Use-case diagram of users, project management AI and caller skills",
+    "Sequence diagrams for each skill, including script exit codes deciding embed-dlid writes",
+    "index-docs loop launching toc-updater for up to 3 documents each, up to 10 concurrently",
+    "query-docs flow with rebuild-or-existing choice and target file hand-off",
+    "check-impact repeat-until-empty procedure and reference writing steps with resolve-dlid",
+    "Overall operating flow from check-dlid through index-docs and check-impact",
+    "Agent data exchange: identifiers, requests, results, error values and cleanup"
   ],
   "tasks": [
-    "Designing or changing SKILL and custom Agent composition",
-    "Implementing or modifying a doc-link SKILL.md or its scripts",
-    "Implementing toc-updater or query-worker Agent behavior",
-    "Deciding the order of SKILL execution in the operational flow",
-    "Handling check-impact results and rewriting title content hashes",
-    "Writing references with resolve-dlid",
-    "Designing the data exchange between SKILLs and Agents",
-    "Reviewing consistency between requirements and SKILL design"
+    "Writing or modifying any SKILL.md of doc-link",
+    "Implementing toc-updater or query-worker agents",
+    "Designing the operating flow of indexing and checks",
+    "Implementing check-dlid, check-links, check-toc or check-impact",
+    "Implementing agent request and result exchange scripts",
+    "Reviewing skill responsibilities and write boundaries"
   ],
   "title": "DES-010 SKILL と Agent の構成"
 }

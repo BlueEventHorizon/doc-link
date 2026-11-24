@@ -61,16 +61,18 @@ doc-link が作るファイルは、すべてプロジェクトの中に置き�
 
 doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` に JSON ファイルとして保存し、git で追跡する。並行するブランチで更新しても衝突が差分として読めるよう、次の 2 種類のファイルに分ける。
 
-- [文書情報]：[文書 ID]ごとに 1 ファイルとする。二つのブランチで衝突するのは、両方で同じ文書を変えた場合に限られる。
-- [確定 ToC]：[ToC 識別キー]ごとに 1 ファイルとする。
+- [文書情報]：[文書 ID]ごとに 1 ファイルとする。文書ごとに決まる情報を、すべてこのファイルが持つ。二つのブランチで衝突するのは、両方で同じ文書を変えた場合に限られる。
+- [確定 ToC]：[ToC 識別キー]ごとに 1 ファイルとする。[ToC 識別キー]ごとに決まる情報（版、対象指定、所属する[文書 ID]、逆参照）だけを持つ。
+
+文書ごとに決まる情報を[確定 ToC]のファイルが持つ、ひとつ前の保存形式のファイルは、そのまま読み取る。保存は常に現在の形式で行うので、次の構築で書き直される。
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[des-010]: DES-010_skill-composition.md "c24ddb837a66 DLID-7e90gq3sdncc"
-[des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "93cb7c345bc4 DLID-p07g3hc4e4xd"
-[des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "2bd4a534eee2 DLID-m0xegzfyhc3k"
-[des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "32ce863741b3 DLID-hs82xgzwkpyz"
-[des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "80e73caeef5c DLID-mjeyc85ak4w3"
+[des-010]: DES-010_skill-composition.md "a37e588a4b86 DLID-7e90gq3sdncc"
+[des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "35de75ac8391 DLID-p07g3hc4e4xd"
+[des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "fb28459057a6 DLID-m0xegzfyhc3k"
+[des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "4603909aaf60 DLID-hs82xgzwkpyz"
+[des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "c3fe2a03c6cb DLID-mjeyc85ak4w3"
 [implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"

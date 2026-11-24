@@ -1,4 +1,5 @@
 {
+  "applied_hash": "d3b39867775ceec6052c3a3da96133a795e70a7814789bf7a1d9802373b29ace",
   "content_hash": "d3b39867775ceec6052c3a3da96133a795e70a7814789bf7a1d9802373b29ace",
   "doc_link_id": "DLID-3f92k3tz4rew",
   "keywords": [
@@ -12,8 +13,217 @@
     "failure and re-run",
     "reference check result"
   ],
+  "last_check": {
+    "checked_at": "2026-11-24T13:48:52+00:00",
+    "result": "success"
+  },
   "path": "docs/specs/design/DES-004_state-machines.md",
   "purpose": "Defines the state models and permitted transitions for the published ToC, ToC build/rebuild runs, and DLID embedding runs, as normative transition tables that scripts enforce.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-008_content-rules.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 1,
+      "recorded_content_hash": "f28039845959",
+      "recorded_path": "DES-008_content-rules.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-ywa6htx8vq09",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-009_verification.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "d35ff8247ac2",
+      "recorded_path": "DES-009_verification.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-xmg0jcmep2h2",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 2,
+      "recorded_content_hash": "3e5b0619aa70",
+      "recorded_path": "../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-89jss0ty2c7m"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 3,
+      "recorded_content_hash": "6de27aa96e79",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-edwjjf150svm"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "594d2964b515",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-z0g4zx0wr0cn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 5,
+      "recorded_content_hash": "b6c21c9348ef",
+      "recorded_path": "../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-5ht9ebyeq2m3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "72f09c754e09",
+      "recorded_path": "../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-mkcvqte59nvc"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "f55cd670bc00",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-7hjmngynv8sb"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "51b57b11c1e5",
+      "recorded_path": "../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-3mhrvbx44c87"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 10,
+      "recorded_content_hash": "c1135544f245",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-8btcs80840gr"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "2351b357da12",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-zacf5tmy6x4x"
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "28c6e80a0d94d023ef33b68d5397c0d6c99947a534b51dc2f7e2cacdee014db1",
+      "heading": "2. [確定 ToC]",
+      "position": 2,
+      "section_id": "DLID-yn0j8tdebdah"
+    },
+    {
+      "content_hash": "5d6774d493ed142e2c4e6b80326aed7fd0d9bdf3624f5867d4ef3924eb8209b4",
+      "heading": "5. DLID 付与操作の実行",
+      "position": 5,
+      "section_id": "DLID-evgp45p8prf7"
+    },
+    {
+      "content_hash": "91ae910ea5feca0df59531db52d6f0400c297e396d3671d82a0fae1c17cdc7f2",
+      "heading": "3. [ToC]構築・再構築の実行",
+      "position": 3,
+      "section_id": "DLID-kz06g0w7tsvs"
+    },
+    {
+      "content_hash": "c5d77dd8469b0942b4ae102004b885bab78d6bf6eb5d762b7627a637c6685f98",
+      "heading": "DES-004 状態モデルと許可遷移",
+      "position": 0,
+      "section_id": "DLID-h1mqw7dj0w2a"
+    },
+    {
+      "content_hash": "de025e2b52686c6c00135f2998a7c14548b1f4d5848ea63ae834669dd1a99a1e",
+      "heading": "4. 検査結果と鮮度",
+      "position": 4,
+      "section_id": "DLID-dq5y0vdrzhbk"
+    },
+    {
+      "content_hash": "ffbc4e3fb84713f03ad6acc5990cd5686e47a8763d20bb48e9473fde0824f69d",
+      "heading": "1. 状態の分離と規範",
+      "position": 1,
+      "section_id": "DLID-avhjbcr0q865"
+    }
+  ],
   "summary": [
     "Separation of published ToC state from build run progress; rebuild-needed and missing-reference are judgments, not states",
     "Normative rule: transitions not in the tables are rejected and no new confirmed ToC is created",

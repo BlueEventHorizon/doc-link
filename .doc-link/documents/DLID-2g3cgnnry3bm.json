@@ -1,4 +1,5 @@
 {
+  "applied_hash": "590998804bef5b2ad3e9ecc74303225cb274baf74e08afc006d689309f730ea3",
   "content_hash": "590998804bef5b2ad3e9ecc74303225cb274baf74e08afc006d689309f730ea3",
   "doc_link_id": "DLID-2g3cgnnry3bm",
   "keywords": [
@@ -13,8 +14,105 @@
     "absolute path",
     "no overwrite"
   ],
+  "last_check": {
+    "checked_at": "2026-11-22T06:44:28+00:00",
+    "result": "success"
+  },
   "path": "docs/rules/agent_data_exchange_rules.md",
   "purpose": "Rules for exchanging transient, per-process data between a calling SKILL and a custom Agent so that handoff does not break regardless of data size.",
+  "references": [],
+  "sections": [
+    {
+      "content_hash": "0b8b1251ba8edd006b195c831d12d71e521bda636863c591090cd7cbd4143b63",
+      "heading": "確定してから書き、上書きしない",
+      "position": 9,
+      "section_id": "DLID-f7ma3cxc4we2"
+    },
+    {
+      "content_hash": "288a19adaa5d2faa2e4c6d59c80dda2344743cea559e34118ed7d2df75e6d76f",
+      "heading": "パスは絶対パスでよい",
+      "position": 12,
+      "section_id": "DLID-rerm67m9wrfj"
+    },
+    {
+      "content_hash": "28bd5db8d0fcffc43b70d19ebeb70352f005b6ddb2776d13afb1697311c71ad9",
+      "heading": "形式の検証を置かない",
+      "position": 11,
+      "section_id": "DLID-2mrw6fbc9ns3"
+    },
+    {
+      "content_hash": "6e644a29e7c152f1172dfbb77a26b55c94abcd539b1c4846c09b2f384126c3df",
+      "heading": "基本原則",
+      "position": 3,
+      "section_id": "DLID-fzv410j82pcq"
+    },
+    {
+      "content_hash": "6ed29577dd2f3016a802c5add5e14fcb25d68c205597e3026a6f8bc5a9508622",
+      "heading": "各機能が決めること",
+      "position": 14,
+      "section_id": "DLID-1qmnw1t0tgcm"
+    },
+    {
+      "content_hash": "94b5fef2c534c3fb12dca07dbd1fb555b9a4b04391921b2aa1953ea4f7e6a193",
+      "heading": "運ぶのは識別値だけ [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-v3fcy1fkkdpp"
+    },
+    {
+      "content_hash": "953665855107636018af039ea2e11bf3d82975a0390375640d01f076abcc1460",
+      "heading": "終了の値で成否を表す",
+      "position": 10,
+      "section_id": "DLID-mf2dwgjrt3zt"
+    },
+    {
+      "content_hash": "a08311fc8607935279dff590d94cfc794691f9ee80792f89aaf73a07cd3e4da5",
+      "heading": "読む側はパスを得て直接読む",
+      "position": 6,
+      "section_id": "DLID-ty1vvkgd97zy"
+    },
+    {
+      "content_hash": "ad437e29981b028d58342bdfd115eba736fdfe5c02db0f17a8e51f2ccac390fa",
+      "heading": "適用範囲",
+      "position": 1,
+      "section_id": "DLID-tb0f710nk973"
+    },
+    {
+      "content_hash": "b01bf18551895d414a39b7459921ecc7816b70bfdccf41002dbe4061ea5a03b2",
+      "heading": "agent とのデータ受け渡し",
+      "position": 0,
+      "section_id": "DLID-p639bx95kvev"
+    },
+    {
+      "content_hash": "b3ceebb9dfba6f55e1e11a7b8a04e89000c67069ec2be1beddd34cb5e4ec6c7d",
+      "heading": "終わったら削除する",
+      "position": 13,
+      "section_id": "DLID-zhdqh2wtg8qg"
+    },
+    {
+      "content_hash": "d5e18cbf0c0c5cd2005e86831ba55eeb8fc21c7ad66cbc7ee20fe288c227467f",
+      "heading": "意味は定義が持つ [MANDATORY]",
+      "position": 8,
+      "section_id": "DLID-x58macmsp71n"
+    },
+    {
+      "content_hash": "db17b954a692f556178829bdc3179be806cbc1d0161e633a4a47d5aba20e7cf0",
+      "heading": "なぜ prompt と return value で運ばないか",
+      "position": 2,
+      "section_id": "DLID-4c3ekhtv3nfz"
+    },
+    {
+      "content_hash": "e22a009294fe29b2ec619732a3043dd91f60decc8138f59877d3267bfa83f88f",
+      "heading": "書くのは script [MANDATORY]",
+      "position": 5,
+      "section_id": "DLID-t9zwxxys59vv"
+    },
+    {
+      "content_hash": "f1d9bb5c4eb451d7da2114cd8405b61e1e35db2083501607fb80c36207ede9f5",
+      "heading": "値は変形せずに届く",
+      "position": 7,
+      "section_id": "DLID-wmzmhv12nm27"
+    }
+  ],
   "summary": [
     "Scope: only data that exists during one process, not permanent documents",
     "Why prompt and return value must not carry full content: size, AI relay distortion, undefined shape",

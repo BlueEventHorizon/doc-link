@@ -1,3 +1,4 @@
+import os
 import sys
 import tempfile
 import unittest
@@ -605,8 +606,10 @@ class PublishTest(Base):
         self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_ASSEMBLY)
         self.assertEqual(self.toc_bytes(), old)
 
-        # 検査の失敗（[文書情報]が無い）
-        state_store.document_info_path(self.root, ID_B).unlink()
+        # 検査の失敗（[文書情報]の[内容ハッシュ]が[反映済みハッシュ]と一致しない）
+        info = state_store.load_document_info(self.root, ID_B)
+        info["content_hash"] = "0" * 64
+        state_store.save_document_info(self.root, "test", info)
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
             toc_candidate.build_and_publish(
                 self.root, "test", KEY, SPEC, cs, results, WHEN
@@ -651,6 +654,108 @@ class PublishTest(Base):
         path.write_text("{", encoding="utf-8")
         self.publish()
         self.assertEqual(path.read_text(encoding="utf-8"), "{")
+
+
+class DocumentValuesTest(Base):
+    """文書ごとに決まる値は、公開で[文書情報]へ書かれ、[ToC 識別キー]が違っても 1 つである。"""
+
+    def test_publish_writes_document_values_into_the_document_infos(self):
+        candidate = self.publish().candidate
+        applied = {d["doc_link_id"]: d["applied_hash"] for d in candidate["documents"]}
+        for doc_id in (ID_A, ID_B):
+            info = state_store.load_document_info(self.root, doc_id)
+            self.assertEqual(info["applied_hash"], applied[doc_id])
+            self.assertEqual(
+                sorted(s["section_id"] for s in info["sections"]),
+                sorted(
+                    s["section_id"]
+                    for s in candidate["sections"]
+                    if s["doc_link_id"] == doc_id
+                ),
+            )
+            self.assertEqual(
+                len(info["references"]),
+                sum(1 for r in candidate["references"] if r["source_doc_id"] == doc_id),
+            )
+            self.assertEqual(info["last_check"]["checked_at"], WHEN)
+
+    def test_failure_midway_keeps_the_toc_file_and_the_next_build_converges(self):
+        self.publish()
+        old = self.toc_bytes()
+        self.write("docs/a.md", A_TEXT + "\n追記 a\n")
+        self.write("docs/b.md", B_TEXT + "\n追記 b\n")
+        cs, results = self.inputs()
+        real = os.replace
+        calls = []
+
+        def fail_on_second(src, dst):
+            calls.append(dst)
+            if len(calls) == 2:
+                raise OSError("boom")
+            real(src, dst)
+
+        with mock.patch("state_store.os.replace", side_effect=fail_on_second):
+            with self.assertRaises(toc_candidate.CandidateFailure) as caught:
+                toc_candidate.build_and_publish(
+                    self.root, "test", KEY, SPEC, cs, results, WHEN
+                )
+        self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_PUBLISH)
+        # [確定 ToC]のファイルは置き換わっていない。書き終えた[文書情報]は戻らない
+        self.assertEqual(self.toc_bytes(), old)
+        # 残りは、次の検査が変更として検出し、やり直すと収束する
+        remaining = self.change_set()
+        self.assertEqual(
+            sorted(
+                c.doc_link_id
+                for c in remaining.documents
+                if "content_changed" in c.kinds
+            ),
+            [ID_B],
+        )
+        result = toc_candidate.build_and_publish(
+            self.root, "test", KEY, SPEC, remaining, self.results(remaining), WHEN
+        )
+        self.assertTrue(result.written)
+        self.assertTrue(all(c.unchanged for c in self.change_set().documents))
+
+    def test_checked_at_can_be_given_for_each_document(self):
+        cs, results = self.inputs()
+        whens = {ID_A: "2026-01-01T00:00:00+00:00", ID_B: "2026-02-02T00:00:00+00:00"}
+        candidate = toc_candidate.assemble_candidate(
+            self.root, KEY, SPEC, cs, results, whens
+        )
+        self.assertEqual(
+            {c["doc_link_id"]: c["checked_at"] for c in candidate["last_checks"]}, whens
+        )
+
+    def test_section_owner_is_found_in_a_document_info_outside_the_candidate(self):
+        # 参照先のセクションの所属文書が、別のキーにだけ所属する
+        self.publish(files=["docs/b.md"], key=OTHER_KEY)
+        candidate = self.assemble(files=["docs/a.md"])
+        (entry,) = [r for r in candidate["references"] if r["target_section_id"] == S3]
+        self.assertEqual(entry["kind"], "section")
+        self.assertEqual(entry["target_doc_id"], ID_B)
+        self.assertIn(
+            {
+                "target_doc_id": ID_B,
+                "target_section_id": S3,
+                "source_doc_id": ID_A,
+                "source_section_id": None,
+            },
+            candidate["reverse_references"],
+        )
+
+    def test_section_owner_without_any_record_stays_the_section_id(self):
+        candidate = self.assemble(files=["docs/a.md"])
+        (entry,) = [r for r in candidate["references"] if r["target_section_id"] == S3]
+        self.assertEqual(entry["target_doc_id"], S3)
+
+    def test_broken_document_info_outside_the_candidate_fails_the_assembly(self):
+        self.publish(files=["docs/b.md"], key=OTHER_KEY)
+        state_store.document_info_path(self.root, ID_B).write_bytes(b"{broken")
+        with self.assertRaises(toc_candidate.CandidateFailure) as caught:
+            self.assemble(files=["docs/a.md"])
+        self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_ASSEMBLY)
 
 
 class ReportTest(unittest.TestCase):

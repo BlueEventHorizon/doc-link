@@ -32,7 +32,7 @@ class PlanTestBase(unittest.TestCase):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(text.encode("utf-8"))
 
-    def record(self, key, doc_id, path, section_ids=()):
+    def record(self, key, doc_id, path, section_ids=(), previous_format=False):
         # 配列のフィールドには最小の 1 件を入れる（sections は走査しない[セクション ID]）。
         reference = {
             "source_doc_id": doc_id,
@@ -64,38 +64,41 @@ class PlanTestBase(unittest.TestCase):
                 "content_hash": "h",
             },
         )
-        state_store.save_confirmed_toc(
-            self.root,
-            "embed-dlid",
-            {
-                "toc_key": key,
-                "version": 1,
-                "target_spec": {},
-                "documents": [{"doc_link_id": doc_id, "applied_hash": "h"}],
-                "sections": [
-                    {
-                        "doc_link_id": doc_id,
-                        "section_id": sid,
-                        "heading": "h",
-                        "position": index,
-                        "content_hash": "h",
-                    }
-                    for index, sid in enumerate(section_ids or [ID_UNUSED])
-                ],
-                "references": [reference],
-                "reverse_references": [
-                    {
-                        "target_doc_id": doc_id,
-                        "target_section_id": None,
-                        "source_doc_id": doc_id,
-                        "source_section_id": None,
-                    }
-                ],
-                "last_checks": [
-                    {"doc_link_id": doc_id, "checked_at": None, "result": "unprocessed"}
-                ],
-            },
-        )
+        toc = {
+            "toc_key": key,
+            "version": 1,
+            "target_spec": {},
+            "documents": [{"doc_link_id": doc_id, "applied_hash": "h"}],
+            "sections": [
+                {
+                    "doc_link_id": doc_id,
+                    "section_id": sid,
+                    "heading": "h",
+                    "position": index,
+                    "content_hash": "h",
+                }
+                for index, sid in enumerate(section_ids or [ID_UNUSED])
+            ],
+            "references": [reference],
+            "reverse_references": [
+                {
+                    "target_doc_id": doc_id,
+                    "target_section_id": None,
+                    "source_doc_id": doc_id,
+                    "source_section_id": None,
+                }
+            ],
+            "last_checks": [
+                {"doc_link_id": doc_id, "checked_at": None, "result": "unprocessed"}
+            ],
+        }
+        if previous_format:
+            # ひとつ前の保存形式（文書ごとの値を[確定 ToC]のファイルが持つ）
+            toc_path = state_store.confirmed_toc_path(self.root, key)
+            toc_path.parent.mkdir(parents=True, exist_ok=True)
+            toc_path.write_bytes(state_store.serialize(toc))
+        else:
+            state_store.save_confirmed_toc(self.root, "embed-dlid", toc)
 
     def snapshot(self):
         return {
@@ -405,14 +408,28 @@ class FailureTest(PlanTestBase):
         )
 
     def test_missing_document_info_means_no_recorded_path(self):
+        # ひとつ前の保存形式では、[確定 ToC]のファイルだけがあり[文書情報]が無い状態がありうる
+        text = f"---\ndoc_link_id: {ID_A}\n---\n# T\n"
+        self.write("a.md", text)
+        self.write("b.md", text)
+        self.record("k", ID_A, "a.md", previous_format=True)
+        state_store.document_info_path(self.root, ID_A).unlink()
+        plan = embed_plan.build_plan(self.root, ["a.md", "b.md"])
+        self.assertEqual(plan.duplicates[0].recorded_paths, ())
+        self.assertEqual(plan.duplicates[0].candidates, ())
+
+    def test_missing_document_info_of_a_toc_document_fails(self):
         text = f"---\ndoc_link_id: {ID_A}\n---\n# T\n"
         self.write("a.md", text)
         self.write("b.md", text)
         self.record("k", ID_A, "a.md")
         state_store.document_info_path(self.root, ID_A).unlink()
-        plan = embed_plan.build_plan(self.root, ["a.md", "b.md"])
-        self.assertEqual(plan.duplicates[0].recorded_paths, ())
-        self.assertEqual(plan.duplicates[0].candidates, ())
+        with self.assertRaises(embed_plan.PlanFailure) as caught:
+            embed_plan.build_plan(self.root, ["a.md", "b.md"])
+        self.assertEqual(caught.exception.kind, embed_plan.FAILURE_STATE_UNREADABLE)
+        self.assertEqual(
+            caught.exception.problems[0].state_kind, state_store.KIND_CORRUPT
+        )
 
 
 class ReadOnlyTest(PlanTestBase):

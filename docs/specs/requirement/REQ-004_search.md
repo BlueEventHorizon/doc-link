@@ -33,7 +33,7 @@ doc_link_id: DLID-h96208rqr773
 
 権限不足、読み取りエラー、保存済み[Index 対象指定]の解釈不能、管理状態の読取不能などにより再構築要否を判定できない場合は、障害として検索を停止し、判定できなかった対象と原因を返すこと。この場合、既存の[ToC]のまま検索する選択肢を提示してはならない（D-026）。
 
-既存の[ToC]のまま検索する場合は、検索結果とともに、[ToC]が現在の[Index 対象文書]を反映していない可能性を通知すること。この選択によって既存の[ToC]を現在状態として再確定してはならない。このとき既存の[ToC]の版から使うのは[ToC]（所属、参照関係、[反映済みハッシュ]、検査結果）であり、タイトルや要約などの[文書情報]は文書ごとの最新の内容を用いる（[D-024][req-003-fr-004]）。
+既存の[ToC]のまま検索する場合は、検索結果とともに、[ToC]が現在の[Index 対象文書]を反映していない可能性を通知すること。この選択によって既存の[ToC]を現在状態として再確定してはならない。このとき既存の[ToC]の版から使うのは所属であり、タイトルや要約などの[文書情報]は文書ごとの最新の内容を用いる（[D-024][req-003-fr-004]）。
 
 検索結果には少なくとも次を含める。
 
@@ -52,8 +52,8 @@ doc_link_id: DLID-h96208rqr773
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
 [req-002-fr-017]: REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "0292868ab4b5 DLID-3wc02prwb6x7"
-[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "7449763271aa DLID-h96208rqr773"
+[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
-[req-003-fr-004]: REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "950ff227e36b DLID-7hjmngynv8sb"
+[req-003-fr-004]: REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "f55cd670bc00 DLID-7hjmngynv8sb"
 [req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"

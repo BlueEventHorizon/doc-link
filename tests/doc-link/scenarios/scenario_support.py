@@ -148,6 +148,15 @@ class ScenarioBase(unittest.TestCase):
     def info(self, doc_id):
         return state_store.load_document_info(self.root, doc_id)
 
+    def summary(self, doc_id):
+        """[文書情報]のうち、構築の確定で変わらない項目（現在パス・要約・要約を生成した時点の[内容ハッシュ]）。"""
+        info = self.info(doc_id)
+        return {
+            name: value
+            for name, value in info.items()
+            if name not in state_store.UNCONFIRMED_FACTS
+        }
+
     # --- 入口 script ---
 
     def run_script(self, module, *args, command=None):

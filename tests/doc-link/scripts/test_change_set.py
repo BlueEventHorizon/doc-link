@@ -319,8 +319,13 @@ class FirstBuildAndFailureTest(ChangeSetTestBase):
         with self.assertRaises(change_set.ChangeFailure) as caught:
             self.build(["a.md"])
         self.assertEqual(caught.exception.kind, change_set.FAILURE_STATE_UNREADABLE)
+        # [確定 ToC]が無い（未構築）こととは区別して、壊れているとして返す
         self.assertEqual(
-            caught.exception.problems[0].state_kind, state_store.KIND_MISSING
+            caught.exception.problems[0].state_kind, state_store.KIND_CORRUPT
+        )
+        self.assertEqual(
+            caught.exception.problems[0].path,
+            str(state_store.document_info_path(self.root, ID_A)),
         )
 
     def test_unreadable_documents_stop_and_are_all_reported(self):

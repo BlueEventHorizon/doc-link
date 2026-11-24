@@ -1,4 +1,5 @@
 {
+  "applied_hash": "619be1bfd3ccab1df83c092d59bfdb4983bd862a23be9eddbfe5c1319c37c7ad",
   "content_hash": "619be1bfd3ccab1df83c092d59bfdb4983bd862a23be9eddbfe5c1319c37c7ad",
   "doc_link_id": "DLID-59vzewmxghxc",
   "keywords": [
@@ -12,8 +13,63 @@
     "script contract",
     "caller handling"
   ],
+  "last_check": {
+    "checked_at": "2026-11-22T06:44:28+00:00",
+    "result": "success"
+  },
   "path": "docs/rules/plugin_script_error_output_rules.md",
   "purpose": "Normative rules for how plugin Python scripts return exit codes and error output, targeting machine-readable output that AI reads and branches on.",
+  "references": [],
+  "sections": [
+    {
+      "content_hash": "0e49c51b9b3140a1795369a5ff93ebdf7da0385dbfdee948d1dc3b2a8610748c",
+      "heading": "`3` 以上に共通の意味を置かない理由",
+      "position": 2,
+      "section_id": "DLID-gemtm84pnhy8"
+    },
+    {
+      "content_hash": "493dd3898b15f05e0dd340a5f9e0b48e2d0d046de36ea026d9859a969691240d",
+      "heading": "script のエラー出力",
+      "position": 0,
+      "section_id": "DLID-ptjyhgyayypg"
+    },
+    {
+      "content_hash": "8022a8a8ad4b3d7ed8ad07b13cac9fcc25f41f8a8f3e229ae6b20142ceae3a6f",
+      "heading": "例外",
+      "position": 7,
+      "section_id": "DLID-shjyhry8ty4b"
+    },
+    {
+      "content_hash": "a681012c7f556fbf3fc566b9594741e1ee82c555272bc2bffe3a506020c0f443",
+      "heading": "終了コードの宣言 [MANDATORY]",
+      "position": 3,
+      "section_id": "DLID-jzhrr7nx93mq"
+    },
+    {
+      "content_hash": "c1096375fc8a18b2fd6d43cdd3f265c47f790bdc7ed6733bad0f831cf61ad324",
+      "heading": "標準エラー出力",
+      "position": 6,
+      "section_id": "DLID-5ac29c71avh8"
+    },
+    {
+      "content_hash": "c76e62f0f4aa4f9879ca2015781c962f8e12d1052b1f2bc701bcaec2cf01d09e",
+      "heading": "終了コード [MANDATORY]",
+      "position": 1,
+      "section_id": "DLID-4xy25dxb160k"
+    },
+    {
+      "content_hash": "faf63a77091b992aded79dd9bee48ba1a4da49384e039b45872d16699a31ae41",
+      "heading": "標準出力",
+      "position": 5,
+      "section_id": "DLID-sead9gpfbm1a"
+    },
+    {
+      "content_hash": "fe1e887b650f3cc814311fdd3f5ff6d653ebe714242f37fe4d8840892bbcc6a4",
+      "heading": "呼び出し側 [MANDATORY]",
+      "position": 4,
+      "section_id": "DLID-df9ndax9f375"
+    }
+  ],
   "summary": [
     "Exit codes: 0 completed, 1 undifferentiated failure, 2 argument rejected by argparse, 3 or more script-specific",
     "Completion judgment excludes result content; zero findings still exit 0",

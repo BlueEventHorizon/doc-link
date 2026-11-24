@@ -114,7 +114,7 @@ DLID 付与操作（`embed-dlid`）の実行ごとの状態は次の通り。[In
 | E-06 | 開始／対象確定／原本確認待ち／計画確定 | 当該段階の処理が失敗した（書き込めなかった文書が 1 件でもある場合を含む）、または利用者が原本を確定せずに終えた | 失敗         | 検証を通って書き込んだ[DLID]は戻さない。書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因を返す（要件 [FR-002][req-002-fr-002]、[D-040][req-002-sec-9-2]、[NFR-005][req-001-nfr-005]） |
 | E-07 | 失敗                                   | 再実行を明示的に開始                                                                                            | 開始         | 書き込み済みの[DLID]を既存の[DLID]として照合し直す                                                                                                                                                    |
 
-[des-009]: DES-009_verification.md "b39bd102e418 DLID-xmg0jcmep2h2"
+[des-009]: DES-009_verification.md "e6393b8ed2b3 DLID-xmg0jcmep2h2"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"

@@ -222,6 +222,53 @@ class FirstBuildTest(Base):
             )
         self.assertFalse((self.root / ".doc-link" / "tocs").exists())
 
+    def test_target_file_builds_the_same_target_as_the_arguments(self):
+        # D-063: 対象指定ファイルだけを渡して、その[ToC 識別キー]と[Index 対象指定]で構築する
+        target = self.root / "target.json"
+        target.write_text(
+            json.dumps({"mode": "targets", "key": "k", "paths": ALL}), encoding="utf-8"
+        )
+        option = ("--target-file", str(target))
+        build_id = None
+        for _ in range(10):
+            extra = [] if build_id is None else ["--build-id", build_id]
+            code, result = self.run_main("advance", *option, *extra)
+            self.assertEqual(code, 0, result)
+            if result["action"] == "done":
+                break
+            build_id = result["build_id"]
+            for batch in result["batches"]:
+                for document in batch["documents"]:
+                    scode, sresult = self.run_main(
+                        "submit",
+                        *option,
+                        "--build-id",
+                        build_id,
+                        *submit_args(document["doc_link_id"], None),
+                    )
+                    self.assertEqual(scode, 0, sresult)
+        self.assertEqual(result["action"], "done")
+        self.assertEqual(result["toc_key"], "k")
+        from_file = self.toc_bytes("k")
+        shutil.rmtree(self.root / ".doc-link")
+        self.assertEqual(self.build("k", ALL)[0], 0)
+        self.assertEqual(
+            json.loads(from_file)["target_spec"],
+            json.loads(self.toc_bytes("k"))["target_spec"],
+        )
+
+    def test_target_file_with_other_target_arguments_is_rejected(self):
+        target = self.root / "target.json"
+        target.write_text(
+            json.dumps({"mode": "targets", "key": "k", "paths": ALL}), encoding="utf-8"
+        )
+        code, result = self.run_main(
+            "advance", "--target-file", str(target), "--key", "k", "--paths", *ALL
+        )
+        self.assertEqual(code, 1)
+        self.assertTrue(any("--target-file" in error for error in result["errors"]))
+        self.assertFalse((self.root / ".doc-link").exists())
+
     def test_request_does_not_contain_internal_limit_factor_or_margin(self):
         code, result = self.advance("k", ALL)
 

@@ -595,6 +595,98 @@ class PersistenceTest(TreeTestCase):
             target_spec.TargetSpec.from_dict({"mode": "weird"})
 
 
+class TargetFileTest(TreeTestCase):
+    """D-063: script が書いた対象指定ファイルを `--target-file` で受け取る。"""
+
+    def setUp(self):
+        super().setUp()
+        self.make("docs/a.md", "docs/b/c.md", "e.md")
+
+    def save(self, data, name="target.json"):
+        path = self.root / name
+        path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        return str(path)
+
+    def parse_command_line(self, *arguments):
+        parser = argparse.ArgumentParser()
+        target_spec.add_target_arguments(parser)
+        return target_spec.parse_namespace(
+            parser.parse_args(list(arguments)), self.root
+        )
+
+    def test_file_gives_the_same_spec_as_the_arguments(self):
+        spec = self.parse(key="k", paths=["e.md"], dirs=["docs"], exclude=["b"])
+        restored = self.parse_command_line("--target-file", self.save(spec.to_dict()))
+        self.assertEqual(restored, spec)
+        self.assertEqual(target_spec.toc_key_of(restored), "k")
+        self.assertEqual(
+            target_spec.expand(restored, self.root).to_dict(),
+            target_spec.expand(spec, self.root).to_dict(),
+        )
+
+    def test_all_mode_file(self):
+        spec = self.parse()
+        restored = self.parse_command_line("--target-file", self.save(spec.to_dict()))
+        self.assertEqual(restored, spec)
+        self.assertEqual(target_spec.toc_key_of(restored), target_spec.RESERVED_KEY)
+
+    def test_other_target_arguments_are_rejected_with_the_file(self):
+        path = self.save(self.parse(key="k", paths=["e.md"]).to_dict())
+        for extra in (
+            ["--key", "k"],
+            ["--all"],
+            ["--paths", "e.md"],
+            ["--paths-json", '["e.md"]'],
+            ["--paths-file", path],
+            ["--dirs", "docs"],
+            ["--dirs-json", '["docs"]'],
+            ["--exclude", "b"],
+            ["--exclude-json", '["b"]'],
+        ):
+            with self.subTest(extra=extra):
+                with self.assertRaises(TargetSpecError) as caught:
+                    self.parse_command_line("--target-file", path, *extra)
+                self.assertIn("--target-file", caught.exception.errors[0])
+
+    def test_unreadable_or_malformed_file_is_rejected(self):
+        broken = self.root / "broken.json"
+        broken.write_text("{not json", encoding="utf-8")
+        cases = {
+            "missing": str(self.root / "nope.json"),
+            "not_json": str(broken),
+            "not_object": self.save(["e.md"], "list.json"),
+            "unknown_mode": self.save({"mode": "weird"}, "mode.json"),
+            "no_mode": self.save({"key": "k", "paths": ["e.md"]}, "nomode.json"),
+            "all_with_key": self.save({"mode": "all", "key": "k"}, "allkey.json"),
+            "all_with_paths": self.save(
+                {"mode": "all", "key": None, "paths": ["e.md"]}, "allpaths.json"
+            ),
+            "targets_without_key": self.save(
+                {"mode": "targets", "key": None, "paths": ["e.md"]}, "nokey.json"
+            ),
+            "targets_without_targets": self.save(
+                {"mode": "targets", "key": "k", "paths": [], "dirs": []}, "empty.json"
+            ),
+            "paths_not_strings": self.save(
+                {"mode": "targets", "key": "k", "paths": [1]}, "types.json"
+            ),
+        }
+        for name, path in cases.items():
+            with self.subTest(case=name):
+                with self.assertRaises(TargetSpecError):
+                    self.parse_command_line("--target-file", path)
+
+    def test_file_content_is_validated_by_the_same_rules_as_the_arguments(self):
+        for data in (
+            {"mode": "targets", "key": "all", "paths": ["e.md"]},
+            {"mode": "targets", "key": "k", "paths": ["../outside.md"]},
+            {"mode": "targets", "key": "k", "exclude": ["b"]},
+        ):
+            with self.subTest(data=data):
+                with self.assertRaises(TargetSpecError):
+                    self.parse_command_line("--target-file", self.save(data))
+
+
 class ArgparseIntegrationTest(TreeTestCase):
     """`add_target_arguments` で登録した引数を `parse_namespace` で `TargetSpec` にする。"""
 

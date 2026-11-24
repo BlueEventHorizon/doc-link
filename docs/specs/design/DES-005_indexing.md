@@ -21,6 +21,7 @@ doc_link_id: DLID-dgphqw70rkpz
    - `--key` を指定して対象指定を渡さない場合は拒否する。対象の無い[ToC]は、処理を正常完了として扱えない状態だからである（要件[REQ-001 §17.1][req-001-sec-17-1]）。
    - `--paths-file` はほかの対象指定と併用できない。
    - `--exclude` 系は `--all`・`--paths-file` と併用できない。
+   - `--target-file` は、doc-link の script が書いた対象指定ファイル（正規化した指定の全体。[ToC 識別キー]を含む）を読む。ほかの対象指定の引数（`--key`・`--all` を含む）と併用できない。ファイルの内容は、引数で渡した指定と同じ規則で検証し直す。読めないファイルと、受理できない内容は拒否する（要件 [D-063][req-002-fr-017]）。
 2. ディレクトリ・パターンを具体的な Markdown 一覧に展開し、除外を適用する。指定外の実体は対象へ加えない。正規化した指定は次回の検索で再展開できる形に保つ。展開と除外の照合は次のとおりとする。
    - `--dirs` 系の要素に `*`・`?`・`[` があればパターンとして展開する。一致したディレクトリは配下の Markdown を再帰的に集め、一致した Markdown ファイルはそのまま加える。無ければ、そのディレクトリ配下の Markdown を再帰的に集める。`/` を含むパターンの要素 `**` は、0 階層以上のディレクトリに一致する（`docs/**/design/` は `docs/design` と `docs/a/b/design` の両方に一致する。要件 [D-052][req-002-sec-6-1-2]）。
    - `--exclude` 系の要素は、`/` を含まなければ、どの階層の同じ名前のディレクトリとも完全一致で照合し、ファイル名とは照合しない。`/` を含めば、パスとの完全一致、またはその配下で照合する。`*`・`?`・`[` を含む要素はパターンとし、`--dirs` 系のパターンと同じ規則で照合する。`/` を含まなければどの階層の名前（ディレクトリ名・ファイル名）と、含めばパスまたはその祖先のパスと照合し、一致したものとその配下を除く。パターンを照合するのは、要件がパターンでの除外を求めるためである（[REQ-002 §6.1][req-002-sec-6-1]）。
@@ -106,7 +107,7 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
 [des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "1b76ab2d7b24 DLID-8ck587eq1qnd"
-[req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#61-index-対象範囲-dlid-aggqjh0wkhe9 "ec720c1bf636 DLID-aggqjh0wkhe9"
+[req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#61-index-対象範囲-dlid-aggqjh0wkhe9 "880c2fce7026 DLID-aggqjh0wkhe9"
 [req-001-sec-17-1]: ../requirement/REQ-001_overview.md#171-エラー候補-dlid-8crwqpf21hbe "f6477b46e7bf DLID-8crwqpf21hbe"
 [des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
@@ -125,4 +126,5 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-002-sec-6-1-2]: ../requirement/REQ-002_document-id.md#612-パターンの照合-dlid-fhfbhsf0svej "ac6985b3990a DLID-fhfbhsf0svej"
 [req-002-sec-6-1-4]: ../requirement/REQ-002_document-id.md#614-シンボリックリンク-dlid-99p6p9nf7npz "96d41fc90490 DLID-99p6p9nf7npz"
+[req-002-fr-017]: ../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "0292868ab4b5 DLID-3wc02prwb6x7"
 [req-003-sec-7-5]: ../requirement/REQ-003_toc.md#75-tocのメタデータ-dlid-ef9szvy6w2cj "4b38b784fc3e DLID-ef9szvy6w2cj"

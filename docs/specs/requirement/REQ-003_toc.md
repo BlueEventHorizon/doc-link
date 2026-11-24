@@ -471,9 +471,9 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 参照情報だけが変更された文書（[内容ハッシュ]が同じもの）では参照関係を更新し、[AI 生成フィールド]を再利用すること。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
+[req-004]: REQ-004_search.md "7449763271aa DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [des-003]: ../design/DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
 [req-002-sec-6-2]: REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs "5c219073abcb DLID-5h2et5v540gs"
@@ -487,7 +487,7 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 [req-001-sec-3-2]: REQ-001_overview.md#32-文書検索フロー-dlid-eeaqehrykrje "e881c27e4f9d DLID-eeaqehrykrje"
 [req-001-sec-3-1]: REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me "a1500a8117ce DLID-5e8mpztyp4me"
 [req-003-sec-10-1-2]: REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw "dfb119ed393a DLID-c3prh9y4nbzw"
-[req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "002418132007 DLID-481cwc8365a3"
+[req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "dc6114d092e1 DLID-481cwc8365a3"
 [req-005-fr-007]: REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a "cebfeb0e3b60 DLID-p7t2pht6h17a"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"

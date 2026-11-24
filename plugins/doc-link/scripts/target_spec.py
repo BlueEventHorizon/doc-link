@@ -7,6 +7,8 @@ import して使う。このモジュールは入口 script ではないので�
 - `parse_target_arguments` で引数の組み合わせを検証し、正規化した `TargetSpec` を得る（反する指定は
   `TargetSpecError`）
 - `TargetSpec.to_dict` / `TargetSpec.from_dict` で、次回に再展開できる形に保つ
+- `--target-file` は、script が書いた対象指定ファイル（`TargetSpec.to_dict` の形）を `load_target_file` で読む。
+  検査した対象と同じ対象を、AI が引数へ書き写さずに、次の操作へ渡すためにある（要件 D-063）
 - `expand` で Markdown の一覧へ展開する（存在しない・Markdown でない指定は `problems` に報告して続ける）
 
 仕様の解釈（設計書が数値や形式を定めていない点）
@@ -144,10 +146,34 @@ def add_target_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--dirs-json", default=None)
     parser.add_argument("--exclude", nargs="+", action="extend", default=None)
     parser.add_argument("--exclude-json", default=None)
+    parser.add_argument("--target-file", default=None)
 
 
 def parse_namespace(namespace: argparse.Namespace, root: str | Path) -> TargetSpec:
-    """`add_target_arguments` で得た Namespace から `TargetSpec` を作る。"""
+    """`add_target_arguments` で得た Namespace から `TargetSpec` を作る。
+
+    `--target-file` があるときは、そのファイルの指定を使う。ほかの対象指定の引数（`--key`・`--all` を含む）と
+    併用した指定は拒否する（要件 D-063）。
+    """
+    target_file = getattr(namespace, "target_file", None)
+    if target_file is not None:
+        others = (
+            namespace.key,
+            namespace.paths,
+            namespace.paths_json,
+            namespace.paths_file,
+            namespace.dirs,
+            namespace.dirs_json,
+            namespace.exclude,
+            namespace.exclude_json,
+        )
+        if namespace.all_targets or any(value is not None for value in others):
+            raise TargetSpecError(
+                [
+                    "--target-file はほかの対象指定の引数（--key・--all を含む）と併用できない"
+                ]
+            )
+        return load_target_file(target_file, root)
     return parse_target_arguments(
         root=root,
         key=namespace.key,
@@ -234,6 +260,52 @@ def parse_target_arguments(
         paths=_canonical(normalize_path(root, item) for item in path_items),
         dirs=_canonical(normalize_pattern(root, item) for item in dir_items),
         exclude=_canonical(normalize_pattern(root, item) for item in exclude_items),
+    )
+
+
+def load_target_file(path: str | Path, root: str | Path) -> TargetSpec:
+    """対象指定ファイル（`TargetSpec.to_dict` の形の JSON）を読み、`TargetSpec` を返す（要件 D-063）。
+
+    ファイルは doc-link の script が書く。呼び出し元が運ぶのはパスだけなので、別のファイルを渡された場合に
+    備えて、内容は引数で渡した指定と同じ規則（`parse_target_arguments`）で検証し直す。読めないファイルと、
+    受理できない内容は `TargetSpecError` で拒否する。
+    """
+    label = f"--target-file の内容 ({path})"
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        raise TargetSpecError([f"--target-file を読めない: {path}: {error}"]) from error
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise TargetSpecError(
+            [f"--target-file が JSON として読めない: {path}: {error}"]
+        ) from error
+    if not isinstance(data, dict):
+        raise TargetSpecError([f"{label} は対象指定のオブジェクトでなければならない"])
+
+    key = data.get("key")
+    lists = {
+        name: _require_string_list(data.get(name, []), f"{label} の {name}")
+        for name in ("paths", "dirs", "exclude")
+    }
+    mode = data.get("mode")
+    if mode == MODE_ALL:
+        if key is not None or any(lists.values()):
+            raise TargetSpecError(
+                [f"{label} は単体モードなのに、キーまたは対象指定を持っている"]
+            )
+        return TargetSpec(mode=MODE_ALL)
+    if mode != MODE_TARGETS:
+        raise TargetSpecError([f"{label} の mode が不正である: {mode!r}"])
+    if not isinstance(key, str):
+        raise TargetSpecError([f"{label} の key が文字列でない"])
+    return parse_target_arguments(
+        root=root,
+        key=key,
+        paths=lists["paths"] or None,
+        dirs=lists["dirs"] or None,
+        exclude=lists["exclude"] or None,
     )
 
 

@@ -95,18 +95,20 @@ class SkillMdTest(unittest.TestCase):
         self.assertIn("そのまま渡す", self.body)
         self.assertIn("index-docs", self.body)
 
-    def test_rebuild_passes_the_same_key_and_target_spec_to_index_docs(self):
-        # 引数なしで index-docs を起動すると単体モード（all）になり、別の ToC を再構築してしまう
+    def test_rebuild_passes_only_the_target_file_to_index_docs(self):
+        # D-063: 検査した対象を、script が書いた対象指定ファイルで渡す。AI は対象指定を引数へ書き写さない
         for needle in (
-            "検索前検査と同じ ToC 識別キーと Index 対象指定を、解釈せずそのまま渡す",
-            "target_spec_source",
-            "`saved`",
-            "`target_spec` の `paths`・`dirs`・`exclude`",
-            "`--paths`・`--dirs`・`--exclude`",
-            "`--all`",
+            "`--target-file {target_file}` だけである",
+            "返されたままの値を渡す",
+            "自分で引数へ書き写さない",
+            "`--choice rebuild --target-file {target_file}`",
         ):
             with self.subTest(needle=needle):
                 self.assertIn(needle, self.body)
+        # 保存済みの指定を読んで引数へ戻す手順が、残っていない
+        for needle in ("target_spec_source", "`target_spec` の `paths`"):
+            with self.subTest(absent=needle):
+                self.assertNotIn(needle, self.body)
 
     def test_invokes_query_worker_with_search_id_only_and_does_not_wait_with_wakeup(
         self,

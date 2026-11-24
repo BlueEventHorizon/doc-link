@@ -149,15 +149,16 @@ sequenceDiagram
     participant Docs as Index 対象文書
 
     PM->>Skill: ToC 識別キーと Index 対象指定を渡して起動
-    Skill->>Scripts: 付与計画の作成
+    Skill->>Scripts: 書き込みを依頼する
     Scripts->>Docs: doc_link_id・見出しを読み取る
     Scripts->>State: 既存の ID と照合する
-    Scripts-->>Skill: ID 未付与の文書、重複と原本候補、発行するセクション DLID
-    opt ID の重複がある
+    Scripts->>Scripts: 付与計画を作る
+    opt 原本の指定を求める重複がある
+        Scripts-->>Skill: 何も書き込まず、重複と原本候補を返す
         Skill->>User: 原本候補を示す
         User-->>Skill: 原本を確定する
+        Skill->>Scripts: 確定した原本を添えて、書き込みを依頼し直す
     end
-    Skill->>Scripts: 付与計画と確定した原本を渡して書き込む
     loop 文書ごと
         Scripts->>Docs: DLID を書き込む
         Scripts->>Docs: 再解析して差分が DLID だけかを検証する
@@ -165,6 +166,8 @@ sequenceDiagram
     Scripts-->>Skill: 書き込み結果
     Skill-->>PM: 書き込んだ件数と、書き込めなかった文書ごとのパス・問題箇所・原因
 ```
+
+書き込むか、原本の確定を求めて止まるかは、script が決める。SKILL は、script の終了コードに従い、付与計画の内容を読んで書き込みへ進むかを判断しない。原本の指定を求める重複があるとき、script は何も書き込まずに終え（[DES-004 §5][des-004-sec-5] の E-06）、SKILL が原本を添えて依頼し直す（同 E-07）。
 
 <a id="sec-3-2"></a>
 
@@ -232,10 +235,10 @@ sequenceDiagram
         Skill->>User: 再構築の規模を示して二択を確認する
         alt 再構築後に検索
             User-->>Skill: 再構築を選ぶ
-            Skill-->>PM: index-docs の実行を求める
-            PM->>Index: ToC を構築・再構築する
+            Skill-->>PM: 対象指定ファイルのパスを渡して、index-docs の実行を求める
+            PM->>Index: 対象指定ファイルを渡して、ToC を構築・再構築する
             Index-->>PM: 確定結果
-            PM->>Skill: 再構築後の検索前検査からやり直す
+            PM->>Skill: 対象指定ファイルを渡して、再構築後の検索前検査からやり直す
         else 既存版のまま検索
             User-->>Skill: 既存版を選ぶ
         end
@@ -451,13 +454,13 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 
 [req-002-sec-9-2]: ../requirement/REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc "72f09c754e09 DLID-mkcvqte59nvc"
 [req-002-sec-9-1]: ../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
-[req-004-sec-12]: ../requirement/REQ-004_search.md#12-文書検索-dlid-r6j09pswcpzg "584367533cf6 DLID-r6j09pswcpzg"
+[req-004-sec-12]: ../requirement/REQ-004_search.md#12-文書検索-dlid-r6j09pswcpzg "3843aa1b44b8 DLID-r6j09pswcpzg"
 [req-005-sec-13]: ../requirement/REQ-005_references.md#13-文書参照とリンク検査-dlid-9nc60w1jj966 "01fe597df344 DLID-9nc60w1jj966"
 [req-003-sec-10]: ../requirement/REQ-003_toc.md#10-既存tocとの比較による変更検出-dlid-djxbs1zd8bwk "53e14e5297d5 DLID-djxbs1zd8bwk"
 [req-003-sec-7-4]: ../requirement/REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"
 [req-003-sec-11-2-2]: ../requirement/REQ-003_toc.md#1122-文書情報の取得と生成-dlid-6vjpqdstr90y "e4f7a9b2bfde DLID-6vjpqdstr90y"
 [req-005-sec-13-1]: ../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
-[req-002-sec-8]: ../requirement/REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w "041cb8a5da26 DLID-ephpayqvh78w"
+[req-002-sec-8]: ../requirement/REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w "f461017b2e2b DLID-ephpayqvh78w"
 [req-003-sec-11-2-4]: ../requirement/REQ-003_toc.md#1124-toc-候補の検査と確定-dlid-3mhrvbx44c87 "51b57b11c1e5 DLID-3mhrvbx44c87"
 [des-002-sec-3]: DES-002_execution-responsibilities.md#3-skill-と-script-の接続規則-dlid-gjwba2n3mq4v "02a83129fff4 DLID-gjwba2n3mq4v"
 [des-008-sec-4]: DES-008_content-rules.md#4-ai-生成フィールド-dlid-7et3ryybpbag "f67ca1c840f3 DLID-7et3ryybpbag"
@@ -465,13 +468,14 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "2bd4a534eee2 DLID-m0xegzfyhc3k"
 [des-005-sec-2-1]: DES-005_indexing.md#21-dlid-付与操作-dlid-kxx8fczbwref "ece4ef428c71 DLID-kxx8fczbwref"
 [des-008-sec-1]: DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe "e07d05aa8a87 DLID-cf1n0ndmf0fe"
-[des-005-sec-2]: DES-005_indexing.md#2-対象確定id-確認と-dlid-付与-dlid-6b3d2nqzpw75 "c912c6930ae9 DLID-6b3d2nqzpw75"
+[des-005-sec-2]: DES-005_indexing.md#2-対象確定id-確認と-dlid-付与-dlid-6b3d2nqzpw75 "2ff63793a51e DLID-6b3d2nqzpw75"
 [des-005-sec-3]: DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx "de8363e8b290 DLID-ext9ze054hbx"
 [des-005-sec-4]: DES-005_indexing.md#4-必要情報の取得と候補確定-dlid-dfsegbf7p2q9 "26e952075c9c DLID-dfsegbf7p2q9"
 [des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "32ce863741b3 DLID-hs82xgzwkpyz"
 [des-007-sec-1]: DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05 "d84f6c33a9b5 DLID-pnrn5dyy7z05"
 [des-004-sec-3]: DES-004_state-machines.md#3-toc構築再構築の実行-dlid-kz06g0w7tsvs "91ae910ea5fe DLID-kz06g0w7tsvs"
-[des-006-sec-1]: DES-006_search.md#1-検索前の判定-dlid-ksmh21dbz9zv "9a58e4009a6f DLID-ksmh21dbz9zv"
+[des-004-sec-5]: DES-004_state-machines.md#5-dlid-付与操作の実行-dlid-evgp45p8prf7 "5d6774d493ed DLID-evgp45p8prf7"
+[des-006-sec-1]: DES-006_search.md#1-検索前の判定-dlid-ksmh21dbz9zv "f2916b0c79f9 DLID-ksmh21dbz9zv"
 [des-007-sec-2]: DES-007_references-impact.md#2-逆参照と影響候補-dlid-9chw5bzdm8zm "15f263908fc6 DLID-9chw5bzdm8zm"
 [des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "80e73caeef5c DLID-mjeyc85ak4w3"
 [exchange-rules]: ../../rules/agent_data_exchange_rules.md "590998804bef DLID-2g3cgnnry3bm"
@@ -479,13 +483,13 @@ SKILL とカスタム Agent の間の依頼と結果は、[Agent とのデータ
 [req-001-nfr-008]: ../requirement/REQ-001_overview.md#nfr-008-生成指示と検証基準の分離-dlid-fc5e4s6nctp9 "7c7778285762 DLID-fc5e4s6nctp9"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
-[req-002-fr-017]: ../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "ab2973434c9d DLID-3wc02prwb6x7"
+[req-002-fr-017]: ../requirement/REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "0292868ab4b5 DLID-3wc02prwb6x7"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-003-fr-003]: ../requirement/REQ-003_toc.md#fr-003-文書の移動改名の認識-dlid-grzqdx81bakh "5e0072a4ce7a DLID-grzqdx81bakh"
 [req-003-fr-005]: ../requirement/REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82 "47be50aa7f05 DLID-65nf6n2jax82"
 [req-003-fr-011]: ../requirement/REQ-003_toc.md#fr-011-文書全体の変更検出-dlid-a7nqc4aq8zwb "c8d953d1fad0 DLID-a7nqc4aq8zwb"
 [req-003-fr-012]: ../requirement/REQ-003_toc.md#fr-012-セクション単位の変更検出-dlid-8kfhte6q4ywd "d342c3bdcb5c DLID-8kfhte6q4ywd"
-[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "002418132007 DLID-481cwc8365a3"
+[req-004-fr-006]: ../requirement/REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "dc6114d092e1 DLID-481cwc8365a3"
 [req-005-fr-009]: ../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
 [req-005-fr-010]: ../requirement/REQ-005_references.md#fr-010-参照パス修正情報の通知-dlid-ev07yszprm9m "52b105d38cac DLID-ev07yszprm9m"
 [req-005-fr-013]: ../requirement/REQ-005_references.md#fr-013-変更影響候補の特定-dlid-cnw6h5pzv3wz "6af5f019bff6 DLID-cnw6h5pzv3wz"

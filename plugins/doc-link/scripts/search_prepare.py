@@ -26,6 +26,13 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 その絶対パスを `detail_path` に返す（要件 D-061。文書を大量に変更しても、標準出力の大きさが変わらないようにする
 ため）。同じ[ToC 識別キー]の次の検索前検査が置き換える。書けないときは、障害（`SearchError`）にする。
 
+`confirm_rebuild` は、検査に使った[ToC 識別キー]と[Index 対象指定]（`target_spec.TargetSpec.to_dict` の形）も、
+`.temp/doc-link/query-docs/target-<符号化した[ToC 識別キー]>.json` の対象指定ファイルへ書き、その絶対パスを
+`target_file` に返す（要件 D-063）。再構築（`index-docs`）と、再構築の後の `prepare` は、このファイルを
+`--target-file` で受け取る。AI が保存済みの指定を引数へ書き写さないので、検査した対象と再構築する対象が同じになる。
+再構築が別の対象で行われたときは、`--choice rebuild` の `prepare` が、このファイルの指定と[確定 ToC]の指定の
+違いを再構築必要として検出し、障害にする。対象指定ファイルは、同じ[ToC 識別キー]の次の確認が置き換える。
+
 ## `query-worker` との受け渡し
 
 置き場は `.temp/doc-link/query-docs/` で、識別値は検索 ID（`SEARCH-<8 桁の 16 進>`。script が生成する）である。
@@ -76,6 +83,9 @@ ACTION_CONFIRM_REBUILD = "confirm_rebuild"
 ACTION_INVOKE_WORKER = "invoke_query_worker"
 
 EXIT_VALUE_OK = "0"
+
+TARGET_FILE_FIELD = "target_file"
+TARGET_FILE_PREFIX = "target-"
 
 _SEARCH_ID = re.compile(r"SEARCH-[0-9a-f]{8}")
 _ITEM_NAME = re.compile(r"item-([0-9]{6})")
@@ -149,6 +159,19 @@ def _write(root: Path, path: Path, value, *, compact: bool = False) -> None:
         state_store.write_if_changed(root, SKILL, path, data)
     except state_store.StateStoreError as exc:
         raise SearchError([f"作業ファイルを書けない: {path}: {exc}"]) from exc
+
+
+def _write_target_file(root: Path, toc_key: str, spec: dict) -> str:
+    """検査に使った[ToC 識別キー]と[Index 対象指定]を対象指定ファイルへ書き、その絶対パスを返す（要件 D-063）。
+
+    [ToC 識別キー]ごとに 1 つで、同じ[ToC 識別キー]の次の確認が置き換える。検索 ID の作業ファイルではないので、
+    `cleanup` は削除しない（再構築と、その後の検索前検査が読むため）。
+    """
+    path = _work_dir(root) / (
+        f"{TARGET_FILE_PREFIX}{state_store.encode_name(toc_key)}{state_store.FILE_SUFFIX}"
+    )
+    _write(root, path, spec)
+    return os.path.abspath(path)
 
 
 def _publish_new(root: Path, path: Path, value) -> bool:
@@ -346,15 +369,20 @@ def prepare(
         )
     except state_store.StateStoreError as exc:
         raise SearchError([f"検索前検査の明細ファイルを書けない: {exc}"]) from exc
+    target_file = _write_target_file(root, result.toc_key, result.target_spec)
     return {
         "action": ACTION_CONFIRM_REBUILD,
         **result.to_summary(),
         detail_file.DETAIL_PATH_FIELD: detail_path,
+        TARGET_FILE_FIELD: target_file,
         "options": [
             {
                 "choice": CHOICE_REBUILD,
                 "label": "再構築してから検索する",
-                "next": "`index-docs` を実行した後、`--choice rebuild` を付けて `prepare` をやり直す",
+                "next": (
+                    "`index-docs` を `--target-file <target_file の値>` だけで実行した後、"
+                    "`--task` と `--choice rebuild --target-file <target_file の値>` で `prepare` をやり直す"
+                ),
             },
             {
                 "choice": CHOICE_EXISTING,

@@ -201,6 +201,60 @@ class ChoiceTest(QueryTestBase):
         self.assertEqual(code, 1)
         self.assertNotIn("search_id", result)
 
+    def test_target_file_from_the_confirmation_is_taken_after_the_rebuild(self):
+        # D-063: 確認が返した対象指定ファイルを、再構築の後の検索前検査へ渡す
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        code, confirm = self.run_main("prepare", "--task", TASK, "--key", KEY)
+        self.assertEqual(confirm["action"], "confirm_rebuild")
+        target_file = confirm["target_file"]
+        self.build()  # index-docs が同じ対象で再構築した後の状態
+        code, result = self.run_main(
+            "prepare",
+            "--task",
+            TASK,
+            "--choice",
+            "rebuild",
+            "--target-file",
+            target_file,
+        )
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["action"], "invoke_query_worker")
+        self.assertEqual(result["toc_key"], KEY)
+
+    def test_rebuild_of_another_target_is_an_error_with_the_target_file(self):
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        _, confirm = self.run_main("prepare", "--task", TASK, "--key", KEY)
+        self.build(paths=("a.md",))  # 検査した対象と違う対象で再構築された
+        code, result = self.run_main(
+            "prepare",
+            "--task",
+            TASK,
+            "--choice",
+            "rebuild",
+            "--target-file",
+            confirm["target_file"],
+        )
+        self.assertEqual(code, 1)
+        self.assertNotIn("search_id", result)
+
+    def test_target_file_with_a_key_is_rejected(self):
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        _, confirm = self.run_main("prepare", "--task", TASK, "--key", KEY)
+        code, result = self.run_main(
+            "prepare",
+            "--task",
+            TASK,
+            "--key",
+            KEY,
+            "--target-file",
+            confirm["target_file"],
+        )
+        self.assertEqual(code, 1)
+        self.assertTrue(any("--target-file" in error for error in result["errors"]))
+
     def test_default_key_uses_the_saved_spec(self):
         self.build()
         code, result = self.run_main("prepare", "--task", TASK, "--key", KEY)

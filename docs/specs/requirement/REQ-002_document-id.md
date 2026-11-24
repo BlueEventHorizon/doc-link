@@ -29,6 +29,7 @@ doc-link は、置き換え時の呼び出し元との接続を維持するた�
 - `--dirs` / `--dirs-json`: プロジェクトルート相対のディレクトリまたはパターン
 - `--exclude` / `--exclude-json`: [Index 対象リスト]から除外するパス、ディレクトリまたはパターン
 - `--all`: プロジェクトルート配下の全 Markdown を対象とする単体モード
+- `--target-file`: doc-link が書いた対象指定ファイル。[ToC 識別キー]と[Index 対象指定]の全体を持つ（D-063）
 
 doc-link は、与えられた[Index 対象指定]を解釈・検証し、今回処理する[Index 対象文書]の一覧を確定する。ディレクトリまたはパターンが指定された場合は、該当する Markdown を列挙して一覧へ変換する。指定されていないファイルを推測で追加したり、指定されたファイルを理由の報告なく除外したりしてはならない。
 
@@ -127,6 +128,13 @@ doc_link_id: DLID-7k3m9q2x4p8r
 doc-link は、ユーザーまたは呼び出し元スキルから[ToC 識別キー]と、そのキーで今回管理すべき Markdown の完全な desired state を受け取れること。
 
 対象指定モードでは `--key` と `--dirs`、`--dirs-json`、`--paths`、`--paths-json`、`--paths-file`、`--exclude` または `--exclude-json` を解釈できること。単体モードでは `--all` を解釈し、引数なしも `--all` として扱うこと。`--all` と対象指定の併用、`--key all`、および `--key` なしの対象指定は拒否すること。
+
+doc-link が検査に使った[ToC 識別キー]と[Index 対象指定]を、対象指定ファイルで受け取れること（`--target-file`。D-063）。
+
+- 対象指定ファイルは doc-link が書く。呼び出し元が運ぶのは、doc-link が返したファイルのパスだけである。
+- 検査した対象と、その後の操作の対象が同じであることを、doc-link が保証するためである。呼び出し元の AI が、対象指定を引数へ書き写さない。
+- `--target-file` と、ほかの対象指定の引数（`--key`・`--all` を含む）の併用は拒否する。
+- 対象指定ファイルの内容は、引数で渡した指定と同じ規則で検証する。
 
 doc-link は[Index 対象指定]を解釈・検証して[Index 対象リスト]を確定し、確定した一覧、拒否した指定、および拒否理由を呼び出し元へ返せること。[ToC 識別キー]は対象の選択にのみ使用し、キー名から対象文書や文書種別を推測してはならない。
 
@@ -307,6 +315,8 @@ DLID 付与操作で、[文書 ID]が存在しない Index 対象の Markdown �
 
 [ToC]の構築と DLID 付与操作は、どちらもこの形式で対象指定を受け取り、同じ指定を拒否すること（[D-041][req-002-sec-9-2]）。
 
+`--target-file <パス>` で、doc-link が書いた対象指定ファイルの[ToC 識別キー]と[Index 対象指定]を受け取れること。`--target-file` と、ほかの対象指定の引数（`--key`・`--all` を含む）の併用を拒否すること。読めないファイルと、対象指定として受理できない内容のファイルを拒否すること。
+
 ### AC-023 [文書 ID]と[ToC 識別キー]の独立性 DLID-jamc383avdg2
 
 同じ文書を[ToC 識別キー] A の対象から外して[ToC 識別キー] B の対象に含めても、そのことだけを理由に `doc_link_id` が変更されないこと。
@@ -332,13 +342,13 @@ Forge が `.doc_structure.yaml` から解決した[ToC 識別キー]と対象指
 文書の[DLID]と[セクション ID]を渡した場合、それぞれ現在のパスが返り、セクションには見出しとアンカーが添えられること。解決済みには、記録した[内容ハッシュ]が添えられること。文書を移動した後、[ToC]を再構築する前は「記録されたパスに無い」が返り、移動前のパスを現在のパスとして返さないこと。[ToC]を再構築した後は、同じ[DLID]から移動後のパスが返ること。管理状態に記録の無い[DLID]には「記録が無い」が返ること。解決の前後で、[Index 対象文書]、[ToC]および管理状態が変わらないこと（[D-047][req-002-fr-018]）。
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4d21daf4f22 DLID-bk29x4s8tadq"
+[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
 [req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "d3d06afd5ba4 DLID-h96208rqr773"
+[req-004]: REQ-004_search.md "7449763271aa DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "4fcba4cbc64c DLID-dbs4rjzstadr"
 [req-002-sec-9-1]: REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"
-[req-002-sec-8]: REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w "041cb8a5da26 DLID-ephpayqvh78w"
+[req-002-sec-8]: REQ-002_document-id.md#8-index-対象リストの確定-dlid-ephpayqvh78w "f461017b2e2b DLID-ephpayqvh78w"
 [req-005-fr-009]: REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x "2351b357da12 DLID-zacf5tmy6x4x"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"

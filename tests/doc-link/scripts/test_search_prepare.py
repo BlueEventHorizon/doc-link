@@ -10,6 +10,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 import change_set  # noqa: E402
 import search_prepare as sp  # noqa: E402
 import state_store  # noqa: E402
+import target_spec  # noqa: E402
 import toc_candidate  # noqa: E402
 from content_hash import document_content_hash  # noqa: E402
 from reference_check import check_document  # noqa: E402
@@ -361,6 +362,54 @@ class ConfirmRebuildDetailTest(SearchTestBase):
         )
         detail = json.loads(path.read_bytes().decode("utf-8"))
         self.assertEqual([d["doc_link_id"] for d in detail["documents"]], [ID_A])
+
+    def test_confirm_rebuild_writes_the_checked_target_to_a_file(self):
+        # D-063: 検査に使った[ToC 識別キー]と[Index 対象指定]を、対象指定ファイルへ書いてパスを返す
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        payload = sp.prepare(self.root, KEY, None, TASK)
+        path = Path(payload["target_file"])
+        self.assertTrue(path.is_absolute())
+        self.assertEqual(
+            path,
+            self.root / ".temp" / "doc-link" / "query-docs" / f"target-{KEY}.json",
+        )
+        saved = state_store.load_confirmed_toc(self.root, KEY)["target_spec"]
+        self.assertEqual(json.loads(path.read_bytes().decode("utf-8")), saved)
+        self.assertEqual(
+            target_spec.load_target_file(path, self.root),
+            TargetSpec.from_dict(saved),
+        )
+
+    def test_target_file_holds_the_given_spec_when_one_is_given(self):
+        self.build()
+        given = TargetSpec(mode=MODE_TARGETS, key=KEY, paths=("a.md",))
+        payload = sp.prepare(self.root, KEY, given, TASK)
+        self.assertEqual(payload["action"], sp.ACTION_CONFIRM_REBUILD)
+        self.assertEqual(
+            target_spec.load_target_file(payload["target_file"], self.root), given
+        )
+
+    def test_target_file_survives_the_cleanup_of_a_search(self):
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        confirm = sp.prepare(self.root, KEY, None, TASK)
+        fixed = sp.prepare(self.root, KEY, None, TASK, sp.CHOICE_EXISTING)
+        sp.cleanup(self.root, fixed["search_id"])
+        self.assertTrue(Path(confirm["target_file"]).is_file())
+
+    def test_rebuild_with_another_target_is_detected_by_the_file(self):
+        # 再構築が別の対象で行われたとき、対象指定ファイルを渡した検索前検査が、黙って検索しない
+        self.build()
+        self.write("a.md", A_TEXT + "more\n")
+        confirm = sp.prepare(self.root, KEY, None, TASK)
+        checked = target_spec.load_target_file(confirm["target_file"], self.root)
+        self.build(a_text=A_TEXT + "more\n", paths=("a.md",))
+        with self.assertRaises(sp.SearchError):
+            sp.prepare(self.root, KEY, checked, TASK, sp.CHOICE_REBUILD)
+        # 保存済みの指定で検査すると、別の対象の再構築を検出できない（最新と判定する）
+        unchecked = sp.prepare(self.root, KEY, None, TASK, sp.CHOICE_REBUILD)
+        self.assertEqual(unchecked["action"], sp.ACTION_INVOKE_WORKER)
 
     def test_unwritable_detail_is_a_failure(self):
         self.build()

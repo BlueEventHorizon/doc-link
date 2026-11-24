@@ -1,40 +1,38 @@
 {
-  "content_hash": "52ed2959d4d09361577f7e083ae994f74dc17eb45806ef3edeb19ee62d20d55f",
+  "content_hash": "ef8a5184c894cfcda91b2ffbd8168e3b73b5ae0bf38b17987beb593248b64eaa",
   "doc_link_id": "DLID-dgphqw70rkpz",
   "keywords": [
     "ToC build",
     "DLID assignment",
-    "target expansion",
+    "index target",
     "change set",
-    "section ID",
-    "content hash",
     "move detection",
-    "detail file",
-    "atomic write",
-    "index-docs"
+    "target-file",
+    "content hash",
+    "section ID",
+    "atomic publish",
+    "detail file"
   ],
   "path": "docs/specs/design/DES-005_indexing.md",
-  "purpose": "Designs target fixing, ID checking, DLID assignment and ToC building: argument rules, target expansion, change set detection, candidate commit, completion output and write units.",
+  "purpose": "Design of target resolution, DLID assignment, change-set detection and ToC building: how index targets are fixed, IDs verified, candidates generated and committed atomically.",
   "summary": [
-    "Inputs and outputs of the build; the completion result returns only items and counts to stdout while full details go to a detail file",
-    "Target fixing: argument combination rules, directory and pattern expansion, exclusion matching, fixed excluded names, path normalization, Markdown detection and symlink handling",
-    "ID check excludes documents without IDs or with duplicates and continues the build; an unreadable document stops it",
-    "DLID assignment operation: explicit invocation, duplicate original confirmation by the user, new ID issuance, section ID writing, count-only reporting, and rollback of non-DLID diffs",
-    "Change set: new, left target, path change, content hash change, reference or physical path change, plus section-level add, delete, move, heading change and body change by section ID",
-    "Move detection records previous and new paths per key in a temporary record file used to build the final result",
-    "Update plan reuses existing generated information, and the AI generates only for new or changed documents with script validation",
-    "Candidate validation and atomic publication of the confirmed ToC; document information is committed per document",
-    "Completion output fields and the detail file with full change sets, generated documents and reference findings",
-    "Write units use os.replace with no locks; reruns converge after failure"
+    "Input/output and execution boundary of a ToC build, which never rewrites index target documents",
+    "Argument rules and target resolution: key, paths, dirs, excludes, target-file, pattern expansion, fixed exclusions, symlinks",
+    "ID check: documents lacking a doc_link_id or with duplicates are excluded from the confirmed list and reported",
+    "DLID assignment operation: duplicate original selection, issuing IDs and section IDs, DLID-only writes, verification",
+    "Change-set detection for documents and sections (added, removed, moved, heading changed, body changed)",
+    "Move detection via a per-key record file kept until the confirmed ToC is published",
+    "Information acquisition: reuse of document info, AI generation only when needed, candidate validation, atomic publish",
+    "Completion output: counts on stdout, full details in a detail file under .temp",
+    "Write units using os.replace, no locks, and recovery on rerun after failure"
   ],
   "tasks": [
-    "Implementing index-docs or the target spec expansion",
-    "Implementing DLID assignment",
-    "Implementing change detection and section-level diff",
-    "Designing build completion output and detail files",
-    "Handling build failure and rerun behavior",
-    "Writing tests for target specification and exclusion rules",
-    "Reviewing ToC candidate commit and write atomicity"
+    "Implementing or modifying index-docs build scripts",
+    "Implementing the embed-dlid DLID assignment operation",
+    "Designing target specification parsing and expansion",
+    "Implementing change-set and move detection",
+    "Reviewing ToC build candidate validation and publication",
+    "Designing completion result output and detail files"
   ],
   "title": "DES-005 対象確定・DLID 付与・[ToC]構築設計"
 }

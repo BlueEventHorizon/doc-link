@@ -25,9 +25,12 @@
    （`rebuild`: 再構築後に検索、`existing`: 既存版のまま検索）。
    - `initial_build_required`: 未構築。検索しない。SKILL は `index-docs` による初回構築が必要だと返す
    - `confirm_rebuild`: 再構築が必要。`scale`（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複・AI 生成が必要な件数）と
-     変更の種別ごとの件数、`options`（二択）、`detail_path` を返す。変更のある文書・セクションごとの明細は標準出力に
-     載せず、`detail_path` の明細ファイルにある（要件 D-061）。SKILL は規模を添えて利用者に二択を確認する（AskUserQuestion）。
-     「再構築してから検索する」: `index-docs` を実行し、同じ引数に `--choice rebuild` を付けて `prepare` をやり直す。
+     変更の種別ごとの件数、`options`（二択）、`detail_path`、`target_file` を返す。変更のある文書・セクションごとの
+     明細は標準出力に載せず、`detail_path` の明細ファイルにある（要件 D-061）。`target_file` は、検査に使った
+     [ToC 識別キー]と[Index 対象指定]を script が書いた対象指定ファイルの絶対パスである（要件 D-063）。SKILL は規模を
+     添えて利用者に二択を確認する（AskUserQuestion）。
+     「再構築してから検索する」: `index-docs` を `--target-file <target_file の値>` で実行し、`prepare` を `--task` と
+     `--choice rebuild --target-file <target_file の値>` でやり直す。対象指定を引数へ書き写さない。
      「既存の[ToC]のまま検索する」: 同じ引数に `--choice existing` を付けて `prepare` をやり直す
    - `invoke_query_worker`: 検索に使う[ToC]を固定した。`search_id`・`toc_key`・`toc_version`（使用版）・`freshness`
      （`current`: 最新、`possibly_stale`: 古い可能性。`freshness_notice` に文言）を返す。SKILL は `query-worker` を起動し、
@@ -133,6 +136,7 @@ def _has_target_arguments(args: argparse.Namespace) -> bool:
             args.dirs_json,
             args.exclude,
             args.exclude_json,
+            args.target_file,
         )
     )
 

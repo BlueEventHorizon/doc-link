@@ -1,4 +1,5 @@
 {
+  "applied_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
   "content_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
   "doc_link_id": "DLID-zvepba87h7zk",
   "keywords": [
@@ -10,8 +11,172 @@
     "state machine",
     "requirements vs design"
   ],
+  "last_check": {
+    "checked_at": "2026-11-24T13:48:52+00:00",
+    "result": "success"
+  },
   "path": "docs/specs/design/README.md",
   "purpose": "Index of the doc-link design documents DES-001 to DES-010, stating what each covers and the principle that design must not override requirements.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-001_system-overview.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "1468229e4b8e",
+      "recorded_path": "DES-001_system-overview.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3da82gspdp44",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 1,
+      "recorded_content_hash": "f81b273666a9",
+      "recorded_path": "DES-002_execution-responsibilities.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-anz9vack2xzt",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-003_data-model.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 2,
+      "recorded_content_hash": "aebbc925440f",
+      "recorded_path": "DES-003_data-model.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-yqqrwtycr379",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-004_state-machines.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 3,
+      "recorded_content_hash": "d3b39867775c",
+      "recorded_path": "DES-004_state-machines.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3f92k3tz4rew",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 4,
+      "recorded_content_hash": "189c8ffcc88b",
+      "recorded_path": "DES-005_indexing.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 5,
+      "recorded_content_hash": "20d2b5d58257",
+      "recorded_path": "DES-006_search.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-007_references-impact.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 6,
+      "recorded_content_hash": "27c0b9daf7fd",
+      "recorded_path": "DES-007_references-impact.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pr3jp4hzb8js",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-008_content-rules.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 7,
+      "recorded_content_hash": "f28039845959",
+      "recorded_path": "DES-008_content-rules.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-ywa6htx8vq09",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-009_verification.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 8,
+      "recorded_content_hash": "d35ff8247ac2",
+      "recorded_path": "DES-009_verification.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-xmg0jcmep2h2",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-010_skill-composition.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 9,
+      "recorded_content_hash": "a37e588a4b86",
+      "recorded_path": "DES-010_skill-composition.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-7e90gq3sdncc",
+      "target_section_id": null
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "e145090b44873ac3ddb4b2d16a4f62a3d01df022d7909ed47239f2bc60cebb2d",
+      "heading": "doc-link 設計書の構成",
+      "position": 0,
+      "section_id": "DLID-2f3q114x45q6"
+    }
+  ],
   "summary": [
     "Requirements are the source of truth for behavior and constraints; design is for subjects, information, states and processing",
     "If requirements and design conflict, design alone does not override requirements",

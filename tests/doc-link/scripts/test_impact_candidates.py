@@ -297,6 +297,95 @@ class StructureTest(ImpactTestBase):
         self.assertEqual(result.target_spec["key"], KEY)
 
 
+class OtherKeyTargetTest(ImpactTestBase):
+    """参照先が、検査する[ToC 識別キー]に所属せず、別のキーにだけ所属する（Issue #14）。"""
+
+    def build_two_keys(self, a=None, b=None):
+        self.build({"b.md": (ID_B, b if b is not None else b_text())}, key="two")
+        self.build({"a.md": (ID_A, a if a is not None else a_text())}, key="one")
+
+    def test_reference_to_a_document_of_another_key_is_compared(self):
+        self.build_two_keys()
+        docs, secs = self.hashes("two")
+        result = self.enumerate("one")
+        self.assertEqual(
+            self.referrers(result),
+            [(ID_B, ID_A, ID_B, None), (ID_B, ID_A, S_B2, None)],
+        )
+        (changed,) = result.changed_documents
+        self.assertEqual(changed.path, "b.md")
+        document_ref, section_ref = changed.referrers
+        self.assertEqual(document_ref.current_hash, docs[ID_B])
+        self.assertEqual(document_ref.target_kind, "document")
+        self.assertEqual(section_ref.current_hash, secs[S_B2])
+        self.assertEqual(section_ref.target_section_id, S_B2)
+        self.assertEqual(section_ref.target_heading, "B2")
+
+    def test_matching_record_is_not_returned(self):
+        self.build_two_keys()
+        docs, secs = self.hashes("two")
+        self.build_two_keys(a=a_text(doc=docs[ID_B], sec=secs[S_B2]))
+        self.assertEqual(self.enumerate("one").changed_documents, ())
+
+    def test_change_confirmed_by_the_other_key_is_returned(self):
+        self.build_two_keys()
+        docs, secs = self.hashes("two")
+        recorded = a_text(doc=docs[ID_B], sec=secs[S_B2])
+        self.build_two_keys(a=recorded)
+        # 参照先だけを変えて、参照先を含むキーだけを再構築する。参照元のキーは再構築しない
+        self.build({"b.md": (ID_B, b_text(part="part changed"))}, key="two")
+        new_docs, new_secs = self.hashes("two")
+        result = self.enumerate("one")
+        self.assertEqual(
+            self.referrers(result),
+            [(ID_B, ID_A, ID_B, docs[ID_B]), (ID_B, ID_A, S_B2, secs[S_B2])],
+        )
+        document_ref, section_ref = result.changed_documents[0].referrers
+        self.assertEqual(document_ref.current_hash, new_docs[ID_B])
+        self.assertEqual(section_ref.current_hash, new_secs[S_B2])
+
+    def test_document_info_not_yet_in_any_toc_is_not_compared(self):
+        # 要約だけが保存され、どの[確定 ToC]にもまだ入っていない文書は、確定した値を持たない
+        self.build({"a.md": (ID_A, a_text())}, key="one")
+        state_store.save_document_info(
+            self.root,
+            "test",
+            {
+                "doc_link_id": ID_B,
+                "path": "b.md",
+                "title": "t",
+                "purpose": "p",
+                "summary": [],
+                "tasks": [],
+                "keywords": [],
+                "content_hash": "h",
+            },
+        )
+        self.assertEqual(self.enumerate("one").changed_documents, ())
+
+    def test_section_recorded_in_several_documents_outside_the_key(self):
+        # セクションを別の文書へ移した後、移動元の文書を含むキーを再構築していない状態
+        self.build_two_keys()
+        moved = f"---\ndoc_link_id: {ID_C}\n---\n# C {S_C}\n\n# B2 {S_B2}\n\nmoved\n"
+        self.build({"c.md": (ID_C, moved)}, key="three")
+        _, secs_two = self.hashes("two")
+        _, secs_three = self.hashes("three")
+        self.write("a.md", a_text(sec=secs_three[S_B2]))
+        self.build({"a.md": (ID_A, a_text(sec=secs_three[S_B2]))}, key="one")
+        result = self.enumerate("one")
+        section_refs = [item for item in self.referrers(result) if item[2] == S_B2]
+        # 記録と異なる所属文書（移動元）についてだけ、影響候補になる
+        self.assertEqual(section_refs, [(ID_B, ID_A, S_B2, secs_three[S_B2])])
+        self.assertNotEqual(secs_two[S_B2], secs_three[S_B2])
+
+    def test_broken_document_info_outside_the_key_fails(self):
+        self.build_two_keys()
+        state_store.document_info_path(self.root, ID_B).write_bytes(b"{broken")
+        with self.assertRaises(impact_candidates.ImpactFailure) as caught:
+            self.enumerate("one")
+        self.assertTrue(any("corrupt" in line for line in caught.exception.errors))
+
+
 class FailureTest(ImpactTestBase):
     def test_missing_toc_fails(self):
         with self.assertRaises(impact_candidates.ImpactFailure) as caught:

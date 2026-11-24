@@ -918,16 +918,46 @@ class MultipleKeysTest(Base):
         ids = [d["doc_link_id"] for b in result["batches"] for d in b["documents"]]
         self.assertEqual(ids, [ID_C])
 
-    def test_stale_toc_of_other_key_is_not_a_basis_for_the_build(self):
+    def test_value_confirmed_by_one_key_is_used_by_the_other_key(self):
         self.build("one", ["docs/a.md", "docs/b.md"])
         self.build("two", ["docs/b.md", "docs/c.md"])
         self.write("docs/b.md", B_TEXT + "\nmore\n")
         self.build("one", ["docs/a.md", "docs/b.md"])
-        # two の確定 ToC は古いが、two の再構築は文書情報（最新）と現物から決まる
+        # 同じ文書の値は 1 つである。one の構築が確定した b の値を、two も使う
+        applied = {
+            key: {
+                d["doc_link_id"]: d["applied_hash"]
+                for d in state_store.load_confirmed_toc(self.root, key)["documents"]
+            }
+            for key in ("one", "two")
+        }
+        self.assertEqual(applied["two"][ID_B], applied["one"][ID_B])
+        self.assertEqual(
+            applied["two"][ID_B],
+            state_store.load_document_info(self.root, ID_B)["content_hash"],
+        )
+        # two の再構築は、内容が同じなので版を変えず、何も書き換えない
+        state_before = self.state_snapshot()
         code, result = self.advance("two", ["docs/b.md", "docs/c.md"])
         self.assertEqual(code, 0)
         self.assertEqual(result["action"], "done")
-        self.assertEqual(result["version"], 2)
+        self.assertEqual((result["version"], result["published"]), (1, False))
+        self.assertEqual(self.state_snapshot(), state_before)
+
+    def test_rebuilding_keys_that_share_a_document_writes_nothing(self):
+        # 検査の時点は文書ごとの値である。共有する文書の時点が、別のキーの構築で変わっていても、
+        # 内容が同じ再構築は何も書き換えない
+        keys = {"one": ["docs/a.md", "docs/b.md"], "two": ["docs/b.md", "docs/c.md"]}
+        for key, paths in keys.items():
+            self.build(key, paths)
+        self.write("docs/b.md", B_TEXT + "\nmore\n")
+        self.build("one", keys["one"])
+        state_before = self.state_snapshot()
+        for key, paths in (*keys.items(), *keys.items()):
+            code, result = self.build(key, paths)
+            self.assertEqual(code, 0, result)
+            self.assertFalse(result["published"], key)
+        self.assertEqual(self.state_snapshot(), state_before)
 
 
 class ExcludedDocumentsTest(Base):

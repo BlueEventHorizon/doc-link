@@ -331,8 +331,8 @@ doc-link が[Index 対象文書]へ行う書き込みは、[文書 ID]管理シ�
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "7449763271aa DLID-h96208rqr773"
+[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-003-sec-7-4]: REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"

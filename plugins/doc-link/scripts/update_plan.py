@@ -17,7 +17,7 @@ Agent の結果の受け取り（TASK-014）、[ToC 候補]の組み立てと公
 
 ## 検証器のキー名と[文書情報]のフィールド名の対応（TASK-012・TASK-014 もこの対応に従う）
 
-`ai_output_validator` の生成結果のキーと、`state_store.DOCUMENT_INFO_FIELDS` のフィールド名は、次の 1 つを除いて同じである。
+`ai_output_validator` の生成結果のキーと、[文書情報]の要約のフィールド名は、次の 1 つを除いて同じである。
 
 | 生成結果（検証器）  | [文書情報]  |
 | ------------------- | ----------- |
@@ -28,6 +28,8 @@ Agent の結果の受け取り（TASK-014）、[ToC 候補]の組み立てと公
 | `keywords`          | `keywords`  |
 
 機械取得の `doc_link_id`・`path`・`content_hash` は、計画（変更集合から引き継いだ値）から書く。
+この処理が書くのは要約の 8 項目だけである。構築が確定した値（`applied_hash`・`sections`・`references`・
+`last_check`）は、`state_store.save_document_info` が保存済みの値を保ち、[ToC 候補]の公開が書く。
 
 ## 仕様の解釈（設計書が値や形式を定めていない点）
 

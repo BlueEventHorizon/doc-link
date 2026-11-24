@@ -7,7 +7,32 @@ script が PEP 723 の宣言とロックを持つ。保存と読取り、置き�
 ## 配置
 
 - `.doc-link/documents/<符号化した文書 ID>.json`: [文書情報]。文書 ID ごとに 1 ファイル
-- `.doc-link/tocs/<符号化した ToC 識別キー>.json`: [確定 ToC]。キーごとに 1 ファイル
+- `.doc-link/tocs/<符号化した ToC 識別キー>.json`: [確定 ToC]のうち、キーごとに決まる値。キーごとに 1 ファイル
+
+## 保存の持ち方
+
+文書ごとに決まる値は、すべて[文書情報]のファイルが持つ。同じ文書の値は、[ToC 識別キー]が違っても 1 つである。
+
+- [文書情報]のファイル: 要約の 8 項目（`doc_link_id`・`path`・`title`・`purpose`・`summary`・`tasks`・`keywords`・
+  `content_hash`）と、構築が確定した 4 項目（`applied_hash`・`sections`・`references`・`last_check`）。
+  `content_hash` は要約を生成した時点、`applied_hash` は構築が確定した時点の[内容ハッシュ]である。
+  どの[確定 ToC]にもまだ入っていない文書は、確定した 4 項目が `UNCONFIRMED_FACTS` の値である
+- [確定 ToC]のファイル: `toc_key`・`version`・`target_spec`・`documents`（所属する文書 ID の配列）・
+  `reverse_references`
+
+`load_confirmed_toc` は、[確定 ToC]のファイルと、所属する文書の[文書情報]から、`CONFIRMED_TOC_FIELDS` の形の
+[確定 ToC]を組み立てて返す。`save_confirmed_toc` は、同じ形の[確定 ToC]を受け取り、文書ごとの値を[文書情報]へ
+書いてから、[確定 ToC]のファイルを置き換える。途中で失敗したときは[確定 ToC]のファイルを置き換えない。
+書き終えた[文書情報]は戻さない。
+
+`save_document_info` は、確定した 4 項目を持たない[文書情報]（要約の 8 項目だけ）を受け取ったとき、保存済みの
+4 項目を保つ。保存が無ければ `UNCONFIRMED_FACTS` の値にする。
+
+## ひとつ前の保存形式
+
+ひとつ前の形式は、文書ごとの値を[確定 ToC]のファイルが持ち、[文書情報]のファイルが要約の 8 項目だけを持つ。
+同じ情報を欠けなく持つので、そのまま読む。[確定 ToC]のファイルは `CONFIRMED_TOC_FIELDS` の形そのものであり、
+[文書情報]は確定した 4 項目が無いものとして読む。保存はつねに現在の形式で行うので、次の構築で書き直される。
 
 ## ファイル名への対応
 
@@ -22,9 +47,9 @@ script が PEP 723 の宣言とロックを持つ。保存と読取り、置き�
 
 UTF-8、オブジェクトのキーを並べ替え、インデント 2、末尾に改行 1 つ。内容が変わらないファイルは
 書き換えない。集合として意味を持つ配列（[確定 ToC] の `documents`・`references`・
-`reverse_references`・`sections`・`last_checks`）は、正規の JSON 文字列の順に並べて保存するので、読取り時の順序は
-保存時の順序と異なりうる。`sections` の順序は `position` で判断する。それ以外の配列
-（`summary`・`tasks`・`keywords`）の順序は内容なので保つ。
+`reverse_references`・`sections`・`last_checks`、[文書情報]の `sections`・`references`）は、正規の JSON 文字列の
+順に並べて保存し、読取りでも同じ順に並べて返すので、読取り時の順序は保存時の順序と異なりうる。`sections` の
+順序は `position` で判断する。それ以外の配列（`summary`・`tasks`・`keywords`）の順序は内容なので保つ。
 
 ## 失敗
 
@@ -173,8 +198,12 @@ def _is_list(value) -> bool:
     return isinstance(value, list)
 
 
-# 各フィールドを (検査関数, 必須か) で表す。ここに無いフィールドは受け付けない。
-DOCUMENT_INFO_FIELDS = {
+def _is_opt_object(value) -> bool:
+    return value is None or isinstance(value, dict)
+
+
+# 各フィールドを検査関数で表す。ここに無いフィールドは受け付けない。
+_SUMMARY_FIELDS = {
     "doc_link_id": _is_str,
     "path": _is_str,
     "title": _is_str,
@@ -183,6 +212,21 @@ DOCUMENT_INFO_FIELDS = {
     "tasks": _is_str_list,
     "keywords": _is_str_list,
     "content_hash": _is_str,
+}
+_FACT_FIELDS = {
+    "applied_hash": _is_opt_str,
+    "sections": _is_list,
+    "references": _is_list,
+    "last_check": _is_opt_object,
+}
+DOCUMENT_INFO_FIELDS = {**_SUMMARY_FIELDS, **_FACT_FIELDS}
+
+# どの[確定 ToC]にもまだ入っていない文書の、確定した 4 項目の値。
+UNCONFIRMED_FACTS = {
+    "applied_hash": None,
+    "sections": [],
+    "references": [],
+    "last_check": None,
 }
 
 _DOCUMENT_ENTRY_FIELDS = {"doc_link_id": _is_str, "applied_hash": _is_str}
@@ -234,6 +278,24 @@ CONFIRMED_TOC_FIELDS = {
     "last_checks": _is_list,
 }
 
+# 保存するファイルの形。文書ごとの値は[文書情報]のファイルが持つので、所属文書を名指す項目を除く。
+_TOC_FILE_FIELDS = {
+    "toc_key": _is_str,
+    "version": _is_version,
+    "target_spec": _is_object,
+    "documents": _is_str_list,
+    "reverse_references": _is_list,
+}
+_INFO_SECTION_FIELDS = {
+    name: check for name, check in _SECTION_FIELDS.items() if name != "doc_link_id"
+}
+_INFO_REFERENCE_FIELDS = {
+    name: check for name, check in _REFERENCE_FIELDS.items() if name != "source_doc_id"
+}
+_INFO_LAST_CHECK_FIELDS = {
+    name: check for name, check in _LAST_CHECK_FIELDS.items() if name != "doc_link_id"
+}
+
 
 def _check_fields(value, fields: dict, label: str) -> None:
     if not isinstance(value, dict):
@@ -253,6 +315,29 @@ def _check_fields(value, fields: dict, label: str) -> None:
 def validate_document_info(info) -> None:
     """[文書情報]が DES-003 §2 のフィールドを過不足なく持つことを確かめる。"""
     _check_fields(info, DOCUMENT_INFO_FIELDS, "文書情報")
+    for index, entry in enumerate(info["sections"]):
+        _check_fields(entry, _INFO_SECTION_FIELDS, f"文書情報の sections[{index}]")
+    for index, entry in enumerate(info["references"]):
+        _check_fields(entry, _INFO_REFERENCE_FIELDS, f"文書情報の references[{index}]")
+        _check_fields(
+            entry["check"],
+            _REFERENCE_CHECK_FIELDS,
+            f"文書情報の references[{index}].check",
+        )
+    if info["last_check"] is not None:
+        _check_fields(
+            info["last_check"], _INFO_LAST_CHECK_FIELDS, "文書情報の last_check"
+        )
+
+
+def _validate_toc_file(toc) -> None:
+    _check_fields(toc, _TOC_FILE_FIELDS, "確定 ToC")
+    for index, entry in enumerate(toc["reverse_references"]):
+        _check_fields(
+            entry,
+            _REVERSE_REFERENCE_FIELDS,
+            f"確定 ToC の reverse_references[{index}]",
+        )
 
 
 def validate_confirmed_toc(toc) -> None:
@@ -296,17 +381,54 @@ def serialize(value) -> bytes:
         raise StateStoreError(KIND_INVALID, f"JSON にできない内容: {exc}") from exc
 
 
+_TOC_SET_LISTS = (
+    "documents",
+    "sections",
+    "references",
+    "reverse_references",
+    "last_checks",
+)
+
+
 def _normalize_toc(toc: dict) -> dict:
     normalized = dict(toc)
-    for name in (
-        "documents",
-        "sections",
-        "references",
-        "reverse_references",
-        "last_checks",
-    ):
+    for name in _TOC_SET_LISTS:
         normalized[name] = _sorted_set_list(toc[name])
     return normalized
+
+
+def _normalize_info(info: dict) -> dict:
+    normalized = dict(info)
+    for name in ("sections", "references"):
+        normalized[name] = _sorted_set_list(info[name])
+    return normalized
+
+
+def _without(entry: dict, name: str) -> dict:
+    return {key: value for key, value in entry.items() if key != name}
+
+
+def _facts_from_toc(toc: dict, doc_link_id: str, applied_hash: str) -> dict:
+    """[確定 ToC]のうち、その文書に決まる値を、[文書情報]の確定した 4 項目の形で返す。"""
+    checks = [
+        _without(entry, "doc_link_id")
+        for entry in toc["last_checks"]
+        if entry["doc_link_id"] == doc_link_id
+    ]
+    return {
+        "applied_hash": applied_hash,
+        "sections": [
+            _without(entry, "doc_link_id")
+            for entry in toc["sections"]
+            if entry["doc_link_id"] == doc_link_id
+        ],
+        "references": [
+            _without(entry, "source_doc_id")
+            for entry in toc["references"]
+            if entry["source_doc_id"] == doc_link_id
+        ],
+        "last_check": checks[0] if checks else None,
+    }
 
 
 # --- 置き換えの機構 ----------------------------------------------------------
@@ -410,38 +532,210 @@ def _check_existing_identity(path: Path, id_field: str, expected_id: str) -> Non
 # --- 公開する操作 -------------------------------------------------------------
 
 
+def _with_facts(value):
+    """ひとつ前の形式の[文書情報]（要約の 8 項目だけ）に、確定した 4 項目が無いことを表す値を足す。"""
+    if isinstance(value, dict) and set(value) == set(_SUMMARY_FIELDS):
+        return {**value, **_unconfirmed_facts()}
+    return value
+
+
+def _unconfirmed_facts() -> dict:
+    return {
+        name: list(value) if isinstance(value, list) else value
+        for name, value in UNCONFIRMED_FACTS.items()
+    }
+
+
+def _recorded_facts(path: Path) -> dict:
+    """保存済みの[文書情報]の確定した 4 項目。保存が無い・壊れている（置き換えで直る）ときは、無いことを表す値。"""
+    try:
+        existing = _with_facts(_read_json(path))
+        validate_document_info(existing)
+    except StateStoreError as exc:
+        if exc.kind in (KIND_MISSING, KIND_CORRUPT):
+            return _unconfirmed_facts()
+        raise
+    return {name: existing[name] for name in _FACT_FIELDS}
+
+
 def save_document_info(project_root: Path, skill: str, info: dict) -> bool:
-    """[文書情報]を文書 ID ごとのファイルへ保存する。書き換えたとき `True`。"""
+    """[文書情報]を文書 ID ごとのファイルへ保存する。書き換えたとき `True`。
+
+    確定した 4 項目を 1 つも持たない `info`（要約の 8 項目だけ）は、保存済みの 4 項目を保って保存する。
+    """
+    if isinstance(info, dict) and not set(info) & set(_FACT_FIELDS):
+        doc_link_id = info.get("doc_link_id")
+        if isinstance(doc_link_id, str) and doc_link_id != "":
+            info = {
+                **info,
+                **_recorded_facts(document_info_path(project_root, doc_link_id)),
+            }
+        else:
+            info = {**info, **_unconfirmed_facts()}
     try:
         validate_document_info(info)
     except StateStoreError as exc:
         raise StateStoreError(KIND_INVALID, str(exc)) from exc
     path = document_info_path(project_root, info["doc_link_id"])
     _check_existing_identity(path, "doc_link_id", info["doc_link_id"])
-    return write_if_changed(project_root, skill, path, serialize(info))
+    return write_if_changed(project_root, skill, path, serialize(_normalize_info(info)))
 
 
 def load_document_info(project_root: Path, doc_link_id: str) -> dict:
     """[文書情報]を読む。無い・読めない・壊れているは `StateStoreError` で区別して失敗する。"""
     path = document_info_path(project_root, doc_link_id)
-    return _load_validated(path, validate_document_info, "doc_link_id", doc_link_id)
+    value = _load_validated(
+        path,
+        lambda raw: validate_document_info(_with_facts(raw)),
+        "doc_link_id",
+        doc_link_id,
+    )
+    return _normalize_info(_with_facts(value))
+
+
+def _member_ids(toc: dict) -> list[str]:
+    """[確定 ToC]の所属文書の文書 ID。文書ごとの値が所属文書のものでなければ `invalid` で失敗する。"""
+    members = [entry["doc_link_id"] for entry in toc["documents"]]
+    if len(set(members)) != len(members):
+        raise StateStoreError(
+            KIND_INVALID, "確定 ToC の documents の文書 ID が重複している"
+        )
+    known = set(members)
+    for name, id_field in (
+        ("sections", "doc_link_id"),
+        ("references", "source_doc_id"),
+        ("last_checks", "doc_link_id"),
+    ):
+        for entry in toc[name]:
+            if entry[id_field] not in known:
+                raise StateStoreError(
+                    KIND_INVALID,
+                    f"確定 ToC の {name} の文書が documents に無い: {entry[id_field]}",
+                )
+    checked = [entry["doc_link_id"] for entry in toc["last_checks"]]
+    if len(set(checked)) != len(checked):
+        raise StateStoreError(
+            KIND_INVALID, "確定 ToC の last_checks の文書 ID が重複している"
+        )
+    return members
 
 
 def save_confirmed_toc(project_root: Path, skill: str, toc: dict) -> bool:
-    """[確定 ToC]をキーごとのファイルへ保存する。書き換えたとき `True`。"""
+    """[確定 ToC]を保存する。[文書情報]か[確定 ToC]のファイルを 1 つでも書き換えたとき `True`。
+
+    文書ごとの値を、所属する文書の[文書情報]へ書いてから、[確定 ToC]のファイルを置き換える。所属する文書の
+    [文書情報]が無いときは、何も書かずに `invalid` で失敗する。
+    """
     try:
         validate_confirmed_toc(toc)
     except StateStoreError as exc:
         raise StateStoreError(KIND_INVALID, str(exc)) from exc
+    members = _member_ids(toc)
     path = confirmed_toc_path(project_root, toc["toc_key"])
     _check_existing_identity(path, "toc_key", toc["toc_key"])
-    return write_if_changed(project_root, skill, path, serialize(_normalize_toc(toc)))
+    applied = {
+        entry["doc_link_id"]: entry["applied_hash"] for entry in toc["documents"]
+    }
+    infos: list[dict] = []
+    for doc_link_id in members:
+        try:
+            info = load_document_info(project_root, doc_link_id)
+        except StateStoreError as exc:
+            kind = KIND_INVALID if exc.kind == KIND_MISSING else exc.kind
+            raise StateStoreError(
+                kind,
+                f"確定 ToC に入れる文書の文書情報を読めない（{doc_link_id}）: {exc}",
+                exc.path,
+            ) from exc
+        infos.append(
+            _normalize_info(
+                {**info, **_facts_from_toc(toc, doc_link_id, applied[doc_link_id])}
+            )
+        )
+    toc_file = {
+        "toc_key": toc["toc_key"],
+        "version": toc["version"],
+        "target_spec": toc["target_spec"],
+        "documents": sorted(members),
+        "reverse_references": _sorted_set_list(toc["reverse_references"]),
+    }
+    written = False
+    for info in infos:
+        written |= write_if_changed(
+            project_root,
+            skill,
+            document_info_path(project_root, info["doc_link_id"]),
+            serialize(info),
+        )
+    written |= write_if_changed(project_root, skill, path, serialize(toc_file))
+    return written
+
+
+def _assemble_toc(project_root: Path, toc_file: dict) -> dict:
+    """[確定 ToC]のファイルと、所属する文書の[文書情報]から、[確定 ToC]を組み立てる。"""
+    toc = {
+        "toc_key": toc_file["toc_key"],
+        "version": toc_file["version"],
+        "target_spec": toc_file["target_spec"],
+        "documents": [],
+        "sections": [],
+        "references": [],
+        "reverse_references": toc_file["reverse_references"],
+        "last_checks": [],
+    }
+    for doc_link_id in toc_file["documents"]:
+        try:
+            info = load_document_info(project_root, doc_link_id)
+        except StateStoreError as exc:
+            # 所属する文書の[文書情報]が無いことは、[確定 ToC]が無い（未構築）こととは違う。
+            kind = KIND_CORRUPT if exc.kind == KIND_MISSING else exc.kind
+            raise StateStoreError(
+                kind,
+                f"確定 ToC の文書の文書情報を読めない（{doc_link_id}）: {exc}",
+                exc.path,
+            ) from exc
+        if info["applied_hash"] is None:
+            raise StateStoreError(
+                KIND_CORRUPT,
+                f"確定 ToC の文書の文書情報に、確定した値が無い（{doc_link_id}）",
+                document_info_path(project_root, doc_link_id),
+            )
+        toc["documents"].append(
+            {"doc_link_id": doc_link_id, "applied_hash": info["applied_hash"]}
+        )
+        toc["sections"] += [
+            {"doc_link_id": doc_link_id, **entry} for entry in info["sections"]
+        ]
+        toc["references"] += [
+            {"source_doc_id": doc_link_id, **entry} for entry in info["references"]
+        ]
+        if info["last_check"] is not None:
+            toc["last_checks"].append(
+                {"doc_link_id": doc_link_id, **info["last_check"]}
+            )
+    return _normalize_toc(toc)
 
 
 def load_confirmed_toc(project_root: Path, toc_key: str) -> dict:
-    """[確定 ToC]を読む。初回構築前は `missing` で失敗する（空の ToC は返さない）。"""
+    """[確定 ToC]を読む。初回構築前は `missing` で失敗する（空の ToC は返さない）。
+
+    返すのは `CONFIRMED_TOC_FIELDS` の形で、文書ごとの値は所属する文書の[文書情報]から組み立てる。
+    """
     path = confirmed_toc_path(project_root, toc_key)
-    return _load_validated(path, validate_confirmed_toc, "toc_key", toc_key)
+    value = _read_json(path)
+    if isinstance(value, dict) and set(value) == set(CONFIRMED_TOC_FIELDS):
+        # ひとつ前の保存形式。文書ごとの値をこのファイルが持つ。
+        return _load_validated(path, validate_confirmed_toc, "toc_key", toc_key)
+    toc_file = _load_validated(path, _validate_toc_file, "toc_key", toc_key)
+    return _assemble_toc(project_root, toc_file)
+
+
+def load_all_document_infos(project_root: Path) -> list[dict]:
+    """保存済みの[文書情報]をすべて、文書 ID の昇順で返す。1 つでも読めなければ失敗する。"""
+    return [
+        load_document_info(project_root, doc_link_id)
+        for doc_link_id in list_document_ids(project_root)
+    ]
 
 
 def _list_ids(directory: Path) -> list[str]:

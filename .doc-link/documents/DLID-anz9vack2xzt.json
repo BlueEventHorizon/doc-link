@@ -1,38 +1,260 @@
 {
-  "content_hash": "9c2bea9cc41e1daf945e0f620658e065878bdcf7d5c0b1817c957d195ee8c58d",
+  "applied_hash": "f81b273666a9f2f3190b54d418e74b63fbd54439ed9b9e27a46e31b2fa729634",
+  "content_hash": "f81b273666a9f2f3190b54d418e74b63fbd54439ed9b9e27a46e31b2fa729634",
   "doc_link_id": "DLID-anz9vack2xzt",
   "keywords": [
-    "execution responsibilities",
-    "script operations",
+    "responsibilities",
     "write permissions",
-    "information-generation AI",
+    "script operations",
+    "Skill",
+    "information generation AI",
     "search AI",
-    "managed state",
-    ".doc-link JSON",
-    "temp files",
     "DLID assignment",
-    "Skill-script connection"
+    "managed state",
+    ".doc-link",
+    "temporary files"
   ],
+  "last_check": {
+    "checked_at": "2026-11-24T13:48:52+00:00",
+    "result": "success"
+  },
   "path": "docs/specs/design/DES-002_execution-responsibilities.md",
-  "purpose": "Defines which actors execute doc-link processing, their responsibilities and write permissions, the logical script operations, Skill-script connection rules, and where managed state and temp files are stored.",
+  "purpose": "Design of which actors do what in doc-link: responsibilities and write permissions, logical script operations, Skill-script connection rules, and the storage layout of managed state.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/rules/plugin_implementation_guidelines.md",
+        "result": "match",
+        "scope": "docs/rules"
+      },
+      "kind": "document",
+      "position": 5,
+      "recorded_content_hash": "a7037b127225",
+      "recorded_path": "../../rules/plugin_implementation_guidelines.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-35fhyrzd02he",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 3,
+      "recorded_content_hash": "4603909aaf60",
+      "recorded_path": "DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": "DLID-hs82xgzwkpyz"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 1,
+      "recorded_content_hash": "35de75ac8391",
+      "recorded_path": "DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": "DLID-p07g3hc4e4xd"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 2,
+      "recorded_content_hash": "fb28459057a6",
+      "recorded_path": "DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": "DLID-m0xegzfyhc3k"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-007_references-impact.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "c3fe2a03c6cb",
+      "recorded_path": "DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pr3jp4hzb8js",
+      "target_section_id": "DLID-mjeyc85ak4w3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-010_skill-composition.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "a37e588a4b86",
+      "recorded_path": "DES-010_skill-composition.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-7e90gq3sdncc",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "3e5b0619aa70",
+      "recorded_path": "../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-89jss0ty2c7m"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "4ca9ecf3d971",
+      "recorded_path": "../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8",
+      "source_section_id": null,
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-kp2w32mbpdb8"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 10,
+      "recorded_content_hash": "b6c21c9348ef",
+      "recorded_path": "../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-5ht9ebyeq2m3"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "6de27aa96e79",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-edwjjf150svm"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "594d2964b515",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-z0g4zx0wr0cn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 11,
+      "recorded_content_hash": "c1135544f245",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-8btcs80840gr"
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "02a83129fff4e894ed06bf65d0ebf7c2ebc037743e223cc4ae1e6b1e1b0626c1",
+      "heading": "3. Skill と script の接続規則",
+      "position": 3,
+      "section_id": "DLID-gjwba2n3mq4v"
+    },
+    {
+      "content_hash": "5d5d4c98544deebefaa1379dc73a3609cfca523fc2cefc69ca70c0191e5faf31",
+      "heading": "DES-002 実行主体と処理責務",
+      "position": 0,
+      "section_id": "DLID-fwe832jzywcp"
+    },
+    {
+      "content_hash": "758e6778944d43944bdfc1cf3476ac5ae2f6b470d68d25267d514434834cf17b",
+      "heading": "4. 保留と後続設計",
+      "position": 4,
+      "section_id": "DLID-8ck587eq1qnd"
+    },
+    {
+      "content_hash": "90570ded7b011eef518c1f757b440dbe538e3929a50310cc6d8ac26a9ab4df70",
+      "heading": "1. 責務と権限",
+      "position": 1,
+      "section_id": "DLID-zex778vtfhtg"
+    },
+    {
+      "content_hash": "bc5045ca6fe4e476bd700f768514702313d2c9cdf304376bca4391daaaabfb4a",
+      "heading": "2. script が提供する論理的な操作",
+      "position": 2,
+      "section_id": "DLID-4wf0pqpj2rzc"
+    }
+  ],
   "summary": [
-    "Actor table: caller or project AI, Skill, deterministic scripts, information-generation AI, search AI, and user, with permissions and prohibitions",
-    "Logical script operations with inputs, results, side effects, and failure promises",
-    "Skill-script connection rules: inherited execution, no self-reported stage success, guards in scripts",
-    "Information-generation AI context restriction: only document content and the public limit, never the internal upper limit",
-    "Impact notification is enumerated mechanically by scripts, with no AI judgment on fix necessity",
-    "Partial failure of DLID assignment: written DLIDs are kept and failures reported per document",
-    "All files stay inside the project; temp files go under .temp/doc-link/<skill>/",
-    "Managed state in .doc-link/ as JSON tracked by git, split per document ID and per ToC key",
-    "Deterministic byte output and no rewrite of unchanged files"
+    "Responsibility table of actors with write permissions and prohibitions",
+    "Logical script operations with inputs, results, side effects and failure promises",
+    "Search relevance is judged by a read-only search AI; scripts supply fixed data",
+    "Skill-script rules: guarded transitions, no self-reported success",
+    "Information-generation AI context excludes internal limits and margins",
+    "Impact notification is mechanical listing; no fix judgment inside doc-link",
+    "Partial DLID-assignment failure keeps issued IDs and reports per document",
+    "All files stay inside the project; temp files go under .temp/doc-link",
+    "Managed state is JSON under .doc-link/, split into document-info and confirmed-ToC files",
+    "Deterministic byte output and conflict convergence by rebuilding"
   ],
   "tasks": [
-    "Designing script operations and Skill boundaries",
-    "Implementing doc-link scripts or Skills",
-    "Reviewing write permissions of actors",
-    "Designing prompts for the information-generation AI",
-    "Deciding where managed state or temp files are stored",
-    "Handling merge conflicts in managed state files"
+    "Designing or changing doc-link actor responsibilities",
+    "Implementing script operations and CLI boundaries",
+    "Writing or reviewing SKILL.md and Skill-script connections",
+    "Designing information-generation AI prompts and validation boundaries",
+    "Implementing DLID assignment and failure handling",
+    "Deciding where temporary files and managed state are stored",
+    "Resolving git conflicts in .doc-link state files",
+    "Reviewing write-permission and boundary compliance"
   ],
   "title": "DES-002 実行主体と処理責務"
 }

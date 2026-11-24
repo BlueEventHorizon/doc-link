@@ -22,12 +22,12 @@ doc_link_id: DLID-zvepba87h7zk
 各図は理解用の表示であり、許可遷移の規範は DES-004 の遷移表とする。各処理の詳細は当該文書だけに置き、全体設計には重複して記載しない。
 
 [des-001]: DES-001_system-overview.md "1468229e4b8e DLID-3da82gspdp44"
-[des-002]: DES-002_execution-responsibilities.md "9c2bea9cc41e DLID-anz9vack2xzt"
-[des-003]: DES-003_data-model.md "370b9cb0bf83 DLID-yqqrwtycr379"
+[des-002]: DES-002_execution-responsibilities.md "f81b273666a9 DLID-anz9vack2xzt"
+[des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-005]: DES-005_indexing.md "ef8a5184c894 DLID-dgphqw70rkpz"
-[des-006]: DES-006_search.md "4893c0b6c888 DLID-nnbgpzkkm5vq"
-[des-007]: DES-007_references-impact.md "debedfd1b155 DLID-pr3jp4hzb8js"
+[des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
+[des-006]: DES-006_search.md "20d2b5d58257 DLID-nnbgpzkkm5vq"
+[des-007]: DES-007_references-impact.md "27c0b9daf7fd DLID-pr3jp4hzb8js"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
-[des-009]: DES-009_verification.md "e6393b8ed2b3 DLID-xmg0jcmep2h2"
+[des-009]: DES-009_verification.md "d35ff8247ac2 DLID-xmg0jcmep2h2"
 [des-010]: DES-010_skill-composition.md "a37e588a4b86 DLID-7e90gq3sdncc"

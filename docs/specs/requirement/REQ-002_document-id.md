@@ -343,8 +343,8 @@ Forge が `.doc_structure.yaml` から解決した[ToC 識別キー]と対象指
 
 [req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
 [req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "02035bac0fca DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "7449763271aa DLID-h96208rqr773"
+[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
+[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "4fcba4cbc64c DLID-dbs4rjzstadr"
 [req-002-sec-9-1]: REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"

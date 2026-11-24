@@ -480,8 +480,9 @@ class UndeterminableTest(Base):
     def test_missing_document_info_of_a_confirmed_document(self):
         self.build()
         state_store.document_info_path(self.root, ID_B).unlink()
+        # [確定 ToC]が無い（未構築）とは判定しない
         self.assert_undeterminable(
-            toc_check.check_toc(self.root, KEY), state_store.KIND_MISSING
+            toc_check.check_toc(self.root, KEY), state_store.KIND_CORRUPT
         )
 
     def test_corrupt_document_info_while_rebuild_is_needed(self):

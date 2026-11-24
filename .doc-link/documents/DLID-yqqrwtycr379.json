@@ -1,38 +1,205 @@
 {
-  "content_hash": "370b9cb0bf8380694ef4e5c0be94251b2d314288cb06fd74a27780c09a4d39f6",
+  "applied_hash": "aebbc925440f7eee18f8dfcd90959b3b7519e7b4075c59285022e387e177f77e",
+  "content_hash": "aebbc925440f7eee18f8dfcd90959b3b7519e7b4075c59285022e387e177f77e",
   "doc_link_id": "DLID-yqqrwtycr379",
   "keywords": [
-    "data model",
+    "logical data model",
+    "document info",
+    "confirmed ToC",
     "document ID",
     "content hash",
-    "confirmed ToC",
-    "document information",
+    "reflected hash",
     "section entry",
-    "reference description",
+    "reference check result",
     "multiplicity",
-    "freshness",
-    "ToC key"
+    "freshness"
   ],
+  "last_check": {
+    "checked_at": "2026-11-24T13:48:52+00:00",
+    "result": "success"
+  },
   "path": "docs/specs/design/DES-003_data-model.md",
-  "purpose": "Defines the logical data model of doc-link: information items, identifiers, sources, relations, multiplicity, value meaning and freshness, independent of the physical schema.",
+  "purpose": "Defines the logical data model of doc-link: information kinds, identifiers, relationships, multiplicities, freshness semantics, and the sources of each piece of information, without a physical schema.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 0,
+      "recorded_content_hash": "758e6778944d",
+      "recorded_path": "DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd",
+      "source_section_id": null,
+      "target_doc_id": "DLID-anz9vack2xzt",
+      "target_section_id": "DLID-8ck587eq1qnd"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/design/DES-010_skill-composition.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 1,
+      "recorded_content_hash": "6e85a7620780",
+      "recorded_path": "DES-010_skill-composition.md#4-カスタム-agent-との受け渡し-dlid-ytajmhsv2p1t",
+      "source_section_id": null,
+      "target_doc_id": "DLID-7e90gq3sdncc",
+      "target_section_id": "DLID-ytajmhsv2p1t"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 2,
+      "recorded_content_hash": "594d2964b515",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-z0g4zx0wr0cn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 3,
+      "recorded_content_hash": "6de27aa96e79",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-edwjjf150svm"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 4,
+      "recorded_content_hash": "f55cd670bc00",
+      "recorded_path": "../requirement/REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-7hjmngynv8sb"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 5,
+      "recorded_content_hash": "dfb119ed393a",
+      "recorded_path": "../requirement/REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-c3prh9y4nbzw"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "c1135544f245",
+      "recorded_path": "../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-8btcs80840gr"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-24T13:48:52+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "275305521655",
+      "recorded_path": "../requirement/REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-5p5ms6a74w73"
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "4821b5ac97f5d9ec33484323e0771c98b06c044e0421e9d06c554b923fa789f2",
+      "heading": "3. 多重度と範囲",
+      "position": 3,
+      "section_id": "DLID-1dsp2vtrmj3q"
+    },
+    {
+      "content_hash": "517558acd014cc0114078aa5b209d48350e5a5c92eae3a3f5b6a6925c90640e3",
+      "heading": "4. 値の意味と鮮度",
+      "position": 4,
+      "section_id": "DLID-61vvsqe67hht"
+    },
+    {
+      "content_hash": "74e3dd3d00601bc95e7d92289621362326c0be7934fdcd8290b1ed492bfe0ca6",
+      "heading": "5. 未決の関係",
+      "position": 5,
+      "section_id": "DLID-yakr636h28ce"
+    },
+    {
+      "content_hash": "b2473d1038e8b0d81ad5d704c53b2c8fc59a3ef730acfd9d8a57289ecc8cb922",
+      "heading": "1. モデルの境界",
+      "position": 1,
+      "section_id": "DLID-3wwk8rkdkpam"
+    },
+    {
+      "content_hash": "bb9fe7144acf75b1f7ce5dcfdb435bb58466cdd66721c6c9f269cc8c0128b38d",
+      "heading": "2. 情報と識別子",
+      "position": 2,
+      "section_id": "DLID-m8vs7s3gahbx"
+    },
+    {
+      "content_hash": "ca17959b9e4717c68e9afe7264a7f9024c46c8aca0e0e7514b652a7a9d7a9157",
+      "heading": "DES-003 論理データモデル",
+      "position": 0,
+      "section_id": "DLID-r0cbjnptm8qv"
+    }
+  ],
   "summary": [
-    "Model boundary: identity, relations, versions and primary sources without a physical schema",
-    "Table of logical information items with identification, attributes, sources and relations",
-    "Document information is stored once per document ID and shared across all keys",
-    "Confirmed ToC holds membership, references, reflected hashes, section entries and last check state",
-    "Multiplicity rules between keys, document IDs and reference descriptions",
-    "Sections are identified by DLID at heading ends; headings are not permanent IDs",
-    "Document ID differs from content hash; reference definition lines are excluded from the hash",
+    "Model boundary: observed reality versus last confirmed index are distinct",
+    "Table of logical information, identifiers, sources and relations",
+    "Document info is stored once per document ID and shared across keys",
+    "Confirmed ToC holds only per-key data: version, target spec, members, back references",
+    "Multiplicities: documents belong to multiple keys, one confirmed ToC per key",
+    "Section identification by section IDs at heading ends",
+    "Document ID differs from content hash; link definition lines excluded from hash",
     "Reference check results hold only for the recorded directory and time",
-    "Documents leaving the index target are removed from the confirmed ToC of that key"
+    "Documents leaving the target are removed from the confirmed ToC without searching outside",
+    "No unresolved relations remain"
   ],
   "tasks": [
-    "Designing or changing the data model",
-    "Implementing document information and ToC storage",
-    "Implementing reference description and check results",
-    "Implementing section entries and section IDs",
-    "Reasoning about freshness of checks",
-    "Writing tests for data relations"
+    "Designing storage of document info and confirmed ToC",
+    "Implementing state store reading and writing",
+    "Defining or changing data fields and identifiers",
+    "Implementing reference check result handling",
+    "Implementing section entry and section ID handling",
+    "Reviewing freshness and consistency of search results",
+    "Deciding content hash scope"
   ],
   "title": "DES-003 論理データモデル"
 }

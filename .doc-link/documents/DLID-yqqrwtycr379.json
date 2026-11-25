@@ -15,7 +15,7 @@
     "freshness"
   ],
   "last_check": {
-    "checked_at": "2026-11-24T16:58:15+00:00",
+    "checked_at": "2026-11-25T03:44:26+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-003_data-model.md",
@@ -23,7 +23,7 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,14 +38,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
       "position": 1,
-      "recorded_content_hash": "6e85a7620780",
+      "recorded_content_hash": "ce6313bd103a",
       "recorded_path": "DES-010_skill-composition.md#4-カスタム-agent-との受け渡し-dlid-ytajmhsv2p1t",
       "source_section_id": null,
       "target_doc_id": "DLID-7e90gq3sdncc",
@@ -53,7 +53,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -68,7 +68,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -83,7 +83,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -98,7 +98,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -113,7 +113,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -128,7 +128,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"

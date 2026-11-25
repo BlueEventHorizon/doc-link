@@ -132,6 +132,49 @@ class FixTest(SearchTestBase):
         for entry in toc["documents"]:
             self.assertNotIn(entry["applied_hash"], copy_text)
 
+    def copy_of(self, payload):
+        request = json.loads(
+            Path(sp.request_path(self.root, payload["search_id"])).read_text("utf-8")
+        )
+        return Path(request["toc_copy_path"]).read_text("utf-8")
+
+    def test_copy_omits_the_heading_that_has_the_same_text_as_the_title(self):
+        # 先頭の見出しのセクション ID は、文書の名前に見え、文書 ID と取り違えられる（Issue #17）。
+        # b.md は、タイトルと先頭の見出しが同じ（B）。a.md は違う（タイトル A / A）
+        copy_text = self.copy_of(self.fix())
+        docs = {d["doc_link_id"]: d for d in json.loads(copy_text)["documents"]}
+        self.assertEqual(docs[ID_B]["sections"], [])
+        self.assertNotIn(SEC_B, copy_text)
+        self.assertEqual(
+            docs[ID_A]["sections"], [{"section_id": SEC_A, "heading": "A"}]
+        )
+
+    def test_the_omitted_section_is_still_valid_in_the_inspection(self):
+        # 写しから外しただけで、固定した状態には残る。提出されたら受理される
+        sid = self.fix()["search_id"]
+        sp.submit_item(self.root, sid, ID_B, "r", [SEC_B])
+        sp.submit_end(self.root, sid, "0")
+        result = sp.collect(self.root, sid)
+        self.assertEqual(result["rejected"], [])
+        self.assertEqual(
+            result["documents"][0]["sections"],
+            [{"section_id": SEC_B, "heading": "B"}],
+        )
+
+    def test_only_the_first_heading_with_the_title_text_is_a_title_heading(self):
+        info = {"title": "タイトル"}
+        self.assertTrue(
+            sp._is_title_heading({"position": 0, "heading": "タイトル"}, info)
+        )
+        # 先頭でない見出しは、文字列がタイトルと同じでも外さない
+        self.assertFalse(
+            sp._is_title_heading({"position": 1, "heading": "タイトル"}, info)
+        )
+        # 先頭の見出しでも、文字列がタイトルと違えば外さない
+        self.assertFalse(
+            sp._is_title_heading({"position": 0, "heading": "別の見出し"}, info)
+        )
+
     def test_copy_is_written_without_indentation_and_with_short_lines(self):
         payload = self.fix()
         request_text = Path(sp.request_path(self.root, payload["search_id"])).read_text(
@@ -335,6 +378,36 @@ class InspectionTest(SearchTestBase):
         self.assertEqual(
             self.rejected_of(result), [("duplicate_document_id", ID_A, None)]
         )
+
+    def test_notice_says_a_document_may_be_missing_only_for_an_unknown_document_id(
+        self,
+    ):
+        # 文書が結果に入っている重複・版に無いセクション ID で、文書が漏れたとは言わない
+        unknown = sp.collect(self.root, self.finish([(ID_B, []), (SEC_A, [])]))
+        self.assertEqual(unknown["rejected_notice"], sp.NOTICE_REJECTED)
+        self.assertIn("漏れている可能性", unknown["rejected_notice"])
+        for items in (
+            [(ID_A, [SEC_A]), (ID_A, [])],
+            [(ID_A, ["DLID-00000000s999"])],
+        ):
+            with self.subTest(items=items):
+                result = sp.collect(self.root, self.finish(items))
+                self.assertEqual(
+                    result["rejected_notice"], sp.NOTICE_REJECTED_DOCUMENTS_KEPT
+                )
+                self.assertNotIn("漏れている可能性", result["rejected_notice"])
+        # 版に無い文書 ID が 1 件でもあれば、ほかの種別と混ざっても文書が漏れた可能性を言う
+        mixed = sp.collect(
+            self.root,
+            self.finish([(ID_A, []), (ID_A, []), (SEC_A, [])]),
+        )
+        self.assertEqual(mixed["rejected_notice"], sp.NOTICE_REJECTED)
+
+    def test_duplicate_message_says_the_document_is_in_the_result(self):
+        result = sp.collect(self.root, self.finish([(ID_A, []), (ID_A, [])]))
+        message = result["rejected"][0]["message"]
+        self.assertIn(ID_A, message)
+        self.assertIn("1 回目", message)
 
     def test_search_fails_when_no_document_passes_the_inspection(self):
         # 全件が誤りの検索を、関連する文書が無いという正常な 0 件と見分けられるようにする

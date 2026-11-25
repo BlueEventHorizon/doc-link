@@ -68,8 +68,8 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[des-010]: DES-010_skill-composition.md "46ea124365d8 DLID-7e90gq3sdncc"
-[des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "4c91983fb6ff DLID-p07g3hc4e4xd"
+[des-010]: DES-010_skill-composition.md "ecbb0ce6bef6 DLID-7e90gq3sdncc"
+[des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "32d757b26926 DLID-p07g3hc4e4xd"
 [des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "fb28459057a6 DLID-m0xegzfyhc3k"
 [des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "4603909aaf60 DLID-hs82xgzwkpyz"
 [des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "c3fe2a03c6cb DLID-mjeyc85ak4w3"

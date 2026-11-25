@@ -14,7 +14,7 @@
     "reference check result"
   ],
   "last_check": {
-    "checked_at": "2026-11-24T16:58:15+00:00",
+    "checked_at": "2026-11-25T03:44:26+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-004_state-machines.md",
@@ -22,7 +22,7 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -37,7 +37,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -52,7 +52,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -67,7 +67,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -82,7 +82,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -97,7 +97,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -112,7 +112,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -127,7 +127,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -142,7 +142,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -157,7 +157,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -172,7 +172,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T16:58:15+00:00",
+        "checked_at": "2026-11-25T03:44:26+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"

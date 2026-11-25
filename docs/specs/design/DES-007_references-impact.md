@@ -97,7 +97,7 @@ doc-link は参照元の修正要否を判断せず、根拠や修正案を生�
 - 標準出力に載せないのは、検出事項（`check-dlid`・`check-links`）、検査できなかったリンクと参照元の文書（`check-links`）、変更のある文書とセクション・除外した文書（`check-toc`・検索前検査）、変更影響候補と走査した参照元の文書（`check-impact`）である。件数は標準出力に持つ。
 - 検査は、[Index 対象文書]と管理状態を書き換えない。書くのは、この明細ファイルだけである。
 
-[des-010]: DES-010_skill-composition.md "46ea124365d8 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "ecbb0ce6bef6 DLID-7e90gq3sdncc"
 [des-010-sec-1-2]: DES-010_skill-composition.md#12-検査の-skill-の責務-dlid-h9bg56gdypm5 "ca66de9e8025 DLID-h9bg56gdypm5"
 [des-010-sec-3-7]: DES-010_skill-composition.md#37-check-impact-dlid-1nny3y551m4v "dd9a5fefa574 DLID-1nny3y551m4v"
 [des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"

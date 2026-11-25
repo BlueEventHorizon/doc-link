@@ -52,7 +52,10 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
   [文書情報]の `path` を、記録されたパスとして固定する時点で読む（D-024 の最新の[文書情報]）
 - 写しの `summary`・`tasks` の名前は[文書情報]のフィールド名に揃える
 - 結果の検査: 返った[文書 ID]が固定した[ToC]の文書に無いとき、[セクション ID]がその文書のセクションに無いとき、同じ[文書 ID]を
-  2 回返したときは異常とする。[セクション ID]が別の文書にあっても、その文書のセクションでなければ異常である
+  2 回返したときは、その ID だけを結果から外し、`rejected`（種別・文書 ID・セクション ID・説明）と `rejected_notice` に残す。
+  ほかの正しい結果は返す。[セクション ID]が別の文書にあっても、その文書のセクションでなければ外す。外した ID を読み替えて補わない。
+  検査に通った文書が 0 件で、外した ID がある（全件が誤り）ときだけ、関連する文書が無い正常な 0 件と見分けられないので、
+  検索を失敗とする（`SearchFailed`）。終了の値の欠落・定義外も失敗である
 - 結果が 0 件（終了の値が `"0"`）は、関連する文書が無いという正常な結果である
 - 後始末（`cleanup`）は、`collect` が結果を返した後（失敗を返した後を含む）に走る。ほかの検索の作業ファイルは削除しない
 - 値の内容を理由に受け渡しを拒まない。関連理由・文書 ID・終了の値は、変形せずに保持し、検査は `collect` で行う
@@ -89,6 +92,15 @@ TARGET_FILE_PREFIX = "target-"
 
 _SEARCH_ID = re.compile(r"SEARCH-[0-9a-f]{8}")
 _ITEM_NAME = re.compile(r"item-([0-9]{6})")
+
+REJECTED_UNKNOWN_DOCUMENT = "unknown_document_id"
+REJECTED_DUPLICATE_DOCUMENT = "duplicate_document_id"
+REJECTED_UNKNOWN_SECTION = "unknown_section_id"
+
+NOTICE_REJECTED = (
+    "検索 AI が返した ID の一部が、固定した[ToC]の版の検査に通らず、結果に含めていない（`rejected`）。"
+    "含めていない ID は補っていない。関連する文書が結果から漏れている可能性がある"
+)
 
 GUIDANCE_INITIAL_BUILD = "[ToC]が未構築のため検索しない"
 NOTICE_POSSIBLY_STALE = (
@@ -458,7 +470,10 @@ def _read_items(root: Path, search_id: str) -> list[dict]:
 
 
 def collect(root: Path, search_id: str) -> dict:
-    """結果を検査して整形する。固定した[ToC]の版に無い ID、終了の値の欠落・定義外は `SearchFailed`。"""
+    """結果を検査して整形する。検査に通らない ID は結果から外して `rejected` に残す。
+
+    終了の値の欠落・定義外、または検査に通った文書が 0 件で外した ID がある（全件が誤り）ときは `SearchFailed`。
+    """
     fixed = _load_fixed(root, search_id)
     result = _read_optional(_file(root, search_id, "result"))
     if result is None:
@@ -468,17 +483,38 @@ def collect(root: Path, search_id: str) -> dict:
             [f"終了の値が定義外である: {result['exit_value']!r}。検索を失敗とした"]
         )
 
-    problems: list[str] = []
+    rejected: list[dict] = []
+
+    def reject(kind: str, doc_id: str, section_id: str | None, message: str) -> None:
+        rejected.append(
+            {
+                "kind": kind,
+                "doc_link_id": doc_id,
+                "section_id": section_id,
+                "message": message,
+            }
+        )
+
     seen: set[str] = set()
     documents = []
     for item in _read_items(root, search_id):
         doc_id = item["doc_link_id"]
         known = fixed["documents"].get(doc_id)
         if known is None:
-            problems.append(f"固定した[ToC]の版に無い[文書 ID]が返った: {doc_id}")
+            reject(
+                REJECTED_UNKNOWN_DOCUMENT,
+                doc_id,
+                None,
+                f"固定した[ToC]の版に無い[文書 ID]が返った: {doc_id}",
+            )
             continue
         if doc_id in seen:
-            problems.append(f"同じ[文書 ID]が複数回返った: {doc_id}")
+            reject(
+                REJECTED_DUPLICATE_DOCUMENT,
+                doc_id,
+                None,
+                f"同じ[文書 ID]が複数回返った: {doc_id}",
+            )
             continue
         seen.add(doc_id)
         headings = {
@@ -487,8 +523,11 @@ def collect(root: Path, search_id: str) -> dict:
         sections = []
         for section_id in item["section_ids"]:
             if section_id not in headings:
-                problems.append(
-                    f"文書 {doc_id} の固定した[ToC]の版に無い[セクション ID]が返った: {section_id}"
+                reject(
+                    REJECTED_UNKNOWN_SECTION,
+                    doc_id,
+                    section_id,
+                    f"文書 {doc_id} の固定した[ToC]の版に無い[セクション ID]が返った: {section_id}",
                 )
                 continue
             sections.append({"section_id": section_id, "heading": headings[section_id]})
@@ -500,9 +539,13 @@ def collect(root: Path, search_id: str) -> dict:
                 "sections": sections,
             }
         )
-    if problems:
+    if rejected and not documents:
+        # 全件が誤りの検索を、関連する文書が無いという正常な 0 件と見分けられなくなるため、失敗とする
         raise SearchFailed(
-            problems + ["存在しない ID を補わないので、この検索の結果を採用しない"]
+            [entry["message"] for entry in rejected]
+            + [
+                "検査に通った文書が無い。存在しない ID を補わないので、この検索の結果を採用しない"
+            ]
         )
 
     stale = fixed["freshness"] == FRESHNESS_POSSIBLY_STALE
@@ -514,6 +557,8 @@ def collect(root: Path, search_id: str) -> dict:
         "freshness_notice": NOTICE_POSSIBLY_STALE if stale else None,
         "path_notice": NOTICE_PATH,
         "documents": documents,
+        "rejected": rejected,
+        "rejected_notice": NOTICE_REJECTED if rejected else None,
     }
 
 

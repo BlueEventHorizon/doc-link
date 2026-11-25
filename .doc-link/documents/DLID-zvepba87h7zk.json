@@ -12,7 +12,7 @@
     "requirements vs design"
   ],
   "last_check": {
-    "checked_at": "2026-11-25T03:44:26+00:00",
+    "checked_at": "2026-11-25T12:29:15+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/README.md",
@@ -20,7 +20,7 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-001_system-overview.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -35,14 +35,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 1,
-      "recorded_content_hash": "f81b273666a9",
+      "recorded_content_hash": "3a9861334737",
       "recorded_path": "DES-002_execution-responsibilities.md",
       "source_section_id": null,
       "target_doc_id": "DLID-anz9vack2xzt",
@@ -50,7 +50,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -65,7 +65,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -80,7 +80,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -95,14 +95,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 5,
-      "recorded_content_hash": "426666febb11",
+      "recorded_content_hash": "8966603c17ac",
       "recorded_path": "DES-006_search.md",
       "source_section_id": null,
       "target_doc_id": "DLID-nnbgpzkkm5vq",
@@ -110,7 +110,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -125,7 +125,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -140,7 +140,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -155,14 +155,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 9,
-      "recorded_content_hash": "46ea124365d8",
+      "recorded_content_hash": "c36cb4d74873",
       "recorded_path": "DES-010_skill-composition.md",
       "source_section_id": null,
       "target_doc_id": "DLID-7e90gq3sdncc",

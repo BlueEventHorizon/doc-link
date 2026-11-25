@@ -6,7 +6,6 @@
 AI の生成は固定値の差し込みで代替する。
 """
 
-import json
 import sys
 import unittest
 from pathlib import Path
@@ -123,17 +122,18 @@ class MultipleKeysScenarioTest(ScenarioBase):
             )
             self.assertEqual((code, prepared["action"]), (0, "invoke_query_worker"))
             search_id = prepared["search_id"]
-            code, located = self.run_script(
-                query_docs, "--search-id", search_id, command="request-path"
+            # 文書を 1 件ずつ受け取る（担当内はパスの昇順）。B が受け取る依頼に載る内容を比べる
+            items = self.work_through(
+                prepared["workers"][0], lambda item: {"relevance": "no"}
             )
-            self.assertEqual(code, 0, located)
-            request = json.loads(Path(located["path"]).read_text(encoding="utf-8"))
-            toc_copy = json.loads(
-                Path(request["toc_copy_path"]).read_text(encoding="utf-8")
-            )
-            copies[key] = next(
-                d for d in toc_copy["documents"] if d["doc_link_id"] == ID_B
-            )
+            # position・total は担当内の位置なので、キーごとに違う。文書の内容だけを比べる
+            copies[key] = {
+                name: value
+                for name, value in next(
+                    item for item in items if item["title"] == self.info(ID_B)["title"]
+                ).items()
+                if name not in ("position", "total")
+            }
             code, _ = self.run_script(
                 query_docs, "--search-id", search_id, command="cleanup"
             )

@@ -97,4 +97,4 @@ Python script の実行と依存の管理を uv で行うときのルール。�
 - `requires-python` の下限は、最新の安定版に合わせる。古い版は修正の提供が終わり、セキュリティ上の懸念が残るため、新しい版を強制する。手元に無ければ uv がダウンロードする
 - 利用できる版は `uv python list` で確かめる。一覧の先頭は alpha・beta・rc の版のことがあるため、これらを除いた最新を選ぶ
 
-[plugin-implementation-guidelines]: plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
+[plugin-implementation-guidelines]: plugin_implementation_guidelines.md "b1dd82402098 DLID-35fhyrzd02he"

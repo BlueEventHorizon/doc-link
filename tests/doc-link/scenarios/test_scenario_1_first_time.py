@@ -130,35 +130,59 @@ class FirstTimeScenarioTest(ScenarioBase):
         self.assertEqual(prepared["freshness"], "current")
         self.assertEqual(prepared["toc_version"], 1)
         search_id = prepared["search_id"]
-        code, _ = self.run_script(
-            query_docs,
-            "--search-id",
-            search_id,
-            "--doc-id",
-            id_a,
-            "--reason",
-            "固定の理由",
-            "--section-id",
-            section_part,
-            command="submit-item",
+        # 文書が少ないので担当は 1 つ。検索 AI は ID を見ず、文書を 1 件ずつ受け取り、見出しで答える
+        self.assertEqual(prepared["workers"], [f"{search_id}-1"])
+        items = self.work_through(
+            prepared["workers"][0],
+            lambda item: (
+                {"relevance": "yes", "reason": "固定の理由", "headings": ["Part"]}
+                if item["title"] == "Alpha"
+                else {"relevance": "no"}
+            ),
         )
-        self.assertEqual(code, 0)
-        code, _ = self.run_script(
-            query_docs,
-            "--search-id",
-            search_id,
-            "--exit-value",
-            "0",
-            command="submit-end",
-        )
-        self.assertEqual(code, 0)
+        self.assertEqual([item["title"] for item in items], ["Alpha", "Beta"])
         code, found = self.run_script(
             query_docs, "--search-id", search_id, command="collect"
         )
         self.assertEqual(code, 0, found)
         self.assertEqual(
-            [(d["doc_link_id"], d["recorded_path"]) for d in found["documents"]],
-            [(id_a, "docs/a.md")],
+            [
+                (d["doc_link_id"], d["recorded_path"], d["relevance"])
+                for d in found["documents"]
+            ],
+            [(id_a, "docs/a.md", "yes")],
+        )
+        self.assertEqual(
+            [s["section_id"] for s in found["documents"][0]["sections"]],
+            [section_part],
+        )
+        # 判断がつかない文書（maybe）は、取りこぼさないために結果へ含まれる。yes と maybe が両方入る
+        code, prepared = self.run_script(
+            query_docs,
+            "--task",
+            "調べもの",
+            "--key",
+            KEY,
+            "--paths",
+            *PATHS,
+            command="prepare",
+        )
+        self.assertEqual(code, 0, prepared)
+        self.work_through(
+            prepared["workers"][0],
+            lambda item: (
+                {"relevance": "yes", "reason": "固定の理由", "headings": ["Part"]}
+                if item["title"] == "Alpha"
+                else {"relevance": "maybe", "reason": "判断がつかない"}
+            ),
+        )
+        code, found = self.run_script(
+            query_docs, "--search-id", prepared["search_id"], command="collect"
+        )
+        self.assertEqual(code, 0, found)
+        self.assertEqual(
+            [(d["doc_link_id"], d["relevance"]) for d in found["documents"]],
+            [(id_a, "yes"), (id_b, "maybe")],
         )
         self.assertEqual(self.state_snapshot(), state_before)
         self.assertEqual(self.snapshot("docs"), docs_before)

@@ -47,7 +47,7 @@ uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" 
 
 - `doc_link_id`: 文書 ID
 - `title`・`purpose`（目的）・`summary`（内容概要）・`tasks`（適用される作業）・`keywords`: 文書情報
-- `sections`: セクションごとの `section_id`（セクション ID）と `heading`（見出し）
+- `sections`: セクションごとの `section_id`（セクション ID）と `heading`（見出し）。文書の先頭の見出しで、見出しがタイトルと同じものは、文書の名前と取り違えるので、写しに入っていない
 
 ### 3. 関連する文書を選ぶ
 
@@ -67,7 +67,7 @@ uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" 
 uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" submit-item --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID} --doc-id {文書 ID} --reason '{関連理由}' --section-id {セクション ID}
 ```
 
-- `--doc-id` に渡すのは、写しの `documents` の各要素の `doc_link_id` だけである。`sections` の `section_id` は `--doc-id` に渡さない。文書の先頭の見出し（タイトルと同じ見出しテキスト）の `section_id` も同じである
+- `--doc-id` に渡すのは、写しの `documents` の各要素の `doc_link_id` だけである。`sections` の `section_id` は `--doc-id` に渡さない。同じ文書を 2 回渡さない。ID は写しから一字一句そのまま写し、文字を足したり変えたりしない
 - `--section-id` は、該当するセクションがあるときだけ付ける。値は、その文書の `sections` の `section_id` だけである。複数あれば、セクションごとにオプションを繰り返す
 - 値は、確定した文字列をそのまま渡す。要約・改変をしない。値は単一引用符で囲み、値の中の単一引用符は `'\''` と書く。値が `-` で始まるときは、`--reason='-値'` のように `=` でつなぐ
 - 検査は script が、結果を受け取るとき（`collect`）に行う。`submit-item` は値を拒まず、誤りを知らせない。検査に通らない ID は、その ID だけが結果から外れ、利用者に報告される。終了コードが 0 以外のときも、再送・値の修正・ID の補完をしない。応答に終了コードと `errors` を書いて、残りの文書へ進む

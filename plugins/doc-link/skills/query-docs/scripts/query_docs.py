@@ -49,7 +49,10 @@
 5. `collect --search-id ID`: 結果を検査して返す。SKILL は、検索結果として `documents`（`doc_link_id`・`recorded_path`・
    `reason`・`sections`）に、`toc_key`・`toc_version`・`freshness`・`freshness_notice`・`path_notice` を添えて呼び出し元へ返す。
    返した後に、検索 ID の依頼・結果・写し・固定した状態をすべて削除する（失敗を返した後も削除する）。
-   終了の値が無い・定義外、固定した[ToC]の版に無い[文書 ID]・[セクション ID]を含む結果は、検索の失敗として
+   固定した[ToC]の版に無い[文書 ID]・[セクション ID]、2 回目以降の同じ[文書 ID]は、その ID だけを結果から外し、
+   `rejected`（`kind`・`doc_link_id`・`section_id`・`message`）と `rejected_notice` に残す（外した ID は補わない）。
+   SKILL は `rejected` があれば、結果が不完全な可能性とともに呼び出し元へ返す。
+   終了の値が無い・定義外、または検査に通った文書が 0 件で外した ID がある（全件が誤り）結果は、検索の失敗として
    終了コード 3 とエラーの JSON を返す。SKILL は失敗を呼び出し元へ返す（結果を補わない）
 6. `cleanup --search-id ID`: 検索 ID の作業ファイルをすべて削除する（`query-worker` を起動できなかったときなど、
    `collect` を呼ばずに終えるとき）

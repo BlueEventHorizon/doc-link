@@ -88,4 +88,5 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" collect --project-ro
 - 使用した ToC 識別キー（`toc_key`）と ToC の版（`toc_version`）
 - 鮮度（`freshness`・`freshness_notice`）。パスの注意（`path_notice`）も添える。記録されたパスを現在の実体パスとして断定しない
 - 「既存の ToC のまま検索する」を選んだときは、その版が現在の Index 対象リストを反映していない可能性を、結果全体に明示する
+- `rejected`（検査に通らず結果から外した ID。`kind`・`doc_link_id`・`section_id`・`message`）が空でないときは、`rejected_notice` とともに返し、関連する文書が結果から漏れている可能性を明示する。外した ID を読み替えたり補ったりしない。黙って捨てない
 - 結果の文書を読み、作業に使うのは呼び出し元である。このスキルは文書を読まず、編集しない

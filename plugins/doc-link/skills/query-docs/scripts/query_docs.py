@@ -41,7 +41,8 @@
 2. `request-path --search-id ID`: 依頼の絶対パス（`{"path": …}`）を返す。`query-worker` が使う。JSON 本文は標準出力に載せない。
    依頼は `search_id`・`task`・`toc_key`・`toc_copy_path`（[ToC]の写しの絶対パス）を持つ。写しは `documents` の配列で、
    要素は `doc_link_id`・`title`・`purpose`・`summary`（内容概要）・`tasks`（適用作業）・`keywords`・`sections`
-   （`section_id`・`heading`）である。公開されていなければ失敗する
+   （`section_id`・`heading`。文書の先頭の見出しで、見出しがタイトルと同じものは入れない。`collect` の検査には残る）である。
+   公開されていなければ失敗する
 3. `submit-item --search-id ID --doc-id DOC_ID --reason R [--section-id S]...`: `query-worker` が、関連する文書を 1 件ずつ渡す。
    並べた順が結果の並びになる。値は変形されずに届く。検査は `collect` が行う
 4. `submit-end --search-id ID --exit-value V`: 終了の値を渡す。正常は `"0"`。エラー値は無い。1 回だけで、上書きしない。
@@ -51,7 +52,8 @@
    返した後に、検索 ID の依頼・結果・写し・固定した状態をすべて削除する（失敗を返した後も削除する）。
    固定した[ToC]の版に無い[文書 ID]・[セクション ID]、2 回目以降の同じ[文書 ID]は、その ID だけを結果から外し、
    `rejected`（`kind`・`doc_link_id`・`section_id`・`message`）と `rejected_notice` に残す（外した ID は補わない）。
-   SKILL は `rejected` があれば、結果が不完全な可能性とともに呼び出し元へ返す。
+   SKILL は `rejected` があれば、`rejected_notice`（文書が漏れている可能性があるのは版に無い文書 ID を外したときだけ）とともに
+   呼び出し元へ返す。
    終了の値が無い・定義外、または検査に通った文書が 0 件で外した ID がある（全件が誤り）結果は、検索の失敗として
    終了コード 3 とエラーの JSON を返す。SKILL は失敗を呼び出し元へ返す（結果を補わない）
 6. `cleanup --search-id ID`: 検索 ID の作業ファイルをすべて削除する（`query-worker` を起動できなかったときなど、

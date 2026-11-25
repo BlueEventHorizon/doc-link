@@ -40,6 +40,9 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 
 - `<ID>.toc.json`: [ToC]の写し。`documents` の配列で、要素は `doc_link_id`・`title`・`purpose`・`summary`（内容概要）・
   `tasks`（適用作業）・`keywords`・`sections`（`section_id`・`heading` の配列）。パス・[内容ハッシュ]・参照関係・検査結果は入れない。
+  `sections` に、文書の先頭の見出しで、見出しの文字列が[文書情報]のタイトルと同じセクションは入れない（その[セクション ID]は
+  文書の名前に見える見出しに付き、[文書 ID]と同じ形式で、検索 AI が[文書 ID]と取り違えるため。Issue #17）。`collect` の検査
+  には、そのセクションも含めた全セクションを使う（`<ID>.fixed.json` は全セクションを持つ）。
   読む量を減らすため、字下げを持たない（要素ごとの改行は残す）。ほかのファイルは管理状態と同じ字下げを持つ
 - `<ID>.fixed.json`: script が固定して持つもの。`toc_key`・`toc_version`・`freshness`・文書ごとの記録されたパスとセクション
 - `<ID>.request.json`: 依頼。`search_id`・`task`・`toc_key`・`toc_copy_path`（写しの絶対パス）
@@ -54,6 +57,8 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 - 結果の検査: 返った[文書 ID]が固定した[ToC]の文書に無いとき、[セクション ID]がその文書のセクションに無いとき、同じ[文書 ID]を
   2 回返したときは、その ID だけを結果から外し、`rejected`（種別・文書 ID・セクション ID・説明）と `rejected_notice` に残す。
   ほかの正しい結果は返す。[セクション ID]が別の文書にあっても、その文書のセクションでなければ外す。外した ID を読み替えて補わない。
+  `rejected_notice` が「文書が結果から漏れている可能性がある」と言うのは、版に無い[文書 ID]を外したときだけである。重複と版に無い
+  [セクション ID]だけのときは、文書が結果に入っているので、含めなかった関連理由・セクションが無いことだけを言う。
   検査に通った文書が 0 件で、外した ID がある（全件が誤り）ときだけ、関連する文書が無い正常な 0 件と見分けられないので、
   検索を失敗とする（`SearchFailed`）。終了の値の欠落・定義外も失敗である
 - 結果が 0 件（終了の値が `"0"`）は、関連する文書が無いという正常な結果である
@@ -100,6 +105,11 @@ REJECTED_UNKNOWN_SECTION = "unknown_section_id"
 NOTICE_REJECTED = (
     "検索 AI が返した ID の一部が、固定した[ToC]の版の検査に通らず、結果に含めていない（`rejected`）。"
     "含めていない ID は補っていない。関連する文書が結果から漏れている可能性がある"
+)
+# 版に無い[文書 ID]を外していないとき（重複・版に無い[セクション ID]だけ）。文書は結果に入っている
+NOTICE_REJECTED_DOCUMENTS_KEPT = (
+    "検索 AI が返した ID の一部が、固定した[ToC]の版の検査に通らず、結果に含めていない（`rejected`）。"
+    "含めていない ID は補っていない。結果の文書は漏れていないが、含めなかった ID が指す関連理由・セクションは結果に無い"
 )
 
 GUIDANCE_INITIAL_BUILD = "[ToC]が未構築のため検索しない"
@@ -254,6 +264,15 @@ def _published_files(root: Path, search_id: str) -> list[Path]:
 # --- 検索前検査の結果の扱いと固定 -------------------------------------------------
 
 
+def _is_title_heading(entry: dict, info: dict) -> bool:
+    """文書の先頭の見出しで、見出しの文字列が[文書情報]のタイトルと同じか。
+
+    この見出しの[セクション ID]は、文書の名前に見える見出しに付いており、[文書 ID]と同じ形式のため、
+    検索 AI が[文書 ID]と取り違える（Issue #17）。写しには入れない。
+    """
+    return entry["position"] == 0 and entry["heading"] == info["title"]
+
+
 def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> dict:
     """検索に使う版の[確定 ToC]と最新の[文書情報]から写しを組み立て、版・鮮度とともに固定して依頼を公開する。"""
     try:
@@ -267,12 +286,17 @@ def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> di
     except state_store.StateStoreError as exc:
         raise SearchError([f"[ToC]・[文書情報]を読めない: {exc}"]) from exc
 
+    # sections は collect の検査に使う全セクション、copy_sections は写しに入れるセクション
     sections: dict[str, list[dict]] = {doc_id: [] for doc_id in infos}
+    copy_sections: dict[str, list[dict]] = {doc_id: [] for doc_id in infos}
     for entry in sorted(toc["sections"], key=lambda item: item["position"]):
-        if entry["doc_link_id"] in sections:
-            sections[entry["doc_link_id"]].append(
-                {"section_id": entry["section_id"], "heading": entry["heading"]}
-            )
+        doc_id = entry["doc_link_id"]
+        if doc_id not in sections:
+            continue
+        section = {"section_id": entry["section_id"], "heading": entry["heading"]}
+        sections[doc_id].append(section)
+        if not _is_title_heading(entry, infos[doc_id]):
+            copy_sections[doc_id].append(section)
 
     copy = {
         "documents": [
@@ -283,7 +307,7 @@ def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> di
                 "summary": infos[doc_id]["summary"],
                 "tasks": infos[doc_id]["tasks"],
                 "keywords": infos[doc_id]["keywords"],
-                "sections": sections[doc_id],
+                "sections": copy_sections[doc_id],
             }
             for doc_id in sorted(infos)
         ]
@@ -513,7 +537,8 @@ def collect(root: Path, search_id: str) -> dict:
                 REJECTED_DUPLICATE_DOCUMENT,
                 doc_id,
                 None,
-                f"同じ[文書 ID]が複数回返った: {doc_id}",
+                f"同じ[文書 ID]が複数回返った: {doc_id}。2 回目以降の関連理由・セクションは結果に含めていない"
+                "（文書は 1 回目の提出で結果に含まれている）",
             )
             continue
         seen.add(doc_id)
@@ -558,8 +583,17 @@ def collect(root: Path, search_id: str) -> dict:
         "path_notice": NOTICE_PATH,
         "documents": documents,
         "rejected": rejected,
-        "rejected_notice": NOTICE_REJECTED if rejected else None,
+        "rejected_notice": _rejected_notice(rejected),
     }
+
+
+def _rejected_notice(rejected: list[dict]) -> str | None:
+    """外した ID の通知。文書が結果から漏れている可能性があるのは、版に無い[文書 ID]を外したときだけである。"""
+    if not rejected:
+        return None
+    if any(entry["kind"] == REJECTED_UNKNOWN_DOCUMENT for entry in rejected):
+        return NOTICE_REJECTED
+    return NOTICE_REJECTED_DOCUMENTS_KEPT
 
 
 def cleanup(root: Path, search_id: str) -> int:

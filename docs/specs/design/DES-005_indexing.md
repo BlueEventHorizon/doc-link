@@ -106,7 +106,7 @@ DLID 付与操作は構築とは別に、ユーザーまたは[プロジェク�
 [ToC]の構築・再構築は、通知の状態を持たない（要件 [D-038][req-005-fr-015]）。失敗時は段階、対象 ID・パス、原因、[確定 ToC]の有無を返す。再実行時は[確定 ToC]と現物から再判定し、旧版に取り込まれた要約を不必要に繰り返さない。
 
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
-[des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "758e6778944d DLID-8ck587eq1qnd"
+[des-002-sec-4]: DES-002_execution-responsibilities.md#4-保留と後続設計-dlid-8ck587eq1qnd "e747eae76afc DLID-8ck587eq1qnd"
 [req-002-sec-6-1]: ../requirement/REQ-002_document-id.md#61-index-対象範囲-dlid-aggqjh0wkhe9 "880c2fce7026 DLID-aggqjh0wkhe9"
 [req-001-sec-17-1]: ../requirement/REQ-001_overview.md#171-エラー候補-dlid-8crwqpf21hbe "f6477b46e7bf DLID-8crwqpf21hbe"
 [des-008-sec-2]: DES-008_content-rules.md#2-markdown-参照と位置-dlid-7d2f9n4a3vry "77f12128e9ca DLID-7d2f9n4a3vry"

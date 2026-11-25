@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 SKILL_SCRIPTS_DIR = (
@@ -15,9 +16,11 @@ SKILL_SCRIPTS_DIR = (
 sys.path.insert(0, str(SKILL_SCRIPTS_DIR))
 
 import query_docs  # noqa: E402
+import worker_io  # noqa: E402
 
 sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
 import change_set  # noqa: E402
+import search_prepare  # noqa: E402
 import state_store  # noqa: E402
 import toc_candidate  # noqa: E402
 from content_hash import document_content_hash  # noqa: E402
@@ -32,6 +35,10 @@ SEC_B = "DLID-00000000s002"
 WHEN = "2026-11-13T00:00:00+00:00"
 A_TEXT = f"---\ndoc_link_id: {ID_A}\n---\n# A {SEC_A}\n\nbody\n"
 B_TEXT = f"---\ndoc_link_id: {ID_B}\n---\n# B {SEC_B}\n"
+TITLE_A = "title a.md"
+TITLE_B = "title b.md"
+HEAD_A = "A"
+HEAD_B = "B"
 TASK = "検索のタスク"
 TARGET = ("--key", KEY, "--paths", "a.md", "b.md")
 
@@ -93,6 +100,55 @@ class QueryTestBase(unittest.TestCase):
 
     def prepare(self, *extra):
         return self.run_main("prepare", "--task", TASK, *TARGET, *extra)
+
+    def worker(self, command, worker_id, stdin_text="", start=None, project_dir=None):
+        """`query-worker` の入口（worker_io）を、`start`（既定はプロジェクトのルート）を作業ディレクトリとして呼ぶ。"""
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = worker_io.execute(
+                worker_io.build_parser().parse_args([command, worker_id]),
+                io.StringIO(stdin_text),
+                self.root if start is None else start,
+                project_dir,
+            )
+        return code, json.loads(out.getvalue())
+
+    def answer(self, worker_id, answer):
+        """答え（dict）を、標準入力の JSON として `answer` へ渡す。"""
+        return self.worker("answer", worker_id, json.dumps(answer, ensure_ascii=False))
+
+    def work(self, worker_id, relevant=None, reason="r", maybe=None):
+        """`query-worker` を模す。`next` で依頼を受け、依頼のファイルを読み、答えを `answer` で渡すことを `done` まで繰り返す。
+
+        `relevant` は、関連する（yes）と答えるタイトルから、選ぶ見出しの並びへの対応。`maybe` は、判断がつかない（maybe）と
+        答えるタイトルから、選ぶ見出しの並びへの対応。それ以外のタイトルは関連しない（no）と答える。
+        依頼を受け取った順のタイトルを返す。
+        """
+        relevant = relevant or {}
+        maybe = maybe or {}
+        titles = []
+        code, step = self.worker("next", worker_id)
+        self.assertEqual(code, 0, step)
+        while not step["done"]:
+            item = json.loads(Path(step["item_path"]).read_text(encoding="utf-8"))
+            titles.append(item["title"])
+            if item["title"] in relevant:
+                answer = {
+                    "relevance": "yes",
+                    "reason": reason,
+                    "headings": list(relevant[item["title"]]),
+                }
+            elif item["title"] in maybe:
+                answer = {
+                    "relevance": "maybe",
+                    "reason": reason,
+                    "headings": list(maybe[item["title"]]),
+                }
+            else:
+                answer = {"relevance": "no"}
+            code, step = self.answer(worker_id, answer)
+            self.assertEqual(code, 0, step)
+        return titles
 
 
 class PrepareOutcomeTest(QueryTestBase):
@@ -177,10 +233,7 @@ class ChoiceTest(QueryTestBase):
         self.assertEqual(result["freshness"], "possibly_stale")
         self.assertEqual(result["toc_version"], old_version)
         sid = result["search_id"]
-        self.run_main(
-            "submit-item", "--search-id", sid, "--doc-id", ID_A, "--reason", "r"
-        )
-        self.run_main("submit-end", "--search-id", sid, "--exit-value", "0")
+        self.work(result["workers"][0], {TITLE_A: []})
         code, found = self.run_main("collect", "--search-id", sid)
         self.assertEqual(code, 0)
         self.assertEqual(found["toc_version"], old_version)
@@ -271,75 +324,120 @@ class ChoiceTest(QueryTestBase):
 
 class ExchangeTest(QueryTestBase):
     def start(self):
+        """検索を固定し、（検索 ID、担当の識別値の並び）を返す。"""
         self.build()
-        return self.prepare()[1]["search_id"]
+        prepared = self.prepare()[1]
+        return prepared["search_id"], prepared["workers"]
+
+    def work_directory(self):
+        return self.root / ".temp" / "doc-link" / "query-docs"
 
     def test_full_flow_and_cleanup(self):
-        sid = self.start()
-        code, path = self.run_main("request-path", "--search-id", sid)
+        sid, workers = self.start()
+        self.assertEqual(workers, [f"{sid}-1"])  # 文書が少ないので担当は 1 つ
+        code, first = self.worker("next", workers[0])
         self.assertEqual(code, 0)
-        self.assertEqual(list(path), ["path"])
-        request = json.loads(Path(path["path"]).read_text("utf-8"))
-        self.assertEqual(request["task"], TASK)
-        self.run_main(
-            "submit-item",
-            "--search-id",
-            sid,
-            "--doc-id",
-            ID_A,
-            "--reason",
-            "理由",
-            "--section-id",
-            SEC_A,
+        self.assertEqual(
+            first,
+            {
+                "done": False,
+                "item_path": first["item_path"],
+                "answered": 0,
+                "total": 2,
+            },
         )
-        self.run_main("submit-end", "--search-id", sid, "--exit-value", "0")
+        request = json.loads(Path(first["item_path"]).read_text("utf-8"))
+        self.assertEqual(request["task"], TASK)
+        self.assertEqual(request["title"], TITLE_A)  # 担当の中はパスの昇順
+        code, stored = self.answer(
+            workers[0], {"relevance": "yes", "reason": "理由", "headings": [HEAD_A]}
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(stored["stored"], {"position": 1, "total": 2})
+        self.assertFalse(stored["done"])
+        code, last = self.answer(workers[0], {"relevance": "no"})
+        self.assertEqual((code, last["done"], last["item_path"]), (0, True, None))
         code, found = self.run_main("collect", "--search-id", sid)
         self.assertEqual(code, 0)
+        self.assertEqual([d["doc_link_id"] for d in found["documents"]], [ID_A])
         self.assertEqual(found["documents"][0]["recorded_path"], "a.md")
+        self.assertEqual(found["documents"][0]["relevance"], "yes")
+        self.assertEqual(found["documents"][0]["reason"], "理由")
         self.assertEqual(found["documents"][0]["sections"][0]["heading"], "A")
         self.assertEqual(found["freshness"], "current")
-        directory = self.root / ".temp" / "doc-link" / "query-docs"
+        self.assertIn("関連度の順ではない", found["order_notice"])
+        self.assertNotIn("rejected", found)
+        directory = self.work_directory()
         self.assertEqual(list(directory.iterdir()) if directory.is_dir() else [], [])
 
-    def test_unknown_id_exits_3_and_cleans_up(self):
-        sid = self.start()
-        self.run_main(
-            "submit-item",
-            "--search-id",
-            sid,
-            "--doc-id",
-            "DLID-zzzzzzzzzzzz",
-            "--reason",
-            "r",
-        )
-        self.run_main("submit-end", "--search-id", sid, "--exit-value", "0")
+    def test_partly_answered_search_exits_3_and_cleans_up(self):
+        sid, workers = self.start()
+        code, _ = self.answer(workers[0], {"relevance": "yes", "reason": "r"})
+        self.assertEqual(code, 0)  # 2 件のうち 1 件だけ答えた
         code, result = self.run_main("collect", "--search-id", sid)
         self.assertEqual(code, 3)
         self.assertTrue(result["errors"])
         self.assertNotIn("documents", result)
-        directory = self.root / ".temp" / "doc-link" / "query-docs"
-        self.assertEqual(list(directory.iterdir()), [])
+        self.assertEqual(list(self.work_directory().iterdir()), [])
 
-    def test_missing_exit_value_exits_3(self):
-        sid = self.start()
-        code, _ = self.run_main("collect", "--search-id", sid)
+    def test_missing_result_exits_3(self):
+        # Issue #19: 答えを渡せなかった検索は、関連する文書が無い正常な 0 件にならず、失敗になる
+        sid, _ = self.start()
+        code, result = self.run_main("collect", "--search-id", sid)
         self.assertEqual(code, 3)
+        self.assertNotIn("documents", result)
+
+    def test_all_irrelevant_is_a_normal_zero_result(self):
+        sid, workers = self.start()
+        self.work(workers[0])
+        code, found = self.run_main("collect", "--search-id", sid)
+        self.assertEqual((code, found["documents"]), (0, []))
+
+    def test_maybe_documents_are_kept_with_their_relevance(self):
+        sid, workers = self.start()
+        self.work(workers[0], {TITLE_A: [HEAD_A]}, maybe={TITLE_B: []})
+        code, found = self.run_main("collect", "--search-id", sid)
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            [(d["doc_link_id"], d["relevance"]) for d in found["documents"]],
+            [(ID_A, "yes"), (ID_B, "maybe")],
+        )
+
+    def test_every_worker_must_answer_before_collect_succeeds(self):
+        # 担当を 2 つにするため、1 本あたりの最小件数を下げる（プロセス内のテストだけ）
+        self.build()
+        with mock.patch.object(search_prepare, "MIN_DOCUMENTS_PER_WORKER", 1):
+            failing = self.prepare()[1]
+            complete = self.prepare()[1]
+        self.assertEqual(len(failing["workers"]), 2)
+        self.assertEqual(len(complete["workers"]), 2)
+        # 1 つの担当だけが答え終えた検索は失敗する
+        self.work(failing["workers"][0], {TITLE_A: []})
+        code, result = self.run_main("collect", "--search-id", failing["search_id"])
+        self.assertEqual(code, 3)
+        self.assertNotIn("documents", result)
+        # 全担当が答えると成功し、担当の順に並ぶ（担当 1 が a.md、担当 2 が b.md）。答える順は担当の順と逆にする
+        first, second = complete["workers"]
+        self.assertEqual(self.work(second, {TITLE_B: []}), [TITLE_B])
+        self.assertEqual(self.work(first, {TITLE_A: []}), [TITLE_A])
+        code, found = self.run_main("collect", "--search-id", complete["search_id"])
+        self.assertEqual(code, 0)
+        self.assertEqual([d["doc_link_id"] for d in found["documents"]], [ID_A, ID_B])
+        self.assertEqual(list(self.work_directory().iterdir()), [])
 
     def test_explicit_cleanup_and_unknown_id(self):
-        sid = self.start()
+        sid, workers = self.start()
+        self.assertEqual(self.worker("next", workers[0])[0], 0)  # 依頼を公開した
         code, result = self.run_main("cleanup", "--search-id", sid)
         self.assertEqual(code, 0)
-        self.assertEqual(result["removed"], 3)
-        code, _ = self.run_main("request-path", "--search-id", sid)
+        self.assertEqual(result["removed"], 2)  # 固定した状態と、公開した依頼
+        code, _ = self.worker("next", workers[0])
         self.assertEqual(code, 1)
 
     def test_state_and_documents_are_unchanged(self):
-        sid = self.start()
+        sid, workers = self.start()
         before = self.snapshot()
-        self.run_main(
-            "submit-item", "--search-id", sid, "--doc-id", ID_B, "--reason", "r"
-        )
-        self.run_main("submit-end", "--search-id", sid, "--exit-value", "0")
+        self.work(workers[0], {TITLE_B: [HEAD_B]})
         self.run_main("collect", "--search-id", sid)
         self.assertEqual(self.snapshot(), before)
 
@@ -368,6 +466,24 @@ class EntryScriptWithUvTest(QueryTestBase):
             check=False,
         )
 
+    def uv_run_worker(self, command, worker_id, stdin_text=""):
+        """`query-worker` の呼び方のとおり、プロジェクトのルートを作業ディレクトリとして、引数 2 つだけで呼ぶ。"""
+        return subprocess.run(
+            [
+                "uv",
+                "run",
+                "--locked",
+                str(SKILL_SCRIPTS_DIR / "worker_io.py"),
+                command,
+                worker_id,
+            ],
+            input=stdin_text,
+            cwd=self.root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
     def test_prepare_and_collect_through_uv(self):
         self.build()
         before = self.snapshot()
@@ -375,21 +491,38 @@ class EntryScriptWithUvTest(QueryTestBase):
             "prepare", "--project-root", str(self.root), "--task", TASK, *TARGET
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        sid = json.loads(completed.stdout)["search_id"]
+        prepared = json.loads(completed.stdout)
+        sid = prepared["search_id"]
+        worker_id = prepared["workers"][0]
         base = ("--project-root", str(self.root), "--search-id", sid)
-        self.assertEqual(self.uv_run("request-path", *base).returncode, 0)
-        self.assertEqual(
-            self.uv_run(
-                "submit-item", *base, "--doc-id", ID_A, "--reason", "r"
-            ).returncode,
-            0,
+        # 文書を 1 件ずつ受け取って答える（1 件目は a.md。2 件目は関連しない）
+        first = self.uv_run_worker("next", worker_id)
+        self.assertEqual(first.returncode, 0, first.stderr)
+        item = json.loads(
+            Path(json.loads(first.stdout)["item_path"]).read_text("utf-8")
         )
-        self.assertEqual(
-            self.uv_run("submit-end", *base, "--exit-value", "0").returncode, 0
+        self.assertEqual(item["title"], TITLE_A)
+        answer = {
+            "relevance": "yes",
+            "reason": "理由\n\"引用符\" と 'apostrophe'",
+            "headings": [HEAD_A],
+        }
+        stored = self.uv_run_worker(
+            "answer", worker_id, stdin_text=json.dumps(answer, ensure_ascii=False)
         )
+        self.assertEqual(stored.returncode, 0, stored.stderr)
+        self.assertFalse(json.loads(stored.stdout)["done"])
+        last = self.uv_run_worker(
+            "answer", worker_id, stdin_text=json.dumps({"relevance": "no"})
+        )
+        self.assertEqual(last.returncode, 0, last.stderr)
+        self.assertTrue(json.loads(last.stdout)["done"])
         done = self.uv_run("collect", *base)
         self.assertEqual(done.returncode, 0, done.stderr)
-        self.assertEqual(json.loads(done.stdout)["documents"][0]["doc_link_id"], ID_A)
+        documents = json.loads(done.stdout)["documents"]
+        self.assertEqual([d["doc_link_id"] for d in documents], [ID_A])
+        self.assertEqual(documents[0]["relevance"], "yes")
+        self.assertEqual(documents[0]["reason"], answer["reason"])
         self.assertEqual(self.snapshot(), before)
 
     def test_failed_search_exits_3(self):

@@ -173,12 +173,22 @@ class AgentMdConformanceTest(unittest.TestCase):
                 self.assertTrue(blocks)
                 for language, block in blocks:
                     self.assertEqual(language.strip(), "bash")
+                    heredoc_end = None
                     for line in block.strip().splitlines():
+                        if heredoc_end is not None:
+                            # スクリプトの標準入力へ渡す内容（ヒアドキュメントの本体）。コマンドではない
+                            if line == heredoc_end:
+                                heredoc_end = None
+                            continue
                         self.assertTrue(line.startswith(AGENT_COMMAND_PREFIX), line)
                         script = line[len(AGENT_COMMAND_PREFIX) :].split('"', 1)[0]
                         skill, _, rest = script.partition("/scripts/")
                         entry = Path(path).parents[1] / "skills" / skill / "scripts"
                         self.assertTrue((entry / rest).is_file(), line)
+                        marker = re.search(r"<<'(\w+)'\s*$", line)
+                        if marker is not None:
+                            heredoc_end = marker.group(1)
+                    self.assertIsNone(heredoc_end, "ヒアドキュメントが閉じていない")
 
 
 if __name__ == "__main__":

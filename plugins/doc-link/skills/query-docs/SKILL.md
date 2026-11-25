@@ -52,15 +52,15 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-ro
 
 `invoke_query_worker`（再構築不要、または選択の後）
 
-- 検索に使う ToC が固定された。`search_id`・`toc_key`・`toc_version`（使用した版）・`freshness`・`freshness_notice` が返る。手順 3 へ進む
+- 検索に使う ToC が固定され、文書が担当に分けられた。`search_id`・`workers`（担当の識別値の並び）・`toc_key`・`toc_version`（使用した版）・`freshness`・`freshness_notice` が返る。手順 3 へ進む
 
 ### 3. `query-worker` を起動する
 
-カスタム Agent `doc-link:query-worker` を Agent ツールで起動する。
+カスタム Agent `doc-link:query-worker` を、`workers` の 1 件ごとに、Agent ツールで起動する。担当の数と割り当ては script が決めている。件数を数えず、分け直さない。`workers` が空のとき（検索する文書が無い）は、起動せず、手順 4 へ進む。
 
-- `subagent_type` は `doc-link:query-worker` とする
-- prompt には、検索 ID（`search_id`）だけを書く。値は返されたまま書き、作り直さない。依頼の中身・指示・親の文脈を重ねない。依頼の中身は script がすでに置いてあり、`query-worker` が自分で読む
-- 起動した Agent の最終応答（background なら完了通知）を受け取るまで、結果に依存する処理へ進まない。完了を `ScheduleWakeup` で待たない。ターンを終えて完了通知を待つ
+- `subagent_type` は `doc-link:query-worker` とする。`workers` のすべてを、同時に起動する（script が、同時に起動できる上限以内に分けてある）
+- prompt には、担当の識別値（`workers` の 1 件）だけを書く。値は返されたまま書き、作り直さない。依頼の中身・指示・親の文脈を重ねない。依頼の中身は script が 1 件ずつ置き、`query-worker` が自分で読む
+- 起動したすべての Agent の最終応答（background なら完了通知）を受け取るまで、結果に依存する処理へ進まない。完了を `ScheduleWakeup` で待たない。ターンを終えて完了通知を待つ
 - Agent の最終応答の内容で、検索結果や成否を判断しない。成否は script が判定する
 - Agent を起動できなかったなど、手順 4 の `collect` を呼ばずに終えるときは、作業ファイルを削除する
 
@@ -84,9 +84,8 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" collect --project-ro
 
 呼び出し元へ、次を返す。
 
-- 検索結果 `documents`（文書 ID `doc_link_id`・記録されたパス `recorded_path`・関連理由 `reason`・`sections`）
+- 検索結果 `documents`（文書 ID `doc_link_id`・記録されたパス `recorded_path`・関連の強弱 `relevance`・関連理由 `reason`・`sections`）。`relevance` は、`yes`（関連する）か `maybe`（判断がつかないが、関連するかもしれない。取りこぼさないために含めた）である。読むときの優先度を、呼び出し元が決められるよう、そのまま返す。`maybe` を `yes` に読み替えない
 - 使用した ToC 識別キー（`toc_key`）と ToC の版（`toc_version`）
-- 鮮度（`freshness`・`freshness_notice`）。パスの注意（`path_notice`）も添える。記録されたパスを現在の実体パスとして断定しない
+- 鮮度（`freshness`・`freshness_notice`）。パスの注意（`path_notice`）と、並びの注意（`order_notice`。`documents` の並びは関連度の順ではない）も添える。記録されたパスを現在の実体パスとして断定しない
 - 「既存の ToC のまま検索する」を選んだときは、その版が現在の Index 対象リストを反映していない可能性を、結果全体に明示する
-- `rejected`（検査に通らず結果から外した ID。`kind`・`doc_link_id`・`section_id`・`message`）が空でないときは、`rejected_notice` とともに返す。`rejected_notice` は、文書が結果から漏れている可能性があるか（版に無い文書 ID を外したとき）、文書は結果に入っていて含めなかった関連理由・セクションがあるだけか（重複・版に無いセクション ID）を言い分けている。その内容を変えずに伝える。外した ID を読み替えたり補ったりしない。黙って捨てない
 - 結果の文書を読み、作業に使うのは呼び出し元である。このスキルは文書を読まず、編集しない

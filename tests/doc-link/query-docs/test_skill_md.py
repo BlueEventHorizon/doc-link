@@ -110,13 +110,28 @@ class SkillMdTest(unittest.TestCase):
             with self.subTest(absent=needle):
                 self.assertNotIn(needle, self.body)
 
-    def test_invokes_query_worker_with_search_id_only_and_does_not_wait_with_wakeup(
+    def test_invokes_one_query_worker_per_worker_id_and_does_not_wait_with_wakeup(
         self,
     ):
         self.assertIn("doc-link:query-worker", self.body)
-        self.assertIn("検索 ID（`search_id`）だけ", self.body)
+        # 担当の数と割り当ては script が決める。SKILL は、返された担当の識別値だけを、1 件ごとに運ぶ
+        self.assertIn("`workers` の 1 件ごとに", self.body)
+        self.assertIn("担当の識別値（`workers` の 1 件）だけ", self.body)
+        self.assertIn("件数を数えず、分け直さない", self.body)
+        self.assertIn("すべての Agent の最終応答", self.body)
         self.assertIn("ScheduleWakeup", self.body)
         self.assertIn("待たない", self.body)
+
+    def test_returns_relevance_as_is_without_reading_maybe_as_yes(self):
+        for needle in (
+            "`relevance`",
+            "`yes`（関連する）",
+            "`maybe`（判断がつかないが、関連するかもしれない",
+            "`maybe` を `yes` に読み替えない",
+            "`order_notice`",
+        ):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, self.body)
 
     def test_returns_version_freshness_and_does_not_fill_failures(self):
         for needle in (

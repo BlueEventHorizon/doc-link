@@ -17,7 +17,7 @@ SCRIPT = (
     / "skills"
     / "query-docs"
     / "scripts"
-    / "query_docs.py"
+    / "worker_io.py"
 )
 MANUAL = PROJECT_ROOT / "tests" / "doc-link" / "manual" / "query-worker_manual.md"
 # 配布物から開発用の文書を参照していないことを確かめる検索語（Agent 定義全体が範囲）
@@ -60,21 +60,38 @@ class AgentMdTest(unittest.TestCase):
             "書き換えない",
             "外部サービスへ書き込まない",
             "advisor",
-            "存在しない文書 ID・セクション ID を補わない",
+            "存在しない見出しを作らない",
             "訂正しない",
-            "JSON を自分で組み立てない",
+            "JSON のキーは手順 3 のものだけを使う",
         ):
             with self.subTest(needle=needle):
                 self.assertIn(needle, self.body)
 
-    def test_reads_all_entries_without_keyword_filtering(self):
-        self.assertIn("全エントリを読む", self.body)
-        self.assertIn("語句の一致で絞り込んで済ませない", self.body)
+    def test_answers_every_document_without_skipping_or_keyword_filtering(self):
+        # 全文書がいずれかの worker に読まれる（要件 D-056）。担当の文書を飛ばさず、まとめて答えない
+        self.assertIn("文書を飛ばさない", self.body)
+        self.assertIn("語句の一致で絞り込まず", self.body)
+        self.assertIn("1 回の答えに、複数の文書をまとめない", self.body)
 
     def test_selects_with_priority_on_not_missing_documents(self):
         self.assertIn("取りこぼしを出さないことを優先する", self.body)
-        self.assertIn("関連するかどうか迷う文書は、選ぶ", self.body)
-        self.assertIn("明らかに無関係な文書だけを選ばない", self.body)
+        self.assertIn("関連するかどうか迷う文書は、`maybe` とする", self.body)
+        self.assertIn("明らかに無関係な文書だけを、`no` とする", self.body)
+
+    def test_answers_with_three_words_and_no_scores(self):
+        # 関連の強弱は、閉じた 3 つの語。点数・数・真偽値は書かせない
+        for needle in (
+            "`yes`: タスクに対して、意味として関連すると判断できる",
+            "`maybe`: 判断がつかないが、関連するかもしれない",
+            "`no`: 明らかに無関係である",
+            '{"relevance": "yes"',
+            '{"relevance": "no"}',
+            '`"yes"`・`"maybe"`・`"no"` の語のどれかだけである',
+            "点数・数・真偽値・ほかの語を書かない",
+        ):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, self.body)
+        self.assertNotIn('"relevant"', self.body)
         # 関連の薄さを理由に落とす旧い指示が戻らない
         self.assertNotIn("関連の薄い文書を、件数を満たすために加えない", self.body)
 
@@ -83,20 +100,71 @@ class AgentMdTest(unittest.TestCase):
             with self.subTest(needle=needle):
                 self.assertNotIn(needle, self.text)
 
-    def test_commands_call_only_the_query_script_subcommands(self):
+    def test_commands_call_only_the_wrapper_with_the_worker_id_as_the_only_argument(
+        self,
+    ):
+        # 引数は、サブコマンドと担当の識別値だけ。`uv run`・プロジェクトのルート・オプションは、ラッパーが持つ
         commands = re.findall(r"^uv run .*$", self.body, flags=re.MULTILINE)
         self.assertEqual(len(commands), 3)
-        for command, sub in zip(
-            commands, ("request-path", "submit-item", "submit-end")
-        ):
-            with self.subTest(sub=sub):
-                self.assertIn(f'query_docs.py" {sub} ', command)
-        self.assertIn("--exit-value 0", commands[2])
+        for command, sub in zip(commands, ("next", "answer", "answer")):
+            with self.subTest(sub=sub, command=command):
+                self.assertTrue(
+                    command.endswith(f'worker_io.py" {sub} {{担当の識別値}}')
+                    or command.endswith(
+                        f"worker_io.py\" {sub} {{担当の識別値}} <<'EOF'"
+                    )
+                )
+                self.assertNotIn("--", command.replace("--locked", ""))
+        self.assertNotIn("query_docs.py", self.body)
         self.assertTrue(SCRIPT.is_file())
+
+    def test_answers_one_document_at_a_time_as_json_on_standard_input(self):
+        # Issue #19: 文書を 1 件ずつ受け取って答える。答えを渡せないまま終了にならない
+        for needle in (
+            "標準入力の JSON で渡す",
+            "<<'EOF'",
+            "区切り `'EOF'` の引用符を外さない",
+            '{"relevance": "no"}',
+            "`relevance`・`reason`・`headings` だけである",
+            "同じ文書について 3 回までとする",
+            "検索は失敗として扱われ",
+            "`next` は呼び直さない",
+            "`done` が真",
+        ):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, self.body)
+        for removed in (
+            "submit-item",
+            "submit-end",
+            "終了の値を渡す",
+            "--exit-value",
+            "submit {",
+            "request {",
+            "全エントリ",
+            "写し",
+        ):
+            with self.subTest(removed=removed):
+                self.assertNotIn(removed, self.body)
+
+    def test_never_names_or_numbers_the_documents_and_answers_headings_only(self):
+        # Issue #17・#19: 文書を指す名前・ID・番号は、AI が書き写して誤る。どの文書への答えかは script が持つ位置で決める
+        for needle in (
+            "文書を指す名前（タイトル）も、文書 ID・セクション ID・番号も、見ず、書かない",
+            "script が文書の位置を持っている",
+            "答えるのは、script が今見せている 1 件の文書についてだけである",
+            "`（同名 k/n）` が付いた見出しは、付いたまま書く",
+            "一意に決まる所まで書けばよい",
+            "候補に無い見出しを作らない",
+        ):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, self.body)
+        for removed in ("doc_link_id", "section_id", "section_ids", "DLID-"):
+            with self.subTest(removed=removed):
+                self.assertNotIn(removed, self.text)
 
     def test_ends_with_response_without_results(self):
         self.assertIn("検索結果の内容", self.body)
-        self.assertIn("0 件でも渡す", self.body)
+        self.assertIn("応答に書かない", self.body)
 
 
 class ManualTest(unittest.TestCase):

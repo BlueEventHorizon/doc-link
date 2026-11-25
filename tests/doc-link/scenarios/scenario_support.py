@@ -1,7 +1,7 @@
 """横断シナリオ（DES-009 §3）の統合テストが共有する補助。
 
 各 SKILL の入口 script の `main()` を、実際の引数で呼ぶ。AI を介する部分（`toc-updater` の生成・
-`query-worker` の検索）は、`index_docs` の `submit`・`query_docs` の `submit-item` / `submit-end` で固定値を差し込む。
+`query-worker` の検索）は、`index_docs` の `submit`・`worker_io` の `next`・`answer`（標準入力の JSON）で固定値を差し込む。
 """
 
 import contextlib
@@ -29,6 +29,7 @@ import index_docs  # noqa: E402
 import query_docs  # noqa: E402
 import resolve_dlid  # noqa: E402
 import state_store  # noqa: E402
+import worker_io  # noqa: E402
 
 ID_A = "DLID-0123456789ab"
 ID_B = "DLID-abcdefghjkmn"
@@ -165,6 +166,33 @@ class ScenarioBase(unittest.TestCase):
         with contextlib.redirect_stdout(out):
             code = module.main([*prefix, "--project-root", str(self.root), *args])
         return code, with_detail(json.loads(out.getvalue()))
+
+    def run_worker(self, command, worker_id, stdin_text=""):
+        """`query-worker` の入口（`worker_io`）を、プロジェクトのルートを作業ディレクトリとして呼ぶ。"""
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = worker_io.execute(
+                worker_io.build_parser().parse_args([command, worker_id]),
+                io.StringIO(stdin_text),
+                self.root,
+                None,
+            )
+        return code, with_detail(json.loads(out.getvalue()))
+
+    def work_through(self, worker_id, decide):
+        """`query-worker` を模す。`next` で依頼を受け、依頼を読み、`decide(依頼)` の答えを `answer` で渡すことを、
+        `done` まで繰り返す。読んだ依頼を、受け取った順に返す。"""
+        items = []
+        code, step = self.run_worker("next", worker_id)
+        self.assertEqual(code, 0, step)
+        while not step["done"]:
+            item = json.loads(Path(step["item_path"]).read_text(encoding="utf-8"))
+            items.append(item)
+            code, step = self.run_worker(
+                "answer", worker_id, json.dumps(decide(item), ensure_ascii=False)
+            )
+            self.assertEqual(code, 0, step)
+        return items
 
     def embed(self, key, paths, *extra):
         return self.run_script(

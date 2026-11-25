@@ -52,6 +52,11 @@ SYSTEM_TEMP_PATTERN = re.compile(
 )
 # SKILL.md・Agent から、シェルで一時ファイルを書き出す記述（ヒアドキュメント・echo のリダイレクト）
 SHELL_WRITE_PATTERN = re.compile(r"<<-?\s*['\"]?\w+|\becho\b[^\n]*>|\bcat\b[^\n]*>")
+# スクリプトの標準入力へ内容を渡すヒアドキュメント。シェルがファイルを書かず、先頭が固定の `uv run --locked` の
+# 呼び出しで、区切りを引用符で囲む形に限る。書き出しの検出から除く（実装ガイドラインの一時ファイルの節）
+STDIN_HEREDOC_TO_SCRIPT = re.compile(
+    r"^uv run --locked [^\n]*<<'\w+'[ \t]*$", re.MULTILINE
+)
 
 
 def pep723_metadata(source):
@@ -199,7 +204,9 @@ class TemporaryFileLocationTest(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             with self.subTest(document=relative(path)):
                 self.assertIsNone(SYSTEM_TEMP_PATTERN.search(text))
-                self.assertIsNone(SHELL_WRITE_PATTERN.search(text))
+                self.assertIsNone(
+                    SHELL_WRITE_PATTERN.search(STDIN_HEREDOC_TO_SCRIPT.sub("", text))
+                )
 
     def test_patterns_detect_what_they_are_meant_to_detect(self):
         for text in (
@@ -217,6 +224,22 @@ class TemporaryFileLocationTest(unittest.TestCase):
         for text in ("cat <<EOF", "echo hi > a.txt", "cat a > b"):
             with self.subTest(text=text):
                 self.assertTrue(SHELL_WRITE_PATTERN.search(text))
+
+    def test_stdin_heredoc_to_a_script_is_not_a_shell_write_but_the_rest_still_is(self):
+        allowed = "uv run --locked \"x/worker_io.py\" submit SEARCH-1 <<'EOF'"
+        self.assertIsNone(
+            SHELL_WRITE_PATTERN.search(STDIN_HEREDOC_TO_SCRIPT.sub("", allowed))
+        )
+        for text in (
+            'uv run --locked "x/worker_io.py" submit SEARCH-1 <<EOF',  # 区切りが引用符で囲まれていない
+            "uv run --locked \"x\" submit SEARCH-1 <<'EOF' > out.json",  # 書き出し先がある
+            "cat <<'EOF' > a.txt",
+            "python3 x.py <<'EOF'",  # 先頭が固定の uv run の呼び出しではない
+        ):
+            with self.subTest(text=text):
+                self.assertTrue(
+                    SHELL_WRITE_PATTERN.search(STDIN_HEREDOC_TO_SCRIPT.sub("", text))
+                )
 
 
 if __name__ == "__main__":

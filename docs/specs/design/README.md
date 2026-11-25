@@ -22,12 +22,12 @@ doc_link_id: DLID-zvepba87h7zk
 各図は理解用の表示であり、許可遷移の規範は DES-004 の遷移表とする。各処理の詳細は当該文書だけに置き、全体設計には重複して記載しない。
 
 [des-001]: DES-001_system-overview.md "1468229e4b8e DLID-3da82gspdp44"
-[des-002]: DES-002_execution-responsibilities.md "f81b273666a9 DLID-anz9vack2xzt"
+[des-002]: DES-002_execution-responsibilities.md "3a9861334737 DLID-anz9vack2xzt"
 [des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
 [des-004]: DES-004_state-machines.md "d3b39867775c DLID-3f92k3tz4rew"
 [des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
-[des-006]: DES-006_search.md "aeaa4be2139b DLID-nnbgpzkkm5vq"
+[des-006]: DES-006_search.md "10973b6b4341 DLID-nnbgpzkkm5vq"
 [des-007]: DES-007_references-impact.md "27c0b9daf7fd DLID-pr3jp4hzb8js"
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-009]: DES-009_verification.md "d35ff8247ac2 DLID-xmg0jcmep2h2"
-[des-010]: DES-010_skill-composition.md "ecbb0ce6bef6 DLID-7e90gq3sdncc"
+[des-010]: DES-010_skill-composition.md "e6cd2ff8b7ec DLID-7e90gq3sdncc"

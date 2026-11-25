@@ -15,7 +15,7 @@
     "supply chain"
   ],
   "last_check": {
-    "checked_at": "2026-11-22T06:44:28+00:00",
+    "checked_at": "2026-11-25T11:41:00+00:00",
     "result": "success"
   },
   "path": "docs/rules/plugin_uv_usage_rules.md",
@@ -23,14 +23,14 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-22T06:44:28+00:00",
+        "checked_at": "2026-11-25T11:41:00+00:00",
         "found_path": "docs/rules/plugin_implementation_guidelines.md",
         "result": "match",
         "scope": "docs/rules"
       },
       "kind": "document",
       "position": 0,
-      "recorded_content_hash": "a7037b127225",
+      "recorded_content_hash": "b1dd82402098",
       "recorded_path": "plugin_implementation_guidelines.md",
       "source_section_id": null,
       "target_doc_id": "DLID-35fhyrzd02he",

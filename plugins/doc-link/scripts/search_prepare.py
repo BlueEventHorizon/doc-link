@@ -1,4 +1,4 @@
-"""検索（query-docs）の script の部品。検索前検査の結果の扱い、[ToC]の写しの固定、`query-worker` との受け渡し。
+"""検索（query-docs）の script の部品。検索前検査の結果の扱い、検索の担当の固定、`query-worker` との受け渡し。
 
 DES-006 §1・§2、DES-010 §1・§3.3・§4（`query-worker` の列）、DES-003 §2、DES-002 §4、REQ-004 FR-006・AC-019、
 REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装する。入口は `query-docs` の `query_docs.py` で、
@@ -19,7 +19,8 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 | 再構築必要 | `confirm_rebuild`（規模と二択）   | 障害（再構築後も一致しない。旧版で黙って検索しない） | 旧版を固定する（鮮度は `possibly_stale`） |
 | 再構築不要 | 最新を固定する（鮮度は `current`） | 最新を固定する                         | 最新を固定する                       |
 
-固定したときは `invoke_query_worker` を返し、検索 ID・[ToC 識別キー]・使用した[ToC]の版・鮮度を添える。
+固定したときは `invoke_query_worker` を返し、検索 ID・[ToC 識別キー]・使用した[ToC]の版・鮮度・担当の識別値の並び
+（`workers`）を添える。
 
 `confirm_rebuild` は、検索前検査の要約（`toc_check.TocCheck.to_summary`。件数と再構築の規模まで）と二択を返す。
 変更のある文書・セクションの明細は、`.temp/doc-link/query-docs/detail-<符号化した[ToC 識別キー]>.json` へ書き、
@@ -35,35 +36,48 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 
 ## `query-worker` との受け渡し
 
-置き場は `.temp/doc-link/query-docs/` で、識別値は検索 ID（`SEARCH-<8 桁の 16 進>`。script が生成する）である。
-検索 ID ごとに次のファイルを置く（すべて書き終えてから公開する。依頼は最後に公開する）。
+置き場は `.temp/doc-link/query-docs/` で、識別値は検索 ID（`SEARCH-<8 桁の 16 進>`。script が生成する）と、担当の識別値
+（検索 ID に枝番を付けた `SEARCH-<8 桁の 16 進>-<k>`。k は 1 から。担当の数だけある）である。
 
-- `<ID>.toc.json`: [ToC]の写し。`documents` の配列で、要素は `doc_link_id`・`title`・`purpose`・`summary`（内容概要）・
-  `tasks`（適用作業）・`keywords`・`sections`（`section_id`・`heading` の配列）。パス・[内容ハッシュ]・参照関係・検査結果は入れない。
-  `sections` に、文書の先頭の見出しで、見出しの文字列が[文書情報]のタイトルと同じセクションは入れない（その[セクション ID]は
-  文書の名前に見える見出しに付き、[文書 ID]と同じ形式で、検索 AI が[文書 ID]と取り違えるため。Issue #17）。`collect` の検査
-  には、そのセクションも含めた全セクションを使う（`<ID>.fixed.json` は全セクションを持つ）。
-  読む量を減らすため、字下げを持たない（要素ごとの改行は残す）。ほかのファイルは管理状態と同じ字下げを持つ
-- `<ID>.fixed.json`: script が固定して持つもの。`toc_key`・`toc_version`・`freshness`・文書ごとの記録されたパスとセクション
-- `<ID>.request.json`: 依頼。`search_id`・`task`・`toc_key`・`toc_copy_path`（写しの絶対パス）
-- `<ID>.item-<連番>.json`: Agent が渡した結果の 1 件（文書）
-- `<ID>.result.json`: 終了の値（`exit_value`）。上書きしない。無い、または `"0"` 以外のとき、検索を失敗とする
+固定した[ToC]の文書は、`_plan_workers` が担当に分ける。担当の数は、同時に起動する数の上限（`MAX_CONCURRENT_WORKERS`。
+`index-docs` の生成と同じ 10）を超えず、文書の数を担当の数で割った件数ずつを割り当てる（余りは先頭の担当から 1 件ずつ）。
+文書が少ないときは、1 本あたりの件数が `MIN_DOCUMENTS_PER_WORKER` 未満にならないよう、担当の数を減らす。文書が無いと
+きは、担当も無い。担当と割り当ては、script が固定した状態に持つ。AI は文書の件数も担当の数も数えない。
+
+検索 ID ごとに次のファイルを置く。
+
+- `<ID>.fixed.json`: script が固定して持つもの。最後に公開する（作業ファイルを探す印でもある）。`task`・`toc_key`・
+  `toc_version`・`freshness`、文書ごとの記録されたパス・タイトル・見せる内容（`purpose`・`summary`・`tasks`・`keywords`）・
+  セクション（`section_id`・`heading`・名前 `name`）、担当ごとの文書の並び（`workers`。文書は[文書 ID]で持つ。並びは
+  パスの昇順）。名前から[セクション ID]への対応は、ここだけが持つ
+- `<ID>.w<k>.item-<NNNN>.json`: 担当 k の NNNN 件目の依頼。`next` が、その文書の答えが無いときに書いて公開する。
+  `task`・`position`・`total`・`title`・`purpose`・`summary`・`tasks`・`keywords`・`sections`（見出しの名前の配列）を持つ。
+  [文書 ID]・[セクション ID]・パス・[内容ハッシュ]・参照関係・検査結果は入れない。検索 AI は、ID・番号を見ず、書かない
+  （書き写しの誤りを、構造で起こさない。Issue #17・#19）。`sections` の名前は、正規化（`_normalize`）して比べても
+  一意になるよう、同じ見出しに `（同名 k/n）` を足す（`_unique_names`）
+- `<ID>.w<k>.answer-<NNNN>.json`: 担当 k の NNNN 件目の文書への答え。検索 AI が標準入力で渡した答えを、script が検査して
+  書く。`doc_link_id`・`relevance`・`reason`・`section_ids`（script が引き当てた[セクション ID]）を持つ。書いたら上書きしない。
+  どの文書への答えかは、script が持つ位置（答えの数）で決まり、検索 AI は文書を指さない
+
+答えの形は `{"relevance": "yes", "reason": "…", "headings": ["…"]}`（`"yes"`: 関連する、`"maybe"`: 判断がつかないが関連するかもしれない。
+取りこぼさないために結果に含める）または `{"relevance": "no"}`（明らかに無関係）。`relevance` は、この 3 つの語のどれかだけである
+（点数・順位は付けない）。`headings` は省略できる。`"no"` は `relevance` だけを持つ。
 
 ## 仕様の解釈（設計書が値や形式を定めていない点）
 
 - 記録されたパス: [確定 ToC]の文書エントリはパスを持たない。[DES-003 §2]が[文書 ID]ごとに現在パスを持つと定める
   [文書情報]の `path` を、記録されたパスとして固定する時点で読む（D-024 の最新の[文書情報]）
-- 写しの `summary`・`tasks` の名前は[文書情報]のフィールド名に揃える
-- 結果の検査: 返った[文書 ID]が固定した[ToC]の文書に無いとき、[セクション ID]がその文書のセクションに無いとき、同じ[文書 ID]を
-  2 回返したときは、その ID だけを結果から外し、`rejected`（種別・文書 ID・セクション ID・説明）と `rejected_notice` に残す。
-  ほかの正しい結果は返す。[セクション ID]が別の文書にあっても、その文書のセクションでなければ外す。外した ID を読み替えて補わない。
-  `rejected_notice` が「文書が結果から漏れている可能性がある」と言うのは、版に無い[文書 ID]を外したときだけである。重複と版に無い
-  [セクション ID]だけのときは、文書が結果に入っているので、含めなかった関連理由・セクションが無いことだけを言う。
-  検査に通った文書が 0 件で、外した ID がある（全件が誤り）ときだけ、関連する文書が無い正常な 0 件と見分けられないので、
-  検索を失敗とする（`SearchFailed`）。終了の値の欠落・定義外も失敗である
-- 結果が 0 件（終了の値が `"0"`）は、関連する文書が無いという正常な結果である
+- 見せる内容の `summary`・`tasks` の名前は[文書情報]のフィールド名に揃える
+- 答えの検査: 形式（JSON として読めること、キーと型）と、見出しの引き当てを、答えを受け取る時点で行う。通らないときは、
+  何も保存せず、直すべき箇所（見出しは、その文書の見出しの候補を添える）を返す（終了コード 1）。検索 AI は同じ文書に
+  答え直せる。見出しは、その文書のセクションの中だけから、`_normalize`（全角半角・空白の正規化）した完全一致、または、
+  その文書の中で一意に決まる前方一致で引く。近い見出しで読み替えて補わない。同じセクションを重ねて選んでも、選択は変わらない
+- 結果（`collect`）: 担当の順、担当の中の順に、`"yes"` か `"maybe"` とされた文書を、`relevance` を付けて並べる。順は関連度の順
+  ではない（強弱は `relevance` が持つ）。担当のどれかに答えの
+  無い文書が残っているときは、関連する文書が無い正常な 0 件と見分けられないので、検索を失敗とする（`SearchFailed`）。
+  すべてに答えがあり、関連する文書が 0 件のときは、正常な結果である
 - 後始末（`cleanup`）は、`collect` が結果を返した後（失敗を返した後を含む）に走る。ほかの検索の作業ファイルは削除しない
-- 値の内容を理由に受け渡しを拒まない。関連理由・文書 ID・終了の値は、変形せずに保持し、検査は `collect` で行う
+- 値の内容（関連理由）を理由に答えを拒まない。値は変形せずに保持する
 """
 
 import json
@@ -71,6 +85,7 @@ import os
 import re
 import secrets
 import tempfile
+import unicodedata
 from pathlib import Path
 
 import detail_file
@@ -90,27 +105,21 @@ ACTION_INITIAL_BUILD = "initial_build_required"
 ACTION_CONFIRM_REBUILD = "confirm_rebuild"
 ACTION_INVOKE_WORKER = "invoke_query_worker"
 
-EXIT_VALUE_OK = "0"
-
 TARGET_FILE_FIELD = "target_file"
 TARGET_FILE_PREFIX = "target-"
 
+# 1 回の検索で同時に起動する query-worker の上限。index-docs の生成（max_concurrent_agents）と同じ値にする
+MAX_CONCURRENT_WORKERS = 10
+# 1 本の query-worker に割り当てる文書の最小件数。TBD: 暫定値であり、実測で決める（DES-006 §2）
+MIN_DOCUMENTS_PER_WORKER = 10
+
 _SEARCH_ID = re.compile(r"SEARCH-[0-9a-f]{8}")
-_ITEM_NAME = re.compile(r"item-([0-9]{6})")
-
-REJECTED_UNKNOWN_DOCUMENT = "unknown_document_id"
-REJECTED_DUPLICATE_DOCUMENT = "duplicate_document_id"
-REJECTED_UNKNOWN_SECTION = "unknown_section_id"
-
-NOTICE_REJECTED = (
-    "検索 AI が返した ID の一部が、固定した[ToC]の版の検査に通らず、結果に含めていない（`rejected`）。"
-    "含めていない ID は補っていない。関連する文書が結果から漏れている可能性がある"
-)
-# 版に無い[文書 ID]を外していないとき（重複・版に無い[セクション ID]だけ）。文書は結果に入っている
-NOTICE_REJECTED_DOCUMENTS_KEPT = (
-    "検索 AI が返した ID の一部が、固定した[ToC]の版の検査に通らず、結果に含めていない（`rejected`）。"
-    "含めていない ID は補っていない。結果の文書は漏れていないが、含めなかった ID が指す関連理由・セクションは結果に無い"
-)
+_WORKER_ID = re.compile(r"(SEARCH-[0-9a-f]{8})-([1-9][0-9]*)")
+RELEVANCE_YES = "yes"  # 関連する
+RELEVANCE_MAYBE = "maybe"  # 判断がつかないが、関連するかもしれない（取りこぼさないために、結果に含める）
+RELEVANCE_NO = "no"  # 明らかに無関係
+RELEVANCES = (RELEVANCE_YES, RELEVANCE_MAYBE, RELEVANCE_NO)
+_ANSWER_KEYS = frozenset({"relevance", "reason", "headings"})
 
 GUIDANCE_INITIAL_BUILD = "[ToC]が未構築のため検索しない"
 NOTICE_POSSIBLY_STALE = (
@@ -121,6 +130,10 @@ NOTICE_POSSIBLY_STALE = (
 NOTICE_PATH = (
     "path は[確定 ToC]の版に記録されたパスであり、現在の実体パスとは限らない"
     "（文書が移動・削除されている可能性がある）"
+)
+NOTICE_ORDER = (
+    "documents の並びは、担当の順と担当の中の順（パスの昇順）であり、関連度の順ではない。"
+    "関連の強弱は relevance が持つ（yes: 関連する、maybe: 判断がつかないが、関連するかもしれない）"
 )
 
 
@@ -133,7 +146,7 @@ class SearchError(Exception):
 
 
 class SearchFailed(Exception):
-    """検索が失敗した（結果が届かない・終了の値が無い、定義外・固定した[ToC]に無い ID。終了コード 3）。"""
+    """検索が失敗した（担当のどれかに答えの無い文書が残っている。終了コード 3）。"""
 
     def __init__(self, errors: list[str]):
         super().__init__("; ".join(errors))
@@ -156,29 +169,39 @@ def _check_search_id(search_id: str) -> None:
         raise SearchError([f"検索 ID の形式が正しくない: {search_id}"])
 
 
-def _serialize_copy(value) -> bytes:
-    """写しのバイト列を返す。字下げとキーの後の空白を省く。
+def split_worker_id(worker_id: str) -> tuple[str, int]:
+    """担当の識別値を、検索 ID と担当の番号（1 から）に分ける。形式が正しくないときは `SearchError`。"""
+    matched = _WORKER_ID.fullmatch(worker_id)
+    if matched is None:
+        raise SearchError([f"担当の識別値の形式が正しくない: {worker_id}"])
+    return matched.group(1), int(matched.group(2))
 
-    写しは worker が読むだけの作業ファイルであり、読む量を減らすために字下げを持たない。
-    1 行にはせず、要素ごとに改行する（worker は Read で読むため、1 行を長くしない）。
-    管理状態と共用する `state_store.serialize` は、差分を読みやすくするため字下げを持つ
-    ので、書き換えない。
+
+def find_project_root(
+    search_id: str, start: Path, project_dir: str | None = None
+) -> Path:
+    """検索 ID の作業ファイルがあるプロジェクトのルートを返す。
+
+    `query-worker` は、プロジェクトのルートを引数で渡さない。環境変数 `project_dir`（あれば）と、`start`（作業ディレクトリ）
+    とその親から、固定した状態のファイルがあるディレクトリを探す。見つからないときは `SearchError`。
     """
-    try:
-        text = json.dumps(
-            value, ensure_ascii=False, sort_keys=True, indent=0, separators=(",", ":")
-        )
-        return (text + "\n").encode("utf-8")
-    except (TypeError, ValueError) as exc:  # UnicodeEncodeError は ValueError の下位
-        raise state_store.StateStoreError(
-            state_store.KIND_INVALID, f"JSON にできない内容: {exc}"
-        ) from exc
+    _check_search_id(search_id)
+    candidates = [Path(project_dir)] if project_dir else []
+    candidates += [Path(start), *Path(start).parents]
+    for candidate in candidates:
+        if _file(candidate, search_id, "fixed").is_file():
+            return candidate
+    raise SearchError(
+        [
+            f"検索 ID の作業ファイルが、作業ディレクトリとその親の .temp/doc-link/query-docs/ に無い: {search_id}"
+            "（後始末済みか、プロジェクトの外で実行している）"
+        ]
+    )
 
 
-def _write(root: Path, path: Path, value, *, compact: bool = False) -> None:
+def _write(root: Path, path: Path, value) -> None:
     try:
-        data = _serialize_copy(value) if compact else state_store.serialize(value)
-        state_store.write_if_changed(root, SKILL, path, data)
+        state_store.write_if_changed(root, SKILL, path, state_store.serialize(value))
     except state_store.StateStoreError as exc:
         raise SearchError([f"作業ファイルを書けない: {path}: {exc}"]) from exc
 
@@ -196,7 +219,7 @@ def _write_target_file(root: Path, toc_key: str, spec: dict) -> str:
     return os.path.abspath(path)
 
 
-def _publish_new(root: Path, path: Path, value) -> bool:
+def _publish_new(root: Path, path: Path, data: bytes) -> bool:
     """上書きしないで公開する。同名のファイルが既にあるとき、何も変えず `False` を返す。"""
     directory = _work_dir(root)
     temp_path: Path | None = None
@@ -207,7 +230,7 @@ def _publish_new(root: Path, path: Path, value) -> bool:
         )
         temp_path = Path(name)
         with os.fdopen(descriptor, "wb") as stream:
-            stream.write(state_store.serialize(value))
+            stream.write(data)
             stream.flush()
             os.fsync(stream.fileno())
         try:
@@ -222,6 +245,14 @@ def _publish_new(root: Path, path: Path, value) -> bool:
             temp_path.unlink(missing_ok=True)
 
 
+def _serialize_item(value: dict) -> bytes:
+    """依頼のバイト列を返す。キーは書いた順（task を先頭）に並べる。worker が Read で読む。"""
+    try:
+        return (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    except (TypeError, ValueError) as exc:  # UnicodeEncodeError は ValueError の下位
+        raise SearchError([f"JSON にできない内容: {exc}"]) from exc
+
+
 def _read(path: Path, missing: str):
     try:
         raw = path.read_bytes()
@@ -233,15 +264,6 @@ def _read(path: Path, missing: str):
         return json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise SearchError([f"作業ファイルが壊れている: {path}: {exc}"]) from exc
-
-
-def _read_optional(path: Path):
-    try:
-        return _read(path, "")
-    except SearchError:
-        if path.exists():
-            raise
-        return None
 
 
 def _load_fixed(root: Path, search_id: str) -> dict:
@@ -264,17 +286,54 @@ def _published_files(root: Path, search_id: str) -> list[Path]:
 # --- 検索前検査の結果の扱いと固定 -------------------------------------------------
 
 
-def _is_title_heading(entry: dict, info: dict) -> bool:
-    """文書の先頭の見出しで、見出しの文字列が[文書情報]のタイトルと同じか。
+def _normalize(text: str) -> str:
+    """名前の照合に使う正規化。全角半角（NFKC）と、空白の種類・連続を揃える。"""
+    return " ".join(unicodedata.normalize("NFKC", text).split())
 
-    この見出しの[セクション ID]は、文書の名前に見える見出しに付いており、[文書 ID]と同じ形式のため、
-    検索 AI が[文書 ID]と取り違える（Issue #17）。写しには入れない。
+
+def _unique_names(names: list[str]) -> list[str]:
+    """検索 AI が答えるときの名前を、正規化して比べても一意にする。
+
+    同名が n 個あるときは、それぞれに `（同名 k/n）` を足す（k は並びの順）。足したあとも一意にならないとき
+    （名前そのものが同じ書式のとき）は、曖昧に引き当てないよう、`SearchError` にする。
     """
-    return entry["position"] == 0 and entry["heading"] == info["title"]
+    groups: dict[str, list[int]] = {}
+    for index, name in enumerate(names):
+        groups.setdefault(_normalize(name), []).append(index)
+    unique = list(names)
+    for indexes in groups.values():
+        if len(indexes) > 1:
+            for order, index in enumerate(indexes, 1):
+                unique[index] = f"{names[index]}（同名 {order}/{len(indexes)}）"
+    if len({_normalize(name) for name in unique}) != len(unique):
+        raise SearchError(
+            ["見出しの名前を一意にできない（同名の目印と同じ書式の名前がある）"]
+        )
+    return unique
+
+
+def _plan_workers(doc_ids: list[str]) -> list[list[str]]:
+    """文書を、query-worker の担当に分ける。並びは保つ。文書が無いときは、担当も無い。
+
+    担当の数は、`MAX_CONCURRENT_WORKERS` を超えず、1 本あたりが `MIN_DOCUMENTS_PER_WORKER` 未満にならない数（1 以上）。
+    文書の数を担当の数で割った件数ずつを割り当て、余りは先頭の担当から 1 件ずつ足す。
+    """
+    count = len(doc_ids)
+    if count == 0:
+        return []
+    workers = max(1, min(MAX_CONCURRENT_WORKERS, count // MIN_DOCUMENTS_PER_WORKER))
+    base, extra = divmod(count, workers)
+    plans: list[list[str]] = []
+    start = 0
+    for index in range(workers):
+        size = base + (1 if index < extra else 0)
+        plans.append(doc_ids[start : start + size])
+        start += size
+    return plans
 
 
 def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> dict:
-    """検索に使う版の[確定 ToC]と最新の[文書情報]から写しを組み立て、版・鮮度とともに固定して依頼を公開する。"""
+    """検索に使う版の[確定 ToC]と最新の[文書情報]から、見せる内容と担当を組み立て、版・鮮度とともに固定する。"""
     try:
         toc = state_store.load_confirmed_toc(root, toc_key)
         infos = {
@@ -286,67 +345,58 @@ def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> di
     except state_store.StateStoreError as exc:
         raise SearchError([f"[ToC]・[文書情報]を読めない: {exc}"]) from exc
 
-    # sections は collect の検査に使う全セクション、copy_sections は写しに入れるセクション
+    # 検索 AI は ID を見ず、書かない。セクションは見出しの名前で答え、名前から ID への対応は、固定した状態に持つ
     sections: dict[str, list[dict]] = {doc_id: [] for doc_id in infos}
-    copy_sections: dict[str, list[dict]] = {doc_id: [] for doc_id in infos}
     for entry in sorted(toc["sections"], key=lambda item: item["position"]):
         doc_id = entry["doc_link_id"]
-        if doc_id not in sections:
-            continue
-        section = {"section_id": entry["section_id"], "heading": entry["heading"]}
-        sections[doc_id].append(section)
-        if not _is_title_heading(entry, infos[doc_id]):
-            copy_sections[doc_id].append(section)
+        if doc_id in sections:
+            sections[doc_id].append(
+                {"section_id": entry["section_id"], "heading": entry["heading"]}
+            )
+    doc_ids = sorted(infos, key=lambda doc_id: (infos[doc_id]["path"], doc_id))
+    for doc_id in doc_ids:
+        names = _unique_names([section["heading"] for section in sections[doc_id]])
+        for section, name in zip(sections[doc_id], names):
+            section["name"] = name
 
-    copy = {
-        "documents": [
-            {
-                "doc_link_id": doc_id,
-                "title": infos[doc_id]["title"],
-                "purpose": infos[doc_id]["purpose"],
-                "summary": infos[doc_id]["summary"],
-                "tasks": infos[doc_id]["tasks"],
-                "keywords": infos[doc_id]["keywords"],
-                "sections": copy_sections[doc_id],
-            }
-            for doc_id in sorted(infos)
-        ]
-    }
     fixed_documents = {
-        doc_id: {"path": infos[doc_id]["path"], "sections": sections[doc_id]}
-        for doc_id in sorted(infos)
+        doc_id: {
+            "path": infos[doc_id]["path"],
+            "title": infos[doc_id]["title"],
+            "purpose": infos[doc_id]["purpose"],
+            "summary": infos[doc_id]["summary"],
+            "tasks": infos[doc_id]["tasks"],
+            "keywords": infos[doc_id]["keywords"],
+            "sections": sections[doc_id],
+        }
+        for doc_id in doc_ids
     }
 
     search_id = "SEARCH-" + secrets.token_hex(4)
     while _file(root, search_id, "fixed").exists():
         search_id = "SEARCH-" + secrets.token_hex(4)
+    workers = {
+        f"{search_id}-{number}": plan
+        for number, plan in enumerate(_plan_workers(doc_ids), 1)
+    }
 
-    copy_path = _file(root, search_id, "toc")
-    _write(root, copy_path, copy, compact=True)
     _write(
         root,
         _file(root, search_id, "fixed"),
         {
             "search_id": search_id,
+            "task": task,
             "toc_key": toc_key,
             "toc_version": toc["version"],
             "freshness": freshness,
             "documents": fixed_documents,
-        },
-    )
-    _write(
-        root,
-        _file(root, search_id, "request"),
-        {
-            "search_id": search_id,
-            "task": task,
-            "toc_key": toc_key,
-            "toc_copy_path": str(copy_path.resolve()),
+            "workers": workers,
         },
     )
     return {
         "action": ACTION_INVOKE_WORKER,
         "search_id": search_id,
+        "workers": list(workers),
         "toc_key": toc_key,
         "toc_version": toc["version"],
         "freshness": freshness,
@@ -432,144 +482,237 @@ def prepare(
 # --- query-worker との受け渡し -----------------------------------------------------
 
 
-def request_path(root: Path, search_id: str) -> str:
-    """依頼の絶対パスを返す。読み出してよい状態（公開済み）でなければ失敗する。"""
-    _load_fixed(root, search_id)
-    path = _file(root, search_id, "request")
-    if not path.is_file():
-        raise SearchError([f"依頼が公開されていない: {search_id}"])
-    return str(path.resolve())
+def _load_worker(root: Path, worker_id: str) -> tuple[dict, list[str], int]:
+    """担当の識別値から、固定した状態と、その担当の文書の並びと、担当の番号を返す。"""
+    search_id, number = split_worker_id(worker_id)
+    fixed = _load_fixed(root, search_id)
+    plan = fixed["workers"].get(worker_id)
+    if plan is None:
+        raise SearchError([f"識別値に対応する担当が無い: {worker_id}"])
+    return fixed, plan, number
 
 
-def _check_open(root: Path, search_id: str) -> None:
-    _load_fixed(root, search_id)
-    if not _file(root, search_id, "request").is_file():
-        raise SearchError([f"依頼が公開されていない: {search_id}"])
-    if _file(root, search_id, "result").exists():
-        raise SearchError(
-            [f"終了の値を既に書いたので、結果を足せない（上書きしない）: {search_id}"]
-        )
+def _answer_name(number: int, position: int) -> str:
+    return f"w{number}.answer-{position:04d}"
 
 
-def submit_item(
-    root: Path,
-    search_id: str,
-    doc_link_id: str,
-    reason: str,
-    section_ids: list[str],
+def _answered(root: Path, search_id: str, number: int) -> int:
+    """担当に保存された答えの数（= 次に答える文書の位置）を返す。"""
+    prefix = f"{search_id}.w{number}.answer-"
+    return sum(
+        1 for path in _published_files(root, search_id) if path.name.startswith(prefix)
+    )
+
+
+def _next_payload(
+    root: Path, fixed: dict, number: int, plan: list[str], answered: int
 ) -> dict:
-    """[検索 AI]が返した関連する文書 1 件を、値のまま保持する。検査は `collect` が行う。"""
-    _check_open(root, search_id)
-    item = {
-        "doc_link_id": doc_link_id,
-        "reason": reason,
-        "section_ids": list(section_ids),
+    """次に答える文書の依頼を（無ければ書いて）公開し、そのパスを返す。答えが揃っていれば、`done` を返す。"""
+    total = len(plan)
+    if answered >= total:
+        return {"done": True, "item_path": None, "answered": answered, "total": total}
+    search_id = fixed["search_id"]
+    path = _file(root, search_id, f"w{number}.item-{answered + 1:04d}")
+    if not path.is_file():
+        document = fixed["documents"][plan[answered]]
+        item = {
+            "task": fixed["task"],
+            "position": answered + 1,
+            "total": total,
+            "title": document["title"],
+            "purpose": document["purpose"],
+            "summary": document["summary"],
+            "tasks": document["tasks"],
+            "keywords": document["keywords"],
+            "sections": [section["name"] for section in document["sections"]],
+        }
+        _publish_new(root, path, _serialize_item(item))
+    return {
+        "done": False,
+        "item_path": str(path.resolve()),
+        "answered": answered,
+        "total": total,
     }
-    number = 1
-    while not _publish_new(root, _file(root, search_id, f"item-{number:06d}"), item):
-        number += 1
-    return {"stored": {"search_id": search_id, "doc_link_id": doc_link_id}}
 
 
-def submit_end(root: Path, search_id: str, exit_value: str) -> dict:
-    """終了の値を書く。1 回だけで、上書きしない。値の内容は `collect` が判定する。"""
-    _check_open(root, search_id)
-    if not _publish_new(
-        root,
-        _file(root, search_id, "result"),
-        {"search_id": search_id, "exit_value": exit_value},
-    ):
-        raise SearchError([f"終了の値を既に書いた（上書きしない）: {search_id}"])
-    return {"stored": {"search_id": search_id}}
+def next_item(root: Path, worker_id: str) -> dict:
+    """次に答える文書の依頼のパスを返す。何度呼んでも同じ文書を返す（答えを保存するまで進まない）。"""
+    fixed, plan, number = _load_worker(root, worker_id)
+    answered = _answered(root, fixed["search_id"], number)
+    return _next_payload(root, fixed, number, plan, answered)
 
 
-def _read_items(root: Path, search_id: str) -> list[dict]:
-    numbered = []
-    for path in _published_files(root, search_id):
-        name = path.name[len(search_id) + 1 : -len(state_store.FILE_SUFFIX)]
-        match = _ITEM_NAME.fullmatch(name)
-        if match is not None:
-            numbered.append((int(match.group(1)), path))
-    return [_read(path, "") for _, path in sorted(numbered)]
+def _parse_answer(text: str) -> dict:
+    """渡された答えの形式（JSON として読めること、キーと型）だけを検査し、保持する形にする。
+
+    通らないときは、直すべき箇所をすべて `SearchError` に入れる。値の内容（見出しが存在するか、など）は検査しない。
+    """
+    if not text.strip():
+        raise SearchError(["標準入力が空である。答えの JSON を標準入力で渡すこと"])
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise SearchError(
+            [f"答えが JSON として読めない（{exc.lineno} 行 {exc.colno} 列）: {exc.msg}"]
+        ) from exc
+    if not isinstance(data, dict):
+        raise SearchError(
+            [
+                '答えは {"relevance": "yes" か "maybe", "reason": "…", "headings": ["…"]} または '
+                '{"relevance": "no"} の形でなければならない'
+            ]
+        )
+    errors: list[str] = []
+    unknown = sorted(set(data) - _ANSWER_KEYS)
+    if unknown:
+        errors.append(f"答えに定義に無いキーがある: {', '.join(unknown)}")
+    relevance = data.get("relevance")
+    if not isinstance(relevance, str) or relevance not in RELEVANCES:
+        errors.append('relevance が "yes"・"maybe"・"no" のどれかでない')
+        relevance = None
+    reason: str | None = None
+    headings: list[str] = []
+    if relevance == RELEVANCE_NO:
+        if "reason" in data or "headings" in data:
+            errors.append(
+                '無関係な答え（relevance が "no"）は、relevance だけを持つ。reason・headings を付けない'
+            )
+    elif relevance is not None:
+        if not isinstance(data.get("reason"), str):
+            errors.append(
+                f'関連する答え（relevance が "{relevance}"）の reason が文字列でない'
+            )
+        else:
+            reason = data["reason"]
+        given = data.get("headings", [])
+        if not isinstance(given, list) or not all(
+            isinstance(heading, str) for heading in given
+        ):
+            errors.append("headings が文字列の配列でない")
+        else:
+            headings = list(given)
+    if errors:
+        raise SearchError(errors)
+    return {"relevance": relevance, "reason": reason, "headings": headings}
+
+
+def _resolve_headings(document: dict, headings: list[str]) -> list[str]:
+    """答えの見出しを、その文書のセクションの[セクション ID]に引き当てる。順序を保ち、重ねては選ばない。
+
+    正規化した完全一致、または、その文書の中で一意に決まる前方一致で引く。引き当てられない見出しがあるときは、
+    すべてについて、その文書の見出しの候補を添えて `SearchError` にする（読み替えて補わない）。
+    """
+    sections = document["sections"]
+    candidates = json.dumps(
+        [section["name"] for section in sections], ensure_ascii=False
+    )
+    section_ids: list[str] = []
+    errors: list[str] = []
+    for heading in headings:
+        key = _normalize(heading)
+        matched = [s for s in sections if _normalize(s["name"]) == key]
+        if not matched and key:
+            matched = [s for s in sections if _normalize(s["name"]).startswith(key)]
+        if len(matched) == 1:
+            if matched[0]["section_id"] not in section_ids:
+                section_ids.append(matched[0]["section_id"])
+        elif matched:
+            errors.append(
+                f"見出し {heading!r} は、この文書の複数の見出しに当たる。"
+                f"一意に決まる所まで書くこと。この文書の見出し: {candidates}"
+            )
+        else:
+            errors.append(
+                f"見出し {heading!r} は、この文書の見出しに無い。"
+                f"この文書の見出しのどれかを、そのまま書くこと。この文書の見出し: {candidates}"
+            )
+    if errors:
+        raise SearchError(errors)
+    return section_ids
+
+
+def submit_answer(root: Path, worker_id: str, text: str) -> dict:
+    """[検索 AI]が標準入力で渡した答えを、次に答える文書への答えとして検査し、通れば保存して、次の依頼を返す。
+
+    形式が合わない、または見出しを引き当てられないときは、何も保存せずに `SearchError` を送出する（答え直せる）。
+    保存した答えは上書きしない。
+    """
+    fixed, plan, number = _load_worker(root, worker_id)
+    search_id = fixed["search_id"]
+    answered = _answered(root, search_id, number)
+    if answered >= len(plan):
+        raise SearchError(
+            [f"担当のすべての文書に答えを保存した。これ以上は受け取らない: {worker_id}"]
+        )
+    doc_id = plan[answered]
+    answer = _parse_answer(text)
+    section_ids = (
+        _resolve_headings(fixed["documents"][doc_id], answer["headings"])
+        if answer["relevance"] != RELEVANCE_NO
+        else []
+    )
+    stored = {
+        "doc_link_id": doc_id,
+        "relevance": answer["relevance"],
+        "reason": answer["reason"],
+        "section_ids": section_ids,
+    }
+    path = _file(root, search_id, _answer_name(number, answered + 1))
+    if not _publish_new(root, path, state_store.serialize(stored)):
+        raise SearchError(
+            [f"この文書の答えを既に保存した（上書きしない）: {worker_id}"]
+        )
+    return {
+        "stored": {"position": answered + 1, "total": len(plan)},
+        **_next_payload(root, fixed, number, plan, answered + 1),
+    }
 
 
 def collect(root: Path, search_id: str) -> dict:
-    """結果を検査して整形する。検査に通らない ID は結果から外して `rejected` に残す。
+    """全担当の答えを束ねて、結果として整形する。[セクション ID]は、答えを受け取った時点で引き当て済みである。
 
-    終了の値の欠落・定義外、または検査に通った文書が 0 件で外した ID がある（全件が誤り）ときは `SearchFailed`。
+    担当のどれかに答えの無い文書が残っている（Agent が答えを渡せなかった）ときは `SearchFailed`。
     """
     fixed = _load_fixed(root, search_id)
-    result = _read_optional(_file(root, search_id, "result"))
-    if result is None:
-        raise SearchFailed(["終了の値が無い（結果が届いていない）。検索を失敗とした"])
-    if result["exit_value"] != EXIT_VALUE_OK:
-        raise SearchFailed(
-            [f"終了の値が定義外である: {result['exit_value']!r}。検索を失敗とした"]
-        )
-
-    rejected: list[dict] = []
-
-    def reject(kind: str, doc_id: str, section_id: str | None, message: str) -> None:
-        rejected.append(
-            {
-                "kind": kind,
-                "doc_link_id": doc_id,
-                "section_id": section_id,
-                "message": message,
-            }
-        )
-
-    seen: set[str] = set()
-    documents = []
-    for item in _read_items(root, search_id):
-        doc_id = item["doc_link_id"]
-        known = fixed["documents"].get(doc_id)
-        if known is None:
-            reject(
-                REJECTED_UNKNOWN_DOCUMENT,
-                doc_id,
-                None,
-                f"固定した[ToC]の版に無い[文書 ID]が返った: {doc_id}",
+    unfinished: list[str] = []
+    documents: list[dict] = []
+    for worker_id, plan in fixed["workers"].items():
+        _, number = split_worker_id(worker_id)
+        answered = _answered(root, search_id, number)
+        if answered < len(plan):
+            unfinished.append(
+                f"担当 {worker_id} は、{len(plan)} 件のうち {answered} 件までしか答えていない"
             )
             continue
-        if doc_id in seen:
-            reject(
-                REJECTED_DUPLICATE_DOCUMENT,
-                doc_id,
-                None,
-                f"同じ[文書 ID]が複数回返った: {doc_id}。2 回目以降の関連理由・セクションは結果に含めていない"
-                "（文書は 1 回目の提出で結果に含まれている）",
+        for position in range(1, len(plan) + 1):
+            answer = _read(
+                _file(root, search_id, _answer_name(number, position)),
+                f"答えが読めない: {worker_id} の {position} 件目",
             )
-            continue
-        seen.add(doc_id)
-        headings = {
-            entry["section_id"]: entry["heading"] for entry in known["sections"]
-        }
-        sections = []
-        for section_id in item["section_ids"]:
-            if section_id not in headings:
-                reject(
-                    REJECTED_UNKNOWN_SECTION,
-                    doc_id,
-                    section_id,
-                    f"文書 {doc_id} の固定した[ToC]の版に無い[セクション ID]が返った: {section_id}",
-                )
+            if answer["relevance"] == RELEVANCE_NO:
                 continue
-            sections.append({"section_id": section_id, "heading": headings[section_id]})
-        documents.append(
-            {
-                "doc_link_id": doc_id,
-                "recorded_path": known["path"],
-                "reason": item["reason"],
-                "sections": sections,
+            known = fixed["documents"][answer["doc_link_id"]]
+            headings = {
+                section["section_id"]: section["heading"]
+                for section in known["sections"]
             }
-        )
-    if rejected and not documents:
-        # 全件が誤りの検索を、関連する文書が無いという正常な 0 件と見分けられなくなるため、失敗とする
+            documents.append(
+                {
+                    "doc_link_id": answer["doc_link_id"],
+                    "recorded_path": known["path"],
+                    "relevance": answer["relevance"],
+                    "reason": answer["reason"],
+                    "sections": [
+                        {"section_id": section_id, "heading": headings[section_id]}
+                        for section_id in answer["section_ids"]
+                    ],
+                }
+            )
+    if unfinished:
         raise SearchFailed(
-            [entry["message"] for entry in rejected]
+            unfinished
             + [
-                "検査に通った文書が無い。存在しない ID を補わないので、この検索の結果を採用しない"
+                "答えの無い文書が残っているので、関連する文書が無い正常な 0 件と見分けられない。検索を失敗とした"
             ]
         )
 
@@ -581,23 +724,13 @@ def collect(root: Path, search_id: str) -> dict:
         "freshness": fixed["freshness"],
         "freshness_notice": NOTICE_POSSIBLY_STALE if stale else None,
         "path_notice": NOTICE_PATH,
+        "order_notice": NOTICE_ORDER,
         "documents": documents,
-        "rejected": rejected,
-        "rejected_notice": _rejected_notice(rejected),
     }
 
 
-def _rejected_notice(rejected: list[dict]) -> str | None:
-    """外した ID の通知。文書が結果から漏れている可能性があるのは、版に無い[文書 ID]を外したときだけである。"""
-    if not rejected:
-        return None
-    if any(entry["kind"] == REJECTED_UNKNOWN_DOCUMENT for entry in rejected):
-        return NOTICE_REJECTED
-    return NOTICE_REJECTED_DOCUMENTS_KEPT
-
-
 def cleanup(root: Path, search_id: str) -> int:
-    """検索 ID の依頼・結果・写し・固定した状態をすべて削除する。削除した数を返す（無ければ 0）。"""
+    """検索 ID の依頼・答え・固定した状態をすべて削除する。削除した数を返す（無ければ 0）。"""
     _check_search_id(search_id)
     removed = 0
     for path in _published_files(root, search_id):

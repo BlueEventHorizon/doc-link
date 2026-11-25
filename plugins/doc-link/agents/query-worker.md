@@ -67,9 +67,10 @@ uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" 
 uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" submit-item --project-root "${CLAUDE_PROJECT_DIR}" --search-id {検索 ID} --doc-id {文書 ID} --reason '{関連理由}' --section-id {セクション ID}
 ```
 
-- `--section-id` は、該当するセクションがあるときだけ付ける。複数あれば、セクションごとにオプションを繰り返す
+- `--doc-id` に渡すのは、写しの `documents` の各要素の `doc_link_id` だけである。`sections` の `section_id` は `--doc-id` に渡さない。文書の先頭の見出し（タイトルと同じ見出しテキスト）の `section_id` も同じである
+- `--section-id` は、該当するセクションがあるときだけ付ける。値は、その文書の `sections` の `section_id` だけである。複数あれば、セクションごとにオプションを繰り返す
 - 値は、確定した文字列をそのまま渡す。要約・改変をしない。値は単一引用符で囲み、値の中の単一引用符は `'\''` と書く。値が `-` で始まるときは、`--reason='-値'` のように `=` でつなぐ
-- 検査は script が行う。終了コードが 0 以外でも、再送・値の修正・ID の補完をしない。応答に終了コードと `errors` を書いて、残りの文書へ進む
+- 検査は script が、結果を受け取るとき（`collect`）に行う。`submit-item` は値を拒まず、誤りを知らせない。検査に通らない ID は、その ID だけが結果から外れ、利用者に報告される。終了コードが 0 以外のときも、再送・値の修正・ID の補完をしない。応答に終了コードと `errors` を書いて、残りの文書へ進む
 
 ### 5. 終了の値を渡す
 
@@ -86,5 +87,5 @@ uv run --locked "${CLAUDE_PLUGIN_ROOT}/skills/query-docs/scripts/query_docs.py" 
 
 終了の値を渡し終えたら、終える。応答は、終えたことと理由だけにする。
 
-- 例: 渡した件数、script が拒否した文書とその `errors`
+- 例: 渡した件数、終了コードが 0 以外だった `submit-item` とその `errors`
 - 検索結果の内容（選んだ文書・関連理由など）を応答に書かない

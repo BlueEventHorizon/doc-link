@@ -47,8 +47,8 @@
   <circle cx="794" cy="76" r="15" fill="#2563eb"/>
   <text x="794" y="81" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">4</text>
   <text x="794" y="113" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">修正を判断</text>
-  <text x="794" y="140" text-anchor="middle" font-size="13" fill="#475569">プロジェクト管理 AI が</text>
-  <text x="794" y="160" text-anchor="middle" font-size="13" fill="#475569">文脈から判断し、</text>
+  <text x="794" y="140" text-anchor="middle" font-size="13" fill="#475569">プロジェクト管理</text>
+  <text x="794" y="160" text-anchor="middle" font-size="13" fill="#475569">AI が文脈から判断し、</text>
   <text x="794" y="180" text-anchor="middle" font-size="13" fill="#475569">必要なら直す</text>
 
   <rect x="24" y="226" width="850" height="44" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>

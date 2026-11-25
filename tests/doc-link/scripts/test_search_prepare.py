@@ -284,26 +284,70 @@ class InspectionTest(SearchTestBase):
             sp.submit_end(self.root, sid, exit_value)
         return sid
 
-    def test_unknown_document_id_is_abnormal(self):
-        sid = self.finish([("DLID-zzzzzzzzzzzz", [])])
+    def rejected_of(self, result):
+        return [
+            (r["kind"], r["doc_link_id"], r["section_id"]) for r in result["rejected"]
+        ]
+
+    def test_clean_result_has_no_rejected_ids(self):
+        result = sp.collect(self.root, self.finish([(ID_A, [SEC_A])]))
+        self.assertEqual(result["rejected"], [])
+        self.assertIsNone(result["rejected_notice"])
+
+    def test_unknown_document_id_is_rejected_and_the_others_are_kept(self):
+        # 1 件の誤りで、ほかの正しい結果を失わない。誤りは結果に見える形で返る（Issue #15）
+        sid = self.finish([(ID_B, []), (SEC_A, []), (ID_A, [])])
+        result = sp.collect(self.root, sid)
+        self.assertEqual([d["doc_link_id"] for d in result["documents"]], [ID_B, ID_A])
+        self.assertEqual(
+            self.rejected_of(result), [("unknown_document_id", SEC_A, None)]
+        )
+        self.assertIn(SEC_A, result["rejected"][0]["message"])
+        self.assertTrue(result["rejected_notice"])
+
+    def test_unknown_section_id_is_rejected_and_its_document_is_kept(self):
+        sid = self.finish([(ID_A, ["DLID-00000000s999", SEC_A])])
+        result = sp.collect(self.root, sid)
+        self.assertEqual(
+            result["documents"][0]["sections"],
+            [{"section_id": SEC_A, "heading": "A"}],
+        )
+        self.assertEqual(
+            self.rejected_of(result),
+            [("unknown_section_id", ID_A, "DLID-00000000s999")],
+        )
+
+    def test_section_of_another_document_is_rejected(self):
+        result = sp.collect(self.root, self.finish([(ID_A, [SEC_B]), (ID_B, [])]))
+        self.assertEqual(
+            self.rejected_of(result), [("unknown_section_id", ID_A, SEC_B)]
+        )
+        self.assertEqual(result["documents"][0]["sections"], [])
+
+    def test_duplicate_document_keeps_the_first_and_rejects_the_rest(self):
+        sid = self.finish([(ID_A, [SEC_A]), (ID_A, [])])
+        result = sp.collect(self.root, sid)
+        self.assertEqual(len(result["documents"]), 1)
+        self.assertEqual(
+            result["documents"][0]["sections"],
+            [{"section_id": SEC_A, "heading": "A"}],
+        )
+        self.assertEqual(
+            self.rejected_of(result), [("duplicate_document_id", ID_A, None)]
+        )
+
+    def test_search_fails_when_no_document_passes_the_inspection(self):
+        # 全件が誤りの検索を、関連する文書が無いという正常な 0 件と見分けられるようにする
+        sid = self.finish([("DLID-zzzzzzzzzzzz", []), (SEC_A, [])])
         with self.assertRaises(sp.SearchFailed) as caught:
             sp.collect(self.root, sid)
         self.assertTrue(any("DLID-zzzzzzzzzzzz" in e for e in caught.exception.errors))
+        self.assertTrue(any(SEC_A in e for e in caught.exception.errors))
 
-    def test_unknown_section_id_is_abnormal(self):
-        sid = self.finish([(ID_A, ["DLID-00000000s999"])])
-        with self.assertRaises(sp.SearchFailed):
-            sp.collect(self.root, sid)
-
-    def test_section_of_another_document_is_abnormal(self):
-        sid = self.finish([(ID_A, [SEC_B])])
-        with self.assertRaises(sp.SearchFailed):
-            sp.collect(self.root, sid)
-
-    def test_duplicate_document_is_abnormal(self):
-        sid = self.finish([(ID_A, []), (ID_A, [])])
-        with self.assertRaises(sp.SearchFailed):
-            sp.collect(self.root, sid)
+    def test_rejected_ids_are_not_completed_or_corrected(self):
+        # 文書の先頭の見出しのセクション ID を、所属する文書の ID に読み替えて補わない
+        result = sp.collect(self.root, self.finish([(SEC_A, []), (ID_B, [])]))
+        self.assertEqual([d["doc_link_id"] for d in result["documents"]], [ID_B])
 
     def test_missing_exit_value_fails_the_search(self):
         sid = self.finish([(ID_A, [])], exit_value=None)

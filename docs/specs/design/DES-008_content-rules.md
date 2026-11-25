@@ -101,7 +101,7 @@ markdown-it-py はリンクの行内位置を持たないため、文書への�
 
 [des-005-sec-3]: DES-005_indexing.md#3-変更集合の確定-dlid-ext9ze054hbx "e029f74cd706 DLID-ext9ze054hbx"
 [des-007-sec-1]: DES-007_references-impact.md#1-正式な参照と検査根拠-dlid-pnrn5dyy7z05 "d84f6c33a9b5 DLID-pnrn5dyy7z05"
-[des-010-sec-4]: DES-010_skill-composition.md#4-カスタム-agent-との受け渡し-dlid-ytajmhsv2p1t "6e85a7620780 DLID-ytajmhsv2p1t"
+[des-010-sec-4]: DES-010_skill-composition.md#4-カスタム-agent-との受け渡し-dlid-ytajmhsv2p1t "ce6313bd103a DLID-ytajmhsv2p1t"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"
 [req-002-sec-6-2]: ../requirement/REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs "5c219073abcb DLID-5h2et5v540gs"

@@ -1,29 +1,29 @@
 {
-  "applied_hash": "a37e588a4b862b6640083eaec560efc31c8a3ad829e2c976c785e2f19771d3fb",
-  "content_hash": "a37e588a4b862b6640083eaec560efc31c8a3ad829e2c976c785e2f19771d3fb",
+  "applied_hash": "46ea124365d8f2726d023f1eb504d3c16f6ab24ff4f53ec51c16231aea69dc63",
+  "content_hash": "46ea124365d8f2726d023f1eb504d3c16f6ab24ff4f53ec51c16231aea69dc63",
   "doc_link_id": "DLID-7e90gq3sdncc",
   "keywords": [
     "SKILL composition",
+    "custom Agent",
     "toc-updater",
     "query-worker",
     "embed-dlid",
     "index-docs",
     "check-impact",
-    "sequence diagram",
-    "operating flow",
-    "agent data exchange",
-    "check-links"
+    "check-links",
+    "operational flow",
+    "Agent data exchange"
   ],
   "last_check": {
-    "checked_at": "2026-11-24T13:48:52+00:00",
+    "checked_at": "2026-11-24T16:58:15+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-010_skill-composition.md",
-  "purpose": "Design of the 8 SKILLs and 2 custom agents: responsibilities, per-skill sequences, the overall operating flow, and how data is exchanged with agents.",
+  "purpose": "Design of the eight SKILLs and two custom Agents of doc-link: responsibilities, per-SKILL sequences, operational flow, and Agent data exchange.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/rules/agent_data_exchange_rules.md",
         "result": "match",
         "scope": "docs/rules"
@@ -38,7 +38,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -53,7 +53,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -68,7 +68,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -83,7 +83,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -98,7 +98,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -113,7 +113,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -128,7 +128,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -143,7 +143,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -158,7 +158,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -173,7 +173,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -188,7 +188,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -203,7 +203,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -218,7 +218,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -233,7 +233,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -248,7 +248,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -263,7 +263,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -278,7 +278,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -293,7 +293,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -308,7 +308,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -323,7 +323,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -338,7 +338,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -353,7 +353,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -368,7 +368,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -383,7 +383,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -398,7 +398,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -413,7 +413,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -428,7 +428,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -443,7 +443,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -458,7 +458,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -473,7 +473,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -488,7 +488,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -503,7 +503,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -518,7 +518,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -533,7 +533,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -548,7 +548,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -563,7 +563,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -578,7 +578,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -593,7 +593,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -608,7 +608,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -623,7 +623,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -638,7 +638,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -653,7 +653,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -668,7 +668,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -683,7 +683,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -698,7 +698,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -713,7 +713,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-24T13:48:52+00:00",
+        "checked_at": "2026-11-24T16:58:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -759,16 +759,16 @@
       "section_id": "DLID-z9j2ys29jx12"
     },
     {
+      "content_hash": "61df12ca68e08a035a8713cd5f8453a64d6ffb58167e1395f89a765b99eaa7f5",
+      "heading": "DES-010 SKILL と Agent の構成",
+      "position": 0,
+      "section_id": "DLID-gf7dehdq4tpd"
+    },
+    {
       "content_hash": "6d036267748763d84fca3f32fc2b3f9cc9250e0d81817dfbca2b33f924cecd6e",
       "heading": "3.8 resolve-dlid",
       "position": 13,
       "section_id": "DLID-venmkyh8532z"
-    },
-    {
-      "content_hash": "6e85a762078008d0d295c89510764c97c9bbc97aea5848a119d9bdbc44d38832",
-      "heading": "4. カスタム Agent との受け渡し",
-      "position": 15,
-      "section_id": "DLID-ytajmhsv2p1t"
     },
     {
       "content_hash": "79cf28959010c7e42e65d23bc10124f3c288c658a51b9dd288a710148ce2a7e4",
@@ -781,12 +781,6 @@
       "heading": "2. ユースケース",
       "position": 4,
       "section_id": "DLID-6tfvncts0q8x"
-    },
-    {
-      "content_hash": "9a2ba382c430b8b46e2df9733874bb820c9a3e82abc2645d365b1eff039177cc",
-      "heading": "DES-010 SKILL と Agent の構成",
-      "position": 0,
-      "section_id": "DLID-gf7dehdq4tpd"
     },
     {
       "content_hash": "aa4ca5399f0b8cfb6972fa8bbf39168da95b7bc3d18f952ce8fc8d284952db94",
@@ -813,6 +807,12 @@
       "section_id": "DLID-nwn04tk644ex"
     },
     {
+      "content_hash": "ce6313bd103a0d6db75f24de5c4878a2d2b8dba32642ae208abefa1c3ed6f9e1",
+      "heading": "4. カスタム Agent との受け渡し",
+      "position": 15,
+      "section_id": "DLID-ytajmhsv2p1t"
+    },
+    {
       "content_hash": "dd9a5fefa574280d8b18f79205d7183de91dcd7163861b61e1bb72210181a6e7",
       "heading": "3.7 check-impact",
       "position": 12,
@@ -826,24 +826,24 @@
     }
   ],
   "summary": [
-    "Composition table of 8 SKILLs and 2 custom Agents with write boundaries and related requirements",
-    "Responsibilities of embed-dlid, index-docs, query-docs and resolve-dlid",
-    "Check skills: check-dlid, check-links, check-toc, check-impact, what each detects and how findings are handled",
-    "Use-case diagram of users, project management AI and caller skills",
-    "Sequence diagrams for each skill, including script exit codes deciding embed-dlid writes",
-    "index-docs loop launching toc-updater for up to 3 documents each, up to 10 concurrently",
-    "query-docs flow with rebuild-or-existing choice and target file hand-off",
-    "check-impact repeat-until-empty procedure and reference writing steps with resolve-dlid",
-    "Overall operating flow from check-dlid through index-docs and check-impact",
-    "Agent data exchange: identifiers, requests, results, error values and cleanup"
+    "Lists eight SKILLs (embed-dlid, index-docs, query-docs, resolve-dlid, four check SKILLs) with write permissions and requirement mapping.",
+    "Defines two Agents: toc-updater generates document info for up to 3 documents, and query-worker selects relevant documents read-only.",
+    "Describes responsibilities of operation and lookup SKILLs: ID embedding, ToC build, search, and DLID resolution.",
+    "Describes check SKILLs that only detect: missing or duplicate IDs, broken links, stale ToC, and change-impact candidates.",
+    "Gives a use-case diagram of users, the project-management AI and calling skills against the SKILLs.",
+    "Gives sequence diagrams per SKILL, with scripts holding the logic and SKILL.md only delegating.",
+    "Defines the operational flow: check-dlid, embed-dlid, check-links, index-docs, then check-impact, restarting after body edits.",
+    "Specifies how check-impact reports changed documents with direct referrers and how hashes in link titles are rewritten.",
+    "Specifies Agent data exchange: identifiers, request and result contents, error values, script validation and deletion timing."
   ],
   "tasks": [
-    "Writing or modifying any SKILL.md of doc-link",
-    "Implementing toc-updater or query-worker agents",
-    "Designing the operating flow of indexing and checks",
-    "Implementing check-dlid, check-links, check-toc or check-impact",
-    "Implementing agent request and result exchange scripts",
-    "Reviewing skill responsibilities and write boundaries"
+    "Implementing or modifying any doc-link SKILL",
+    "Implementing toc-updater or query-worker Agents",
+    "Designing SKILL and Agent responsibilities and boundaries",
+    "Defining the operational flow for indexing and checking",
+    "Implementing check-impact change-impact handling",
+    "Designing request and result exchange with Agents",
+    "Reviewing SKILL composition against requirements"
   ],
   "title": "DES-010 SKILL と Agent の構成"
 }

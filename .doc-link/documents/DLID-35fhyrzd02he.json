@@ -1,6 +1,6 @@
 {
-  "applied_hash": "a7037b12722536682aa371798acb684c51c7f9a9a88c6cc165fbccd4c2f107e4",
-  "content_hash": "a7037b12722536682aa371798acb684c51c7f9a9a88c6cc165fbccd4c2f107e4",
+  "applied_hash": "b1dd82402098505b779d6cb15ee25dfd5e8ae0c778735f3ff21052ad8f01b208",
+  "content_hash": "b1dd82402098505b779d6cb15ee25dfd5e8ae0c778735f3ff21052ad8f01b208",
   "doc_link_id": "DLID-35fhyrzd02he",
   "keywords": [
     "plugin implementation",
@@ -8,22 +8,22 @@
     "Python script",
     "testing",
     "temp files",
+    "distribution",
     "fallback",
     "version files",
     "script placement",
-    "distribution",
-    "component interface"
+    "inline script"
   ],
   "last_check": {
-    "checked_at": "2026-11-22T06:44:28+00:00",
+    "checked_at": "2026-11-25T11:41:00+00:00",
     "result": "success"
   },
   "path": "docs/rules/plugin_implementation_guidelines.md",
-  "purpose": "General rules for implementing plugin scripts (Python/Bash) and SKILL.md that do not depend on a specific plugin: language choice, tests, layout, temp files, references, fallbacks, versioning.",
+  "purpose": "General rules for implementing Claude Code plugin scripts and SKILL.md: language, testing, placement, temp files, distribution references, fallbacks, and version-file handling.",
   "references": [],
   "sections": [
     {
-      "content_hash": "02a1805ce865b07b41ddfa43c1468bca36b957a42350fed2a2e8989382124ce7",
+      "content_hash": "1f8c368bf2c974e40d5d6bec174888f06eed7e606962c9524b05f904503f603b",
       "heading": "プラグイン実装ガイドライン",
       "position": 0,
       "section_id": "DLID-4px5jv1568w5"
@@ -71,7 +71,7 @@
       "section_id": "DLID-hx3xzsgqyyjh"
     },
     {
-      "content_hash": "8241d2fdb9c047b88793d0619c77d4d026324e4ba6d0ec81d86ce5ba54852e11",
+      "content_hash": "8e7cb287d655247cbbdb79b9a02521b76b9fdbcb0de08568fcb19748a21c2098",
       "heading": "一時ファイルは `.temp/<plugin>/<skill>/` に `Write` ツールで書く [CRITICAL]",
       "position": 5,
       "section_id": "DLID-jej8f9m3vz0h"
@@ -132,27 +132,26 @@
     }
   ],
   "summary": [
-    "Script language choice and dependency policy: standard library Python by default, Bash for external commands",
-    "Test requirements: mandatory for distributed .py, naming test_{module}.py, test directory matches skill name",
-    "No inline logic in SKILL.md; call independent scripts instead",
-    "Placement of scripts and docs: skill-specific vs plugin-wide, no direct reference to other skills internals",
-    "Temp files under .temp/<plugin>/<skill>/ written with the Write tool, session ID in file name",
+    "Choose Python or Bash by task; Python uses the standard library by default",
+    "Distributed Python scripts must have tests named test_{module}.py, with directories matching skill names",
+    "SKILL.md must not contain inline logic; call independent scripts instead",
+    "Placement of scripts and docs: per-skill versus plugin-wide, no direct references to other skills",
+    "Temp files go under .temp/<plugin>/<skill>/ written with the Write tool, not shell",
     "Distributed artifacts must not reference development-only docs",
-    "Only SKILL is the interface to other components; never call their scripts directly",
-    "Delete unused code; no deprecation markers",
-    "Do not use script parsers for AI-interpreted natural-language input",
-    "Do not write fallbacks reflexively; and do not edit version files in ordinary work"
+    "Other components are accessed only through SKILL contracts",
+    "Delete unused code; do not parse AI-interpreted input in scripts",
+    "Fallbacks must be explainable recoveries, otherwise report errors explicitly",
+    "Version files are not edited in ordinary work; release procedure owns them"
   ],
   "tasks": [
-    "Implementing plugin Python or Bash scripts",
-    "Writing SKILL.md that calls scripts",
+    "Implementing plugin scripts in Python or Bash",
+    "Writing or editing SKILL.md",
     "Adding tests for distributed scripts",
-    "Deciding where to place scripts and docs",
-    "Writing temporary files for commands",
-    "Depending on another plugin component",
-    "Considering adding a fallback to error handling",
-    "Reviewing changes that touch version files",
-    "Removing obsolete code"
+    "Deciding where scripts and docs are placed",
+    "Handling temporary files in a SKILL procedure",
+    "Reviewing plugin code for distribution constraints",
+    "Deciding whether to add a fallback",
+    "Handling version or changelog updates"
   ],
   "title": "プラグイン実装ガイドライン"
 }

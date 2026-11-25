@@ -1,29 +1,29 @@
 {
-  "applied_hash": "aeaa4be2139b0e8874f6e49505d00582b893f81645331bbf9264ce2edb46d605",
-  "content_hash": "aeaa4be2139b0e8874f6e49505d00582b893f81645331bbf9264ce2edb46d605",
+  "applied_hash": "10973b6b43413f356fa0450c7581a4359fb8038777ff29d870490d932e62938f",
+  "content_hash": "10973b6b43413f356fa0450c7581a4359fb8038777ff29d870490d932e62938f",
   "doc_link_id": "DLID-nnbgpzkkm5vq",
   "keywords": [
-    "search",
-    "query-docs",
-    "query-worker",
-    "resolve-dlid",
+    "document search",
     "pre-search check",
-    "rebuild",
-    "ToC copy",
-    "ID validation",
-    "freshness",
-    "DLID resolution"
+    "rebuild decision",
+    "query-worker",
+    "search AI",
+    "relevance yes maybe no",
+    "heading matching",
+    "resolve-dlid",
+    "DLID resolution",
+    "ToC freshness"
   ],
   "last_check": {
-    "checked_at": "2026-11-25T03:44:26+00:00",
+    "checked_at": "2026-11-25T12:29:15+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-006_search.md",
-  "purpose": "Design of document search: pre-search freshness check, the search result contract with query-worker and ID validation, and DLID resolution by resolve-dlid.",
+  "purpose": "Defines the design of document search: pre-search rebuild checks, the search result contract with parallel read-only search AI workers, and DLID resolution against recorded state.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,7 +38,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -53,7 +53,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -68,7 +68,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -83,7 +83,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -98,7 +98,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -113,7 +113,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -128,7 +128,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -143,7 +143,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -158,7 +158,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -173,7 +173,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T03:44:26+00:00",
+        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -189,13 +189,13 @@
   ],
   "sections": [
     {
-      "content_hash": "32d757b26926271fe7c9327a0cb64dcb23ff4ad0ae07d545f8fb75ce21199ea9",
+      "content_hash": "9c1137e525bfe0f3094a6bf2ddc2889673f75a4c80fc7e8c01ce4b3bfd9f3e7a",
       "heading": "2. 検索結果の契約",
       "position": 2,
       "section_id": "DLID-p07g3hc4e4xd"
     },
     {
-      "content_hash": "6eef3c88dee34f5f754402606c43bad5c1a36ec120970a7c4058dcc4235d39e9",
+      "content_hash": "ab9c329fa2e3c22b6dbb6f204840466a14ed2ef70da87e6da9f85afe3d67656d",
       "heading": "DES-006 文書検索設計",
       "position": 0,
       "section_id": "DLID-wwna81gbj3jz"
@@ -214,23 +214,25 @@
     }
   ],
   "summary": [
-    "Pre-search check distinguishes no rebuild needed, rebuild needed, and undeterminable states",
-    "Rebuild scale is reported as counts, with details and a target file written under .temp/doc-link/query-docs",
-    "User chooses between searching after rebuild or searching the existing version",
-    "Undeterminable state is a failure; search stops and cause is returned, with no fallback to the old version",
-    "Each candidate carries document ID, recorded path, reason, optional sections, ToC key, version, and freshness",
-    "query-worker reads the full ToC copy and prefers recall; the copy contains no paths, hashes, or references",
-    "Script validates returned IDs, drops only invalid or duplicate ones, and reports them; all-invalid is a failure",
-    "resolve-dlid resolves DLIDs from recorded paths by checking the file, returning heading, anchor, and content hash",
-    "Missing files or mismatched DLIDs return not-at-recorded-path; unknown DLIDs return no record"
+    "Pre-search check distinguishes no rebuild needed, rebuild needed, and undeterminable, and asks the user to choose rebuild-then-search or search the existing version",
+    "Rebuild scale is shown as counts only, with details and the target specification file written under the work directory",
+    "Undeterminable results are treated as failures and never read as up to date; search stops with the cause reported",
+    "Each result candidate carries document ID, recorded path, relevance, reason, optional sections, and ToC key, version and freshness",
+    "A script fixes the ToC and partitions documents among at most 10 read-only search AI workers; every document is read one at a time",
+    "Workers answer with yes, maybe or no only, never see or write IDs, and name sections by heading that the script resolves",
+    "Answers are validated on receipt; unmatched headings are rejected with candidates, and a search with unanswered documents fails",
+    "Result order follows assignment order, not relevance, and maybe is never promoted to yes",
+    "resolve-dlid resolves DLIDs from recorded state and the recorded path file, returning resolved, not at recorded path, or no record, with content hash",
+    "Search and resolution never write to the ToC, management state, or target documents"
   ],
   "tasks": [
-    "Implementing or changing query-docs search logic",
-    "Implementing or changing resolve-dlid",
-    "Designing or reviewing the query-worker agent contract",
-    "Reviewing the pre-search rebuild check behavior",
-    "Handling invalid IDs returned by the search worker",
-    "Writing tests for search and DLID resolution"
+    "Designing or modifying the query-docs search flow",
+    "Implementing search preparation, assignment and result collection scripts",
+    "Writing or changing the query-worker agent behavior",
+    "Implementing or testing resolve-dlid",
+    "Deciding how stale ToC versions are handled during search",
+    "Reviewing search result contract and relevance semantics",
+    "Writing tests for pre-search checks and answer validation"
   ],
   "title": "DES-006 文書検索設計"
 }

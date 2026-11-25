@@ -14,7 +14,7 @@ doc_link_id: DLID-anz9vack2xzt
 | doc-link Skill                    | 操作を選択し、script と内部 AI を順序付ける。検索時に必要な利用者確認を取り、結果を返す                           | 検査結果や[ToC]を自由記述で上書きしない。script のガードを迂回しない                                                                                               |
 | 決定論的な script 群              | 走査、解析、ID 管理、[DLID]の解決、差分、ハッシュ、参照検査、生成結果検証、[ToC 候補]検査・確定、状態遷移のガード | [DLID]の書き込み（frontmatter と見出しの行の末尾）と doc-link 管理状態の更新だけを行う。[DLID]の書き込みは DLID 付与操作に限る。それ以外の本文・リンクは修正しない |
 | [情報生成 AI]                     | 対象文書から目的・概要・適用作業・キーワードなどを生成する                                                        | ID、ハッシュ、参照検査状態、[ToC]を直接変更しない                                                                                                                  |
-| [検索 AI]                         | [確定 ToC]の[ToC]全体を読み、タスクに関連する文書と関連理由を返す                                                 | 存在しない ID を補わない。索引の版・パスを訂正しない。[ToC]と管理状態を変更しない                                                                                  |
+| [検索 AI]                         | [確定 ToC]の文書を 1 件ずつ読み、タスクに関連するかを関連理由とともに答える                                       | 存在しない見出しを作らない。[文書 ID]・[セクション ID]・パスを見ず、書かない。索引の版・パスを訂正しない。[ToC]と管理状態を変更しない                              |
 | ユーザー                          | [ToC]が古い場合、更新後に検索するか、古い版で検索するかを選ぶ。ID 重複の原本を確定する                            | 選択なしに古い版を現在状態として扱わせない                                                                                                                         |
 
 ここでの「script 群」は検証可能な決定論的処理の論理的な担当を表す。実際のスクリプトの本数とファイル名は後続設計で決める。実装言語は §4 に定める。要約などの AI 生成結果は script の入力となり、script が型・長さなどを検査する。変更影響候補の列挙に AI の判断結果を入力しない。
@@ -37,7 +37,7 @@ doc_link_id: DLID-anz9vack2xzt
 | [DLID]の解決         | [DLID]の並び、管理状態、[確定 ToC]                        | [DLID]ごとの現在パスと記録した[内容ハッシュ]、または記録されたパスに無いこと | 書き込まない。記録されたパスの文書がその[DLID]を持つことを確かめてから返し、ほかの場所を探索しない（[DES-006 §3][des-006-sec-3]）                                      |
 | 不整合検査           | 対象指定、現物、[確定 ToC]                                | 問題の件数と、全件を収めた明細ファイル                                       | [Index 対象文書]と管理状態へは書き込まない。書くのは明細ファイルだけである。ID の付与・修復は DLID 付与操作が行う（要件 [D-035][req-002-fr-001]）                      |
 
-検索の意味的な関連度は、読み取り専用の[検索 AI]（カスタム Agent）が[ToC]を読んで判定する（[DES-006 §2][des-006-sec-2]）。script は使用版・キー・[文書 ID]・パスを確定したデータから渡し、[検索 AI]は索引の状態を変更しない。
+検索の意味的な関連度は、読み取り専用の[検索 AI]（カスタム Agent）が、[ToC]の文書を 1 件ずつ読んで判定する（[DES-006 §2][des-006-sec-2]）。script は使用版・キー・[文書 ID]・パスを確定したデータから結果に付ける。[検索 AI]はそれらを見ず、索引の状態を変更しない。
 
 <a id="sec-3"></a>
 
@@ -57,7 +57,7 @@ doc-link の各 Skill は、呼び出し元（[プロジェクト管理 AI]）�
 
 DLID 付与操作が ID を一部の文書へ保存した後に失敗した場合、既発行 ID は不変として再実行時に再利用する必要がある（要件 [D-004][req-002-fr-001]）。検証を通って書き込んだ[DLID]は正しい値なのでロールバックせず、発行済みとして報告する。操作は正常終了させず、書き込めなかった文書ごとにパス・問題箇所・原因を報告する（要件 [FR-002][req-002-fr-002]、[NFR-005][req-001-nfr-005]）。再実行すると残りの文書を処理する。script の分割、CLI の引数形式は後続設計で扱う。Python の script は `uv run` で実行し、Python 本体と外部依存（markdown-it-py）は uv が用意する。利用者の環境の前提は uv だけとする。
 
-doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に渡す[ToC]の写し、構築の完了結果と検査の結果の明細ファイル）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
+doc-link が作るファイルは、すべてプロジェクトの中に置き、プロジェクトの外（OS の一時ディレクトリなど）には作らない。一時ファイル（書き込み用の一時ファイル、カスタム Agent との受け渡しファイル、検索に見せる文書の内容と答え、構築の完了結果と検査の結果の明細ファイル）は、[実装ガイドライン][implementation-guidelines]に従い `.temp/doc-link/<skill>/` に置く。
 
 doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` に JSON ファイルとして保存し、git で追跡する。並行するブランチで更新しても衝突が差分として読めるよう、次の 2 種類のファイルに分ける。
 
@@ -68,12 +68,12 @@ doc-link の管理状態は、プロジェクトルート直下の `.doc-link/` 
 
 script は同じ内容から常に同じバイト列を出力する（UTF-8、オブジェクトのキーの並べ替え、インデントの固定）。内容が変わらないファイルは書き換えない。[文書情報]と[ToC]のファイルが衝突した場合は、どちらかの内容を採って構築を再実行すれば、[内容ハッシュ]が変わった文書だけの AI 生成で収束する。書き込みの単位は[DES-005 §5][des-005-sec-5]に定める。
 
-[des-010]: DES-010_skill-composition.md "ecbb0ce6bef6 DLID-7e90gq3sdncc"
-[des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "32d757b26926 DLID-p07g3hc4e4xd"
+[des-010]: DES-010_skill-composition.md "e6cd2ff8b7ec DLID-7e90gq3sdncc"
+[des-006-sec-2]: DES-006_search.md#2-検索結果の契約-dlid-p07g3hc4e4xd "9c1137e525bf DLID-p07g3hc4e4xd"
 [des-006-sec-3]: DES-006_search.md#3-dlidの解決-dlid-m0xegzfyhc3k "fb28459057a6 DLID-m0xegzfyhc3k"
 [des-005-sec-5]: DES-005_indexing.md#5-書き込みの単位-dlid-hs82xgzwkpyz "4603909aaf60 DLID-hs82xgzwkpyz"
 [des-007-sec-3]: DES-007_references-impact.md#3-変更影響候補の通知-dlid-mjeyc85ak4w3 "c3fe2a03c6cb DLID-mjeyc85ak4w3"
-[implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "a7037b127225 DLID-35fhyrzd02he"
+[implementation-guidelines]: ../../rules/plugin_implementation_guidelines.md "b1dd82402098 DLID-35fhyrzd02he"
 [req-001-nfr-005]: ../requirement/REQ-001_overview.md#nfr-005-診断可能性-dlid-89jss0ty2c7m "3e5b0619aa70 DLID-89jss0ty2c7m"
 [req-002-fr-002]: ../requirement/REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm "6de27aa96e79 DLID-edwjjf150svm"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"

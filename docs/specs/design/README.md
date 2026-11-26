@@ -18,6 +18,7 @@ doc_link_id: DLID-zvepba87h7zk
 | [DES-008 内容規則][des-008]              | Markdown 解析、ID、ハッシュ、AI 生成結果の検証契約                                                    |
 | [DES-009 検証設計][des-009]              | 状態遷移と変換規則のテスト、要件との対応                                                              |
 | [DES-010 SKILL と Agent の構成][des-010] | SKILL・カスタム Agent の責務、検査の SKILL ごとの検出事項の扱い、ユースケース、SKILL ごとのシーケンス |
+| [DES-011 検索基盤の切り替え][des-011]    | doc-db と ToC の切り替え、doc-db の同期・検索結果の対応づけ、自動切り替えと通知（差分開発型）         |
 
 各図は理解用の表示であり、許可遷移の規範は DES-004 の遷移表とする。各処理の詳細は当該文書だけに置き、全体設計には重複して記載しない。
 
@@ -31,3 +32,4 @@ doc_link_id: DLID-zvepba87h7zk
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-009]: DES-009_verification.md "d35ff8247ac2 DLID-xmg0jcmep2h2"
 [des-010]: DES-010_skill-composition.md "e6cd2ff8b7ec DLID-7e90gq3sdncc"
+[des-011]: DES-011_backend-switch.md "82465fdceac0 DLID-dwtbdwda6d0e"

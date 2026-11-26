@@ -14,6 +14,13 @@
 `toc_check`）。受け渡しの型は Agent とのデータ受け渡し規約に従い、運ぶのは検索 ID と担当の識別値（script が生成する）
 だけである。
 
+## 検索基盤（DES-011、REQ-006）
+
+`prepare` は、検索前検査の前に、[検索基盤]を決める（`backend_select`。設定ファイル `.doc-link/config.json` の `backend` と、
+[doc-db]への接続の可否。接続できなければ[doc-db]を起動する）。呼び出しごとの指定（引数）は無い。設定ファイルを受理できない
+ときは、検索せず、終了コード 1 で原因を返す。結果は、`backend`・`forced`・`startup`・`backend_switch`（切り替えが無ければ
+`null`。あれば `notice` に、AI が利用者へ伝える通知の文）を持つ。
+
 ## 呼び出し方
 
 どのサブコマンドも `--project-root`（既定は現在のディレクトリ）を取る。値が `-` で始まる引数は、`--task=-値` のように
@@ -23,7 +30,7 @@
    `--task` は検索のタスクで、値のまま依頼に書かれる。対象指定の引数（`--all`・`--paths`・`--dirs`・`--exclude` など。
    規則は `target_spec`）を 1 つも付けないときは、`--key`（省略時は予約キー `all`）の[確定 ToC]に保存された指定を使う。
    付けたときは、完全な指定として保存済みの指定より優先して比較する。`--choice` は、利用者の二択の選択結果である
-   （`rebuild`: 再構築後に検索、`existing`: 既存版のまま検索）。
+   （`rebuild`: 再構築後に検索、`existing`: 既存版のまま検索。[doc-db]を使うときは `existing` を受け付けない）。
    - `initial_build_required`: 未構築。検索しない。SKILL は `index-docs` による初回構築が必要だと返す
    - `confirm_rebuild`: 再構築が必要。`scale`（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複・AI 生成が必要な件数）と
      変更の種別ごとの件数、`options`（二択）、`detail_path`、`target_file` を返す。変更のある文書・セクションごとの
@@ -33,6 +40,14 @@
      「再構築してから検索する」: `index-docs` を `--target-file <target_file の値>` で実行し、`prepare` を `--task` と
      `--choice rebuild --target-file <target_file の値>` でやり直す。対象指定を引数へ書き写さない。
      「既存の[ToC]のまま検索する」: 同じ引数に `--choice existing` を付けて `prepare` をやり直す
+   - `rebuild_required`: 二択を示さず、再構築を求める。`reason` は `toc_stale`（[doc-db]を使うときの、機械取得の情報の古さ）か
+     `ai_fields_needed`（[ToC]を使うときに、[AI 生成フィールド]が要る文書がある）。`scale`・`ai_fields_needed`・`detail_path`・
+     `target_file` を返す。SKILL は、規模を利用者へ知らせ（確認は求めない）、`index-docs` を `--target-file <target_file の値>`
+     で実行してもらった後、`prepare` を `--task` と `--choice rebuild --target-file <target_file の値>` でやり直す
+   - `docdb_result`: [doc-db]で検索した結果。`documents`（[ToC]の検索結果と同じ項目。`relevance` は `maybe` の固定、`reason` は
+     script が組み立てた文、`rank`）・`toc_key`・`toc_version`・`freshness`（`current`）・`path_notice`・`order_notice`・
+     `limit_notice`（上位の結果に限る）・`unmapped`（対応づけられなかった結果の件数）・`sync`（同期の結果）・`warnings` を返す。
+     `collect` は要らない。SKILL は、この結果を呼び出し元へ返す
    - `invoke_query_worker`: 検索に使う[ToC]を固定し、文書を担当に分けた。`search_id`・`workers`（担当の識別値の並び。
      文書が無いときは空）・`toc_key`・`toc_version`（使用版）・`freshness`（`current`: 最新、`possibly_stale`: 古い可能性。
      `freshness_notice` に文言）を返す。SKILL は `workers` の 1 件ごとに `query-worker` を起動し（同時に起動する数は、
@@ -83,6 +98,8 @@ from pathlib import Path
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
+import backend_config  # noqa: E402
+import backend_select  # noqa: E402
 import script_output  # noqa: E402
 import search_prepare  # noqa: E402
 import target_spec  # noqa: E402
@@ -146,8 +163,12 @@ def _parse_search_target(args: argparse.Namespace, root: Path):
 
 def _prepare(args: argparse.Namespace, root: Path) -> int:
     toc_key, spec = _parse_search_target(args, root)
+    try:
+        decision = backend_select.decide(root)
+    except backend_config.BackendConfigError as exc:
+        raise search_prepare.SearchError(exc.errors) from exc
     return script_output.emit_result(
-        search_prepare.prepare(root, toc_key, spec, args.task, args.choice)
+        search_prepare.prepare(root, toc_key, spec, args.task, args.choice, decision)
     )
 
 

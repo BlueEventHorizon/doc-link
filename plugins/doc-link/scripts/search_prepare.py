@@ -34,6 +34,23 @@ REQ-001 D-024・D-026・D-027、Agent とのデータ受け渡し規約を実装
 再構築が別の対象で行われたときは、`--choice rebuild` の `prepare` が、このファイルの指定と[確定 ToC]の指定の
 違いを再構築必要として検出し、障害にする。対象指定ファイルは、同じ[ToC 識別キー]の次の確認が置き換える。
 
+## 検索基盤（DES-011、REQ-006）
+
+`prepare` は、基盤判定（`backend_select.Decision`）を受け取る。渡さないときは `toc`（現在の動作）である。
+
+- `doc-db`: 検索前検査（機械取得の情報の鮮度。`toc_check`）が再構築必要のとき、二択を示さず、`rebuild_required`
+  （`reason` は `toc_stale`）を返す。SKILL は規模を利用者へ知らせ、呼び出し元に `index-docs`（機械取得の構築と[doc-db]の
+  同期）の実行を求め、`--choice rebuild --target-file …` で `prepare` をやり直す。`--choice existing` は受け付けない。
+  未構築は `initial_build_required`（対象指定が要る）、判定不能は障害である。再構築不要のとき、[doc-db]を同期して検索し、
+  `docdb_result` を返す（`documents` は[ToC]の検索結果と同じ形。`relevance` は `maybe` の固定）。同期・検索が接続できない (a)・
+  OpenAI の失敗 (b) になったときは、[ToC]へ切り替えて、`toc` の規則で続ける（`backend_switch` に通知）。ほかの失敗は障害である
+- `toc`: [AI 生成フィールド]が未生成の文書（`toc_check` の `ai_unfilled`）があるとき、または、機械取得の情報は最新（再構築
+  不要）なのに[AI 生成フィールド]が古い文書（`ai_needed`）があるときは、二択を示さず、`rebuild_required`（`reason` は
+  `ai_fields_needed`）を返す（既存の[ToC]のままでは、検索できない・古い[AI 生成フィールド]を最新として検索するため）。それ以外は、
+  現在のとおり（機械取得の情報が古いときは、[AI 生成フィールド]が古い文書があっても、二択を示す）
+
+結果（`prepare`・`collect`）は、`backend`・`forced`・`startup`・`backend_switch`（切り替えが無ければ `null`）を持つ。
+
 ## `query-worker` との受け渡し
 
 置き場は `.temp/doc-link/query-docs/` で、識別値は検索 ID（`SEARCH-<8 桁の 16 進>`。script が生成する）と、担当の識別値
@@ -88,7 +105,11 @@ import tempfile
 import unicodedata
 from pathlib import Path
 
+import backend_select
 import detail_file
+import docdb_contract
+import docdb_search
+import docdb_sync
 import state_store
 import toc_check
 
@@ -104,6 +125,11 @@ FRESHNESS_POSSIBLY_STALE = "possibly_stale"
 ACTION_INITIAL_BUILD = "initial_build_required"
 ACTION_CONFIRM_REBUILD = "confirm_rebuild"
 ACTION_INVOKE_WORKER = "invoke_query_worker"
+ACTION_REBUILD_REQUIRED = "rebuild_required"
+ACTION_DOCDB_RESULT = "docdb_result"
+
+REBUILD_REASON_TOC_STALE = "toc_stale"
+REBUILD_REASON_AI_FIELDS = "ai_fields_needed"
 
 TARGET_FILE_FIELD = "target_file"
 TARGET_FILE_PREFIX = "target-"
@@ -332,7 +358,26 @@ def _plan_workers(doc_ids: list[str]) -> list[list[str]]:
     return plans
 
 
-def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> dict:
+def _backend_info(decision) -> dict:
+    """結果に添える[検索基盤]の情報。判定を渡さないとき（既存の呼び出し）は[ToC]。"""
+    if decision is None:
+        return {
+            "backend": backend_select.BACKEND_TOC,
+            "forced": False,
+            "startup": None,
+            "backend_switch": None,
+        }
+    return decision.to_dict()
+
+
+def _fix(
+    root: Path,
+    toc_key: str,
+    task: str,
+    freshness: str,
+    status: str,
+    info: dict | None = None,
+) -> dict:
     """検索に使う版の[確定 ToC]と最新の[文書情報]から、見せる内容と担当を組み立て、版・鮮度とともに固定する。"""
     try:
         toc = state_store.load_confirmed_toc(root, toc_key)
@@ -391,9 +436,11 @@ def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> di
             "freshness": freshness,
             "documents": fixed_documents,
             "workers": workers,
+            "backend_info": info or _backend_info(None),
         },
     )
     return {
+        **(info or _backend_info(None)),
         "action": ACTION_INVOKE_WORKER,
         "search_id": search_id,
         "workers": list(workers),
@@ -407,56 +454,89 @@ def _fix(root: Path, toc_key: str, task: str, freshness: str, status: str) -> di
     }
 
 
-def prepare(
-    root: Path,
-    toc_key: str,
-    spec,
-    task: str,
-    choice: str | None = None,
-) -> dict:
-    """検索前検査を行い、結果と二択の選択結果から次の行動を返す。[ToC]・管理状態・[Index 対象文書]は書き換えない。"""
-    if choice is not None and choice not in CHOICES:
-        raise SearchError([f"二択の選択結果が正しくない: {choice!r}"])
-    if task == "":
-        raise SearchError(["検索のタスクが空である"])
-
-    result = toc_check.check_toc(root, toc_key, spec)
-    if result.status == toc_check.STATUS_UNDETERMINABLE:
-        raise SearchError(
-            [
-                "[ToC]の再構築要否を判定できないため、障害として検索を停止した"
-                "（判定できた版が無いので、既存の[ToC]のまま検索することもしない）"
-            ]
-            + [cause.describe() for cause in result.causes]
-        )
-    if result.status == toc_check.STATUS_NOT_BUILT:
-        return {
-            "action": ACTION_INITIAL_BUILD,
-            "status": result.status,
-            "toc_key": result.toc_key,
-            "guidance": [GUIDANCE_INITIAL_BUILD],
-        }
-    if result.status == toc_check.STATUS_UP_TO_DATE:
-        return _fix(root, result.toc_key, task, FRESHNESS_CURRENT, result.status)
-
-    # 再構築必要
-    if choice == CHOICE_EXISTING:
-        return _fix(root, result.toc_key, task, FRESHNESS_POSSIBLY_STALE, result.status)
-    if choice == CHOICE_REBUILD:
-        raise SearchError(
-            [
-                "再構築を選んだが、再構築後も[ToC]が現物と一致していない。"
-                "旧版で黙って検索しない。`index-docs` の結果を確かめる"
-            ]
-        )
+def _write_rebuild_files(root: Path, result: toc_check.TocCheck) -> tuple[str, str]:
+    """再構築の明細ファイルと対象指定ファイルを書き、（明細のパス, 対象指定ファイルのパス）を返す。"""
     try:
         detail_path = detail_file.write_detail(
             root, SKILL, result.toc_key, result.to_detail()
         )
     except state_store.StateStoreError as exc:
         raise SearchError([f"検索前検査の明細ファイルを書けない: {exc}"]) from exc
-    target_file = _write_target_file(root, result.toc_key, result.target_spec)
+    return detail_path, _write_target_file(root, result.toc_key, result.target_spec)
+
+
+def _rebuild_required(
+    root: Path, result: toc_check.TocCheck, reason: str, info: dict
+) -> dict:
+    """二択を示さず、再構築（`index-docs`）を求める行動を返す。"""
+    detail_path, target_file = _write_rebuild_files(root, result)
+    summary = result.to_summary()
+    if info["backend"] == backend_select.BACKEND_DOCDB:
+        # [doc-db]を使う再構築は、機械取得の構築と同期だけで、[AI 生成フィールド]を作らない（DES-011 §7.1）
+        summary["scale"] = {**summary["scale"], "ai_generation": 0}
+        summary["ai_fields_needed"] = None
+        summary["ai_fields_unfilled"] = None
     return {
+        **info,
+        "action": ACTION_REBUILD_REQUIRED,
+        "reason": reason,
+        **summary,
+        detail_file.DETAIL_PATH_FIELD: detail_path,
+        TARGET_FILE_FIELD: target_file,
+        "next": (
+            "利用者へ再構築の規模を知らせ（二択は示さない）、`index-docs` を `--target-file <target_file の値>` "
+            "だけで実行した後、`--task` と `--choice rebuild --target-file <target_file の値>` で `prepare` をやり直す"
+        ),
+    }
+
+
+def _rebuild_mismatch() -> SearchError:
+    return SearchError(
+        [
+            "再構築を選んだが、再構築後も[ToC]が現物と一致していない（または[AI 生成フィールド]が未生成の文書が残っている）。"
+            "旧版で黙って検索しない。`index-docs` の結果を確かめる"
+        ]
+    )
+
+
+def _prepare_toc(
+    root: Path,
+    result: toc_check.TocCheck,
+    task: str,
+    choice: str | None,
+    info: dict,
+) -> dict:
+    """[ToC]を[検索基盤]とするときの、検索前検査の結果の扱い。"""
+    unfilled = result.ai_unfilled or 0
+    ai_needed = result.ai_needed or 0
+    up_to_date = result.status == toc_check.STATUS_UP_TO_DATE
+    if unfilled > 0 or (up_to_date and ai_needed > 0):
+        # 二択を示さず、構築を求める。[AI 生成フィールド]が未生成の文書は、既存の[ToC]のままでは検索できず、取りこぼす。
+        # 機械取得の情報は最新なのに[AI 生成フィールド]が古い文書（[doc-db]を使っていた間に変わった文書）は、
+        # 既存の[ToC]のままだと、古い[AI 生成フィールド]を最新として検索してしまう
+        if choice == CHOICE_EXISTING:
+            raise SearchError(
+                [
+                    f"[AI 生成フィールド]が要る文書が {ai_needed} 件ある（うち未生成が {unfilled} 件）。"
+                    "既存の[ToC]のままでは、正しく検索できないので、「既存のまま検索する」を選べない"
+                ]
+            )
+        if choice == CHOICE_REBUILD:
+            raise _rebuild_mismatch()
+        return _rebuild_required(root, result, REBUILD_REASON_AI_FIELDS, info)
+    if result.status == toc_check.STATUS_UP_TO_DATE:
+        return _fix(root, result.toc_key, task, FRESHNESS_CURRENT, result.status, info)
+
+    # 再構築必要（機械取得の情報が古い）
+    if choice == CHOICE_EXISTING:
+        return _fix(
+            root, result.toc_key, task, FRESHNESS_POSSIBLY_STALE, result.status, info
+        )
+    if choice == CHOICE_REBUILD:
+        raise _rebuild_mismatch()
+    detail_path, target_file = _write_rebuild_files(root, result)
+    return {
+        **info,
         "action": ACTION_CONFIRM_REBUILD,
         **result.to_summary(),
         detail_file.DETAIL_PATH_FIELD: detail_path,
@@ -477,6 +557,149 @@ def prepare(
             },
         ],
     }
+
+
+def _docdb_documents(root: Path, toc_key: str):
+    """同期の一覧と、対応づけに使う（[文書 ID]→パス、[文書 ID]→（[セクション ID]→見出し））を返す。"""
+    try:
+        listed = docdb_sync.build_document_list(root, toc_key)
+        toc = state_store.load_confirmed_toc(root, toc_key)
+    except state_store.StateStoreError as exc:
+        raise SearchError([f"[ToC]・[文書情報]を読めない: {exc}"]) from exc
+    paths = {doc_id: path for path, doc_id in listed.path_to_doc.items()}
+    sections: dict[str, dict[str, str]] = {}
+    for entry in toc["sections"]:
+        sections.setdefault(entry["doc_link_id"], {})[entry["section_id"]] = entry[
+            "heading"
+        ]
+    return listed, toc, paths, sections
+
+
+def _switch_to_toc(
+    decision, result: toc_check.TocCheck, outcome
+) -> "backend_select.Decision":
+    """[doc-db]の同期・検索が切り替えになったときの、[ToC]の判定を返す。影響（[AI 生成フィールド]が要る文書の件数）を添える。"""
+    switch = backend_select.Switch(
+        outcome.reason_code, outcome.cause, outcome.presumed
+    ).with_impact(result.ai_needed)
+    return decision.switched_to_toc(switch)
+
+
+def _prepare_docdb(
+    root: Path,
+    result: toc_check.TocCheck,
+    task: str,
+    choice: str | None,
+    decision,
+) -> dict:
+    """[doc-db]を[検索基盤]とするときの、検索前検査の結果の扱いと、同期・検索。"""
+    info = decision.to_dict()
+    if choice == CHOICE_EXISTING:
+        raise SearchError(
+            [
+                "[doc-db]を使うときは、「既存の[ToC]のまま検索する」を提供しない（古ければ、二択を示さず、"
+                "再構築してから検索する）"
+            ]
+        )
+    if result.status == toc_check.STATUS_REBUILD_NEEDED:
+        if choice == CHOICE_REBUILD:
+            raise _rebuild_mismatch()
+        return _rebuild_required(root, result, REBUILD_REASON_TOC_STALE, info)
+
+    listed, toc, paths, sections = _docdb_documents(root, result.toc_key)
+    outcome = docdb_sync.run_sync(decision.client, root, result.toc_key, listed=listed)
+    if outcome.status == docdb_sync.STATUS_FAILED:
+        raise SearchError(outcome.errors)
+    if outcome.status == docdb_sync.STATUS_SWITCH:
+        return _prepare_toc(
+            root,
+            result,
+            task,
+            choice,
+            _switch_to_toc(decision, result, outcome).to_dict(),
+        )
+    try:
+        found = docdb_search.search(
+            decision.client,
+            root,
+            result.toc_key,
+            task,
+            listed.path_to_doc,
+            paths,
+            sections,
+            met=outcome.contract_met,
+        )
+    except docdb_search.DocdbSearchError as exc:
+        if not exc.switch:
+            raise SearchError(exc.errors) from exc
+        switched = _switch_to_toc(decision, result, _SwitchCause(exc))
+        return _prepare_toc(root, result, task, choice, switched.to_dict())
+    warnings = [] if outcome.contract_met else [docdb_contract.WARNING_CONTRACT_UNMET]
+    return {
+        **info,
+        "action": ACTION_DOCDB_RESULT,
+        "toc_key": result.toc_key,
+        "toc_version": toc["version"],
+        "freshness": FRESHNESS_CURRENT,
+        "freshness_notice": None,
+        "path_notice": docdb_search.NOTICE_PATH,
+        "order_notice": docdb_search.NOTICE_ORDER,
+        "limit_notice": docdb_search.NOTICE_LIMIT,
+        "documents": found.documents,
+        "unmapped": found.unmapped,
+        "sync": outcome.to_dict(),
+        "warnings": warnings,
+        "precheck_status": result.status,
+    }
+
+
+class _SwitchCause:
+    """`DocdbSearchError`（切り替え）を、同期の結果と同じ項目（`reason_code`・`cause`・`presumed`）で見せる。"""
+
+    def __init__(self, error: "docdb_search.DocdbSearchError"):
+        self.reason_code = error.reason_code
+        self.cause = error.cause
+        self.presumed = error.presumed
+
+
+def prepare(
+    root: Path,
+    toc_key: str,
+    spec,
+    task: str,
+    choice: str | None = None,
+    decision=None,
+) -> dict:
+    """検索前検査を行い、結果と二択の選択結果から次の行動を返す。[ToC]・管理状態・[Index 対象文書]は書き換えない。
+
+    `decision` は基盤判定（`backend_select.Decision`）。渡さないときは[ToC]として扱う。
+    """
+    if choice is not None and choice not in CHOICES:
+        raise SearchError([f"二択の選択結果が正しくない: {choice!r}"])
+    if task == "":
+        raise SearchError(["検索のタスクが空である"])
+
+    result = toc_check.check_toc(root, toc_key, spec)
+    if result.status == toc_check.STATUS_UNDETERMINABLE:
+        raise SearchError(
+            [
+                "[ToC]の再構築要否を判定できないため、障害として検索を停止した"
+                "（判定できた版が無いので、既存の[ToC]のまま検索することもしない）"
+            ]
+            + [cause.describe() for cause in result.causes]
+        )
+    info = _backend_info(decision)
+    if result.status == toc_check.STATUS_NOT_BUILT:
+        return {
+            **info,
+            "action": ACTION_INITIAL_BUILD,
+            "status": result.status,
+            "toc_key": result.toc_key,
+            "guidance": [GUIDANCE_INITIAL_BUILD],
+        }
+    if decision is not None and decision.backend == backend_select.BACKEND_DOCDB:
+        return _prepare_docdb(root, result, task, choice, decision)
+    return _prepare_toc(root, result, task, choice, info)
 
 
 # --- query-worker との受け渡し -----------------------------------------------------
@@ -726,6 +949,7 @@ def collect(root: Path, search_id: str) -> dict:
         "path_notice": NOTICE_PATH,
         "order_notice": NOTICE_ORDER,
         "documents": documents,
+        **fixed.get("backend_info", _backend_info(None)),
     }
 
 

@@ -308,5 +308,89 @@ class StoreTest(Base):
             self.assertNotIn(forbidden, dumped)
 
 
+class UnfilledTest(Base):
+    """[doc-db]を使う構築: AI 生成フィールドを作らず、未生成の[文書情報]を整える（DES-011 §3・§6）。"""
+
+    def test_a_new_document_gets_an_unfilled_info_and_is_not_marked_unfilled_before(
+        self,
+    ):
+        self.write("a.md", doc(ID_A, "# Title", "body"))
+        plan = self.plan("main", ["a.md"])
+        self.assertEqual(
+            plan.unfilled_targets, ()
+        )  # [文書情報]がまだ無い新規の文書は、未生成ではない
+        outcomes = update_plan.apply_unfilled(self.root, "test", plan)
+        self.assertEqual([o.status for o in outcomes], [update_plan.STATUS_SAVED])
+        info = state_store.load_document_info(self.root, ID_A)
+        self.assertEqual(
+            (
+                info["title"],
+                info["purpose"],
+                info["summary"],
+                info["tasks"],
+                info["keywords"],
+            ),
+            ("Title", "", [], [], []),
+        )
+        self.assertEqual(info["content_hash"], update_plan.UNFILLED_CONTENT_HASH)
+        self.assertEqual(info["path"], "a.md")
+
+    def test_a_document_without_an_h1_gets_an_empty_title(self):
+        self.write("a.md", doc(ID_A, "body only"))
+        plan = self.plan("main", ["a.md"])
+        update_plan.apply_unfilled(self.root, "test", plan)
+        self.assertEqual(state_store.load_document_info(self.root, ID_A)["title"], "")
+
+    def test_the_unfilled_info_is_a_generation_target_marked_unfilled(self):
+        self.write("a.md", doc(ID_A, "# Title", "body"))
+        update_plan.apply_unfilled(self.root, "test", self.plan("main", ["a.md"]))
+        plan = self.plan("main", ["a.md"])
+        item = self.by_id(plan)[ID_A]
+        self.assertEqual(item.action, update_plan.ACTION_GENERATE)
+        self.assertTrue(item.unfilled)
+        self.assertEqual(plan.unfilled_targets, (item,))
+
+    def test_a_changed_document_keeps_its_old_ai_fields_and_is_not_unfilled(self):
+        text = doc(ID_A, "# Title", "body")
+        self.write("old.md", text)
+        h = document_content_hash(text)
+        self.save_info(ID_A, "old.md", h)
+        self.save_toc("main", [(ID_A, h)])
+        (self.root / "old.md").rename(self.root / "new.md")
+        self.write("new.md", doc(ID_A, "# Title", "changed"))
+        plan = self.plan("main", ["new.md"])
+        self.assertEqual(self.by_id(plan)[ID_A].action, update_plan.ACTION_GENERATE)
+        self.assertEqual(plan.unfilled_targets, ())
+        update_plan.apply_unfilled(self.root, "test", plan)
+        info = state_store.load_document_info(self.root, ID_A)
+        self.assertEqual(info["path"], "new.md")
+        self.assertEqual(info["purpose"], "old purpose")
+        self.assertEqual(info["content_hash"], h)
+
+    def test_applying_twice_changes_nothing(self):
+        self.write("a.md", doc(ID_A, "# Title", "body"))
+        update_plan.apply_unfilled(self.root, "test", self.plan("main", ["a.md"]))
+        before = (self.root / ".doc-link").rglob("*")
+        before = {str(p): p.read_bytes() for p in before if p.is_file()}
+        outcomes = update_plan.apply_unfilled(
+            self.root, "test", self.plan("main", ["a.md"])
+        )
+        self.assertEqual([o.status for o in outcomes], [update_plan.STATUS_UNCHANGED])
+        after = {
+            str(p): p.read_bytes()
+            for p in (self.root / ".doc-link").rglob("*")
+            if p.is_file()
+        }
+        self.assertEqual(before, after)
+
+    def test_unreadable_info_is_a_failure_not_replaced(self):
+        self.write("a.md", doc(ID_A, "# Title", "body"))
+        path = state_store.document_info_path(self.root, ID_A)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{broken", encoding="utf-8")
+        with self.assertRaises(change_set.ChangeFailure):
+            self.plan("main", ["a.md"])
+
+
 if __name__ == "__main__":
     unittest.main()

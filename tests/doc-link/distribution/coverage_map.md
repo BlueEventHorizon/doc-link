@@ -251,6 +251,82 @@
 - 明細ファイルを書けないときは、件数だけを返さず、失敗として報告する → `check-dlid/test_check_dlid.py::DetailFileTest::test_unwritable_detail_file_exits_1`、`check-links/test_check_links.py::DetailFileTest::test_unwritable_detail_file_exits_1`、`scripts/test_search_prepare.py::ConfirmRebuildDetailTest::test_unwritable_detail_is_a_failure`、`scripts/test_detail_file.py::EmitTest::test_unwritable_detail_returns_errors_and_1_without_the_summary`、`scripts/test_detail_file.py::WriteTest::test_unwritable_place_raises`
 - 検査の前後で、[Index 対象文書]と管理状態が変わらず、書くのが明細ファイルだけである → `check-dlid/test_check_dlid.py::DetailFileTest::test_only_the_detail_file_is_written`、`check-links/test_check_links.py::DetailFileTest::test_only_the_detail_file_is_written`、`check-toc/test_check_toc.py::ReadOnlyTest::test_documents_and_state_are_unchanged`、`check-impact/test_check_impact.py::ReadOnlyTest::test_documents_and_state_are_unchanged`、`scripts/test_detail_file.py::WriteTest::test_writes_only_under_the_work_directory`
 
+## FR-019〜028 検索基盤の切り替え、NFR-009
+
+### AC-036
+
+- [doc-db]が動作するとき、構築が[AI 生成フィールド]を作らず、[doc-db]を同期する → `index-docs/test_index_docs_backend.py::DocdbBuildTest::test_the_default_builds_the_machine_toc_syncs_doc_db_and_generates_nothing`、`index-docs/test_index_docs_backend.py::DocdbBuildTest::test_documents_have_no_ai_fields_and_are_marked_unfilled`、`scripts/test_update_plan.py::UnfilledTest::test_a_new_document_gets_an_unfilled_info_and_is_not_marked_unfilled_before`、`scripts/test_backend_select.py::DecideTest::test_the_default_is_doc_db_when_it_works`
+- 検索が[doc-db]で行われ、結果が[検索基盤]として `doc-db` を示す → `query-docs/test_query_docs_backend.py::DocdbSearchTest::test_up_to_date_syncs_then_searches_and_returns_mapped_documents`、`query-docs/test_query_docs_backend.py::DocdbSearchTest::test_a_search_changes_neither_the_state_nor_the_documents`、`query-docs/test_query_docs_backend.py::DocdbSearchTest::test_no_working_files_are_left_for_a_doc_db_search`
+- 実機の[doc-db]で、起動・同期・検索ができる → `docdb_manual.md`
+
+### AC-037
+
+- 設定ファイルの強制スイッチで、[doc-db]へ接続も起動もせず、[ToC]で構築と検索が行われ、切り替えの通知が無い → `scripts/test_backend_select.py::DecideTest::test_the_forced_switch_neither_connects_nor_starts_nor_notifies`、`index-docs/test_index_docs_backend.py::SettingTest::test_the_forced_switch_in_the_setting_never_touches_doc_db`、`query-docs/test_query_docs_backend.py::SettingTest::test_the_forced_switch_in_the_setting_is_used_without_connecting`、`query-docs/test_query_docs_backend.py::TocRuleTest::test_a_filled_up_to_date_toc_is_searched_by_workers`
+- 呼び出しごとの上書きの引数が無い → `index-docs/test_index_docs_backend.py::SettingTest::test_there_is_no_per_call_override`
+- 実機で、強制スイッチが[doc-db]へ接続しない → `docdb_manual.md`
+
+### AC-038
+
+- [doc-db]へ接続できず、起動を試みても接続できないとき、[ToC]へ切り替えて構築・検索を完了する → `scripts/test_backend_select.py::DecideTest::test_an_unreachable_doc_db_switches_to_toc_with_a_notice`、`scripts/test_backend_select.py::DecideTest::test_the_decision_is_not_remembered`、`index-docs/test_index_docs_backend.py::SwitchDuringBuildTest::test_an_unreachable_doc_db_at_the_start_builds_as_toc_with_a_notice`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_an_unreachable_doc_db_at_the_start_is_reported_in_the_toc_result`
+- 実機で、実行ファイルが無いときに切り替わる → `docdb_manual.md`
+
+### AC-039
+
+- 同期での Embedding の失敗（識別子 `EMBEDDING_FAILED`、または契約を満たさない[doc-db]の文言）で、[ToC]へ切り替えて続ける → `scripts/test_docdb_sync.py::RunSyncTest::test_an_embedding_failure_in_a_done_job_switches_for_openai`、`scripts/test_docdb_sync.py::RunSyncTest::test_identifiers_make_the_switch_certain`、`scripts/test_docdb_sync.py::RunSyncTest::test_a_failed_job_with_the_embedding_identifier_switches`、`index-docs/test_index_docs_backend.py::SwitchDuringBuildTest::test_an_openai_failure_in_the_sync_continues_as_toc_and_generates`、`index-docs/test_index_docs_backend.py::SwitchDuringBuildTest::test_no_generation_is_needed_when_every_document_is_already_filled`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_an_openai_failure_in_the_sync_continues_as_toc`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_the_switch_is_carried_into_the_toc_result`
+- 検索の Embedding の失敗で、[ToC]へ切り替えて続ける → `scripts/test_docdb_search.py::SearchTest::test_embedding_failures_switch`、`scripts/test_docdb_search.py::SearchTest::test_an_internal_error_without_an_identifier_switches_only_for_old_versions`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_an_embedding_failure_in_the_search_continues_as_toc`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_an_internal_error_without_an_identifier_is_presumed_for_old_versions_only`
+- 接続の断で切り替わる → `scripts/test_docdb_sync.py::RunSyncTest::test_a_dropped_connection_switches_for_unreachable`、`scripts/test_docdb_search.py::SearchTest::test_a_dropped_connection_switches_for_unreachable`、`index-docs/test_index_docs_backend.py::SwitchDuringBuildTest::test_a_dropped_connection_in_the_sync_switches_for_unreachable`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_a_dropped_connection_continues_as_toc`
+- 実機で、無効な鍵（HTTP 401）で切り替わる → `docdb_manual.md`
+
+### AC-040
+
+- (a)・(b) 以外の[doc-db]の失敗では、切り替えず、失敗として原因と次の判断に要る情報を返す → `scripts/test_docdb_sync.py::RunSyncTest::test_another_failure_in_a_done_job_is_a_fault`、`scripts/test_docdb_sync.py::RunSyncTest::test_tool_errors_follow_the_identifier`、`scripts/test_docdb_sync.py::RunSyncTest::test_http_and_protocol_errors_are_faults`、`scripts/test_docdb_sync.py::RunSyncTest::test_exceeding_the_wait_limit_is_a_fault_not_a_switch`、`scripts/test_docdb_search.py::SearchTest::test_other_failures_do_not_switch`、`index-docs/test_index_docs_backend.py::SwitchDuringBuildTest::test_a_fault_in_the_sync_exits_4_after_publishing_the_machine_toc`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_other_failures_stop_without_switching`
+
+### AC-041
+
+- 切り替え後、AI 生成フィールドが未生成の文書と、内容が変わった文書だけを生成する → `index-docs/test_index_docs_backend.py::DocdbBuildTest::test_a_content_change_keeps_the_old_ai_fields_and_leaves_them_stale`、`index-docs/test_index_docs_backend.py::DocdbBuildTest::test_switching_to_toc_by_the_setting_generates_every_unfilled_document`、`scripts/test_update_plan.py::UnfilledTest::test_a_changed_document_keeps_its_old_ai_fields_and_is_not_unfilled`、`scripts/test_toc_check.py::AiFieldsTest::test_unfilled_documents_are_counted_even_when_the_toc_is_up_to_date`
+- 未生成の文書があるとき、または機械取得の情報は最新なのに AI 生成フィールドが古いとき、二択を示さずに構築する。それ以外は、既存の二択を示す → `query-docs/test_query_docs_backend.py::TocRuleTest::test_unfilled_members_force_a_build_and_refuse_the_existing_choice`、`query-docs/test_query_docs_backend.py::TocRuleTest::test_stale_ai_fields_with_an_up_to_date_toc_force_a_build`、`query-docs/test_query_docs_backend.py::TocRuleTest::test_an_ordinary_stale_toc_keeps_the_two_options`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_a_switch_with_unfilled_documents_asks_for_a_build_without_the_two_options`
+
+### AC-042
+
+- 切り替えの通知が、切り替え・理由・原因・影響・次の実行の扱いを持ち、認証情報と[doc-db]の応答の生の文字列を含まない → `scripts/test_backend_select.py::SwitchTest::test_the_notice_names_the_switch_reason_cause_impact_and_next_run`、`scripts/test_backend_select.py::SwitchTest::test_a_presumed_cause_is_marked`、`scripts/test_backend_select.py::SwitchTest::test_to_dict_carries_the_notice_and_no_secrets`、`scripts/test_docdb_client.py::ClientTest::test_a_tool_error_carries_only_the_identifier_and_numeric_code`、`scripts/test_docdb_client.py::ClientTest::test_the_openai_http_status_is_carried_when_doc_db_confirmed_it`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_the_failure_detail_has_no_exception_message`、`scripts/test_docdb_sync.py::RunSyncTest::test_http_and_protocol_errors_are_faults`
+- 通知を、AI が利用者へ伝える（SKILL.md の手順）→ `index-docs/test_skill_md.py`、`query-docs/test_skill_md.py` が、SKILL.md の構造を検査する。AI の振る舞いは `docdb_manual.md`（結果の `backend_switch.notice`）で確かめる
+
+### AC-043
+
+- [確定 ToC]の所属と現在のパスから一覧を作り、移動・削除・追加を[doc-db]へ反映する → `scripts/test_docdb_sync.py::DocumentListTest::test_the_list_comes_from_the_confirmed_toc_with_relative_and_absolute_paths`、`scripts/test_docdb_sync.py::DocumentListTest::test_a_deleted_file_is_left_out_and_reported`、`scripts/test_docdb_sync.py::DocumentListTest::test_a_moved_file_is_listed_under_its_recorded_path_only`、`scripts/test_docdb_sync.py::RunSyncTest::test_the_empty_list_is_still_sent`、`index-docs/test_index_docs_backend.py::DocdbBuildTest::test_a_moved_and_a_deleted_document_are_reflected_in_the_next_list`
+- [doc-db]を使うとき、古ければ二択を示さずに更新してから検索する。未構築は初回構築を求める → `query-docs/test_query_docs_backend.py::DocdbAutomaticUpdateTest::test_a_stale_toc_asks_for_a_rebuild_without_the_two_options`、`query-docs/test_query_docs_backend.py::DocdbAutomaticUpdateTest::test_the_existing_choice_is_not_offered`、`query-docs/test_query_docs_backend.py::DocdbAutomaticUpdateTest::test_after_the_rebuild_the_search_runs`、`query-docs/test_query_docs_backend.py::DocdbAutomaticUpdateTest::test_a_rebuild_that_did_not_bring_the_toc_up_to_date_is_an_error`、`query-docs/test_query_docs_backend.py::DocdbSearchTest::test_not_built_still_asks_for_the_first_build`
+- 実機で、移動・削除の後の検索が変更前のパスを返さない → `docdb_manual.md`
+
+### AC-044
+
+- 結果が、[文書 ID]・パス・理由・[ToC 識別キー]・版・鮮度・[検索基盤]を持ち、対応づけられない結果の件数を報告し、上位の結果に限られることを明示する → `query-docs/test_query_docs_backend.py::DocdbSearchTest::test_up_to_date_syncs_then_searches_and_returns_mapped_documents`、`scripts/test_docdb_search.py::MapResultsTest::test_documents_follow_the_rank_of_their_best_chunk`、`scripts/test_docdb_search.py::MapResultsTest::test_relevance_is_always_maybe_and_the_reason_is_a_fixed_sentence`、`scripts/test_docdb_search.py::MapResultsTest::test_the_section_is_read_from_the_dlid_at_the_end_of_the_heading_path`、`scripts/test_docdb_search.py::MapResultsTest::test_a_dlid_the_document_does_not_have_falls_back_to_the_document`、`scripts/test_docdb_search.py::MapResultsTest::test_a_result_without_a_matching_path_is_counted_not_listed`、`scripts/test_docdb_search.py::SearchTest::test_the_task_is_passed_as_is_in_all_mode_without_rerank`
+
+### AC-045
+
+- [検索基盤]によらず、検査・解決の SKILL が同じ結果を返す → `scenarios/test_scenario_8_docdb_backend.py::DocdbBackendScenarioTest::test_the_inspection_skills_return_the_same_results_for_both_backends`、`scripts/test_backend_config.py::LoadTest::test_config_file_does_not_disturb_the_state_listing`
+- [doc-db]を使っている間に変更された文書の AI 生成フィールドが、[ToC]へ切り替えた後に再生成される → `scenarios/test_scenario_8_docdb_backend.py::DocdbBackendScenarioTest::test_a_change_made_while_using_doc_db_is_regenerated_after_switching_to_toc`、`index-docs/test_index_docs_backend.py::DocdbBuildTest::test_a_content_change_keeps_the_old_ai_fields_and_leaves_them_stale`
+
+### AC-046
+
+- 出力・作業ファイル・管理状態に、OpenAI の認証情報が含まれない（認証情報を読まない・渡さない）→ `scripts/test_docdb_client.py::ReadPortTest::test_the_failure_does_not_carry_the_file_body`、`scripts/test_docdb_client.py::ClientTest::test_a_tool_error_carries_only_the_identifier_and_numeric_code`、`scripts/test_docdb_runtime.py::SpawnServerTest::test_it_starts_a_new_session_without_arguments_or_inherited_streams`、`scripts/test_docdb_contract.py::JobTest::test_labels_never_contain_the_error_text`、`query-docs/test_query_docs_backend.py::DocdbFailureTest::test_an_unreachable_doc_db_at_the_start_is_reported_in_the_toc_result`
+
+### AC-047
+
+- [doc-db]へ接続できないとき、起動して期限内に再接続し、使える → `scripts/test_docdb_runtime.py::EnsureAvailableTest::test_it_starts_doc_db_and_reconnects_within_the_deadline`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_a_running_doc_db_is_used_without_starting`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_an_early_exit_is_forgiven_when_another_instance_answers`
+- 起動しても接続できないとき、原因（実行ファイルが無い・起動できない・接続の前に終了した・期限内に接続できない・設定ファイルから port を得られない）を区別して返す → `scripts/test_docdb_runtime.py::EnsureAvailableTest::test_a_missing_executable_is_reported_without_starting`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_a_spawn_failure_is_reported`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_an_early_exit_gets_exactly_one_more_try`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_the_deadline_stops_the_retries`、`scripts/test_docdb_runtime.py::EnsureAvailableTest::test_a_missing_config_means_neither_connecting_nor_starting`
+- 停止せず、常駐の設定をせず、ログのファイルを作らない。強制スイッチのときは起動しない → `scripts/test_docdb_runtime.py::SpawnServerTest::test_it_starts_a_new_session_without_arguments_or_inherited_streams`、`scripts/test_backend_select.py::DecideTest::test_the_forced_switch_neither_connects_nor_starts_nor_notifies`
+- 実機で、起動・鍵が無いときの終了・実行ファイルが無いときの切り替え → `docdb_manual.md`
+
+### AC-048
+
+- 設定が未指定のとき[doc-db]を先に試し、設定が読めない・値が不正なときは、構築・検索を行わず原因を返す → `scripts/test_backend_config.py::LoadTest::test_missing_file_means_auto`、`scripts/test_backend_config.py::LoadTest::test_missing_key_means_auto`、`scripts/test_backend_config.py::LoadTest::test_toc_and_auto_are_accepted`、`scripts/test_backend_config.py::LoadTest::test_invalid_files_are_rejected_without_falling_back_to_auto`、`scripts/test_backend_config.py::LoadTest::test_a_directory_in_place_of_the_file_is_rejected`、`scripts/test_backend_select.py::DecideTest::test_an_invalid_config_is_an_error_and_does_not_probe`、`index-docs/test_index_docs_backend.py::SettingTest::test_an_invalid_setting_stops_the_build_without_writing_anything`、`query-docs/test_query_docs_backend.py::SettingTest::test_an_invalid_setting_stops_the_search_with_the_reason`
+
+### AC-049
+
+- 識別子（`EMBEDDING_FAILED`・`INTERNAL_ERROR`・`KEY_NOT_FOUND`・`KEY_TRASHED`）だけで失敗を分類し、`EMBEDDING_FAILED` のときだけ[ToC]へ切り替える。契約を満たすかを、同期の応答の目印（`document_errors`）で判断する → `scripts/test_docdb_contract.py::MarkerTest::test_the_marker_is_document_errors_in_the_job`、`scripts/test_docdb_contract.py::ToolErrorTest::test_identifiers_classify_regardless_of_the_contract`、`scripts/test_docdb_contract.py::ToolErrorTest::test_an_internal_error_without_an_identifier_depends_on_the_contract`、`scripts/test_docdb_contract.py::ToolErrorTest::test_other_errors_without_an_identifier_are_faults`、`scripts/test_docdb_contract.py::JobTest::test_document_errors_are_read_by_their_codes`、`scripts/test_docdb_contract.py::JobTest::test_an_embedding_failure_wins_over_other_codes`、`scripts/test_docdb_contract.py::JobTest::test_text_errors_of_a_job_that_meets_the_contract_are_faults`、`scripts/test_docdb_sync.py::RunSyncTest::test_a_clean_job_with_the_marker_reports_the_contract_as_met`
+- 契約を満たさない[doc-db]では、当面の扱いに従い、結果の警告に、その旨を含める → `scripts/test_docdb_contract.py::JobTest::test_text_errors_are_read_only_when_the_marker_is_absent`、`index-docs/test_index_docs_backend.py::DocdbBuildTest::test_the_contract_warning_is_added_unless_the_contract_is_met`、`query-docs/test_query_docs_backend.py::DocdbSearchTest::test_a_met_contract_has_no_warning`
+- 同期で Embedding に失敗した文書が、次の同期で補われる → `docdb_manual.md`（契約を実装した[doc-db]の実機。手順 7・8）
+
 ## NFR-001〜003 一貫性・決定性・冪等性
 
 - 同一入力の論理同値 → `scripts/test_state_store.py::DeterminismTest::test_same_bytes_regardless_of_order`、`scripts/test_toc_candidate.py::AssembleTest::test_deterministic`、`scripts/test_state_store.py::DeterminismTest::test_toc_set_lists_are_order_independent`

@@ -15,6 +15,14 @@ description: ToC（確定 ToC）を構築・再構築する。対象の文書の
 - 受け取った引数を、解釈せずにそのまま script へ渡す。引数の検証は script が行い、反する指定は拒否される
 - 親の文脈（作業の指示・差分・文書の本文など）を引数へ足さない
 
+## 検索基盤
+
+構築の入口の script が、検索基盤（doc-db か ToC）を決める。決めるのは、設定ファイル（`.doc-link/config.json` の `backend`。`"auto"` か `"toc"`。無ければ `"auto"`）と、doc-db への接続の可否である。呼び出しごとの指定（引数）は無い。`"auto"` のとき、doc-db に接続できなければ、script が doc-db を起動して再接続を試みる（停止・常駐化はしない）。
+
+- doc-db を使うとき: script は、機械取得の構築（手順 1〜3 の流れ）だけを行い、AI 生成フィールドを作らない（`toc-updater` を起動しない）。確定した後、doc-db を同期する
+- ToC を使うとき（設定で強制、または doc-db を使えず切り替えた）: 現在のとおり、`toc-updater` が AI 生成フィールドを作る
+- 結果の `backend`（`doc-db` か `toc`）・`forced`・`startup`・`backend_switch` を、報告に含める。`backend_switch` が `null` でないときは、切り替えが起きている。その `notice` を、そのまま利用者へ伝える（理由・原因・影響・次の実行の扱いを、自分で書き足さない・言い換えて補わない）
+
 ## 手順
 
 構築の前に、前工程を済ませる（手順 0）。そのあと、入口の script を 1 本だけ呼ぶ。script は構築を進められる所まで進め、次に行うこと（`action`）を返す。返された `action` に従い、終えたら同じ script を `build_id` 付きでもう一度呼ぶ。この繰り返しで構築が終わる。
@@ -36,12 +44,15 @@ description: ToC（確定 ToC）を構築・再構築する。対象の文書の
 uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-root "${CLAUDE_PROJECT_DIR}" {受け取った対象指定の引数}
 ```
 
-- 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2・3）
+- 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2・3）。`backend_switch` があれば、その `notice` を利用者へ伝える
 - 終了コードが 3 のときは、構築が失敗している。手順 4 へ進む
-- それ以外（1）のときは、標準出力の `errors` をそのまま利用者へ報告して終える。対象指定を直して再実行できる
+- 終了コードが 4 のときは、doc-db を使う構築で、確定 ToC は確定したが、doc-db の同期が障害で失敗している。手順 4 の後半へ進む
+- それ以外（1）のときは、標準出力の `errors` をそのまま利用者へ報告して終える。対象指定を直して再実行できる。設定ファイルを受理できないときも、ここである（`errors` に、ファイルと箇所）
 - `problems`（存在しない・Markdown でない指定）と `warnings` があれば、あわせて報告する
 
 ### 2. `action` が `invoke_toc_updater` のとき
+
+ToC を使うとき（設定で強制、または doc-db を使えず切り替えた）に返る。doc-db の同期が接続できない・OpenAI の失敗で切り替わったときも、この `action` が返る（確定 ToC は確定済みで、`machine_toc` に版と明細ファイルを持つ。続けて AI 生成フィールドを作る）。`backend_switch` の `notice` を、最初に利用者へ伝える。
 
 `batches` の 1 件ごとに、カスタム Agent `doc-link:toc-updater` を Agent ツールで起動する。
 
@@ -62,7 +73,8 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-ro
 
 [確定 ToC]が公開された。標準出力の JSON から、次を報告する。
 
-- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない）と、生成した文書の件数（`generated_count`）
+- 使った検索基盤（`backend`）。doc-db のときは、同期の結果（`docdb_sync`。一覧の件数 `listed`・一覧から除いた文書の件数 `missing_count`・doc-db の処理の件数 `counts`）。`warnings` に doc-db の契約を満たすと確認できない旨があれば、あわせて伝える
+- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない）と、生成した文書の件数（`generated_count`。doc-db のときは 0）
 - 変更の種別ごとの件数（`change_summary`）
 - 参照検査結果（`reference_check`）。`summary` の、分類ごとの件数。一致（`match`）以外の件数があれば、参照に検出事項がある
 - 除外した文書の件数（`excluded_counts`。ID 未付与は `missing`、ID 重複は `duplicate`）
@@ -70,7 +82,11 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-ro
 
 標準出力は件数までで、全件の明細は `detail_path` のファイルにある。変更集合（`change_set`。除外した文書の一覧 `excluded` を含む）、生成した文書の一覧（`generated_documents`）、一致以外の参照の検出事項（`reference_findings`）である。報告に文書ごとの明細が要るときだけ、そのファイルを読む。明細が要らないときは読まない。件数が多いときは、一度に全部を読まない。
 
-### 4. 構築が失敗したとき
+### 4. 構築が失敗したとき（終了コード 4 を含む）
+
+終了コードが 4 のときは、`errors`・`toc_published`・`docdb_sync` をそのまま利用者へ報告する。確定 ToC は確定している（機械取得の情報は最新）が、doc-db の同期は完了していない。切り替えていない（接続できない・OpenAI の失敗以外の失敗のため）。自動で再試行しない。原因を直した後、利用者の指示で、手順 1 から再実行する。設定ファイルで `"backend": "toc"` にすると、doc-db を使わずに ToC で構築できることを添える。
+
+終了コードが 3 のときは次のとおり。
 
 終了コードが 3 のときは、標準出力の `errors`・`stage`・`problems`（失敗した文書・フィールド・原因）・`confirmed_toc_present` をそのまま利用者へ報告する。
 

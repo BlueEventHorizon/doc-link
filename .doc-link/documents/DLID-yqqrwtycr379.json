@@ -15,7 +15,7 @@
     "AI-generated fields"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T09:45:33+00:00",
+    "checked_at": "2026-11-26T09:48:01+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-003_data-model.md",
@@ -23,7 +23,7 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,7 +38,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -53,14 +53,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-011_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
       "position": 1,
-      "recorded_content_hash": "4a533053fc58",
+      "recorded_content_hash": "97ede572efb7",
       "recorded_path": "DES-011_backend-switch.md#3-管理状態-dlid-k163mb7mp4bt",
       "source_section_id": null,
       "target_doc_id": "DLID-dwtbdwda6d0e",
@@ -68,7 +68,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -83,7 +83,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -98,7 +98,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -113,7 +113,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -128,7 +128,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -143,7 +143,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"

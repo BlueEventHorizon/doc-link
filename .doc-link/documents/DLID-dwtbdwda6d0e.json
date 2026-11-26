@@ -1,29 +1,29 @@
 {
-  "applied_hash": "aa7b07ea11800d49f51bc487c1e70751a5bd53842472f1bb6c25ae134ab138f9",
-  "content_hash": "aa7b07ea11800d49f51bc487c1e70751a5bd53842472f1bb6c25ae134ab138f9",
+  "applied_hash": "88a7205e5e8b2b32a66fda13cb786f14df184af7ed8e1dc194dddafc132be85c",
+  "content_hash": "88a7205e5e8b2b32a66fda13cb786f14df184af7ed8e1dc194dddafc132be85c",
   "doc_link_id": "DLID-dwtbdwda6d0e",
   "keywords": [
     "doc-db",
     "ToC",
+    "search backend",
     "backend switch",
+    "automatic fallback",
     "config.json",
-    "automatic switching",
-    "sync",
-    "EMBEDDING_FAILED",
-    "notification",
-    "search result mapping",
-    "startup permission"
+    "doc-db sync",
+    "startup permission",
+    "failure classification",
+    "result mapping"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T09:45:33+00:00",
+    "checked_at": "2026-11-26T09:48:01+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-011_backend-switch.md",
-  "purpose": "Design for switching the search backend between doc-db and ToC: backend decision, startup permission, sync, search mapping, automatic switching and notification, and relation to existing designs.",
+  "purpose": "Design for switching the search backend between doc-db and ToC: backend decision, config, doc-db startup, sync, result mapping, automatic fallback and notices, realizing REQ-006.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-001_system-overview.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,7 +38,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -53,7 +53,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -68,7 +68,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -83,14 +83,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "section",
       "position": 9,
-      "recorded_content_hash": "d3b39867775c",
+      "recorded_content_hash": "a0d91293f3dd",
       "recorded_path": "DES-004_state-machines.md#6-doc-dbの同期の実行-dlid-qxveh3z6rq85",
       "source_section_id": null,
       "target_doc_id": "DLID-3f92k3tz4rew",
@@ -98,7 +98,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -113,7 +113,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -128,7 +128,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -143,7 +143,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -158,7 +158,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:45:33+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -180,6 +180,12 @@
       "section_id": "DLID-h87td10ebpf7"
     },
     {
+      "content_hash": "08aa111d6c24641a28b1665d07f123a32f7128a74d929a21dda06e74ff04a4ea",
+      "heading": "DES-011 検索基盤の切り替え設計",
+      "position": 0,
+      "section_id": "DLID-xvm8ab2ag0te"
+    },
+    {
       "content_hash": "13a8375a842e26012e81af44cba988c28faa4fda879728ff02f472cae9171740",
       "heading": "5.4 同期の状態遷移",
       "position": 12,
@@ -190,6 +196,12 @@
       "heading": "11. 既存の設計との関係",
       "position": 22,
       "section_id": "DLID-6j0cdp7b5cs4"
+    },
+    {
+      "content_hash": "2b3c3660e49aa2ce8b9a7623826cf69f584b83f9383328c91ec7a42922913458",
+      "heading": "12. 未決事項と未確認",
+      "position": 23,
+      "section_id": "DLID-qjv0z5ns32e2"
     },
     {
       "content_hash": "2d3565941a5eb62c761045693d028b64ca06ae58e9ca0fcccd7ac68a698bac74",
@@ -234,12 +246,6 @@
       "section_id": "DLID-313cqdcx2dhv"
     },
     {
-      "content_hash": "6110d9ee5b6c4fc24c33d3b3fa435ed38e1ec58c9889ddaead3ecec7afecf2d3",
-      "heading": "DES-011 検索基盤の切り替え設計",
-      "position": 0,
-      "section_id": "DLID-xvm8ab2ag0te"
-    },
-    {
       "content_hash": "637b235dda18cb39a2cad0a060c69b68ce1ea65a772f7892d5d58e87c32d3ba6",
       "heading": "9. 検査・解決の SKILL",
       "position": 20,
@@ -282,12 +288,6 @@
       "section_id": "DLID-mrgdxghyajjc"
     },
     {
-      "content_hash": "8900909946d44e2facbb5343ac582f3c20bba66c430095a63855982eb2974f0e",
-      "heading": "12. 未決事項と未確認",
-      "position": 23,
-      "section_id": "DLID-qjv0z5ns32e2"
-    },
-    {
       "content_hash": "8a542ef644d8c0ee5b1f6a75ba648a6bf3d72ff80608b0da3dcd0d7c13e2c693",
       "heading": "7.2 [doc-db]の検索",
       "position": 16,
@@ -319,22 +319,24 @@
     }
   ],
   "summary": [
-    "Boundary between backend-independent and backend-dependent parts",
-    "Backend decision: force switch config file, doc-db connection and startup with user permission, failure classification",
-    "Management state: AI generated fields can be unfilled; no doc-db sync record is kept",
-    "doc-db identification: KEY, series, path, and local_path rules",
-    "doc-db sync: list creation, execution, completion judgment, state transitions",
-    "Build and search flows per backend, pre-search check, mapping of doc-db results to documents and sections, result contract",
-    "Automatic switch notification items generated by script",
-    "Unchanged check and resolve SKILLs, setup and OpenAI credential handling, relation to existing designs, open and unconfirmed items"
+    "Boundary between backend-independent parts (DLID, checks, confirmed ToC) and backend-dependent parts (AI-generated fields, search, doc-db update)",
+    "Backend decision: .doc-link/config.json force switch (auto or toc), invalid-value rejection, no per-call override",
+    "doc-db connection and startup: MCP initialize check, executable resolution, user permission, detached launch, bounded reconnect, startup-failure stop",
+    "Failure classification table: unreachable, startup failure, OpenAI failure, fault, and handling of doc-db versions not meeting the contract",
+    "Management state: unfilled AI-generated fields, no doc-db sync record, sync before every search",
+    "doc-db identification: KEY, series, path and local_path conventions",
+    "doc-db sync: list creation from confirmed ToC, job execution, completion judgment, state transitions",
+    "Index build and search flows, pre-search check behavior per backend, mapping chunk results to documents and sections, result contract",
+    "Automatic switching notices, unchanged check/resolve SKILLs, setup and credential notes, relation to existing designs, open and unconfirmed items"
   ],
   "tasks": [
-    "Implementing backend decision and doc-db connection or startup",
-    "Implementing doc-db sync and search result mapping",
-    "Changing index-docs or query-docs behavior by backend",
-    "Designing failure handling and fallback to ToC",
-    "Writing the force switch config file handling",
-    "Reviewing consistency with REQ-006 and existing designs"
+    "Implementing backend decision and doc-db connection or startup scripts",
+    "Implementing doc-db sync and search in query-docs",
+    "Implementing index-docs build flow with backend switching",
+    "Designing or reviewing fallback from doc-db to ToC and user notifications",
+    "Editing .doc-link/config.json handling",
+    "Mapping doc-db search results to document IDs and sections",
+    "Reviewing consistency with REQ-006 and existing designs DES-001 to DES-010"
   ],
   "title": "DES-011 検索基盤の切り替え設計"
 }

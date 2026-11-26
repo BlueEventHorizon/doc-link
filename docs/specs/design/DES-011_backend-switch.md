@@ -292,6 +292,7 @@ sequenceDiagram
 
 ## 10. 導入・起動・OpenAI の認証情報 DLID-qw5hyw9agt2s
 
+- 利用の前提（要件 [§18.1][req-006]）: [doc-db]は、サンドボックスの外で起動し、常駐させる。サンドボックスの下の Claude Code から使うと、[doc-db]の OpenAI への通信が失敗し（通信の代理による TLS の書き換えなど）、(b) として[ToC]へ切り替わる。doc-link は、サンドボックスを調べず、サンドボックスの設定を変えない。
 - doc-link は、[doc-db]を導入しない。接続できなければ起動し（§2.2）、停止せず、常駐させない。
 - [doc-db]が未導入（実行ファイルが検索パスに無い）のとき、(a)（原因 `executable_missing`）として[ToC]へ切り替える。通知に、[doc-db]を導入すれば既定で使うことを添える。
 - [doc-db]は、起動時に OpenAI の認証情報（環境変数）が無いと、起動できずに終了する（[doc-db]の実装の確認結果。実機では未確認）。doc-link から見ると、起動したプロセスが接続の前に終了した (a)（原因 `exited_early`）である。通知の原因には、「接続の前に終了した（OpenAI の認証情報が無いときも、この形になる。[doc-db]のログで確認する）」と書く。doc-link は、認証情報の有無を調べず、読まない。
@@ -345,7 +346,7 @@ sequenceDiagram
 - 契約を実装した[doc-db]の、リリース版での動作（確かめたのは、未 merge のブランチのビルド）
 
 [req-004]: ../requirement/REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-006]: ../requirement/REQ-006_backend-switch.md "396317c2ec8a DLID-emxm9mx5a4d2"
+[req-006]: ../requirement/REQ-006_backend-switch.md "0100e7f04371 DLID-emxm9mx5a4d2"
 [des-001]: DES-001_system-overview.md "1468229e4b8e DLID-3da82gspdp44"
 [des-002]: DES-002_execution-responsibilities.md "3a9861334737 DLID-anz9vack2xzt"
 [des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"

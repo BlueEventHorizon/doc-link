@@ -26,6 +26,8 @@ doc_link_id: DLID-emxm9mx5a4d2
 
 切り替えの範囲は、[ToC]の構築と文書検索の両方である（D-064）。
 
+利用の前提として、[doc-db]は、サンドボックスの外で起動し、常駐させる。サンドボックスの下の Claude Code から使うと、[doc-db]の OpenAI への通信が失敗し（通信の代理による TLS の書き換えなど）、(b) として[ToC]へ切り替わる。プラグインは、サンドボックスを調べず、サンドボックスの設定を変えない。
+
 ### FR-019 検索基盤の既定 DLID-qxmk354vw8v5
 
 プラグインは、[doc-db]が動作するときは、[AI 生成フィールド]を作らず、[doc-db]で索引を構築して検索すること（D-064）。[doc-db]が動作するとは、[doc-db]へ接続でき（接続できなければ、プラグインが起動して接続する。FR-027）、[doc-db]の機能（検索・同期・Embedding）が失敗していないことを指す。
@@ -222,6 +224,6 @@ doc_link_id: DLID-emxm9mx5a4d2
 [req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
-[req-006]: REQ-006_backend-switch.md "396317c2ec8a DLID-emxm9mx5a4d2"
+[req-006]: REQ-006_backend-switch.md "0100e7f04371 DLID-emxm9mx5a4d2"
 [req-003-fr-005]: REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82 "47be50aa7f05 DLID-65nf6n2jax82"
 [req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "5b1ed8d54266 DLID-481cwc8365a3"

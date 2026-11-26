@@ -33,6 +33,12 @@ REQ-001 D-026・D-027・D-036・D-039 を実装する。`check-toc` と `query-d
   保存済みの指定（違わないとき、渡されないときは `None`）
 - `counts`: 変更種別ごとの件数と、除外した文書の件数（`missing_id`・`duplicate_id`・`excluded_in_toc`）。
   `scale`: 再構築が必要なときの規模の件数
+- `ai_needed`: [AI 生成フィールド]が要る文書の件数（`update_plan` の生成対象。未生成の文書と、生成した時点の
+  [内容ハッシュ]が[現在ハッシュ]と違う文書）。[検索基盤]によらず、再構築要否とは別に、常に数える（`not_built`・
+  `undeterminable` では `None`）。`up_to_date`（機械取得の情報が最新）でも 0 とは限らない。件数の扱いは呼び出し側が基盤に
+  応じて決める（`doc-db` を使うときは無視し、`toc` を使うときは構築が要る。要件 REQ-006 FR-022、DES-011 §7.1・§9）
+- `ai_unfilled`: そのうち、[AI 生成フィールド]が未生成の文書の件数（`update_plan.UpdatePlan.unfilled_targets`）。
+  未生成の文書は、既存の[ToC]のままでは検索できない（要件 REQ-006 FR-022）
 - `problems`・`warnings`: 対象指定の展開が報告した、存在しない・Markdown でない指定など
 
 `TocCheck.to_summary()` は標準出力へ返す要約（件数まで）、`TocCheck.to_detail()` は明細ファイルへ書く全件
@@ -161,6 +167,8 @@ class TocCheck:
     excluded_in_toc: tuple[ExcludedDocument, ...] = ()
     counts: dict | None = None
     scale: Scale | None = None
+    ai_needed: int | None = None
+    ai_unfilled: int | None = None
     causes: tuple[Cause, ...] = ()
     problems: tuple[dict, ...] = ()
     warnings: tuple[str, ...] = ()
@@ -177,6 +185,8 @@ class TocCheck:
             "saved_target_spec": self.saved_target_spec,
             "counts": self.counts,
             "scale": self.scale.to_dict() if self.scale else None,
+            "ai_fields_needed": self.ai_needed,
+            "ai_fields_unfilled": self.ai_unfilled,
             "causes": [c.to_dict() for c in self.causes],
             "problems": list(self.problems),
             "warnings": list(self.warnings),
@@ -353,13 +363,16 @@ def check_toc(
         "warnings": tuple(expansion.warnings),
     }
 
-    if not (changed or change_set.sections or excluded_in_toc or spec_changed):
-        return TocCheck(status=STATUS_UP_TO_DATE, toc_key=key, **result)
-
     try:
         plan = update_plan.build_update_plan(root, change_set)
     except ChangeFailure as failure:
         return _undeterminable(key, _failure_causes(failure), **common)
+    result["ai_needed"] = len(plan.generation_targets)
+    result["ai_unfilled"] = len(plan.unfilled_targets)
+
+    if not (changed or change_set.sections or excluded_in_toc or spec_changed):
+        return TocCheck(status=STATUS_UP_TO_DATE, toc_key=key, **result)
+
     scale = Scale(
         new=counts["new"],
         departed=counts["departed"],

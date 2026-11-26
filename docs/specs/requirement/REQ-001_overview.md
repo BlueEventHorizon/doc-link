@@ -6,7 +6,7 @@ doc_link_id: DLID-veg2nsjk8zw1
 
 ## 文書構成 DLID-mf1pxc9fkj0k
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005]
+[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005] · [検索基盤の切り替え][req-006]
 
 本書は全体の目的、共通の非機能要件および検出事項を扱う。各処理の機能要件と受け入れ条件は対応する文書に記載する。
 
@@ -206,6 +206,10 @@ flowchart TB
 | [Index 済みリスト]      | 最後に確定した[ToC]に入っている文書の一覧                                                                                                                                                           |
 | [Index 対象文書]        | [Index 対象リスト]に含まれる Markdown 文書。[ToC]の構築と DLID 付与操作の対象になる                                                                                                                 |
 | [プロジェクト管理 AI]   | 対象プロジェクトの目的、仕様および運用規則を理解し、doc-link の通知を受けて[Index 対象文書]を実際に修正する外部の実行主体                                                                           |
+| [doc-db]                | 文書の本文を分割して Embedding し、検索する外部のサービス（doc-db-mcp-server）。[DLID]を識別子として扱わず、文書のパスの変更・移動・削除を知らない（[REQ-006][req-006]）                            |
+| [検索基盤]              | [ToC]の構築と文書検索の裏側。[doc-db]と[ToC]の 2 つがある（[REQ-006][req-006]）                                                                                                                     |
+| [強制スイッチ]          | [doc-db]が動作するときでも、[ToC]を[検索基盤]に使うことを、利用者が明示する指定（[REQ-006][req-006]）                                                                                               |
+| [自動切り替え]          | [doc-db]に接続できないとき、または OpenAI が失敗したときに、その実行の[検索基盤]を[ToC]へ切り替える仕組み。[強制スイッチ]とは別である（[REQ-006][req-006]）                                         |
 
 <a id="sec-5"></a>
 
@@ -334,6 +338,7 @@ doc-link が[Index 対象文書]へ行う書き込みは、[文書 ID]管理シ�
 [req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
+[req-006]: REQ-006_backend-switch.md "3a6cc3bcee23 DLID-emxm9mx5a4d2"
 [req-003-sec-7-4]: REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"

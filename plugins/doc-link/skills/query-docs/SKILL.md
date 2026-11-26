@@ -9,6 +9,14 @@ description: タスクに関連する文書を ToC（確定 ToC）から探し�
 
 検索は ToC・管理状態・Index 対象文書を書き換えない。「既存の ToC のまま検索する」を選んでも、ToC を現在の状態として再確定しない。
 
+## 検索基盤
+
+検索前検査の script が、検索基盤（doc-db か ToC）を決める。決めるのは、設定ファイル（`.doc-link/config.json` の `backend`。`"auto"` か `"toc"`。無ければ `"auto"`）と、doc-db への接続の可否である。強制スイッチの呼び出しごとの指定（引数）は無い。`"auto"` のとき、doc-db に接続できなければ、script は doc-db を起動せずに止まる（手順 2 の `confirm_docdb_startup`）。利用者が許可したときだけ、doc-db を起動して再接続を試みる（停止・常駐化はしない）。
+
+- doc-db を使うとき: script が、doc-db を最新に同期して検索し、結果を返す（`query-worker` を使わない）。結果の `relevance` はすべて `maybe` で、doc-db の検索は上位の結果に限られる。文書が古ければ、二択を示さず、再構築してから検索する（手順 2 の `rebuild_required`）
+- ToC を使うとき（設定で強制、doc-db を使えず切り替えた、または利用者が今回は ToC で続けることを選んだ）: 現在のとおり、`query-worker` が文書を読んで検索する
+- 結果の `backend`・`backend_switch` を、呼び出し元へ返す。`backend_switch` が `null` でないときは、切り替えが起きている。その `notice` を、そのまま利用者へ伝える（理由・原因・影響・次の実行の扱いを、自分で書き足さない・言い換えて補わない）
+
 ## 引数
 
 - 検索条件と、ToC 識別キー（省略時は予約キー `all`）と、あれば完全な Index 対象指定だけを受け取る
@@ -30,14 +38,36 @@ description: タスクに関連する文書を ToC（確定 ToC）から探し�
 uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-root "${CLAUDE_PROJECT_DIR}" --task={検索のタスク} {受け取った ToC 識別キーと対象指定の引数}
 ```
 
-- 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2）
-- 終了コードが 1 のときは、検索を停止し、標準出力の `errors` をそのまま呼び出し元へ返す。旧版（既存の ToC）で検索する選択肢を出さない。再構築後も一致しないときも同じである
+- 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2）。`backend_switch` があれば、その `notice` を利用者へ伝える
+- 終了コードが 1 のときは、検索を停止し、標準出力の `errors` をそのまま呼び出し元へ返す。旧版（既存の ToC）で検索する選択肢を出さない。再構築後も一致しないときも同じである。設定ファイルを受理できないとき、doc-db の失敗（接続できない・OpenAI の失敗以外）も、ここである（切り替えない）
 
 ### 2. `action` で分ける
+
+`confirm_docdb_startup`（doc-db に接続できず、起動していない）
+
+- 検索しない（検索前検査もしていない）。返った `question` と `options` を、AskUserQuestion で利用者に確認する。選択肢は「doc-db を起動する」と「今回は ToC で続ける」である。理由・原因を自分で書き足さない
+- 利用者の選択を、そのまま `--docdb-startup` に渡し（`options` の `argument`）、手順 1 の `prepare` を、同じ引数でやり直す。選択を推測して決めない。利用者が選ばずに終えたときは、検索せずに終える。利用者に確認できない文脈（`AskUserQuestion` を使えないなど）では、起動も ToC への切り替えも自分で決めず、質問と選択肢を呼び出し元へ返して終える
+
+`docdb_startup_failed`（許可を得て起動したが、接続できなかった）
+
+- 検索しない。返った `message`（起動できなかったこと・原因の分類・起動の command）を、そのまま利用者へ伝え、AskUserQuestion で「起動してやり直す」か「今回は ToC で続ける」かを確認する。原因を断定しない・自分で書き足さない
+- 「起動してやり直す」は、利用者が `command` で doc-db を起動した後に、`--docdb-startup` を付けずに `prepare` をやり直す。「今回は ToC で続ける」は、`options` の `argument` を付けて、やり直す
 
 `initial_build_required`（未構築）
 
 - 検索しない。ToC が未構築で検索できないことを呼び出し元へ返して終える
+
+`rebuild_required`（二択を示さず、再構築を求める）
+
+- 検索しない。`reason` は、`toc_stale`（doc-db を使うときに、ToC の機械取得の情報が古い。doc-db の更新は AI 生成を伴わず、費用が小さいので、確認しない）か、`ai_fields_needed`（ToC を使うときに、AI 生成フィールドが未生成の文書がある、または、機械取得の情報は最新なのに AI 生成フィールドが古い文書がある。既存の ToC のままでは検索できない・古い値を最新として検索してしまうので、確認しない）である
+- 返った規模（`scale`・`ai_fields_needed`・`ai_fields_unfilled`）を利用者へ知らせる（AskUserQuestion で確認しない）
+- 呼び出し元（プロジェクト管理 AI）に `index-docs` の実行を求め、確定結果を受け取る。このスキルは `index-docs` を実行しない
+  - `index-docs` に渡す対象の引数は、`--target-file {target_file}` だけである。`target_file` は、返されたままの値を渡す。ToC 識別キーと Index 対象指定を、自分で引数へ書き写さない
+  - その後、手順 1 の `prepare` を、`--task` と `--choice rebuild --target-file {target_file}` でやり直す。`--choice existing` は付けない（受け付けない）。再構築が別の対象で行われていた、または再構築後も一致しないときは、終了コード 1 で検出される
+
+`docdb_result`（doc-db で検索した結果）
+
+- 検索が済んでいる。`query-worker` を起動せず、`collect` も呼ばない。手順 5 の項目を、この結果から呼び出し元へ返す（`documents` の `relevance` は `maybe` の固定で、`reason` は script が組み立てた文である。`order_notice`・`limit_notice`（上位の結果に限られ、取りこぼしうること）・`unmapped`・`sync`・`warnings` を添える）。`warnings` に契約を満たすと確認できない旨があれば、あわせて伝える
 
 `confirm_rebuild`（再構築が必要）
 
@@ -84,7 +114,8 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" collect --project-ro
 
 呼び出し元へ、次を返す。
 
-- 検索結果 `documents`（文書 ID `doc_link_id`・記録されたパス `recorded_path`・関連の強弱 `relevance`・関連理由 `reason`・`sections`）。`relevance` は、`yes`（関連する）か `maybe`（判断がつかないが、関連するかもしれない。取りこぼさないために含めた）である。読むときの優先度を、呼び出し元が決められるよう、そのまま返す。`maybe` を `yes` に読み替えない
+- 使った検索基盤（`backend`）と、切り替えの有無（`backend_switch`）
+- 検索結果 `documents`（文書 ID `doc_link_id`・記録されたパス `recorded_path`・関連の強弱 `relevance`・関連理由 `reason`・`sections`）。`relevance` は、`yes`（関連する）か `maybe`（判断がつかないが、関連するかもしれない。取りこぼさないために含めた）である。読むときの優先度を、呼び出し元が決められるよう、そのまま返す。`maybe` を `yes` に読み替えない。doc-db を使ったときは、すべて `maybe` である
 - 使用した ToC 識別キー（`toc_key`）と ToC の版（`toc_version`）
 - 鮮度（`freshness`・`freshness_notice`）。パスの注意（`path_notice`）と、並びの注意（`order_notice`。`documents` の並びは関連度の順ではない）も添える。記録されたパスを現在の実体パスとして断定しない
 - 「既存の ToC のまま検索する」を選んだときは、その版が現在の Index 対象リストを反映していない可能性を、結果全体に明示する

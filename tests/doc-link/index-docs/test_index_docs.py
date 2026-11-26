@@ -17,6 +17,7 @@ SKILL_SCRIPTS_DIR = (
 )
 sys.path.insert(0, str(SKILL_SCRIPTS_DIR))
 
+import backend_select  # noqa: E402
 import index_docs  # noqa: E402
 from content_hash import RECORD_LENGTH  # noqa: E402
 import state_store  # noqa: E402
@@ -74,8 +75,20 @@ def submit_args(doc_id, values=None):
     return args
 
 
+def _force_toc_backend(testcase):
+    """既存の検査が、実機の doc-db へ接続・起動しないよう、基盤判定を[ToC]の強制スイッチに固定する。"""
+    patcher = mock.patch.object(
+        backend_select,
+        "decide",
+        return_value=backend_select.Decision(backend_select.BACKEND_TOC, forced=True),
+    )
+    patcher.start()
+    testcase.addCleanup(patcher.stop)
+
+
 class Base(unittest.TestCase):
     def setUp(self):
+        _force_toc_backend(self)
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         self.root = Path(self._tmp.name)
@@ -464,6 +477,10 @@ DONE_KEYS = {
     "excluded_counts",
     "problems",
     "warnings",
+    "backend",
+    "forced",
+    "startup",
+    "backend_switch",
 }
 DOCUMENT_COUNT_KEYS = {
     "new",
@@ -1111,6 +1128,13 @@ class WaveTest(Base):
 @unittest.skipUnless(shutil.which("uv"), "uv が使えない環境では実行しない")
 class EntryScriptWithUvTest(Base):
     SCRIPT = SKILL_SCRIPTS_DIR / "index_docs.py"
+
+    def setUp(self):
+        super().setUp()
+        # 別プロセスで動くので、基盤判定の差し替えは届かない。設定ファイルで[ToC]を強制し、実機の doc-db に触れない
+        config = self.root / ".doc-link" / "config.json"
+        config.parent.mkdir(parents=True, exist_ok=True)
+        config.write_text('{"backend": "toc"}\n', encoding="utf-8")
 
     def uv_run(self, *args):
         return subprocess.run(

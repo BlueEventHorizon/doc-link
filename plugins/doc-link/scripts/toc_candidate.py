@@ -555,7 +555,10 @@ def _consistency_problems(
 
 
 def _document_info_problems(
-    root: Path, candidate: dict, confirmed: Sequence[ConfirmedDocument]
+    root: Path,
+    candidate: dict,
+    confirmed: Sequence[ConfirmedDocument],
+    require_ai_fields: bool = True,
 ) -> list[CandidateProblem]:
     paths = {item.doc_link_id: item.path for item in confirmed}
     problems: list[CandidateProblem] = []
@@ -573,7 +576,7 @@ def _document_info_problems(
                 )
             )
             continue
-        if info["content_hash"] != entry["applied_hash"]:
+        if require_ai_fields and info["content_hash"] != entry["applied_hash"]:
             problems.append(
                 CandidateProblem(
                     doc_id,
@@ -589,8 +592,14 @@ def validate_candidate(
     project_root: str | Path,
     candidate: dict,
     confirmed_documents: Iterable[ConfirmedDocument],
+    require_ai_fields: bool = True,
 ) -> None:
-    """候補を検査する（モジュールの docstring の「検査」）。何も書き込まない。通らなければ `CandidateFailure`。"""
+    """候補を検査する（モジュールの docstring の「検査」）。何も書き込まない。通らなければ `CandidateFailure`。
+
+    `require_ai_fields` が偽のとき（[doc-db]を使う構築。[AI 生成フィールド]を作らない）は、[文書情報]の
+    [内容ハッシュ]が[反映済みハッシュ]と一致することを求めない。[文書情報]が読めることは、求める
+    （要件 REQ-006 FR-019・D-064、DES-011 §6）。
+    """
     root = Path(project_root)
     confirmed = tuple(confirmed_documents)
     toc_key = candidate.get("toc_key") if isinstance(candidate, dict) else None
@@ -604,7 +613,7 @@ def validate_candidate(
             [CandidateProblem(None, None, None, f"必須フィールドを満たさない: {exc}")],
         ) from exc
     problems = _consistency_problems(candidate, confirmed)
-    problems += _document_info_problems(root, candidate, confirmed)
+    problems += _document_info_problems(root, candidate, confirmed, require_ai_fields)
     if problems:
         raise _failure(root, candidate["toc_key"], STAGE_VALIDATION, problems)
 

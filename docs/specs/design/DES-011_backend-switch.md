@@ -87,7 +87,7 @@ doc_link_id: DLID-dwtbdwda6d0e
 | 契約を満たさない doc-db で、識別子の無い検索の内部エラー（JSON-RPC の `-32603`）                                                                                         | OpenAI の失敗 (b) | `toc` へ切り替える（当面の扱い。原因は推定。結果の警告に、契約を満たさない doc-db であることを含める） |
 | 契約を満たさない doc-db で、同期ジョブのエラーの文言が `embed:` で始まる                                                                                                 | OpenAI の失敗 (b) | 同上                                                                                                   |
 
-- 契約を満たす[doc-db]かは、同期ジョブの応答（`get_sync_status`）に `document_errors` があるかで判断する（要件 [FR-028][req-006]）。版の番号では判断しない。doc-link は、検索の前に必ず同期するので、同じ実行の同期の応答を、検索の判断にも使う。目印が無いときは、満たさない[doc-db]として扱う。
+- 契約を満たす[doc-db]かは、同期ジョブの応答（`get_sync_status`）に `document_errors` があるかで判断する（要件 [FR-028][req-006]）。版の番号では判断しない（契約を満たす最初の[doc-db]の版は 0.4.1。記録するだけである）。doc-link は、検索の前に必ず同期するので、同じ実行の同期の応答を、検索の判断にも使う。目印が無いときは、満たさない[doc-db]として扱う。
 - 識別子の置き場は、検索の失敗が JSON-RPC のエラーの `error.data.code`、同期ジョブの文書ごとの失敗が `document_errors[].code`、失敗したジョブが最上位の `code` である。同期の投入と状態の取得は、Embedding を行わないので、識別子の無い内部エラーを OpenAI の失敗とみなさない（検索の内部エラーだけが、当面の扱いの対象）。
 - 契約を満たさない[doc-db]の扱い（最後の 2 行）は、当面の扱いである。[doc-db]が契約を満たすものだけになった後、既存の設計への統合のときに、削除する。
 - [doc-db]が返したエラーの文言・HTTP の本文は、利用者向けの出力に載せない。載せるのは、失敗の分類・HTTP の状態コード・識別子だけである（要件 [NFR-009][req-006]）。
@@ -325,7 +325,6 @@ sequenceDiagram
 
 1. 不要になった series（削除したワークツリーのもの）の掃除。doc-link は行わない。[doc-db]が持つ削除の予約の機能を、利用者が使う。
 2. 暫定値の確定。接続の待ち時間（1 秒）、再接続の期限（10 秒）と間隔（0.25 秒）、同期の完了待ちの上限（600 秒）と間隔（2 秒）、検索の上位の件数（20）は、実装の定数で、実測で決める値の暫定である。
-3. 契約を満たす[doc-db]の版の番号。doc-link は版の番号で判断しないので、doc-link の実装には影響しない（[doc-db]側の決定）。
 
 確認済み（実機。契約を実装した[doc-db]のブランチのビルドと、導入済みの旧版 0.3.4 を、隔離した HOME・別のポートで動かした）:
 
@@ -346,7 +345,7 @@ sequenceDiagram
 - 契約を実装した[doc-db]の、リリース版での動作（確かめたのは、未 merge のブランチのビルド）
 
 [req-004]: ../requirement/REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-006]: ../requirement/REQ-006_backend-switch.md "744cdbbdc0ab DLID-emxm9mx5a4d2"
+[req-006]: ../requirement/REQ-006_backend-switch.md "396317c2ec8a DLID-emxm9mx5a4d2"
 [des-001]: DES-001_system-overview.md "1468229e4b8e DLID-3da82gspdp44"
 [des-002]: DES-002_execution-responsibilities.md "3a9861334737 DLID-anz9vack2xzt"
 [des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"

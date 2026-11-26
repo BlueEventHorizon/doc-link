@@ -126,7 +126,7 @@ doc_link_id: DLID-emxm9mx5a4d2
 | `EMBEDDING_FAILED` | OpenAI から Embedding を得られなかった。再試行を尽くした後の失敗で、認証・通信・HTTP のエラー・応答の不正を含む | 検索のクエリの Embedding。同期での文書のチャンクの Embedding | OpenAI の失敗 (b)。[ToC]へ切り替える |
 | `INTERNAL_ERROR`   | 上記以外のサーバー内部の失敗（保存先・ファイルの読み取りなど）                                                  | 任意                                                         | 障害。切り替えない                   |
 
-- 契約を満たす[doc-db]でも、入力の不正（JSON-RPC `-32602`。key が空、job_id が不明など）には、識別子が付かない。識別子の無いエラーは、障害として扱う。
+- 契約を満たす[doc-db]は、サーバー内部の失敗に、必ず識別子（`EMBEDDING_FAILED` か `INTERNAL_ERROR`）を付ける。入力の不正（JSON-RPC `-32602`。key が空、job_id が不明など）は、識別子を付けない。識別子の無いエラーは、障害として扱う。
 - 同期ジョブが完了（`done`）しても、Embedding に失敗した文書がありうる。`get_sync_status` の応答は、文書ごとの失敗を `document_errors`（`path`・`code`・`skipped_chunks`（あれば）の配列。失敗が無ければ空）に、常に持つ。既存のエラーの文字列の一覧 `errors` は、他の利用者のために維持される。
 
 **Embedding が欠けた文書の扱い.** 同じ KEY・series・パス・内容の文書でも、Embedding が欠けたチャンクを持つ文書は、同期で skip しない。欠けたチャンクだけを、再度 Embedding する。成功すれば完全になり、再び失敗すれば、上記の識別子で報告する。
@@ -137,7 +137,7 @@ doc_link_id: DLID-emxm9mx5a4d2
 - OpenAI の失敗で不完全になった同期の後、次の同期が、OpenAI の復旧を待って、[doc-db]を完全にする。プラグインは、[doc-db]の内容を削除せず、失敗を記録しない。
 - 切り替えた実行も、次の実行で[doc-db]を先に試す（FR-021）。
 
-**契約を満たさない[doc-db]（当面の扱い）.** プラグインは、同期ジョブの応答に `document_errors` があるかで、契約を満たす[doc-db]かを判断する（版の番号では判断しない）。目印が無いときは、満たさない[doc-db]として扱う。満たさない[doc-db]では、次のとおり扱い、結果の警告に、契約を満たさない[doc-db]であることを含める。
+**契約を満たさない[doc-db]（当面の扱い）.** プラグインは、同期ジョブの応答に `document_errors` があるかで、契約を満たす[doc-db]かを判断する（版の番号では判断しない。契約を満たす最初の[doc-db]の版は 0.4.1 で、記録するだけである）。目印が無いときは、満たさない[doc-db]として扱う。満たさない[doc-db]では、次のとおり扱い、結果の警告に、契約を満たさない[doc-db]であることを含める。
 
 - 識別子の無い、検索の内部エラー（JSON-RPC の `-32603`）を、(b) とみなす。原因は推定であることを通知に明記する。
 - 同期ジョブの Embedding の失敗は、エラーの文言（`embed:` で始まる）で判別する。
@@ -222,6 +222,6 @@ doc_link_id: DLID-emxm9mx5a4d2
 [req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
 [req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
-[req-006]: REQ-006_backend-switch.md "744cdbbdc0ab DLID-emxm9mx5a4d2"
+[req-006]: REQ-006_backend-switch.md "396317c2ec8a DLID-emxm9mx5a4d2"
 [req-003-fr-005]: REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82 "47be50aa7f05 DLID-65nf6n2jax82"
 [req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "5b1ed8d54266 DLID-481cwc8365a3"

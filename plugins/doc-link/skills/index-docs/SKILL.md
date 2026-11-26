@@ -74,7 +74,7 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-ro
 [確定 ToC]が公開された。標準出力の JSON から、次を報告する。
 
 - 使った検索基盤（`backend`）。doc-db のときは、同期の結果（`docdb_sync`。一覧の件数 `listed`・一覧から除いた文書の件数 `missing_count`・doc-db の処理の件数 `counts`）。`warnings` に doc-db の契約を満たすと確認できない旨があれば、あわせて伝える
-- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない）と、生成した文書の件数（`generated_count`。doc-db のときは 0）
+- 確定結果（`version`・`published`。`published` が偽なら、前回と同じ内容で、書き換えていない。doc-db から ToC へ切り替えた構築では、機械取得の確定は最初の呼び出しの `machine_toc`（`published` が真）で済んでおり、AI 生成フィールドを作った後の完了の `published` が偽でも異常ではない）と、生成した文書の件数（`generated_count`。doc-db のときは 0）
 - 変更の種別ごとの件数（`change_summary`）
 - 参照検査結果（`reference_check`）。`summary` の、分類ごとの件数。一致（`match`）以外の件数があれば、参照に検出事項がある
 - 除外した文書の件数（`excluded_counts`。ID 未付与は `missing`、ID 重複は `duplicate`）

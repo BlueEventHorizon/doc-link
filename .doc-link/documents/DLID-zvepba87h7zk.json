@@ -1,26 +1,25 @@
 {
-  "applied_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
-  "content_hash": "d6568928b5319065d45a421019c0a3f9073221ad0d7c51fb79b901e61cb2d190",
+  "applied_hash": "8a5c97df770d95080c07072fc00756f86910e0e461962198e609a42f365a1df7",
+  "content_hash": "8a5c97df770d95080c07072fc00756f86910e0e461962198e609a42f365a1df7",
   "doc_link_id": "DLID-zvepba87h7zk",
   "keywords": [
-    "design index",
-    "doc-link",
-    "DES-001",
-    "DES-010",
     "design documents",
-    "state machine",
-    "requirements vs design"
+    "DES-001",
+    "DES-011",
+    "index",
+    "doc-link",
+    "source of truth"
   ],
   "last_check": {
-    "checked_at": "2026-11-25T12:29:15+00:00",
+    "checked_at": "2026-11-26T09:48:01+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/README.md",
-  "purpose": "Index of the doc-link design documents DES-001 to DES-010, stating what each covers and the principle that design must not override requirements.",
+  "purpose": "Entry index of the doc-link design documents DES-001 to DES-011, stating what each covers and that requirements prevail over design.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-001_system-overview.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -35,7 +34,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -50,7 +49,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -65,7 +64,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -80,7 +79,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -95,14 +94,14 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 5,
-      "recorded_content_hash": "8966603c17ac",
+      "recorded_content_hash": "10973b6b4341",
       "recorded_path": "DES-006_search.md",
       "source_section_id": null,
       "target_doc_id": "DLID-nnbgpzkkm5vq",
@@ -110,7 +109,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -125,7 +124,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-008_content-rules.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -140,7 +139,7 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-009_verification.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -155,44 +154,54 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "checked_at": "2026-11-26T09:48:01+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 9,
-      "recorded_content_hash": "c36cb4d74873",
+      "recorded_content_hash": "e6cd2ff8b7ec",
       "recorded_path": "DES-010_skill-composition.md",
       "source_section_id": null,
       "target_doc_id": "DLID-7e90gq3sdncc",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:48:01+00:00",
+        "found_path": "docs/specs/design/DES-011_backend-switch.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 10,
+      "recorded_content_hash": "4a533053fc58",
+      "recorded_path": "DES-011_backend-switch.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dwtbdwda6d0e",
       "target_section_id": null
     }
   ],
   "sections": [
     {
-      "content_hash": "e145090b44873ac3ddb4b2d16a4f62a3d01df022d7909ed47239f2bc60cebb2d",
+      "content_hash": "fc8077567760f5a5df4417274f8a07a14b47433088914a5657c20f7d2afcc3b0",
       "heading": "doc-link 設計書の構成",
       "position": 0,
       "section_id": "DLID-2f3q114x45q6"
     }
   ],
   "summary": [
-    "Requirements are the source of truth for behavior and constraints; design is for subjects, information, states and processing",
-    "If requirements and design conflict, design alone does not override requirements",
-    "Table of DES-001 to DES-010 with the content each covers",
-    "DES-001 covers system boundary, overall sequence and common invariants",
-    "DES-002 to DES-004 cover execution subjects, data model and state machines",
-    "DES-005 to DES-007 cover ToC building, search, and references with impact notification",
-    "DES-008 to DES-010 cover content rules, verification design, and SKILL and Agent composition",
-    "Diagrams are for understanding; the transition table in DES-004 is normative"
+    "Requirements are the source of truth for behavior and constraints; designs for subjects, information, states, processing",
+    "Design must not override requirements when they conflict",
+    "Table mapping DES-001 through DES-011 to their responsibilities",
+    "Diagrams are for understanding; DES-004 transition table is normative",
+    "Process details live in one document and are not duplicated in the overall design"
   ],
   "tasks": [
     "Finding which design document covers a topic",
-    "Starting design work on doc-link",
-    "Resolving conflicts between requirements and design",
-    "Adding or restructuring design documents",
-    "Reviewing design documents"
+    "Starting design or implementation work on doc-link",
+    "Adding a new design document"
   ],
   "title": "doc-link 設計書の構成"
 }

@@ -61,8 +61,8 @@ script は、答えを受け取った時点で検査する。形式（JSON と�
 [ToC]、管理状態、[Index 対象文書]には書き込まない。
 
 [des-003-sec-2]: DES-003_data-model.md#2-情報と識別子-dlid-m8vs7s3gahbx "bb9fe7144acf DLID-m8vs7s3gahbx"
-[des-011-sec-7-1]: DES-011_backend-switch.md#71-検索前検査-dlid-h87td10ebpf7 "4a533053fc58 DLID-h87td10ebpf7"
-[des-011-sec-7-4]: DES-011_backend-switch.md#74-検索結果の契約-dlid-tg62wwpqbmsy "4a533053fc58 DLID-tg62wwpqbmsy"
+[des-011-sec-7-1]: DES-011_backend-switch.md#71-検索前検査-dlid-h87td10ebpf7 "017facc8cd2e DLID-h87td10ebpf7"
+[des-011-sec-7-4]: DES-011_backend-switch.md#74-検索結果の契約-dlid-tg62wwpqbmsy "2d3565941a5e DLID-tg62wwpqbmsy"
 [des-008-sec-1]: DES-008_content-rules.md#1-文書-idの読取りと書込み-dlid-cf1n0ndmf0fe "e07d05aa8a87 DLID-cf1n0ndmf0fe"
 [des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"

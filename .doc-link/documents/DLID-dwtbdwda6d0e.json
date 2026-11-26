@@ -1,0 +1,340 @@
+{
+  "applied_hash": "aa7b07ea11800d49f51bc487c1e70751a5bd53842472f1bb6c25ae134ab138f9",
+  "content_hash": "aa7b07ea11800d49f51bc487c1e70751a5bd53842472f1bb6c25ae134ab138f9",
+  "doc_link_id": "DLID-dwtbdwda6d0e",
+  "keywords": [
+    "doc-db",
+    "ToC",
+    "backend switch",
+    "config.json",
+    "automatic switching",
+    "sync",
+    "EMBEDDING_FAILED",
+    "notification",
+    "search result mapping",
+    "startup permission"
+  ],
+  "last_check": {
+    "checked_at": "2026-11-26T09:45:33+00:00",
+    "result": "success"
+  },
+  "path": "docs/specs/design/DES-011_backend-switch.md",
+  "purpose": "Design for switching the search backend between doc-db and ToC: backend decision, startup permission, sync, search mapping, automatic switching and notification, and relation to existing designs.",
+  "references": [
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-001_system-overview.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 2,
+      "recorded_content_hash": "1468229e4b8e",
+      "recorded_path": "DES-001_system-overview.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3da82gspdp44",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 3,
+      "recorded_content_hash": "3a9861334737",
+      "recorded_path": "DES-002_execution-responsibilities.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-anz9vack2xzt",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-003_data-model.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 4,
+      "recorded_content_hash": "aebbc925440f",
+      "recorded_path": "DES-003_data-model.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-yqqrwtycr379",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-004_state-machines.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 5,
+      "recorded_content_hash": "d3b39867775c",
+      "recorded_path": "DES-004_state-machines.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3f92k3tz4rew",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-004_state-machines.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "d3b39867775c",
+      "recorded_path": "DES-004_state-machines.md#6-doc-dbの同期の実行-dlid-qxveh3z6rq85",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3f92k3tz4rew",
+      "target_section_id": "DLID-qxveh3z6rq85"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-005_indexing.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 6,
+      "recorded_content_hash": "189c8ffcc88b",
+      "recorded_path": "DES-005_indexing.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dgphqw70rkpz",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-006_search.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 7,
+      "recorded_content_hash": "10973b6b4341",
+      "recorded_path": "DES-006_search.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-nnbgpzkkm5vq",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/design/DES-010_skill-composition.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "document",
+      "position": 8,
+      "recorded_content_hash": "e6cd2ff8b7ec",
+      "recorded_path": "DES-010_skill-composition.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-7e90gq3sdncc",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/requirement/REQ-004_search.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "document",
+      "position": 0,
+      "recorded_content_hash": "3dee26a7c09a",
+      "recorded_path": "../requirement/REQ-004_search.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-h96208rqr773",
+      "target_section_id": null
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T09:45:33+00:00",
+        "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "document",
+      "position": 1,
+      "recorded_content_hash": "3a6cc3bcee23",
+      "recorded_path": "../requirement/REQ-006_backend-switch.md",
+      "source_section_id": null,
+      "target_doc_id": "DLID-emxm9mx5a4d2",
+      "target_section_id": null
+    }
+  ],
+  "sections": [
+    {
+      "content_hash": "017facc8cd2ebf3f888417585373157d9d4cdbe37a61506180030dce5258b07f",
+      "heading": "7.1 検索前検査",
+      "position": 15,
+      "section_id": "DLID-h87td10ebpf7"
+    },
+    {
+      "content_hash": "13a8375a842e26012e81af44cba988c28faa4fda879728ff02f472cae9171740",
+      "heading": "5.4 同期の状態遷移",
+      "position": 12,
+      "section_id": "DLID-4ejebw3d2t3m"
+    },
+    {
+      "content_hash": "266c58e9e4a2c237580f65913c63ac6229dd60bd3a2c17fc2063ad844583ff73",
+      "heading": "11. 既存の設計との関係",
+      "position": 22,
+      "section_id": "DLID-6j0cdp7b5cs4"
+    },
+    {
+      "content_hash": "2d3565941a5eb62c761045693d028b64ca06ae58e9ca0fcccd7ac68a698bac74",
+      "heading": "7.4 検索結果の契約",
+      "position": 18,
+      "section_id": "DLID-tg62wwpqbmsy"
+    },
+    {
+      "content_hash": "3008a6abe14aa9964e7c1b7e08fe88e4a944bcb37e3e92e6f4138f61e1ea9708",
+      "heading": "2.3 失敗の分類",
+      "position": 5,
+      "section_id": "DLID-2fn0zmfkgx72"
+    },
+    {
+      "content_hash": "36d8dfc4b020c691655f857697d8f20c226b26102a97cd11c190d19d5b95db7c",
+      "heading": "8. 自動切り替えと通知",
+      "position": 19,
+      "section_id": "DLID-dgcb7xq6remn"
+    },
+    {
+      "content_hash": "485de29a0f9901b7353749c8b5b77aea835fc77bfb6872c9817d0ee755009d7b",
+      "heading": "7.3 結果の対応づけ",
+      "position": 17,
+      "section_id": "DLID-4w03dr7n3397"
+    },
+    {
+      "content_hash": "5b1d31638cd4691a4546246525cbdc35e5e3bbd238d5c7fed784ab5cf8fe0721",
+      "heading": "2.2 [doc-db]への接続と起動",
+      "position": 4,
+      "section_id": "DLID-c065g6m6p3zk"
+    },
+    {
+      "content_hash": "5ea7d5746fbb329cd6ddc3368a4d2fd3b55c8910a802b10f99740939b1ca4548",
+      "heading": "5.1 一覧の作成",
+      "position": 9,
+      "section_id": "DLID-xr38wnx30z05"
+    },
+    {
+      "content_hash": "5fad1aa11c5ad7599569b8390b340f45ea57c7ebbb78acb32270bce312e28966",
+      "heading": "1. 境界と構成",
+      "position": 1,
+      "section_id": "DLID-313cqdcx2dhv"
+    },
+    {
+      "content_hash": "6110d9ee5b6c4fc24c33d3b3fa435ed38e1ec58c9889ddaead3ecec7afecf2d3",
+      "heading": "DES-011 検索基盤の切り替え設計",
+      "position": 0,
+      "section_id": "DLID-xvm8ab2ag0te"
+    },
+    {
+      "content_hash": "637b235dda18cb39a2cad0a060c69b68ce1ea65a772f7892d5d58e87c32d3ba6",
+      "heading": "9. 検査・解決の SKILL",
+      "position": 20,
+      "section_id": "DLID-fa8b68px7c38"
+    },
+    {
+      "content_hash": "673fdc9b8c3d958f4130964ac23fc4d4a32e249438c3b1e5d096f2dbf5d1e95d",
+      "heading": "10. 導入・起動・OpenAI の認証情報",
+      "position": 21,
+      "section_id": "DLID-qw5hyw9agt2s"
+    },
+    {
+      "content_hash": "6abcb1da99036abcbc6a77d0d3237bf004c7a749ea370e7614836f51b2167c0e",
+      "heading": "6. 構築（`index-docs`）",
+      "position": 13,
+      "section_id": "DLID-bxb28mdy9mv6"
+    },
+    {
+      "content_hash": "7aec69a125865b02423d7f5d9c796d645c3ef6fa6dd734af3bd7e47a80dc7376",
+      "heading": "4. [doc-db]での識別",
+      "position": 7,
+      "section_id": "DLID-h0y83t7mgczc"
+    },
+    {
+      "content_hash": "7dbed611aec4a0baee79308bee4bd2be7b9b10ec80fd3dccdacde0f63393352b",
+      "heading": "2. 基盤判定",
+      "position": 2,
+      "section_id": "DLID-1m0mz21ac6eg"
+    },
+    {
+      "content_hash": "818ca5fe9380e2521844942cf55aaf3a7266ba6557d9b2e83ffca9a9d9d9533a",
+      "heading": "7. 検索（`query-docs`）",
+      "position": 14,
+      "section_id": "DLID-2g8yj5b314bg"
+    },
+    {
+      "content_hash": "874dbcf330b27bec9c6bd9fb21c89ef4ea8983fc8f4a4dcae3a25d90b425c499",
+      "heading": "2.1 強制スイッチの設定ファイル",
+      "position": 3,
+      "section_id": "DLID-mrgdxghyajjc"
+    },
+    {
+      "content_hash": "8900909946d44e2facbb5343ac582f3c20bba66c430095a63855982eb2974f0e",
+      "heading": "12. 未決事項と未確認",
+      "position": 23,
+      "section_id": "DLID-qjv0z5ns32e2"
+    },
+    {
+      "content_hash": "8a542ef644d8c0ee5b1f6a75ba648a6bf3d72ff80608b0da3dcd0d7c13e2c693",
+      "heading": "7.2 [doc-db]の検索",
+      "position": 16,
+      "section_id": "DLID-kgetcnfk06tn"
+    },
+    {
+      "content_hash": "97ede572efb725c2a615c2d9a2eae531b28814c87824312c6a20b3947a5f3a78",
+      "heading": "3. 管理状態",
+      "position": 6,
+      "section_id": "DLID-k163mb7mp4bt"
+    },
+    {
+      "content_hash": "a3bf72003088d707a8b0d77490d54fb927bab031b07aaafe85ac6e9b61fc800e",
+      "heading": "5.3 完了の判定",
+      "position": 11,
+      "section_id": "DLID-ta6dd1atk12j"
+    },
+    {
+      "content_hash": "ad591b0340ef7d70c2fffca9200e121528191e18d481661f0c4be051ac2cbe44",
+      "heading": "5. [doc-db]の同期",
+      "position": 8,
+      "section_id": "DLID-d7rhtwt0669r"
+    },
+    {
+      "content_hash": "d3900467da6b3f9b716602d88ccb47b8e62b2d5de4ed147e9a47e28e2a9d3d46",
+      "heading": "5.2 同期の実行",
+      "position": 10,
+      "section_id": "DLID-gtfn20gdckza"
+    }
+  ],
+  "summary": [
+    "Boundary between backend-independent and backend-dependent parts",
+    "Backend decision: force switch config file, doc-db connection and startup with user permission, failure classification",
+    "Management state: AI generated fields can be unfilled; no doc-db sync record is kept",
+    "doc-db identification: KEY, series, path, and local_path rules",
+    "doc-db sync: list creation, execution, completion judgment, state transitions",
+    "Build and search flows per backend, pre-search check, mapping of doc-db results to documents and sections, result contract",
+    "Automatic switch notification items generated by script",
+    "Unchanged check and resolve SKILLs, setup and OpenAI credential handling, relation to existing designs, open and unconfirmed items"
+  ],
+  "tasks": [
+    "Implementing backend decision and doc-db connection or startup",
+    "Implementing doc-db sync and search result mapping",
+    "Changing index-docs or query-docs behavior by backend",
+    "Designing failure handling and fallback to ToC",
+    "Writing the force switch config file handling",
+    "Reviewing consistency with REQ-006 and existing designs"
+  ],
+  "title": "DES-011 検索基盤の切り替え設計"
+}

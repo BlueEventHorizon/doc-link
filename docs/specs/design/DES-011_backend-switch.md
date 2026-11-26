@@ -354,4 +354,4 @@ sequenceDiagram
 [des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
 [des-006]: DES-006_search.md "10973b6b4341 DLID-nnbgpzkkm5vq"
 [des-010]: DES-010_skill-composition.md "e6cd2ff8b7ec DLID-7e90gq3sdncc"
-[des-004-sec-6]: DES-004_state-machines.md#6-doc-dbの同期の実行-dlid-qxveh3z6rq85 "d3b39867775c DLID-qxveh3z6rq85"
+[des-004-sec-6]: DES-004_state-machines.md#6-doc-dbの同期の実行-dlid-qxveh3z6rq85 "a0d91293f3dd DLID-qxveh3z6rq85"

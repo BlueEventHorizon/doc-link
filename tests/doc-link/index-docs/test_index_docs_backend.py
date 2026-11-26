@@ -90,7 +90,7 @@ class Base(unittest.TestCase):
         target.write_bytes(text.encode("utf-8"))
 
     def decide_with(self, decision):
-        def decide(root):
+        def decide(root, startup=None):
             self.decisions.append(decision)
             return decision
 
@@ -365,7 +365,7 @@ class SettingTest(Base):
             ["config.json"],
         )
 
-    def test_there_is_no_per_call_override(self):
+    def test_there_is_no_per_call_override_of_the_forced_switch(self):
         code = None
         with self.assertRaises(SystemExit) as raised:
             with contextlib.redirect_stderr(io.StringIO()):
@@ -373,6 +373,96 @@ class SettingTest(Base):
                     ["advance", "--key", "k", "--paths", "a.md", "--backend", "toc"]
                 )
         self.assertEqual(raised.exception.code, 2)
+
+
+#: 他のテストが `decide` を差し替える前の、実物
+REAL_DECIDE = backend_select.decide
+
+
+class StartupPermissionTest(Base):
+    """AC-047: 接続できないとき、利用者の許可を得てから起動する。許可の前は、構築しない。"""
+
+    def use_real_decide(self, availability):
+        self.allowed = []
+
+        def provider(allow_startup=False):
+            self.allowed.append(allow_startup)
+            return availability
+
+        def decide(root, startup=None):
+            return REAL_DECIDE(root, provider, startup)
+
+        patcher = mock.patch.object(backend_select, "decide", side_effect=decide)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def required(self):
+        return docdb_runtime.Availability(
+            docdb_runtime.STATUS_STARTUP_REQUIRED,
+            "not_attempted",
+            detail="接続できない",
+        )
+
+    def test_without_an_answer_it_asks_and_writes_nothing(self):
+        self.use_real_decide(self.required())
+        code, result = self.advance()
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["action"], "confirm_docdb_startup")
+        self.assertEqual(
+            [o["argument"] for o in result["options"]],
+            ["--docdb-startup start", "--docdb-startup toc"],
+        )
+        self.assertEqual(self.allowed, [False])
+        self.assertFalse((self.root / ".doc-link").exists())
+
+    def test_the_permission_starts_and_the_build_uses_doc_db(self):
+        client = FakeDocDb()
+        self.use_real_decide(
+            docdb_runtime.Availability(
+                docdb_runtime.STATUS_AVAILABLE, "succeeded", client=client
+            )
+        )
+        code, result = self.advance("--docdb-startup", "start")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(self.allowed, [True])
+        self.assertEqual((result["action"], result["backend"]), ("done", "doc-db"))
+        self.assertEqual(result["startup"], "succeeded")
+
+    def test_a_failed_start_stops_without_building_or_switching(self):
+        self.use_real_decide(
+            docdb_runtime.Availability(
+                docdb_runtime.STATUS_UNAVAILABLE,
+                "failed",
+                docdb_runtime.CAUSE_RECONNECT_FAILED,
+                "10 秒以内に接続できなかった",
+            )
+        )
+        code, result = self.advance("--docdb-startup", "start")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["action"], "docdb_startup_failed")
+        self.assertEqual(result["cause"], "reconnect_failed")
+        self.assertNotIn("backend_switch", result)
+        self.assertFalse((self.root / ".doc-link").exists())
+
+    def test_declining_builds_as_toc_with_the_notice(self):
+        self.use_real_decide(self.required())
+        code, result = self.advance("--docdb-startup", "toc")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(self.allowed, [])
+        self.assertEqual(result["action"], "invoke_toc_updater")
+        self.assertEqual(result["backend"], "toc")
+        self.assertEqual(
+            result["backend_switch"]["reason_code"], "docdb_startup_declined"
+        )
+        code, done = self.complete_generation(result)
+        self.assertEqual(
+            done["backend_switch"]["reason_code"], "docdb_startup_declined"
+        )
+
+    def test_the_answer_is_refused_on_a_continued_build(self):
+        code, result = self.advance("--build-id", "x", "--docdb-startup", "start")
+        self.assertEqual(code, 1)
+        self.assertIn("--docdb-startup", result["errors"][0])
 
 
 if __name__ == "__main__":

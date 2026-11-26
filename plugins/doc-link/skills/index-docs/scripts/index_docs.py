@@ -21,9 +21,16 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 ## 検索基盤（DES-011、REQ-006）
 
 `advance` は、構築の入口で[検索基盤]を決める（`backend_select`。設定ファイル `.doc-link/config.json` の `backend` と、
-[doc-db]への接続の可否）。呼び出しごとの指定（引数）は無い。
+[doc-db]への接続の可否）。[強制スイッチ]の呼び出しごとの指定（引数）は無い。
 
-- `toc`（強制スイッチ、または[doc-db]に接続できず[自動切り替え]した）: 現在の構築のとおり、`toc-updater` に[AI 生成
+[doc-db]に接続できないとき（実行ファイルはある）、script は[doc-db]を起動せずに止まり、`action` が `confirm_docdb_startup`
+（利用者に、起動してよいかを聞く）の結果を返す（終了コード 0。何も書き込まない）。利用者の回答は、build-id を付けない
+最初の呼び出しの `--docdb-startup` で渡す。`start` は起動してよい（期限付きの再接続）、`toc` は起動せず今回は[ToC]で続ける。
+許可を得て起動したのに接続できなかったときは、切り替えずに `action` が `docdb_startup_failed`（起動できなかったこと・原因の
+分類・起動の command・選択肢）の結果を返す。実行ファイルが無い・[doc-db]の設定から `port` を得られないときは、起動できない
+ので、許可を求めずに[ToC]へ切り替える。
+
+- `toc`（強制スイッチ、または[doc-db]を使えず[自動切り替え]・利用者の選択で切り替えた）: 現在の構築のとおり、`toc-updater` に[AI 生成
   フィールド]を作らせる。[doc-db]へ触れない。切り替えたときは、`backend_switch` に通知を持つ
 - `doc-db`: 機械取得の構築（B-01〜B-07）だけを行い、[AI 生成フィールド]は作らない（`update_plan.apply_unfilled`。
   候補の検査は[文書情報]の[内容ハッシュ]を求めない）。[確定 ToC]を公開した後、[doc-db]の同期（`docdb_sync`）を行う。
@@ -271,6 +278,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     advance.add_argument("--project-root", default=os.getcwd())
     advance.add_argument("--build-id", default=None)
+    advance.add_argument(
+        "--docdb-startup",
+        choices=backend_select.STARTUP_CHOICES,
+        default=None,
+        help="doc-db に接続できないときの利用者の回答（start＝起動してよい、toc＝今回は ToC で続ける）。build-id なしの呼び出しだけで使う",
+    )
     target_spec.add_target_arguments(advance)
 
     submit = subcommands.add_parser("submit", help="生成結果を 1 文書分ずつ差し込む")
@@ -1131,13 +1144,22 @@ def advance(args: argparse.Namespace) -> int:
     try:
         decision = None
         if args.build_id is not None:
+            if args.docdb_startup is not None:
+                raise Rejected(
+                    [
+                        "--docdb-startup は、--build-id を付けない最初の呼び出しだけで指定できる"
+                    ]
+                )
             build = _load_build(root, args.build_id, toc_key, spec)
             info = _info_from_build(build)
         else:
             try:
-                decision = backend_select.decide(root)
+                decision = backend_select.decide(root, startup=args.docdb_startup)
             except backend_config.BackendConfigError as exc:
                 raise Rejected(exc.errors) from exc
+            if decision.pending is not None:
+                # 利用者の回答を待つ。構築しない（何も書き込まない）
+                return _emit(decision.pending.to_dict(), script_output.EXIT_OK)
             info = decision.to_dict()
         backend = info["backend"]
         expansion, changes, plan = _prepare(root, spec, toc_key, session, True, backend)

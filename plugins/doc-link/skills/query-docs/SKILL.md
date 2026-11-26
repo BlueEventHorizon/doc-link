@@ -11,11 +11,10 @@ description: タスクに関連する文書を ToC（確定 ToC）から探し�
 
 ## 検索基盤
 
-検索前検査の script が、検索基盤（doc-db か ToC）を決める。決めるのは、設定ファイル（`.doc-link/config.json` の `backend`。`"auto"` か `"toc"`。無ければ `"auto"`）と、doc-db への接続の可否である。呼び出しごとの指定（引数）は無い。`"auto"` のとき、doc-db に接続できなければ、script が doc-db を起動して再接続を試みる（停止・常駐化はしない）。
+検索前検査の script が、検索基盤（doc-db か ToC）を決める。決めるのは、設定ファイル（`.doc-link/config.json` の `backend`。`"auto"` か `"toc"`。無ければ `"auto"`）と、doc-db への接続の可否である。強制スイッチの呼び出しごとの指定（引数）は無い。`"auto"` のとき、doc-db に接続できなければ、script は doc-db を起動せずに止まる（手順 2 の `confirm_docdb_startup`）。利用者が許可したときだけ、doc-db を起動して再接続を試みる（停止・常駐化はしない）。
 
 - doc-db を使うとき: script が、doc-db を最新に同期して検索し、結果を返す（`query-worker` を使わない）。結果の `relevance` はすべて `maybe` で、doc-db の検索は上位の結果に限られる。文書が古ければ、二択を示さず、再構築してから検索する（手順 2 の `rebuild_required`）
-- ToC を使うとき（設定で強制、または doc-db を使えず切り替えた）: 現在のとおり、`query-worker` が文書を読んで検索する
-- doc-db は、サンドボックスの外で起動・常駐させておく前提である。サンドボックスの下の Claude Code から使うと、doc-db の OpenAI への通信が失敗し、ToC へ切り替わる。サンドボックスの扱いを自分で変えない（設定を変えない、無効にしない）。サンドボックスの制限に当たったら、止めて、その旨を報告する
+- ToC を使うとき（設定で強制、doc-db を使えず切り替えた、または利用者が今回は ToC で続けることを選んだ）: 現在のとおり、`query-worker` が文書を読んで検索する
 - 結果の `backend`・`backend_switch` を、呼び出し元へ返す。`backend_switch` が `null` でないときは、切り替えが起きている。その `notice` を、そのまま利用者へ伝える（理由・原因・影響・次の実行の扱いを、自分で書き足さない・言い換えて補わない）
 
 ## 引数
@@ -43,6 +42,16 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/query_docs.py" prepare --project-ro
 - 終了コードが 1 のときは、検索を停止し、標準出力の `errors` をそのまま呼び出し元へ返す。旧版（既存の ToC）で検索する選択肢を出さない。再構築後も一致しないときも同じである。設定ファイルを受理できないとき、doc-db の失敗（接続できない・OpenAI の失敗以外）も、ここである（切り替えない）
 
 ### 2. `action` で分ける
+
+`confirm_docdb_startup`（doc-db に接続できず、起動していない）
+
+- 検索しない（検索前検査もしていない）。返った `question` と `options` を、AskUserQuestion で利用者に確認する。選択肢は「doc-db を起動する」と「今回は ToC で続ける」である。理由・原因を自分で書き足さない
+- 利用者の選択を、そのまま `--docdb-startup` に渡し（`options` の `argument`）、手順 1 の `prepare` を、同じ引数でやり直す。選択を推測して決めない。利用者が選ばずに終えたときは、検索せずに終える。利用者に確認できない文脈（`AskUserQuestion` を使えないなど）では、起動も ToC への切り替えも自分で決めず、質問と選択肢を呼び出し元へ返して終える
+
+`docdb_startup_failed`（許可を得て起動したが、接続できなかった）
+
+- 検索しない。返った `message`（起動できなかったこと・原因の分類・起動の command）を、そのまま利用者へ伝え、AskUserQuestion で「起動してやり直す」か「今回は ToC で続ける」かを確認する。原因を断定しない・自分で書き足さない
+- 「起動してやり直す」は、利用者が `command` で doc-db を起動した後に、`--docdb-startup` を付けずに `prepare` をやり直す。「今回は ToC で続ける」は、`options` の `argument` を付けて、やり直す
 
 `initial_build_required`（未構築）
 

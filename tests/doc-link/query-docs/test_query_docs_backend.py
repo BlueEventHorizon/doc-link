@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import backend_select  # noqa: E402
 import docdb_client  # noqa: E402
+import docdb_runtime  # noqa: E402
 import state_store  # noqa: E402
 from test_query_docs import (  # noqa: E402
     A_TEXT,
@@ -59,6 +60,10 @@ class FakeDocDb:
         if self.query_error is not None:
             raise self.query_error
         return self.query_response
+
+
+#: 他のテストが `decide` を差し替える前の、実物
+REAL_DECIDE = backend_select.decide
 
 
 def hit(path, heading_path="", score=0.9):
@@ -445,6 +450,91 @@ class SettingTest(Base):
         self.assertEqual(code, 1)
         self.assertIn(".doc-link/config.json", result["errors"][0])
         self.assertNotIn("search_id", result)
+
+
+class StartupPermissionTest(Base):
+    """AC-047: 接続できないとき、利用者の許可を得てから起動する。許可の前は、検索前検査も検索もしない。"""
+
+    def use_real_decide(self, availability):
+        self.allowed = []
+
+        def provider(allow_startup=False):
+            self.allowed.append(allow_startup)
+            return availability
+
+        def decide(root, startup=None):
+            return REAL_DECIDE(root, provider, startup)
+
+        patcher = mock.patch.object(backend_select, "decide", side_effect=decide)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def required(self):
+        return docdb_runtime.Availability(
+            docdb_runtime.STATUS_STARTUP_REQUIRED,
+            "not_attempted",
+            detail="接続できない",
+        )
+
+    def test_without_an_answer_it_asks_and_neither_checks_nor_searches(self):
+        self.build()
+        self.use_real_decide(self.required())
+        before = sorted(p for p in self.root.rglob("*") if p.is_file())
+        code, result = self.prepare()
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["action"], "confirm_docdb_startup")
+        self.assertEqual(result["command"], "doc-db")
+        self.assertNotIn("search_id", result)
+        self.assertEqual(self.allowed, [False])
+        self.assertEqual(before, sorted(p for p in self.root.rglob("*") if p.is_file()))
+
+    def test_the_permission_is_passed_on_and_a_started_doc_db_is_used(self):
+        self.build()
+        client = FakeDocDb(query={"results": [hit("a.md")]})
+        self.use_real_decide(
+            docdb_runtime.Availability(
+                docdb_runtime.STATUS_AVAILABLE, "succeeded", client=client
+            )
+        )
+        code, result = self.prepare("--docdb-startup", "start")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(self.allowed, [True])
+        self.assertEqual(
+            (result["action"], result["startup"]), ("docdb_result", "succeeded")
+        )
+
+    def test_a_failed_start_stops_with_the_cause_and_does_not_switch(self):
+        self.build()
+        self.use_real_decide(
+            docdb_runtime.Availability(
+                docdb_runtime.STATUS_UNAVAILABLE,
+                "failed",
+                docdb_runtime.CAUSE_EXITED_EARLY,
+                "終了コード 1",
+            )
+        )
+        code, result = self.prepare("--docdb-startup", "start")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["action"], "docdb_startup_failed")
+        self.assertEqual(result["cause"], "exited_early")
+        self.assertNotIn("backend_switch", result)
+
+    def test_declining_continues_as_toc_with_the_notice_and_never_connects(self):
+        self.build()
+        self.use_real_decide(self.required())
+        code, result = self.prepare("--docdb-startup", "toc")
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["backend"], "toc")
+        self.assertEqual(
+            result["backend_switch"]["reason_code"], "docdb_startup_declined"
+        )
+        self.assertEqual(self.allowed, [])
+
+    def test_an_unknown_answer_is_refused(self):
+        self.build()
+        with self.assertRaises(SystemExit):
+            with mock.patch("sys.stderr"):
+                self.prepare("--docdb-startup", "yes")
 
 
 if __name__ == "__main__":

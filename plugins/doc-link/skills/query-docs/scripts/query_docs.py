@@ -17,8 +17,12 @@
 ## 検索基盤（DES-011、REQ-006）
 
 `prepare` は、検索前検査の前に、[検索基盤]を決める（`backend_select`。設定ファイル `.doc-link/config.json` の `backend` と、
-[doc-db]への接続の可否。接続できなければ[doc-db]を起動する）。呼び出しごとの指定（引数）は無い。設定ファイルを受理できない
-ときは、検索せず、終了コード 1 で原因を返す。結果は、`backend`・`forced`・`startup`・`backend_switch`（切り替えが無ければ
+[doc-db]への接続の可否）。[強制スイッチ]の呼び出しごとの指定（引数）は無い。設定ファイルを受理できないときは、検索せず、
+終了コード 1 で原因を返す。[doc-db]に接続できないとき（実行ファイルはある）は、[doc-db]を起動せずに止まり、`action` が
+`confirm_docdb_startup`（利用者に、起動してよいかを聞く）の結果を返す（終了コード 0。何も書き込まない）。利用者の回答は
+`--docdb-startup`（`start`＝起動してよい、`toc`＝今回は[ToC]で続ける）で渡して、`prepare` をやり直す。許可を得て起動した
+のに接続できなかったときは、切り替えずに `action` が `docdb_startup_failed`（起動できなかったこと・原因の分類・起動の
+command・選択肢）の結果を返す。実行ファイルが無い・[doc-db]の設定から `port` を得られないときは、許可を求めずに[ToC]へ切り替える。結果は、`backend`・`forced`・`startup`・`backend_switch`（切り替えが無ければ
 `null`。あれば `notice` に、AI が利用者へ伝える通知の文）を持つ。
 
 ## 呼び出し方
@@ -115,6 +119,12 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--project-root", default=os.getcwd())
     prepare.add_argument("--task", required=True)
     prepare.add_argument("--choice", choices=search_prepare.CHOICES, default=None)
+    prepare.add_argument(
+        "--docdb-startup",
+        choices=backend_select.STARTUP_CHOICES,
+        default=None,
+        help="doc-db に接続できないときの利用者の回答（start＝起動してよい、toc＝今回は ToC で続ける）",
+    )
     target_spec.add_target_arguments(prepare)
 
     collect = subcommands.add_parser("collect", help="結果を検査して返し、後始末する")
@@ -164,9 +174,12 @@ def _parse_search_target(args: argparse.Namespace, root: Path):
 def _prepare(args: argparse.Namespace, root: Path) -> int:
     toc_key, spec = _parse_search_target(args, root)
     try:
-        decision = backend_select.decide(root)
+        decision = backend_select.decide(root, startup=args.docdb_startup)
     except backend_config.BackendConfigError as exc:
         raise search_prepare.SearchError(exc.errors) from exc
+    if decision.pending is not None:
+        # 利用者の回答を待つ。検索前検査・検索をしない（何も書き込まない）
+        return script_output.emit_result(decision.pending.to_dict())
     return script_output.emit_result(
         search_prepare.prepare(root, toc_key, spec, args.task, args.choice, decision)
     )

@@ -17,11 +17,10 @@ description: ToC（確定 ToC）を構築・再構築する。対象の文書の
 
 ## 検索基盤
 
-構築の入口の script が、検索基盤（doc-db か ToC）を決める。決めるのは、設定ファイル（`.doc-link/config.json` の `backend`。`"auto"` か `"toc"`。無ければ `"auto"`）と、doc-db への接続の可否である。呼び出しごとの指定（引数）は無い。`"auto"` のとき、doc-db に接続できなければ、script が doc-db を起動して再接続を試みる（停止・常駐化はしない）。
+構築の入口の script が、検索基盤（doc-db か ToC）を決める。決めるのは、設定ファイル（`.doc-link/config.json` の `backend`。`"auto"` か `"toc"`。無ければ `"auto"`）と、doc-db への接続の可否である。強制スイッチの呼び出しごとの指定（引数）は無い。`"auto"` のとき、doc-db に接続できなければ、script は doc-db を起動せずに止まる（手順 1 の `confirm_docdb_startup`）。利用者が許可したときだけ、doc-db を起動して再接続を試みる（停止・常駐化はしない）。
 
 - doc-db を使うとき: script は、機械取得の構築（手順 1〜3 の流れ）だけを行い、AI 生成フィールドを作らない（`toc-updater` を起動しない）。確定した後、doc-db を同期する
-- ToC を使うとき（設定で強制、または doc-db を使えず切り替えた）: 現在のとおり、`toc-updater` が AI 生成フィールドを作る
-- doc-db は、サンドボックスの外で起動・常駐させておく前提である。サンドボックスの下の Claude Code から使うと、doc-db の OpenAI への通信が失敗し、ToC へ切り替わる。サンドボックスの扱いを自分で変えない（設定を変えない、無効にしない）。サンドボックスの制限に当たったら、止めて、その旨を報告する
+- ToC を使うとき（設定で強制、doc-db を使えず切り替えた、または利用者が今回は ToC で続けることを選んだ）: 現在のとおり、`toc-updater` が AI 生成フィールドを作る
 - 結果の `backend`（`doc-db` か `toc`）・`forced`・`startup`・`backend_switch` を、報告に含める。`backend_switch` が `null` でないときは、切り替えが起きている。その `notice` を、そのまま利用者へ伝える（理由・原因・影響・次の実行の扱いを、自分で書き足さない・言い換えて補わない）
 
 ## 手順
@@ -46,6 +45,8 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/index_docs.py" advance --project-ro
 ```
 
 - 終了コードが 0 のときは、標準出力の JSON の `action` に従う（手順 2・3）。`backend_switch` があれば、その `notice` を利用者へ伝える
+- `action` が `confirm_docdb_startup` のとき（doc-db に接続できず、起動していない。構築はまだ始まっていない）は、返った `question` と `options` を、AskUserQuestion で利用者に確認する。選択肢は「doc-db を起動する」と「今回は ToC で続ける」である。理由・原因を自分で書き足さない。利用者の選択を、そのまま `--docdb-startup` に渡し（`options` の `argument`）、同じ呼び出し（`build_id` なし）をやり直す。選択を推測して決めない。利用者が選ばずに終えたときは、構築せずに終える。利用者に確認できない文脈（`AskUserQuestion` を使えないなど）では、起動も ToC への切り替えも自分で決めず、質問と選択肢を呼び出し元へ返して終える
+- `action` が `docdb_startup_failed` のとき（許可を得て起動したが、接続できなかった。構築はまだ始まっていない）は、返った `message`（起動できなかったこと・原因の分類・起動の command）を、そのまま利用者へ伝え、AskUserQuestion で「起動してやり直す」か「今回は ToC で続ける」かを確認する。原因を断定しない・自分で書き足さない。「起動してやり直す」は、利用者が `command` で doc-db を起動した後に、`--docdb-startup` なしで同じ呼び出しをやり直す。「今回は ToC で続ける」は、`options` の `argument` を付けて、やり直す
 - 終了コードが 3 のときは、構築が失敗している。手順 4 へ進む
 - 終了コードが 4 のときは、doc-db を使う構築で、確定 ToC は確定したが、doc-db の同期が障害で失敗している。手順 4 の後半へ進む
 - それ以外（1）のときは、標準出力の `errors` をそのまま利用者へ報告して終える。対象指定を直して再実行できる。設定ファイルを受理できないときも、ここである（`errors` に、ファイルと箇所）

@@ -107,6 +107,27 @@ class EnsureAvailableTest(unittest.TestCase):
         self.assertEqual(result.startup, rt.STARTUP_FAILED)
         self.assertEqual(self.spawned, [])
 
+    def test_without_permission_it_does_not_start_and_asks(self):
+        # 起動の許可が無いときは、実行ファイルがあっても起動しない
+        result = self.run_ensure([refused()], allow_startup=False)
+        self.assertFalse(result.available)
+        self.assertEqual(result.status, rt.STATUS_STARTUP_REQUIRED)
+        self.assertEqual(result.startup, rt.STARTUP_NOT_ATTEMPTED)
+        self.assertEqual(self.spawned, [])
+
+    def test_without_permission_a_running_doc_db_is_still_used(self):
+        result = self.run_ensure([None], allow_startup=False)
+        self.assertTrue(result.available)
+        self.assertEqual(result.startup, rt.STARTUP_NOT_ATTEMPTED)
+
+    def test_without_permission_a_missing_executable_is_not_a_question(self):
+        # 起動できないので、許可を求めても意味が無い
+        result = self.run_ensure(
+            [refused()], which=lambda name: None, allow_startup=False
+        )
+        self.assertEqual(result.status, rt.STATUS_UNAVAILABLE)
+        self.assertEqual(result.cause, rt.CAUSE_EXECUTABLE_MISSING)
+
     def test_a_spawn_failure_is_reported(self):
         def failing(executable):
             raise PermissionError("denied")

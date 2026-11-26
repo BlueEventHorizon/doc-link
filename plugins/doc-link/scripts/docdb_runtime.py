@@ -1,12 +1,13 @@
-"""[doc-db]の利用の可否を確定する（接続の確認 → その場での起動 → 期限付きの再接続）。
+"""[doc-db]の利用の可否を確定する（接続の確認 → 利用者の許可を得た起動 → 期限付きの再接続）。
 
-DES-011 §2.2、REQ-006 FR-027・AC-047（D-071）を実装する。入口 script ではないので、PEP 723 とロックは持たない。
-`ensure_available()` を 1 回呼び、返った `Availability` の `status` だけで次を決める。
+DES-011 §2.2、REQ-006 FR-027・AC-047 を実装する。入口 script ではないので、PEP 723 とロックは持たない。
+`ensure_available(allow_startup=...)` を 1 回呼び、返った `Availability` の `status` だけで次を決める。
 
-| `status`      | 意味                                           | 呼び出し側の動作                             |
-| ------------- | ---------------------------------------------- | -------------------------------------------- |
-| `available`   | MCP のセッションを確立した（`client` を持つ）  | その client で操作する                       |
-| `unavailable` | 起動しても接続できなかった                     | 接続できない (a) として[ToC]へ切り替える     |
+| `status`           | 意味                                                                                   | 呼び出し側の動作                                     |
+| ------------------ | -------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `available`        | MCP のセッションを確立した（`client` を持つ）                                          | その client で操作する                               |
+| `startup_required` | 接続できず、実行ファイルはある。起動の許可が無い（`allow_startup` が偽）ので起動しない | 利用者に起動の許可を求める（DES-011 §2.2）           |
+| `unavailable`      | 接続できず、起動できない（実行ファイル無し・設定無し）、または起動しても接続できない   | `cause` に従う（DES-011 §2.2。切り替えか、起動の失敗） |
 
 ## 判定の根拠は MCP の `initialize` の成否だけである
 
@@ -16,7 +17,11 @@ DES-011 §2.2、REQ-006 FR-027・AC-047（D-071）を実装する。入口 scrip
 
 ## 起動（要件 FR-027）
 
-接続できないとき、実行ファイル `doc-db` を実行ファイルの検索パスから解決し、新しいセッションで、引数なしで起動する。
+起動するのは、呼び出し側が利用者の許可を得たとき（`allow_startup` が真）だけである。許可が無いときは、接続できず、
+実行ファイルがあることを確かめたところで、起動せずに `startup_required` を返す。実行ファイルが無いときと、設定から
+`port` を得られないときは、起動できないので、許可を求めずに `unavailable` を返す。
+
+接続できないとき、許可があれば、実行ファイル `doc-db` を実行ファイルの検索パスから解決し、新しいセッションで、引数なしで起動する。
 標準入力・標準出力・標準エラーは切り離して破棄する（起動のログを出力に混ぜない。doc-link はログのファイルを作らない）。
 引数なしにするのは、ポートとログの出力先を[doc-db]自身の設定に任せるためである。起動したプロセスは、停止・再起動・
 監視をしない。OS の自動起動・サービスへの登録もしない。環境変数は、呼び出し元から引き継ぐ（doc-link は読まない）。
@@ -51,6 +56,7 @@ DOCDB_EXECUTABLE = "doc-db"
 
 STATUS_AVAILABLE = "available"
 STATUS_UNAVAILABLE = "unavailable"
+STATUS_STARTUP_REQUIRED = "startup_required"
 
 #: 起動の試行（結果の `startup`）
 STARTUP_NOT_ATTEMPTED = "not_attempted"  # 最初の接続で成功した。起動を試みていない
@@ -135,8 +141,12 @@ def ensure_available(
     deadline=RECONNECT_DEADLINE_SECONDS,
     interval=RECONNECT_INTERVAL_SECONDS,
     transport=None,
+    allow_startup=True,
 ) -> Availability:
-    """接続の確認 → 実行ファイルの解決 → 起動 → 期限付きの再接続を、この順に行う。"""
+    """接続の確認 → 実行ファイルの解決 → 起動 → 期限付きの再接続を、この順に行う。
+
+    `allow_startup` が偽のときは、実行ファイルを解決できたところで、起動せずに `startup_required` を返す。
+    """
     try:
         port = docdb_client.read_port(config_path)
     except docdb_client.PortUnavailable as exc:
@@ -175,6 +185,13 @@ def ensure_available(
         return unavailable(
             CAUSE_EXECUTABLE_MISSING,
             f"実行ファイル {DOCDB_EXECUTABLE} が検索パスに無い（接続も失敗した: {detail}）",
+        )
+    if not allow_startup:
+        return Availability(
+            STATUS_STARTUP_REQUIRED,
+            STARTUP_NOT_ATTEMPTED,
+            detail=f"接続できない（{detail}）",
+            port=port,
         )
     try:
         process = spawn(executable)

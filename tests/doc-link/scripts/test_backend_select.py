@@ -19,6 +19,12 @@ def available(startup="not_attempted"):
     )
 
 
+def startup_required(detail="接続できない（接続の失敗）"):
+    return docdb_runtime.Availability(
+        docdb_runtime.STATUS_STARTUP_REQUIRED, "not_attempted", detail=detail
+    )
+
+
 def unavailable(
     cause="executable_missing", detail="実行ファイル doc-db が検索パスに無い"
 ):
@@ -33,6 +39,7 @@ class DecideTest(unittest.TestCase):
         self.addCleanup(self._tmp.cleanup)
         self.root = Path(self._tmp.name)
         self.probes = 0
+        self.allowed = []
 
     def write_config(self, text):
         path = backend_config.config_path(self.root)
@@ -40,8 +47,9 @@ class DecideTest(unittest.TestCase):
         path.write_text(text, encoding="utf-8")
 
     def provider(self, result):
-        def provide():
+        def provide(allow_startup=False):
             self.probes += 1
+            self.allowed.append(allow_startup)
             return result
 
         return provide
@@ -87,6 +95,65 @@ class DecideTest(unittest.TestCase):
         self.assertEqual(decision.switch.reason_code, bs.REASON_UNREACHABLE)
         self.assertIn("executable_missing", decision.switch.cause)
         self.assertEqual(decision.startup, "failed")
+
+    def test_an_unreachable_doc_db_with_an_executable_stops_to_ask_for_permission(self):
+        # 起動の許可を得ていない。起動せず、構築・検索をしない
+        decision = bs.decide(self.root, self.provider(startup_required()))
+        self.assertIsNone(decision.backend)
+        self.assertIsNone(decision.switch)
+        self.assertEqual(self.allowed, [False])
+        data = decision.pending.to_dict()
+        self.assertEqual(data["action"], "confirm_docdb_startup")
+        self.assertEqual(data["command"], "doc-db")
+        self.assertEqual(
+            [(o["id"], o["argument"]) for o in data["options"]],
+            [("start", "--docdb-startup start"), ("toc", "--docdb-startup toc")],
+        )
+
+    def test_the_permission_to_start_is_passed_to_the_runtime(self):
+        bs.decide(self.root, self.provider(available("succeeded")), startup="start")
+        self.assertEqual(self.allowed, [True])
+
+    def test_declining_continues_as_toc_without_connecting(self):
+        decision = bs.decide(self.root, self.provider(available()), startup="toc")
+        self.assertEqual(decision.backend, bs.BACKEND_TOC)
+        self.assertFalse(decision.forced)
+        self.assertEqual(decision.switch.reason_code, bs.REASON_STARTUP_DECLINED)
+        self.assertEqual(self.probes, 0)
+        self.assertIn("今回は ToC", decision.switch.notice)
+
+    def test_a_failed_start_stops_without_switching_and_does_not_mention_the_sandbox(
+        self,
+    ):
+        for cause in ("exited_early", "spawn_failed", "reconnect_failed"):
+            with self.subTest(cause=cause):
+                decision = bs.decide(
+                    self.root,
+                    self.provider(unavailable(cause, "詳細")),
+                    startup="start",
+                )
+                self.assertIsNone(decision.backend)
+                self.assertIsNone(decision.switch)
+                data = decision.pending.to_dict()
+                self.assertEqual(data["action"], "docdb_startup_failed")
+                self.assertEqual(data["cause"], cause)
+                self.assertEqual(data["command"], "doc-db")
+                self.assertEqual([o["id"] for o in data["options"]], ["retry", "toc"])
+                self.assertIsNone(data["options"][0]["argument"])
+                text = str(data)
+                self.assertNotIn("sandbox", text.lower())
+                self.assertNotIn("サンドボックス", text)
+
+    def test_an_executable_that_does_not_exist_switches_even_with_permission(self):
+        decision = bs.decide(self.root, self.provider(unavailable()), startup="start")
+        self.assertEqual(decision.backend, bs.BACKEND_TOC)
+        self.assertEqual(decision.switch.reason_code, bs.REASON_UNREACHABLE)
+
+    def test_the_forced_switch_ignores_the_answer(self):
+        self.write_config('{"backend": "toc"}')
+        decision = bs.decide(self.root, self.provider(available()), startup="start")
+        self.assertTrue(decision.forced)
+        self.assertEqual(self.probes, 0)
 
     def test_the_decision_is_not_remembered(self):
         bs.decide(self.root, self.provider(unavailable()))

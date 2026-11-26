@@ -4,8 +4,6 @@ doc_link_id: DLID-pc44gkb54821
 
 # doc-link 要件定義書 — 参照と変更通知 DLID-yv3r915903qx
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005]
-
 <a id="sec-13"></a>
 
 ## 13. 文書参照とリンク検査 DLID-9nc60w1jj966
@@ -202,11 +200,6 @@ doc-link は、通知の状態を保存しない（D-038）。
 
 参照先の文書を、リンク先のパスが示すディレクトリから、今回の[Index 対象リスト]に含まれる別のディレクトリへ移動した場合、参照の検査が、移動先のパスを現在パスとして、パス不一致を返すこと。[Index 対象リスト]の外へ移動した場合は、移動先を示さず、不在を返すこと。同じ[DLID]を持つ文書が[Index 対象リスト]に複数ある場合は、重複を返し、現在パスを決めないこと。保存済みの[ToC]と管理状態の記録を、移動先の根拠にしないこと。
 
-[req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-005-sec-13-1]: REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73 "275305521655 DLID-5p5ms6a74w73"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-001-sec-3-1]: REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me "a1500a8117ce DLID-5e8mpztyp4me"

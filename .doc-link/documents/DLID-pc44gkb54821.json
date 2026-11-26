@@ -1,50 +1,35 @@
 {
-  "applied_hash": "762ad095b9648e5353e262ab8219453dd3140922d8c1c06ea83a2113a32a1577",
-  "content_hash": "762ad095b9648e5353e262ab8219453dd3140922d8c1c06ea83a2113a32a1577",
+  "applied_hash": "af6e940609a35802f45ae73df5a50166b8e186e439539bd600f16b341518244d",
+  "content_hash": "af6e940609a35802f45ae73df5a50166b8e186e439539bd600f16b341518244d",
   "doc_link_id": "DLID-pc44gkb54821",
   "keywords": [
-    "document reference",
-    "DLID",
+    "formal reference",
     "reference link definition",
     "content hash",
-    "link check",
-    "path mismatch",
-    "change impact candidates",
     "section ID",
-    "inconsistency check",
-    "detail file"
+    "check-links",
+    "check-impact",
+    "change impact candidates",
+    "path mismatch",
+    "inconsistency inspection",
+    "DLID"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T09:48:01+00:00",
+    "checked_at": "2026-11-26T13:48:51+00:00",
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-005_references.md",
-  "purpose": "Requirements for formal document references by document ID, link checking, path-fix notification, change-impact candidate notification, and inconsistency checks, including output split into counts and a detail file.",
+  "purpose": "Requirements for DLID-based document references, link checking, path-fix notification, section IDs, change impact candidates and notification, and inconsistency inspection, with acceptance criteria.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-001_overview.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 0,
-      "recorded_content_hash": "93356ddc0c6c",
-      "recorded_path": "REQ-001_overview.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-veg2nsjk8zw1",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 6,
+      "position": 1,
       "recorded_content_hash": "4ca9ecf3d971",
       "recorded_path": "REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8",
       "source_section_id": null,
@@ -53,13 +38,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 7,
+      "position": 2,
       "recorded_content_hash": "a1500a8117ce",
       "recorded_path": "REQ-001_overview.md#31-システム全体フロー-dlid-5e8mpztyp4me",
       "source_section_id": null,
@@ -68,28 +53,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 1,
-      "recorded_content_hash": "d4eb78414c6e",
-      "recorded_path": "REQ-002_document-id.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 8,
+      "position": 3,
       "recorded_content_hash": "594d2964b515",
       "recorded_path": "REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
       "source_section_id": null,
@@ -98,13 +68,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 9,
+      "position": 4,
       "recorded_content_hash": "6de27aa96e79",
       "recorded_path": "REQ-002_document-id.md#fr-002-文書-idの検証-dlid-edwjjf150svm",
       "source_section_id": null,
@@ -113,28 +83,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 2,
-      "recorded_content_hash": "c065536a773d",
-      "recorded_path": "REQ-003_toc.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 10,
+      "position": 5,
       "recorded_content_hash": "dfb119ed393a",
       "recorded_path": "REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_section_id": null,
@@ -143,63 +98,33 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-004_search.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 3,
-      "recorded_content_hash": "3dee26a7c09a",
-      "recorded_path": "REQ-004_search.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-h96208rqr773",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 4,
-      "recorded_content_hash": "762ad095b964",
-      "recorded_path": "REQ-005_references.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 11,
-      "recorded_content_hash": "cebfeb0e3b60",
-      "recorded_path": "REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-p7t2pht6h17a"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 5,
+      "position": 0,
       "recorded_content_hash": "275305521655",
       "recorded_path": "REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73",
       "source_section_id": null,
       "target_doc_id": "DLID-pc44gkb54821",
       "target_section_id": "DLID-5p5ms6a74w73"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "cebfeb0e3b60",
+      "recorded_path": "REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-p7t2pht6h17a"
     }
   ],
   "sections": [
@@ -246,7 +171,7 @@
       "section_id": "DLID-5p5ms6a74w73"
     },
     {
-      "content_hash": "3024b6e2c164ef160c611e811f34ffa799e7b8b44b34e415549377669dc1a805",
+      "content_hash": "41e41dd7f1cab710177925325603475ac12e1715dd504869e2724da9db297ba6",
       "heading": "doc-link 要件定義書 — 参照と変更通知",
       "position": 0,
       "section_id": "DLID-yv3r915903qx"
@@ -349,23 +274,26 @@
     }
   ],
   "summary": [
-    "FR-007: formal references use reference-link definitions whose title holds a content hash and a DLID",
-    "FR-009: link checks search the referenced directory and verify DLID, current path, relative path resolution and fragments",
-    "FR-010: path-fix notification, including looking up moved documents in the current Index target list",
-    "Section 13.1: section IDs (DLIDs) placed at the end of every heading to reference sections stably",
-    "FR-013 to FR-015: enumerating direct referrers when a recorded content hash differs from the current hash, with no stored notification state",
-    "FR-016: inconsistency check items, user confirmation before rewriting, and the stdout counts plus detail file output contract",
-    "Acceptance criteria AC-003 to AC-035 covering path mismatch, impact listing, directory-search verification, title values, rewrite confirmation and detail files",
-    "Boundary that doc-link never rewrites link definitions or target documents; the project management AI does"
+    "FR-007 formal references use Markdown reference-link definitions with a content hash and DLID in the title",
+    "FR-009 link checks verify the target by searching the referenced directory, not stored state",
+    "FR-010 path-fix notification and lookup of moved documents within the Index target list",
+    "Section 13.1 gives every heading a section ID DLID issued only by the DLID assignment operation",
+    "FR-013 to FR-015 enumerate change impact candidates by reverse lookup and keep no notification state",
+    "Project management AI rewrites titles hashes after verifying; doc-link never writes them",
+    "FR-016 lists inconsistencies such as missing IDs, duplicates, broken references, and hash mismatches",
+    "Rewrites of user documents require user confirmation of a list before applying",
+    "Check results return counts on stdout and full details in a work file",
+    "Acceptance criteria AC-003 to AC-035 cover path mismatch, impact, and detail files"
   ],
   "tasks": [
-    "Writing or revising reference links between documents",
-    "Designing or implementing link checking (check-links)",
-    "Designing or implementing change impact detection (check-impact)",
-    "Implementing path mismatch and moved-document detection",
-    "Designing inconsistency check output and detail files",
-    "Reviewing acceptance criteria for references",
-    "Rewriting link titles with content hashes and DLIDs"
+    "Implementing link checking",
+    "Implementing change impact detection",
+    "Writing reference links with DLID titles",
+    "Implementing section ID assignment",
+    "Handling moved or renamed documents",
+    "Designing inspection output and detail files",
+    "Writing tests for reference acceptance criteria",
+    "Rewriting links after user approval"
   ],
   "title": "doc-link 要件定義書 — 参照と変更通知"
 }

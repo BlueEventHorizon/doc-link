@@ -1,50 +1,35 @@
 {
-  "applied_hash": "c9c24a4b20e8c055efe7037c34a74e9c58eee12ed8f94a7eecb1c91741b8102b",
-  "content_hash": "c9c24a4b20e8c055efe7037c34a74e9c58eee12ed8f94a7eecb1c91741b8102b",
+  "applied_hash": "9e80926f0773e43da81ea86238c7a1b4dafe886f2f10e3282231c0e86a841f1e",
+  "content_hash": "9e80926f0773e43da81ea86238c7a1b4dafe886f2f10e3282231c0e86a841f1e",
   "doc_link_id": "DLID-veg2nsjk8zw1",
   "keywords": [
     "doc-link",
     "DLID",
-    "document ID",
-    "ToC",
-    "requirements overview",
     "glossary",
+    "ToC",
     "non-functional requirements",
+    "write boundary",
+    "system flow",
+    "change impact notification",
     "responsibility boundary",
-    "search backend",
-    "impact notification"
+    "DocAdvisor replacement"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T09:48:01+00:00",
+    "checked_at": "2026-11-26T13:48:51+00:00",
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-001_overview.md",
-  "purpose": "Overview of doc-link requirements: goals, background, overall flows, glossary, scope, responsibility boundaries, shared non-functional requirements and error/warning categories for replacing DocAdvisor.",
+  "purpose": "Overview requirements for doc-link: purpose, background, overall flows, glossary, scope, responsibility boundaries, common non-functional requirements and error/warning categories.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-001_overview.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 0,
-      "recorded_content_hash": "93356ddc0c6c",
-      "recorded_path": "REQ-001_overview.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-veg2nsjk8zw1",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 7,
+      "position": 2,
       "recorded_content_hash": "4ca9ecf3d971",
       "recorded_path": "REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8",
       "source_section_id": null,
@@ -53,58 +38,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 1,
-      "recorded_content_hash": "d4eb78414c6e",
-      "recorded_path": "REQ-002_document-id.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 10,
-      "recorded_content_hash": "b6c21c9348ef",
-      "recorded_path": "REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-5ht9ebyeq2m3"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 11,
-      "recorded_content_hash": "72f09c754e09",
-      "recorded_path": "REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-mkcvqte59nvc"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 8,
+      "position": 3,
       "recorded_content_hash": "594d2964b515",
       "recorded_path": "REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
       "source_section_id": null,
@@ -113,13 +53,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 9,
+      "position": 4,
       "recorded_content_hash": "5c219073abcb",
       "recorded_path": "REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs",
       "source_section_id": null,
@@ -128,43 +68,43 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 2,
-      "recorded_content_hash": "c065536a773d",
-      "recorded_path": "REQ-003_toc.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 12,
-      "recorded_content_hash": "dfb119ed393a",
-      "recorded_path": "REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
+      "position": 5,
+      "recorded_content_hash": "b6c21c9348ef",
+      "recorded_path": "REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
       "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": "DLID-c3prh9y4nbzw"
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-5ht9ebyeq2m3"
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
       "position": 6,
+      "recorded_content_hash": "72f09c754e09",
+      "recorded_path": "REQ-002_document-id.md#92-dlid-付与操作-dlid-mkcvqte59nvc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-mkcvqte59nvc"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 1,
       "recorded_content_hash": "2cdcc9befbb7",
       "recorded_path": "REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n",
       "source_section_id": null,
@@ -173,73 +113,28 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-004_search.md",
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
-      "kind": "document",
-      "position": 3,
-      "recorded_content_hash": "3dee26a7c09a",
-      "recorded_path": "REQ-004_search.md",
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "dfb119ed393a",
+      "recorded_path": "REQ-003_toc.md#1012-内容ハッシュ-dlid-c3prh9y4nbzw",
       "source_section_id": null,
-      "target_doc_id": "DLID-h96208rqr773",
-      "target_section_id": null
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-c3prh9y4nbzw"
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 4,
-      "recorded_content_hash": "762ad095b964",
-      "recorded_path": "REQ-005_references.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 13,
-      "recorded_content_hash": "cebfeb0e3b60",
-      "recorded_path": "REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-p7t2pht6h17a"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 14,
-      "recorded_content_hash": "2351b357da12",
-      "recorded_path": "REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": "DLID-zacf5tmy6x4x"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 15,
+      "position": 10,
       "recorded_content_hash": "0cbc9091ee0f",
       "recorded_path": "REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn",
       "source_section_id": null,
@@ -248,13 +143,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 16,
+      "position": 11,
       "recorded_content_hash": "275305521655",
       "recorded_path": "REQ-005_references.md#131-セクション参照-dlid-5p5ms6a74w73",
       "source_section_id": null,
@@ -263,13 +158,43 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "cebfeb0e3b60",
+      "recorded_path": "REQ-005_references.md#fr-007-文書-idを使用した参照-dlid-p7t2pht6h17a",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-p7t2pht6h17a"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:48:51+00:00",
+        "found_path": "docs/specs/requirement/REQ-005_references.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "2351b357da12",
+      "recorded_path": "REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
+      "source_section_id": null,
+      "target_doc_id": "DLID-pc44gkb54821",
+      "target_section_id": "DLID-zacf5tmy6x4x"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:48:51+00:00",
         "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
-      "position": 5,
+      "position": 0,
       "recorded_content_hash": "3a6cc3bcee23",
       "recorded_path": "REQ-006_backend-switch.md",
       "source_section_id": null,
@@ -295,12 +220,6 @@
       "heading": "2. 背景",
       "position": 3,
       "section_id": "DLID-y8grft64a0qp"
-    },
-    {
-      "content_hash": "12988bce9c8c98581a99c6e5fde05313338b32260d22492a621d61153d5f13d0",
-      "heading": "doc-link 要件定義書 — 総論",
-      "position": 0,
-      "section_id": "DLID-75ja6a0cja5m"
     },
     {
       "content_hash": "1bfb73100c73f1470b62725c10a734ff4718c64f276370ab522c87ffa4f094cd",
@@ -375,13 +294,19 @@
       "section_id": "DLID-eeaqehrykrje"
     },
     {
+      "content_hash": "8e58bbd68e259a82c6cb15af149825833f69820252534c8cffab351f971ae2e7",
+      "heading": "doc-link 要件定義書 — 総論",
+      "position": 0,
+      "section_id": "DLID-75ja6a0cja5m"
+    },
+    {
       "content_hash": "a1500a8117ce226ddc3debfd521e880081ffd6b99d1ad39da649cdf6fdc2ca79",
       "heading": "3.1 システム全体フロー",
       "position": 5,
       "section_id": "DLID-5e8mpztyp4me"
     },
     {
-      "content_hash": "b6b1626b524bf5c42cd240d51925c546e5b7830b2f78adc76017112c3361a0cf",
+      "content_hash": "afe295adddbce7e6e19f524116bc3b29ee17c943b66ca8c220cfda5adfbdb55b",
       "heading": "文書構成",
       "position": 1,
       "section_id": "DLID-mf1pxc9fkj0k"
@@ -424,22 +349,22 @@
     }
   ],
   "summary": [
-    "Purpose and background: replacing DocAdvisor path-based indexing with permanent document IDs",
-    "Overall system flow from DLID check and assignment through link check, ToC build and impact check",
-    "Document search flow including the rebuild-or-keep choice and doc-db automatic update",
-    "Glossary of terms such as DLID, ToC, document information, search backend and force switch",
-    "Scope: included and excluded items, and the responsibility split between doc-link and the project management AI",
-    "Write boundary: doc-link may only write DLIDs into frontmatter and heading ends",
-    "Non-functional requirements: rebuild consistency, determinism, idempotency, diagnosability, scalability, generation/validation separation",
-    "Error candidates and findings that do not block ToC confirmation"
+    "Document purpose and background: replacing DocAdvisor with permanent document-ID based indexing and search",
+    "Goals: related document search, move-resistant tracking, reference graph, change impact notification, integrity checks",
+    "System-wide flow (section 3.1): DLID check, assignment, link check, ToC build, impact check, with user confirmation for link rewrites",
+    "Document search flow (section 3.2) including stale ToC handling and the doc-db versus ToC backend behavior",
+    "Glossary of terms such as DLID, document ID, section ID, ToC, content hash and search backend",
+    "Scope: included and excluded items, plus responsibility boundary between doc-link and the project management AI",
+    "Non-functional requirements NFR-001 to NFR-008: rebuild consistency, determinism, idempotence, write boundary (DLID only), diagnosability, resumability, scalability, generation limit separation",
+    "Error candidates and detections that do not block ToC finalization"
   ],
   "tasks": [
-    "Understanding the overall doc-link requirements before design or implementation",
-    "Looking up glossary term definitions",
-    "Designing the index, search or impact-check flow",
-    "Checking write-boundary constraints on user documents",
-    "Reviewing non-functional requirements and error handling",
-    "Writing or editing requirement documents that use glossary terms"
+    "Understanding the overall purpose and scope of doc-link",
+    "Writing or reviewing requirement and design documents that use glossary terms",
+    "Designing the index-building and change-impact flow",
+    "Implementing write-boundary checks for user documents",
+    "Defining error handling and reporting behavior",
+    "Designing document search behavior and backend switching"
   ],
   "title": "doc-link 要件定義書 — 総論"
 }

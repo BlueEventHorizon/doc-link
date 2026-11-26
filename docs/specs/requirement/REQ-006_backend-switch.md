@@ -4,8 +4,6 @@ doc_link_id: DLID-emxm9mx5a4d2
 
 # doc-link 要件定義書 — 検索基盤の切り替え DLID-4042ef3rdqs9
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005] · [検索基盤の切り替え][req-006]
-
 ## 18. 検索基盤の切り替え DLID-06wcf22rjcdy
 
 本書は、[ToC]の構築と文書検索の裏側（[検索基盤]）を、[doc-db]と[ToC]で切り替える要件を定める。
@@ -226,11 +224,5 @@ doc_link_id: DLID-emxm9mx5a4d2
 
 識別子に対応した版の[doc-db]では、識別子（`EMBEDDING_FAILED`・`INTERNAL_ERROR`・`KEY_NOT_FOUND`・`KEY_TRASHED`）だけで失敗を分類し、`EMBEDDING_FAILED` のときだけ[ToC]へ切り替えること。契約を満たさない[doc-db]では、当面の扱い（FR-028）に従い、結果の警告に、契約を満たさない[doc-db]であることを含めること。同期で Embedding に失敗した文書が、次の同期で補われること（契約の確認）。
 
-[req-001]: REQ-001_overview.md "10c935be3c29 DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
-[req-006]: REQ-006_backend-switch.md "3a6cc3bcee23 DLID-emxm9mx5a4d2"
 [req-003-fr-005]: REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82 "47be50aa7f05 DLID-65nf6n2jax82"
 [req-004-fr-006]: REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3 "5b1ed8d54266 DLID-481cwc8365a3"

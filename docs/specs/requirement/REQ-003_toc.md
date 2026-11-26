@@ -4,8 +4,6 @@ doc_link_id: DLID-kxe3nxfgk491
 
 # doc-link 要件定義書 — [ToC]管理 DLID-4pgmjg3my8bn
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005]
-
 <a id="sec-7"></a>
 
 ## 7. [ToC]の情報要件 DLID-3x56epwte9qn
@@ -474,11 +472,6 @@ Index 対象の Markdown 文書を追加、移動、改名、対象範囲から�
 
 参照情報だけが変更された文書（[内容ハッシュ]が同じもの）では参照関係を更新し、[AI 生成フィールド]を再利用すること。
 
-[req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-006]: REQ-006_backend-switch.md "75495766ea7c DLID-emxm9mx5a4d2"
 [des-003]: ../design/DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
 [req-002-sec-6-2]: REQ-002_document-id.md#62-markdown-への文書-id記載-dlid-5h2et5v540gs "5c219073abcb DLID-5h2et5v540gs"

@@ -4,8 +4,6 @@ doc_link_id: DLID-h96208rqr773
 
 # doc-link 要件定義書 — 文書検索 DLID-tc02dcf51xb4
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005]
-
 <a id="sec-12"></a>
 
 ## 12. 文書検索 DLID-r6j09pswcpzg
@@ -53,12 +51,7 @@ doc_link_id: DLID-h96208rqr773
 
 [検索基盤]が[ToC]のとき、指定キーの[ToC]が未構築の場合は検索できず、初回構築が必要であることを返すこと。既存[ToC]がある場合は、検索要求に[Index 対象指定]が含まれなくても、[ToC]に保存された指定を再解釈して現在の対象文書を列挙し、再構築要否を検査できること。検索前の検査で再構築が不要と判定された場合は、そのまま検索を実行すること。再構築が必要と判定された場合は、検索前にユーザーへ再構築の規模（変更種別ごとの件数と AI による要約生成が必要な件数）を示して確認し、「[ToC]を再構築してから検索する」または「既存の[ToC]のまま検索する」を選択できること。この確認が、検査に使った[ToC 識別キー]と[Index 対象指定]を持つ対象指定ファイルのパスを返し、そのファイルを渡した[ToC]の構築が、検査と同じ対象を再構築すること。後者を選択した場合は[ToC]を更新せず、検索結果に[ToC]の状態と、現在の[Index 対象文書]を反映していない可能性を含めること。再構築要否を判定できない場合は検索を停止し、原因を返すこと。
 
-[req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
 [req-002-fr-017]: REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7 "0292868ab4b5 DLID-3wc02prwb6x7"
-[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-006]: REQ-006_backend-switch.md "75495766ea7c DLID-emxm9mx5a4d2"
 [req-003-fr-004]: REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb "f55cd670bc00 DLID-7hjmngynv8sb"
 [req-005-fr-016]: REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn "0cbc9091ee0f DLID-jhkngqtfdnhn"

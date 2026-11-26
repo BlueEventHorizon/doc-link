@@ -6,8 +6,6 @@ doc_link_id: DLID-veg2nsjk8zw1
 
 ## 文書構成 DLID-mf1pxc9fkj0k
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005] · [検索基盤の切り替え][req-006]
-
 本書は全体の目的、共通の非機能要件および検出事項を扱う。各処理の機能要件と受け入れ条件は対応する文書に記載する。
 
 章番号と FR・AC・NFR・D の識別子は、分割前の番号を維持する。そのため、各ファイル内の章番号は連続しない。本文中の節番号は該当文書へのリンクとする。
@@ -335,11 +333,6 @@ doc-link が[Index 対象文書]へ行う書き込みは、[文書 ID]管理シ�
 
 通知に重要度の分類は設けない。指定ディレクトリ内での参照先不在および参照パス不一致は[ToC]の確定を妨げず、検査結果として保持すること。参照先ディレクトリを検索できない場合も、「指定ディレクトリ内に不在」と記録して[ToC]を確定する（[D-025][req-005-fr-009]）。[文書 ID]が無い文書と[文書 ID]が重複する文書は[ToC]に入れずに報告し、[ToC]の確定を妨げない（[D-036][req-002-sec-9-1]）。
 
-[req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
-[req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-006]: REQ-006_backend-switch.md "3a6cc3bcee23 DLID-emxm9mx5a4d2"
 [req-003-sec-7-4]: REQ-003_toc.md#74-ai-生成フィールドの上限-dlid-afs68x15mq0n "2cdcc9befbb7 DLID-afs68x15mq0n"
 [req-001-nfr-004]: REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"

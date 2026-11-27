@@ -55,12 +55,11 @@ B-08 にあたる。公開は B-07（候補検査済み → 完了）の処理�
     `None` を入れる
   - `source_section_id`: `None`。設計書は、セクション単位の参照元の追跡を求めていない（REQ-003 §7.3 の「条件付き」）
   - `check`: `scope` は検査したディレクトリ（プロジェクトルート相対）で、走査しなかった（解決不能の）ときは空文字、
-    `checked_at` は参照検査の結果が持つ時点、`result` は検査結果の区分（`match`・`path_mismatch`・
+    検査の時点は記録しない。`result` は検査結果の区分（`match`・`path_mismatch`・
     `fragment_mismatch`・`absent`・`duplicate`・`unresolved`）、`found_path` は確認できた現在のパス（無ければ `None`）。
     `absent` の細かい理由（ディレクトリが無い・読めない等）は、保存のスキーマに持たないので記録しない
 - `reverse_references`: `references` から機械的に作る（参照先 → 参照元）。同じ組は 1 件にまとめる
-- `last_checks`: 文書ごとに 1 件。`checked_at` は呼び出し側から渡された検査の時点（全文書に共通の 1 つの値、
-  または[文書 ID]から時点への対応）。`result` は、その文書の全参照の
+- `last_checks`: 文書ごとに 1 件。検査の時点は記録しない。`result` は、その文書の全参照の
   検査結果が `unresolved`（リンク先を解決できず走査できなかった）を含まなければ `success`、含めば `failure`。
   不在・パス不一致・フラグメント不一致・重複は、検査を完了した結果なので `success` である（D-025）。
   この処理は `unprocessed` を作らない（検査結果が渡されない文書は組み立ての失敗にする）
@@ -290,7 +289,6 @@ def _reference_entry(
         "kind": kind,
         "check": {
             "scope": result.directory or "",
-            "checked_at": result.checked_at,
             "result": result.status,
             "found_path": result.current_path,
         },
@@ -367,13 +365,11 @@ def assemble_candidate(
     target_spec: TargetSpec,
     change_set: ChangeSet,
     reference_results: Mapping[str, Sequence[ReferenceCheckResult]],
-    checked_at: str | Mapping[str, str],
 ) -> dict:
     """[ToC 候補]を組み立てる。何も書き込まない。同じ入力から常に同じ候補を返す。
 
     `reference_results` は[文書 ID]から、その文書の[正式な参照]の検査結果（定義の行の順）への対応。
-    [確定 Index 対象リスト]の全文書の結果を渡す（参照が無い文書は空の並び）。`checked_at` は検査の時点で、
-    全文書に共通の 1 つの値か、[文書 ID]から時点への対応である。
+    [確定 Index 対象リスト]の全文書の結果を渡す（参照が無い文書は空の並び）。
     """
     root = Path(project_root)
     confirmed = change_set.confirmed_documents
@@ -465,11 +461,6 @@ def assemble_candidate(
         last_checks.append(
             {
                 "doc_link_id": item.doc_link_id,
-                "checked_at": (
-                    checked_at
-                    if isinstance(checked_at, str)
-                    else checked_at[item.doc_link_id]
-                ),
                 "result": RESULT_FAILURE if failed else RESULT_SUCCESS,
             }
         )
@@ -555,7 +546,10 @@ def _consistency_problems(
 
 
 def _document_info_problems(
-    root: Path, candidate: dict, confirmed: Sequence[ConfirmedDocument]
+    root: Path,
+    candidate: dict,
+    confirmed: Sequence[ConfirmedDocument],
+    require_ai_fields: bool = True,
 ) -> list[CandidateProblem]:
     paths = {item.doc_link_id: item.path for item in confirmed}
     problems: list[CandidateProblem] = []
@@ -573,7 +567,7 @@ def _document_info_problems(
                 )
             )
             continue
-        if info["content_hash"] != entry["applied_hash"]:
+        if require_ai_fields and info["content_hash"] != entry["applied_hash"]:
             problems.append(
                 CandidateProblem(
                     doc_id,
@@ -589,8 +583,14 @@ def validate_candidate(
     project_root: str | Path,
     candidate: dict,
     confirmed_documents: Iterable[ConfirmedDocument],
+    require_ai_fields: bool = True,
 ) -> None:
-    """候補を検査する（モジュールの docstring の「検査」）。何も書き込まない。通らなければ `CandidateFailure`。"""
+    """候補を検査する（モジュールの docstring の「検査」）。何も書き込まない。通らなければ `CandidateFailure`。
+
+    `require_ai_fields` が偽のとき（[doc-db]を使う構築。[AI 生成フィールド]を作らない）は、[文書情報]の
+    [内容ハッシュ]が[反映済みハッシュ]と一致することを求めない。[文書情報]が読めることは、求める
+    （要件 REQ-006 FR-019・D-064、DES-011 §6）。
+    """
     root = Path(project_root)
     confirmed = tuple(confirmed_documents)
     toc_key = candidate.get("toc_key") if isinstance(candidate, dict) else None
@@ -604,7 +604,7 @@ def validate_candidate(
             [CandidateProblem(None, None, None, f"必須フィールドを満たさない: {exc}")],
         ) from exc
     problems = _consistency_problems(candidate, confirmed)
-    problems += _document_info_problems(root, candidate, confirmed)
+    problems += _document_info_problems(root, candidate, confirmed, require_ai_fields)
     if problems:
         raise _failure(root, candidate["toc_key"], STAGE_VALIDATION, problems)
 
@@ -645,11 +645,10 @@ def build_and_publish(
     target_spec: TargetSpec,
     change_set: ChangeSet,
     reference_results: Mapping[str, Sequence[ReferenceCheckResult]],
-    checked_at: str | Mapping[str, str],
 ) -> PublishResult:
     """組み立て → 検査 → 公開を順に行う。どの段階の失敗も `CandidateFailure`。"""
     candidate = assemble_candidate(
-        project_root, toc_key, target_spec, change_set, reference_results, checked_at
+        project_root, toc_key, target_spec, change_set, reference_results
     )
     validate_candidate(project_root, candidate, change_set.confirmed_documents)
     written = publish_candidate(project_root, skill, candidate)

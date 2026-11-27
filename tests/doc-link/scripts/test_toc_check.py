@@ -106,7 +106,7 @@ class Base(unittest.TestCase):
             item.doc_link_id: check_document(self.root, item.path, checked_at=WHEN)
             for item in cs.confirmed_documents
         }
-        toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results, WHEN)
+        toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results)
 
     def snapshot(self):
         return {
@@ -369,6 +369,8 @@ class TargetSpecChangeTest(Base):
                 "saved_target_spec",
                 "counts",
                 "scale",
+                "ai_fields_needed",
+                "ai_fields_unfilled",
                 "causes",
                 "problems",
                 "warnings",
@@ -510,6 +512,63 @@ class ReadOnlyTest(Base):
     def test_no_state_directory_is_created(self):
         toc_check.check_toc(self.root, KEY)
         self.assertFalse((self.root / ".doc-link").exists())
+
+
+class AiFieldsTest(Base):
+    """[AI 生成フィールド]が要る文書の件数（`ai_needed`・`ai_unfilled`。DES-011 §9）。"""
+
+    def unfill(self, path, doc_id):
+        info = state_store.load_document_info(self.root, doc_id)
+        info.update(
+            {
+                "purpose": "",
+                "summary": [],
+                "tasks": [],
+                "keywords": [],
+                "content_hash": "",
+            }
+        )
+        state_store.save_document_info(self.root, "test", info)
+
+    def test_a_filled_up_to_date_toc_needs_none(self):
+        self.build()
+        result = toc_check.check_toc(self.root, KEY)
+        self.assertEqual((result.ai_needed, result.ai_unfilled), (0, 0))
+        summary = result.to_summary()
+        self.assertEqual(
+            (summary["ai_fields_needed"], summary["ai_fields_unfilled"]), (0, 0)
+        )
+
+    def test_unfilled_documents_are_counted_even_when_the_toc_is_up_to_date(self):
+        self.build()
+        self.unfill("docs/a.md", ID_A)
+        result = toc_check.check_toc(self.root, KEY)
+        self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
+        self.assertEqual((result.ai_needed, result.ai_unfilled), (1, 1))
+
+    def test_stale_ai_fields_are_needed_but_not_unfilled(self):
+        self.build()
+        info = state_store.load_document_info(self.root, ID_B)
+        info["content_hash"] = "0" * 64
+        state_store.save_document_info(self.root, "test", info)
+        result = toc_check.check_toc(self.root, KEY)
+        self.assertEqual(result.status, toc_check.STATUS_UP_TO_DATE)
+        self.assertEqual((result.ai_needed, result.ai_unfilled), (1, 0))
+
+    def test_a_new_document_is_needed_but_not_unfilled(self):
+        self.build()
+        self.write("docs/c.md", C_TEXT)
+        spec = TargetSpec(mode=MODE_TARGETS, key=KEY, paths=(*FILES, "docs/c.md"))
+        result = toc_check.check_toc(self.root, KEY, spec)
+        self.assertEqual(result.status, toc_check.STATUS_REBUILD_NEEDED)
+        self.assertEqual((result.ai_needed, result.ai_unfilled), (1, 0))
+
+    def test_not_built_and_undeterminable_have_no_count(self):
+        result = toc_check.check_toc(self.root, KEY)
+        self.assertEqual(
+            (result.status, result.ai_needed, result.ai_unfilled),
+            ("not_built", None, None),
+        )
 
 
 if __name__ == "__main__":

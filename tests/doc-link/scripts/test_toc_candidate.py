@@ -1,3 +1,4 @@
+import dataclasses
 import os
 import sys
 import tempfile
@@ -120,13 +121,11 @@ class Base(unittest.TestCase):
 
     def assemble(self, files=FILES, key=KEY):
         cs, results = self.inputs(files, key)
-        return toc_candidate.assemble_candidate(self.root, key, SPEC, cs, results, WHEN)
+        return toc_candidate.assemble_candidate(self.root, key, SPEC, cs, results)
 
     def publish(self, files=FILES, key=KEY, skill="test"):
         cs, results = self.inputs(files, key)
-        return toc_candidate.build_and_publish(
-            self.root, skill, key, SPEC, cs, results, WHEN
-        )
+        return toc_candidate.build_and_publish(self.root, skill, key, SPEC, cs, results)
 
     def toc_bytes(self, key=KEY):
         path = state_store.confirmed_toc_path(self.root, key)
@@ -239,7 +238,6 @@ class AssembleTest(Base):
                 "kind": "document",
                 "check": {
                     "scope": "docs",
-                    "checked_at": WHEN,
                     "result": "match",
                     "found_path": "docs/b.md",
                 },
@@ -295,8 +293,8 @@ class AssembleTest(Base):
             candidate["last_checks"],
             [
                 # A は解決できない参照を含むので failure
-                {"doc_link_id": ID_A, "checked_at": WHEN, "result": "failure"},
-                {"doc_link_id": ID_B, "checked_at": WHEN, "result": "success"},
+                {"doc_link_id": ID_A, "result": "failure"},
+                {"doc_link_id": ID_B, "result": "success"},
             ],
         )
 
@@ -330,7 +328,7 @@ class AssembleTest(Base):
         cs, results = self.inputs()
         del results[ID_B]
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results, WHEN)
+            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results)
         report = caught.exception.report
         self.assertEqual(report.stage, toc_candidate.STAGE_ASSEMBLY)
         self.assertEqual(report.problems[0].doc_link_id, ID_B)
@@ -342,14 +340,14 @@ class AssembleTest(Base):
         cs, results = self.inputs()
         results[ID_B] = results[ID_A]
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results, WHEN)
+            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results)
         self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_ASSEMBLY)
 
     def test_unreadable_document_fails_assembly(self):
         cs, results = self.inputs()
         (self.root / "docs/b.md").unlink()
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results, WHEN)
+            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results)
         problem = caught.exception.report.problems[0]
         self.assertEqual((problem.doc_link_id, problem.path), (ID_B, "docs/b.md"))
 
@@ -357,9 +355,7 @@ class AssembleTest(Base):
         self.save_infos()
         before = self.snapshot()
         cs = self.change_set()
-        toc_candidate.assemble_candidate(
-            self.root, KEY, SPEC, cs, self.results(cs), WHEN
-        )
+        toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, self.results(cs))
         self.assertEqual(self.snapshot(), before)
 
 
@@ -384,7 +380,7 @@ class VersionTest(Base):
         )
         cs, results = self.inputs()
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results, WHEN)
+            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results)
         report = caught.exception.report
         self.assertEqual(report.stage, toc_candidate.STAGE_ASSEMBLY)
         self.assertEqual(report.problems[0].field, "version")
@@ -396,7 +392,7 @@ class VersionTest(Base):
         path.parent.mkdir(parents=True)
         path.write_text("{", encoding="utf-8")
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results, WHEN)
+            toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results)
         self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_ASSEMBLY)
 
 
@@ -405,7 +401,7 @@ class ValidateTest(Base):
         super().setUp()
         self.cs, results = self.inputs()
         self.candidate = toc_candidate.assemble_candidate(
-            self.root, KEY, SPEC, self.cs, results, WHEN
+            self.root, KEY, SPEC, self.cs, results
         )
 
     def validate(self, candidate=None, confirmed=None):
@@ -565,7 +561,7 @@ class PublishTest(Base):
         with mock.patch("state_store.os.replace", side_effect=OSError("boom")):
             with self.assertRaises(toc_candidate.CandidateFailure) as caught:
                 toc_candidate.build_and_publish(
-                    self.root, "test", KEY, SPEC, cs, results, WHEN
+                    self.root, "test", KEY, SPEC, cs, results
                 )
         report = caught.exception.report
         self.assertEqual(report.stage, toc_candidate.STAGE_PUBLISH)
@@ -585,7 +581,7 @@ class PublishTest(Base):
         with mock.patch("state_store.os.replace", side_effect=OSError("boom")):
             with self.assertRaises(toc_candidate.CandidateFailure) as caught:
                 toc_candidate.build_and_publish(
-                    self.root, "test", KEY, SPEC, cs, results, WHEN
+                    self.root, "test", KEY, SPEC, cs, results
                 )
         self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_PUBLISH)
         self.assertFalse(caught.exception.report.confirmed_toc_present)
@@ -600,9 +596,7 @@ class PublishTest(Base):
         broken = dict(results)
         del broken[ID_A]
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.build_and_publish(
-                self.root, "test", KEY, SPEC, cs, broken, WHEN
-            )
+            toc_candidate.build_and_publish(self.root, "test", KEY, SPEC, cs, broken)
         self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_ASSEMBLY)
         self.assertEqual(self.toc_bytes(), old)
 
@@ -611,9 +605,7 @@ class PublishTest(Base):
         info["content_hash"] = "0" * 64
         state_store.save_document_info(self.root, "test", info)
         with self.assertRaises(toc_candidate.CandidateFailure) as caught:
-            toc_candidate.build_and_publish(
-                self.root, "test", KEY, SPEC, cs, results, WHEN
-            )
+            toc_candidate.build_and_publish(self.root, "test", KEY, SPEC, cs, results)
         report = caught.exception.report
         self.assertEqual(report.stage, toc_candidate.STAGE_VALIDATION)
         self.assertTrue(report.confirmed_toc_present)
@@ -642,7 +634,7 @@ class PublishTest(Base):
         with mock.patch("state_store.os.replace", side_effect=OSError("boom")):
             with self.assertRaises(toc_candidate.CandidateFailure):
                 toc_candidate.build_and_publish(
-                    self.root, "test", KEY, SPEC, cs, results, WHEN
+                    self.root, "test", KEY, SPEC, cs, results
                 )
         self.assertEqual(self.toc_bytes(OTHER_KEY), other)
         self.write("docs/b.md", B_TEXT)
@@ -677,7 +669,9 @@ class DocumentValuesTest(Base):
                 len(info["references"]),
                 sum(1 for r in candidate["references"] if r["source_doc_id"] == doc_id),
             )
-            self.assertEqual(info["last_check"]["checked_at"], WHEN)
+            self.assertNotIn("checked_at", info["last_check"])
+            for entry in info["references"]:
+                self.assertNotIn("checked_at", entry["check"])
 
     def test_failure_midway_keeps_the_toc_file_and_the_next_build_converges(self):
         self.publish()
@@ -697,7 +691,7 @@ class DocumentValuesTest(Base):
         with mock.patch("state_store.os.replace", side_effect=fail_on_second):
             with self.assertRaises(toc_candidate.CandidateFailure) as caught:
                 toc_candidate.build_and_publish(
-                    self.root, "test", KEY, SPEC, cs, results, WHEN
+                    self.root, "test", KEY, SPEC, cs, results
                 )
         self.assertEqual(caught.exception.report.stage, toc_candidate.STAGE_PUBLISH)
         # [確定 ToC]のファイルは置き換わっていない。書き終えた[文書情報]は戻らない
@@ -713,19 +707,28 @@ class DocumentValuesTest(Base):
             [ID_B],
         )
         result = toc_candidate.build_and_publish(
-            self.root, "test", KEY, SPEC, remaining, self.results(remaining), WHEN
+            self.root, "test", KEY, SPEC, remaining, self.results(remaining)
         )
         self.assertTrue(result.written)
         self.assertTrue(all(c.unchanged for c in self.change_set().documents))
 
-    def test_checked_at_can_be_given_for_each_document(self):
+    def test_check_time_is_not_recorded(self):
+        # 検査の時点は記録しない。時点が違うだけの検査結果から、同じ候補ができる
         cs, results = self.inputs()
-        whens = {ID_A: "2026-01-01T00:00:00+00:00", ID_B: "2026-02-02T00:00:00+00:00"}
-        candidate = toc_candidate.assemble_candidate(
-            self.root, KEY, SPEC, cs, results, whens
-        )
+        candidate = toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, results)
+        for entry in candidate["last_checks"]:
+            self.assertNotIn("checked_at", entry)
+        for entry in candidate["references"]:
+            self.assertNotIn("checked_at", entry["check"])
+        later = {
+            doc_id: [
+                dataclasses.replace(r, checked_at="2099-01-01T00:00:00+00:00")
+                for r in found
+            ]
+            for doc_id, found in results.items()
+        }
         self.assertEqual(
-            {c["doc_link_id"]: c["checked_at"] for c in candidate["last_checks"]}, whens
+            candidate, toc_candidate.assemble_candidate(self.root, KEY, SPEC, cs, later)
         )
 
     def test_section_owner_is_found_in_a_document_info_outside_the_candidate(self):

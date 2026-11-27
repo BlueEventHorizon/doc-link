@@ -4,8 +4,6 @@ doc_link_id: DLID-bk29x4s8tadq
 
 # doc-link 要件定義書 — Index 対象と[文書 ID] DLID-rqcgktp23k3p
 
-[総論][req-001] · [Index 対象と文書 ID][req-002] · [ToC 管理][req-003] · [文書検索][req-004] · [参照と変更通知][req-005]
-
 <a id="sec-6"></a>
 
 ## 6. [Index 対象文書] DLID-pwtjzpywnyjt
@@ -341,10 +339,6 @@ Forge が `.doc_structure.yaml` から解決した[ToC 識別キー]と対象指
 
 文書の[DLID]と[セクション ID]を渡した場合、それぞれ現在のパスが返り、セクションには見出しとアンカーが添えられること。解決済みには、記録した[内容ハッシュ]が添えられること。文書を移動した後、[ToC]を再構築する前は「記録されたパスに無い」が返り、移動前のパスを現在のパスとして返さないこと。[ToC]を再構築した後は、同じ[DLID]から移動後のパスが返ること。管理状態に記録の無い[DLID]には「記録が無い」が返ること。解決の前後で、[Index 対象文書]、[ToC]および管理状態が変わらないこと（[D-047][req-002-fr-018]）。
 
-[req-001]: REQ-001_overview.md "93356ddc0c6c DLID-veg2nsjk8zw1"
-[req-002]: REQ-002_document-id.md "d4eb78414c6e DLID-bk29x4s8tadq"
-[req-003]: REQ-003_toc.md "c065536a773d DLID-kxe3nxfgk491"
-[req-004]: REQ-004_search.md "3dee26a7c09a DLID-h96208rqr773"
 [req-005]: REQ-005_references.md "762ad095b964 DLID-pc44gkb54821"
 [req-002-sec-9]: REQ-002_document-id.md#9-文書-idの付与確認解決-dlid-dbs4rjzstadr "4fcba4cbc64c DLID-dbs4rjzstadr"
 [req-002-sec-9-1]: REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3 "b6c21c9348ef DLID-5ht9ebyeq2m3"

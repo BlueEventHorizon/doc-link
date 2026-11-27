@@ -8,7 +8,7 @@ doc_link_id: DLID-3da82gspdp44
 
 ## 1. システム境界 DLID-gzrbkxrazr3s
 
-doc-link は DocAdvisor を置き換え、[Index 対象文書]の[文書 ID]、[ToC]、検索、[DLID]の解決、参照検査、[変更影響候補の通知]を担う。[Index 対象指定]は呼び出し元が完全な desired state として渡す。Forge の設定ファイルは呼び出し元が解釈し、doc-link は直接読まない。[ToC 識別キー]は[ToC]を識別するが、参照の有効範囲は限定しない。
+doc-link は DocAdvisor を置き換え、[Index 対象文書]の[文書 ID]、[ToC]、検索、[DLID]の解決、参照検査、[変更影響候補の通知]を担う。[Index 対象指定]は呼び出し元が完全な desired state として渡す。Forge の設定ファイルなど、呼び出し元の設定ファイルは呼び出し元が解釈し、doc-link は直接読まない。doc-link が読む設定は、自身の設定ファイル `.doc-link/config.json` だけである（[DES-011 §2.1][des-011-sec-2-1]）。[ToC 識別キー]は[ToC]を識別するが、参照の有効範囲は限定しない。
 
 doc-link が[Index 対象文書]に書き込めるのは[DLID]だけであり、位置は frontmatter の `doc_link_id` と、見出しの行の末尾の[セクション ID]に限る（要件 [D-031][req-001-nfr-004]）。リンクとその title は書き込まない（要件 [D-042][req-005-fr-016]）。[DLID]の書き込みは明示的に起動する DLID 付与操作だけが行い、[ToC]の構築、検索、[DLID]の解決は[Index 対象文書]を書き換えない（要件 [D-035][req-002-fr-001]、[FR-018][req-002-fr-018]）。それ以外の本文・見出し・リンクの修正は、通知を受けた[プロジェクト管理 AI]が行う。Skill、script、AI の内部責務は[DES-002][des-002]に定める。
 
@@ -25,6 +25,8 @@ doc-link が[Index 対象文書]に書き込めるのは[DLID]だけであり、
 | 参照検査             | 参照記述と、記載パスが示すディレクトリ、今回の[Index 対象リスト]の文書            | 検査範囲・時点を伴う一致／不一致／不在とフラグメントの到達                                                                   | [Index 対象文書]のリンクは変更しない                                                                            |
 | [変更影響候補の通知] | 参照元の title に記録した[内容ハッシュ]、参照先の[現在ハッシュ]、把握済みの逆参照 | 変更文書と参照元の件数、検査範囲、全件を収めた明細のファイル                                                                 | [Index 対象文書]と管理状態を書き換えない（要件 [D-038][req-005-fr-015]）                                        |
 | 不整合検査           | [Index 対象指定]、現物、[確定 ToC]                                                | 不整合の件数と、全件を収めた明細のファイル                                                                                   | [Index 対象文書]と管理状態を書き換えない。ID の付与・修復は DLID 付与操作が行う（要件 [D-035][req-002-fr-001]） |
+
+[ToC]構築・再構築と文書検索は、入口で[検索基盤]（[doc-db]か[ToC]）を判定する（[DES-011 §2][des-011-sec-2]）。[検索基盤]によらず、機械取得の情報（[文書 ID]・パス・[内容ハッシュ]・セクション・参照）は構築し、[DLID]の管理状態を保つ。[AI 生成フィールド]の生成と文書検索の実体が、[検索基盤]に依存する。
 
 [ToC]構築・再構築は、対象確定、ID 確認、変更検出、必要情報の取得、参照検査、候補検査、確定の順に行う。ID 確認では ID 未付与・重複の文書を除外して報告し、構築を止めない（要件 [D-036][req-002-sec-9-1]）。初回[ToC]がないキーでは検索できない。検索、[DLID]の解決、[変更影響候補の通知]は、[ToC]確定後の別操作である。通知の成功は、[ToC]更新の成功と同義ではない。
 
@@ -90,6 +92,8 @@ sequenceDiagram
 [des-005]: DES-005_indexing.md "189c8ffcc88b DLID-dgphqw70rkpz"
 [des-003]: DES-003_data-model.md "aebbc925440f DLID-yqqrwtycr379"
 [des-006]: DES-006_search.md "10973b6b4341 DLID-nnbgpzkkm5vq"
+[des-011-sec-2]: DES-011_backend-switch.md#2-基盤判定-dlid-1m0mz21ac6eg "7dbed611aec4 DLID-1m0mz21ac6eg"
+[des-011-sec-2-1]: DES-011_backend-switch.md#21-強制スイッチの設定ファイル-dlid-mrgdxghyajjc "874dbcf330b2 DLID-mrgdxghyajjc"
 [req-002-fr-018]: ../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv "cf5307ccef85 DLID-8vajyevfatkv"
 [req-001-nfr-004]: ../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8 "4ca9ecf3d971 DLID-kp2w32mbpdb8"
 [req-002-fr-001]: ../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn "594d2964b515 DLID-z0g4zx0wr0cn"

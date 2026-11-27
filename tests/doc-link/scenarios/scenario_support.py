@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 PLUGIN_DIR = PROJECT_ROOT / "plugins" / "doc-link"
@@ -21,6 +22,7 @@ for _directory in (
 ):
     sys.path.insert(0, str(_directory))
 
+import backend_select  # noqa: E402
 import check_impact  # noqa: E402
 import check_links  # noqa: E402
 import check_toc  # noqa: E402
@@ -105,10 +107,22 @@ def with_detail(stdout: dict) -> dict:
     return {**detail, **stdout}
 
 
+def _force_toc_backend(testcase):
+    """既存の検査が、実機の doc-db へ接続・起動しないよう、基盤判定を[ToC]の強制スイッチに固定する。"""
+    patcher = mock.patch.object(
+        backend_select,
+        "decide",
+        return_value=backend_select.Decision(backend_select.BACKEND_TOC, forced=True),
+    )
+    patcher.start()
+    testcase.addCleanup(patcher.stop)
+
+
 class ScenarioBase(unittest.TestCase):
     """一時ディレクトリをプロジェクトルートとする、シナリオの共通の土台。"""
 
     def setUp(self):
+        _force_toc_backend(self)
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         self.root = Path(self._tmp.name)

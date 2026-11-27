@@ -1,29 +1,27 @@
 {
-  "applied_hash": "1468229e4b8e4d397203d28bb12dc0c856fd6c37048d546e6dcd8249f62b3a7c",
-  "content_hash": "1468229e4b8e4d397203d28bb12dc0c856fd6c37048d546e6dcd8249f62b3a7c",
+  "applied_hash": "113804046f72420b290b4e2b57eb2d3b9ddf151a83431df19e51f050e13950ed",
+  "content_hash": "113804046f72420b290b4e2b57eb2d3b9ddf151a83431df19e51f050e13950ed",
   "doc_link_id": "DLID-3da82gspdp44",
   "keywords": [
     "system overview",
     "system boundary",
-    "DLID write boundary",
     "ToC build",
+    "DLID",
+    "document ID",
     "change impact notification",
     "invariants",
-    "sequence diagram",
-    "reference check",
-    "DLID resolution",
-    "inconsistency check"
+    "write boundary",
+    "search backend",
+    "sequence diagram"
   ],
   "last_check": {
-    "checked_at": "2026-11-25T12:29:15+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-001_system-overview.md",
-  "purpose": "Top-level design of doc-link: system boundary, overall operations and their connections, the end-to-end sequence, and common invariants that all detailed designs must keep.",
+  "purpose": "Defines the overall system design of doc-link: system boundary, top-level operations and their connections, the overall sequence, and the common invariants that all detailed designs must satisfy.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,7 +36,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -53,7 +50,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-004_state-machines.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -68,7 +64,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-005_indexing.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -83,14 +78,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-006_search.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 6,
-      "recorded_content_hash": "8966603c17ac",
+      "recorded_content_hash": "10973b6b4341",
       "recorded_path": "DES-006_search.md",
       "source_section_id": null,
       "target_doc_id": "DLID-nnbgpzkkm5vq",
@@ -98,7 +92,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-007_references-impact.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -113,14 +106,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
       },
       "kind": "document",
       "position": 1,
-      "recorded_content_hash": "c36cb4d74873",
+      "recorded_content_hash": "e6cd2ff8b7ec",
       "recorded_path": "DES-010_skill-composition.md",
       "source_section_id": null,
       "target_doc_id": "DLID-7e90gq3sdncc",
@@ -128,13 +120,40 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "found_path": "docs/specs/design/DES-011_backend-switch.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "7dbed611aec4",
+      "recorded_path": "DES-011_backend-switch.md#2-基盤判定-dlid-1m0mz21ac6eg",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dwtbdwda6d0e",
+      "target_section_id": "DLID-1m0mz21ac6eg"
+    },
+    {
+      "check": {
+        "found_path": "docs/specs/design/DES-011_backend-switch.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "874dbcf330b2",
+      "recorded_path": "DES-011_backend-switch.md#21-強制スイッチの設定ファイル-dlid-mrgdxghyajjc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dwtbdwda6d0e",
+      "target_section_id": "DLID-mrgdxghyajjc"
+    },
+    {
+      "check": {
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 8,
+      "position": 10,
       "recorded_content_hash": "4ca9ecf3d971",
       "recorded_path": "../requirement/REQ-001_overview.md#nfr-004-index-対象文書への書き込み境界-dlid-kp2w32mbpdb8",
       "source_section_id": null,
@@ -143,43 +162,12 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 10,
-      "recorded_content_hash": "b6c21c9348ef",
-      "recorded_path": "../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-5ht9ebyeq2m3"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 7,
-      "recorded_content_hash": "cf5307ccef85",
-      "recorded_path": "../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": "DLID-8vajyevfatkv"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "section",
-      "position": 9,
+      "position": 11,
       "recorded_content_hash": "594d2964b515",
       "recorded_path": "../requirement/REQ-002_document-id.md#fr-001-文書-idの発行と読み取り-dlid-z0g4zx0wr0cn",
       "source_section_id": null,
@@ -188,13 +176,40 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 12,
+      "recorded_content_hash": "b6c21c9348ef",
+      "recorded_path": "../requirement/REQ-002_document-id.md#91-文書-id確認処理-dlid-5ht9ebyeq2m3",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-5ht9ebyeq2m3"
+    },
+    {
+      "check": {
+        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 9,
+      "recorded_content_hash": "cf5307ccef85",
+      "recorded_path": "../requirement/REQ-002_document-id.md#fr-018-dlidの解決-dlid-8vajyevfatkv",
+      "source_section_id": null,
+      "target_doc_id": "DLID-bk29x4s8tadq",
+      "target_section_id": "DLID-8vajyevfatkv"
+    },
+    {
+      "check": {
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 11,
+      "position": 13,
       "recorded_content_hash": "2351b357da12",
       "recorded_path": "../requirement/REQ-005_references.md#fr-009-id-付きリンクの検査-dlid-zacf5tmy6x4x",
       "source_section_id": null,
@@ -203,13 +218,12 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 12,
+      "position": 14,
       "recorded_content_hash": "c1135544f245",
       "recorded_path": "../requirement/REQ-005_references.md#fr-015-変更報告の管理-dlid-8btcs80840gr",
       "source_section_id": null,
@@ -218,13 +232,12 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-25T12:29:15+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 13,
+      "position": 15,
       "recorded_content_hash": "0cbc9091ee0f",
       "recorded_path": "../requirement/REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn",
       "source_section_id": null,
@@ -234,22 +247,10 @@
   ],
   "sections": [
     {
-      "content_hash": "213dc6313c137d85851271179f2a4b636b779d41db282b2b66e1e48a8be7fd49",
-      "heading": "DES-001 システム全体設計",
-      "position": 0,
-      "section_id": "DLID-he599f4215xq"
-    },
-    {
       "content_hash": "29765456285670ec948584ea1cc36952dcb0f273a68b788a45cd67ffd736040a",
       "heading": "5. 本書で確定しないこと",
       "position": 5,
       "section_id": "DLID-mzr6cep22ym1"
-    },
-    {
-      "content_hash": "52723fdc530f00255241a095af621981aeb87d007c4351c63072a005eb92f4e5",
-      "heading": "1. システム境界",
-      "position": 1,
-      "section_id": "DLID-gzrbkxrazr3s"
     },
     {
       "content_hash": "725bec31eb1f0386dbaeda378fa012153c2a3f0f7c02de808505c5818f057ba0",
@@ -264,28 +265,41 @@
       "section_id": "DLID-wa3zfxxced6j"
     },
     {
-      "content_hash": "d31c66fccd09a7161c94205dcdecfa42d6ac915733c31a5bae9d5d58aba48a10",
+      "content_hash": "966309d18c1831eb80b9415436abf28d716abd957edc9a0c0473511455514589",
       "heading": "2. 全体の操作と接続",
       "position": 2,
       "section_id": "DLID-xw8rpzytg31z"
+    },
+    {
+      "content_hash": "c9a70afb040fae62dadec02eb51b550f849a5af92b9576114b93baa0b99acedd",
+      "heading": "1. システム境界",
+      "position": 1,
+      "section_id": "DLID-gzrbkxrazr3s"
+    },
+    {
+      "content_hash": "e39053afeaab1c40899a7bfb09c7f7ccd38d2926d6ce731acfd2beb8177304c2",
+      "heading": "DES-001 システム全体設計",
+      "position": 0,
+      "section_id": "DLID-he599f4215xq"
     }
   ],
   "summary": [
-    "System boundary: doc-link handles document IDs, ToC, search, DLID resolution, reference checks, and change-impact notification",
-    "Write boundary: only DLIDs may be written to indexed documents, in frontmatter and heading line ends",
-    "Operation table: DLID assignment, ToC build, search, DLID resolution, reference check, impact notification, inconsistency check",
-    "ToC build order and handling of documents with missing or duplicate IDs",
-    "Overall sequence diagram of index-docs followed by check-impact",
-    "Unreadable reference target directories are recorded as absent and do not block confirmation",
-    "Common invariants: ID independence, real directory scans, no partial ToC publication, no stored notification state, per-key updates",
-    "Pointers to detailed designs for decisions left to them"
+    "System boundary: doc-link replaces DocAdvisor and handles document IDs, ToC, search, DLID resolution, reference checks and change-impact notification",
+    "Write boundary: only DLIDs may be written to indexed documents, in frontmatter and heading-line suffixes, by the explicit DLID assignment operation only",
+    "Operation table: inputs, results handed downstream and write boundary for DLID assignment, ToC build, search, DLID resolution, reference check, impact notification and inconsistency check",
+    "Search backend (doc-db or ToC) is decided at the entry of ToC build and search; machine-acquired information is always built",
+    "ToC build flow: target fixing, ID check, change detection, information acquisition, reference check, candidate check, confirmation",
+    "Overall sequence diagram of index-docs followed by check-impact in the normal case",
+    "Common invariants: independent document IDs, real directory scan for references, no partial candidate publication, no stored notification state, per-key update isolation",
+    "Deferred items: storage as JSON files and multi-key visibility are decided in the individual designs"
   ],
   "tasks": [
-    "Designing or revising doc-link features",
-    "Reviewing the write boundary for user documents",
-    "Implementing index-docs or check-impact skills",
-    "Checking consistency between requirements and design",
-    "Understanding overall doc-link operations and flow"
+    "Designing or revising any doc-link detailed design",
+    "Understanding the overall doc-link architecture before implementation",
+    "Checking write-boundary compliance for indexed documents",
+    "Reviewing consistency between requirements and designs",
+    "Implementing ToC build, search or impact notification operations",
+    "Designing the doc-db and ToC backend switch integration"
   ],
   "title": "DES-001 システム全体設計"
 }

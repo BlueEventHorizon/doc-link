@@ -18,6 +18,30 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 一括公開は `toc_candidate`、管理状態の書き込みは `state_store` を使う。このファイルは段階の処理を再実装せず、
 順に呼んで結果をつなぐだけである。[Index 対象文書]は書き換えない。[DLID]を発行・保存しない。
 
+## 検索基盤（DES-011、REQ-006）
+
+`advance` は、構築の入口で[検索基盤]を決める（`backend_select`。設定ファイル `.doc-link/config.json` の `backend` と、
+[doc-db]への接続の可否）。[強制スイッチ]の呼び出しごとの指定（引数）は無い。
+
+[doc-db]に接続できないとき（実行ファイルはある）、script は[doc-db]を起動せずに止まり、`action` が `confirm_docdb_startup`
+（利用者に、起動してよいかを聞く）の結果を返す（終了コード 0。何も書き込まない）。利用者の回答は、build-id を付けない
+最初の呼び出しの `--docdb-startup` で渡す。`start` は起動してよい（期限付きの再接続）、`toc` は起動せず今回は[ToC]で続ける。
+許可を得て起動したのに接続できなかったときは、切り替えずに `action` が `docdb_startup_failed`（起動できなかったこと・原因の
+分類・起動の command・選択肢）の結果を返す。実行ファイルが無い・[doc-db]の設定から `port` を得られないときは、起動できない
+ので、許可を求めずに[ToC]へ切り替える。
+
+- `toc`（強制スイッチ、または[doc-db]を使えず[自動切り替え]・利用者の選択で切り替えた）: 現在の構築のとおり、`toc-updater` に[AI 生成
+  フィールド]を作らせる。[doc-db]へ触れない。切り替えたときは、`backend_switch` に通知を持つ
+- `doc-db`: 機械取得の構築（B-01〜B-07）だけを行い、[AI 生成フィールド]は作らない（`update_plan.apply_unfilled`。
+  候補の検査は[文書情報]の[内容ハッシュ]を求めない）。[確定 ToC]を公開した後、[doc-db]の同期（`docdb_sync`）を行う。
+  同期が成功したら、`done` を返す。同期が接続できない (a)・OpenAI の失敗 (b) で切り替わったときは、[ToC]として続ける:
+  「[AI 生成フィールド]が要る文書」があれば、`invoke_toc_updater` を返し（`backend` は `toc`、`backend_switch` に通知）、
+  以後の `advance --build-id` は、作業状態に記録した基盤で続ける（[doc-db]へ再接続しない）。同期が障害のときは、
+  終了コード 4 を返す（[確定 ToC]は確定済み）
+
+`advance` の結果は、`backend`（`doc-db` か `toc`）・`forced`・`startup`・`backend_switch`（切り替えが無ければ `null`）を持つ。
+`doc-db` のときは、`docdb_sync`（同期の結果。一覧の件数・除いた文書の件数・[doc-db]の処理の件数）も持つ。
+
 ## 呼び出し方
 
 4 つのサブコマンドを持つ。すべて `--project-root`（既定は現在のディレクトリ）を取る。`advance` と `submit` は、
@@ -126,9 +150,10 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 | code | 意味                                                                                                                                                  |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0    | 操作が完了した（`advance` は次の行動を返した。`submit`・`deliver` は生成結果を保存した。`request` は依頼のパスを返した）                              |
-| 1    | 区別のないエラー（対象指定の拒否、識別値・状態が合わない、段階の前提が満たされない、生成対象でない文書への `submit`・`deliver`、公開されていない依頼） |
+| 1    | 区別のないエラー（対象指定の拒否、設定ファイルを受理できない、識別値・状態が合わない、段階の前提が満たされない、生成対象でない文書への `submit`・`deliver`、公開されていない依頼） |
 | 2    | 引数を受理できない（`argparse`）                                                                                                                      |
 | 3    | 構築が失敗した（B-08）。文書を読めない、[確定 ToC]・[文書情報]を読めない、生成結果が検証に通らない・届かない、`deliver` の終了の値が `"0"` でない・無い、候補の検査・公開の失敗。旧[確定 ToC]は残る |
+| 4    | [doc-db]を使う構築で、[確定 ToC]は確定したが、[doc-db]の同期が障害で失敗した（接続できない (a)・OpenAI の失敗 (b) 以外の失敗。切り替えない）。`docdb_sync.errors` に原因 |
 
 ## 仕様の解釈（設計書が値や形式を定めていない点）
 
@@ -142,8 +167,8 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
   または検証に通らなかった）。Agent の完了の後に呼ぶ前提なので、待たず失敗にする
 - 対象文書の依頼の分け方: 生成対象を、ディレクトリごとにまとめて 3 文書ずつに分け、ディレクトリ名の昇順に並べ、
   先頭の 10 件を 1 回の依頼にする
-- 検査の時点（`checked_at`）: 参照検査の結果と最終検査状態が、前回確定した[確定 ToC]と時点を除いて同じなら、前回の
-  時点を引き継ぐ（再実行で不要な差分を作らない。NFR-003）。違えば、今回の時点（UTC、秒）を記録する
+- 検査の時点: [文書情報]・[確定 ToC]には記録しない。参照検査の結果と最終検査状態が前回と同じなら、保存内容も同じなので、
+  再実行で不要な差分を作らない（NFR-003）。参照検査を実行した時点は、明細ファイルの検出事項の `scope` が持つ
 - `reference_check` の `findings`: 一致（`match`）以外の参照の検査結果。件数は `summary` に分類ごとに持つ
 - 依頼の置き場と名前: `<構築 ID>.exchange/request-<符号化した、昇順に並べて "+" でつないだ[文書 ID]>.json`。
   `toc-updater` が受け取る[文書 ID]の並びの順に依らず、同じ組は同じファイルに当たる。結果は
@@ -155,7 +180,6 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 """
 
 import argparse
-import dataclasses
 import json
 import os
 import posixpath
@@ -168,10 +192,14 @@ from pathlib import Path
 # 共通モジュールは、プラグイン直下の scripts/（このファイルの 3 つ上の scripts/）にある。
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 
+import backend_config  # noqa: E402
+import backend_select  # noqa: E402
 import build_state_machine as bsm  # noqa: E402
 import change_set as cs  # noqa: E402
 from clock import utc_now  # noqa: E402
 import detail_file  # noqa: E402
+import docdb_contract  # noqa: E402
+import docdb_sync  # noqa: E402
 import script_output  # noqa: E402
 import state_store  # noqa: E402
 import target_spec  # noqa: E402
@@ -191,6 +219,7 @@ SKILL = "index-docs"
 WORK_DIR_PARTS = (*state_store.TEMP_ROOT, SKILL)
 
 EXIT_BUILD_FAILED = 3
+EXIT_SYNC_FAILED = 4
 
 ACTION_INVOKE = "invoke_toc_updater"
 ACTION_DONE = "done"
@@ -248,6 +277,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     advance.add_argument("--project-root", default=os.getcwd())
     advance.add_argument("--build-id", default=None)
+    advance.add_argument(
+        "--docdb-startup",
+        choices=backend_select.STARTUP_CHOICES,
+        default=None,
+        help="doc-db に接続できないときの利用者の回答（start＝起動してよい、toc＝今回は ToC で続ける）。build-id なしの呼び出しだけで使う",
+    )
     target_spec.add_target_arguments(advance)
 
     submit = subcommands.add_parser("submit", help="生成結果を 1 文書分ずつ差し込む")
@@ -539,8 +574,19 @@ def _change_problems(exc: cs.ChangeFailure) -> list[toc_candidate.CandidateProbl
     ]
 
 
-def _prepare(root, spec, toc_key, session: bsm.BuildSession, write_paths: bool):
-    """対象確定（B-01）・ID 確認（B-02）・変更確定（B-03）と更新計画を行う。失敗は `BuildFailed`。"""
+def _prepare(
+    root,
+    spec,
+    toc_key,
+    session: bsm.BuildSession,
+    write_paths: bool,
+    backend: str = backend_select.BACKEND_TOC,
+):
+    """対象確定（B-01）・ID 確認（B-02）・変更確定（B-03）と更新計画を行う。失敗は `BuildFailed`。
+
+    `backend` が `doc-db` のとき、`write_paths` なら、生成対象の文書の[文書情報]を、AI に生成させずに整える
+    （`update_plan.apply_unfilled`。[AI 生成フィールド]を作らない）。
+    """
     expansion = target_spec.expand(spec, root)
     unreadable = [
         problem
@@ -576,9 +622,12 @@ def _prepare(root, spec, toc_key, session: bsm.BuildSession, write_paths: bool):
     if write_paths:
         # 移動は、パスを新しくする前に記録する。あとの比較には、移動が現れない
         _record_moves(root, toc_key, changes)
+        outcomes = update_plan.apply_path_updates(root, SKILL, plan)
+        if backend == backend_select.BACKEND_DOCDB:
+            outcomes += update_plan.apply_unfilled(root, SKILL, plan)
         failed = [
             outcome
-            for outcome in update_plan.apply_path_updates(root, SKILL, plan)
+            for outcome in outcomes
             if outcome.status == update_plan.STATUS_FAILED
         ]
         if failed:
@@ -674,8 +723,34 @@ def _write_requests(root: Path, build_id: str, wave: list[list]) -> None:
         )
 
 
-def _issue_wave(root, toc_key, spec, session, build: dict | None, targets) -> dict:
-    """生成対象の依頼（1 回に最大 10 件）を、作業状態に記録して、`invoke_toc_updater` の内容を返す。"""
+def _build_backend_record(info: dict) -> dict:
+    """構築の作業状態に記録する[検索基盤]の情報。"""
+    return {
+        "backend": info["backend"],
+        "forced": info.get("forced", False),
+        "startup": info.get("startup"),
+        "switch": info.get("backend_switch"),
+    }
+
+
+def _info_from_build(build: dict) -> dict:
+    """作業状態に記録した[検索基盤]の情報から、結果に添える情報を作る。記録が無い作業状態は、[ToC]とする。"""
+    return {
+        "backend": build.get("backend", backend_select.BACKEND_TOC),
+        "forced": build.get("forced", False),
+        "startup": build.get("startup"),
+        "backend_switch": build.get("switch"),
+    }
+
+
+def _issue_wave(
+    root, toc_key, spec, session, build: dict | None, targets, info: dict
+) -> dict:
+    """生成対象の依頼（1 回に最大 10 件）を、作業状態に記録して、`invoke_toc_updater` の内容を返す。
+
+    `info` は、その構築の[検索基盤]の情報（`backend`・`forced`・`startup`・`backend_switch`）で、作業状態に記録する。
+    以後の `advance --build-id` は、再判定せず、この記録で続ける。
+    """
     batches = _batches(targets)
     wave = batches[:MAX_CONCURRENT_AGENTS]
     wave_documents = [document for batch in wave for document in batch]
@@ -709,9 +784,11 @@ def _issue_wave(root, toc_key, spec, session, build: dict | None, targets) -> di
                 for document in wave_documents
             ],
             "generated": generated,
+            **_build_backend_record(info),
         },
     )
     return {
+        **info,
         "action": ACTION_INVOKE,
         "state": session.build.state,
         "build_id": build_id,
@@ -730,72 +807,6 @@ def _issue_wave(root, toc_key, spec, session, build: dict | None, targets) -> di
         "remaining_documents": len(targets) - len(wave_documents),
         "await_completion": True,
     }
-
-
-def _previous_toc(root: Path, toc_key: str) -> dict | None:
-    try:
-        return state_store.load_confirmed_toc(root, toc_key)
-    except state_store.StateStoreError as exc:
-        if exc.kind == state_store.KIND_MISSING:
-            return None
-        raise BuildFailed(
-            toc_candidate.STAGE_ASSEMBLY,
-            [
-                toc_candidate.CandidateProblem(
-                    None,
-                    str(exc.path) if exc.path else None,
-                    "version",
-                    f"前の[確定 ToC]を読めない（{exc.kind}）: {exc}",
-                )
-            ],
-            publication=True,
-        ) from exc
-
-
-def _recorded_times(previous: dict) -> dict[str, str]:
-    """前回の確定で、文書ごとに記録した検査の時点。時点が 1 つに決まる文書だけを返す。
-
-    時点は文書ごとの値である。同じ文書を複数の[ToC 識別キー]で使うと、文書によって時点が異なりうる。
-    """
-    times: dict[str, set[str]] = {}
-    for check in previous["last_checks"]:
-        times.setdefault(check["doc_link_id"], set()).add(check["checked_at"])
-    for entry in previous["references"]:
-        times.setdefault(entry["source_doc_id"], set()).add(
-            entry["check"]["checked_at"]
-        )
-    return {
-        doc_id: next(iter(found))
-        for doc_id, found in times.items()
-        if len(found) == 1 and None not in found
-    }
-
-
-def _assemble(root, toc_key, spec, changes, results, now: str) -> dict:
-    """候補を組み立てる。検査の結果が前回の確定と時点を除いて同じなら、前回の時点を引き継ぐ。"""
-    candidate = toc_candidate.assemble_candidate(
-        root, toc_key, spec, changes, results, now
-    )
-    previous = _previous_toc(root, toc_key)
-    if previous is None:
-        return candidate
-    recorded = _recorded_times(previous)
-    whens = {doc_id: recorded.get(doc_id, now) for doc_id in results}
-    if all(when == now for when in whens.values()):
-        return candidate
-    carried = {
-        doc_id: [
-            dataclasses.replace(result, checked_at=whens[doc_id]) for result in found
-        ]
-        for doc_id, found in results.items()
-    }
-    same_time = toc_candidate.assemble_candidate(
-        root, toc_key, spec, changes, carried, whens
-    )
-    # 版が前の版のままなのは、時点を除いて内容が同じとき（toc_candidate の版の決め方）。
-    if same_time["version"] == previous["version"]:
-        return same_time
-    return candidate
 
 
 def _reference_report(results) -> tuple[dict, list[dict]]:
@@ -841,8 +852,20 @@ def _candidate_failed(exc: toc_candidate.CandidateFailure) -> BuildFailed:
     return BuildFailed(exc.report.stage, list(exc.report.problems), publication=True)
 
 
-def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
-    """参照検査（B-05）・候補の検査（B-06）・一括公開（B-07）まで進める。"""
+def _finish(
+    root,
+    toc_key,
+    spec,
+    session,
+    build,
+    expansion,
+    changes,
+    require_ai_fields: bool = True,
+) -> dict:
+    """参照検査（B-05）・候補の検査（B-06）・一括公開（B-07）まで進める。
+
+    `require_ai_fields` が偽（[doc-db]を使う構築）のとき、候補の検査は、[文書情報]の[内容ハッシュ]を求めない。
+    """
     session.apply(bsm.EVENT_ACQUIRE_INFO, bsm.BuildFacts(info_acquired=True))
     now = utc_now()
     scanner = DirectoryScanner(root)
@@ -867,8 +890,12 @@ def _finish(root, toc_key, spec, session, build, expansion, changes) -> dict:
     )
 
     try:
-        candidate = _assemble(root, toc_key, spec, changes, results, now)
-        toc_candidate.validate_candidate(root, candidate, changes.confirmed_documents)
+        candidate = toc_candidate.assemble_candidate(
+            root, toc_key, spec, changes, results
+        )
+        toc_candidate.validate_candidate(
+            root, candidate, changes.confirmed_documents, require_ai_fields
+        )
     except toc_candidate.CandidateFailure as exc:
         raise _candidate_failed(exc) from exc
     session.apply(
@@ -977,6 +1004,70 @@ def _parse_target(args, root: Path):
     return spec, spec.key or target_spec.RESERVED_KEY
 
 
+def _docdb_done(root, toc_key, spec, session, expansion, changes, decision, info: dict):
+    """[doc-db]を使う構築。機械取得の構築を公開した後、[doc-db]を同期する。`(payload, 終了コード)` を返す。
+
+    同期が切り替え（(a)・(b)）になったときは、[ToC]として続ける。[確定 ToC]は既に確定している。
+    「[AI 生成フィールド]が要る文書」があれば `invoke_toc_updater` を返し、無ければ完了を返す。
+    """
+    payload = _finish(
+        root,
+        toc_key,
+        spec,
+        session,
+        None,
+        expansion,
+        changes,
+        require_ai_fields=False,
+    )
+    outcome = docdb_sync.run_sync(decision.client, root, toc_key)
+    payload = {**payload, **info, "docdb_sync": outcome.to_dict()}
+    if outcome.status == docdb_sync.STATUS_SYNCED:
+        if not outcome.contract_met:
+            payload["warnings"] = [
+                *payload["warnings"],
+                docdb_contract.WARNING_CONTRACT_UNMET,
+            ]
+        return payload, script_output.EXIT_OK
+    if outcome.status == docdb_sync.STATUS_FAILED:
+        return (
+            {
+                **payload,
+                "errors": outcome.errors,
+                "toc_published": True,
+            },
+            EXIT_SYNC_FAILED,
+        )
+    # 切り替え: [ToC]として続ける（[確定 ToC]の機械取得の情報は、基盤によらず確定済み）
+    switch = backend_select.Switch(outcome.reason_code, outcome.cause, outcome.presumed)
+    toc_session = _session(root, toc_key)
+    _, _, plan = _prepare(
+        root, spec, toc_key, toc_session, False, backend_select.BACKEND_TOC
+    )
+    targets = plan.generation_targets
+    switched = {
+        "backend": backend_select.BACKEND_TOC,
+        "forced": False,
+        "startup": decision.startup,
+        "backend_switch": switch.with_impact(len(targets)).to_dict(),
+    }
+    if targets:
+        wave = _issue_wave(root, toc_key, spec, toc_session, None, targets, switched)
+        return (
+            {
+                **wave,
+                "machine_toc": {
+                    "version": payload["version"],
+                    "published": payload["published"],
+                    "detail_path": payload["detail_path"],
+                },
+                "docdb_sync": outcome.to_dict(),
+            },
+            script_output.EXIT_OK,
+        )
+    return {**payload, **switched}, script_output.EXIT_OK
+
+
 def advance(args: argparse.Namespace) -> int:
     root = Path(os.path.abspath(args.project_root))
     try:
@@ -986,16 +1077,45 @@ def advance(args: argparse.Namespace) -> int:
     session = _session(root, toc_key)
     build = None
     try:
+        decision = None
         if args.build_id is not None:
+            if args.docdb_startup is not None:
+                raise Rejected(
+                    [
+                        "--docdb-startup は、--build-id を付けない最初の呼び出しだけで指定できる"
+                    ]
+                )
             build = _load_build(root, args.build_id, toc_key, spec)
-        expansion, changes, plan = _prepare(root, spec, toc_key, session, True)
-        targets = plan.generation_targets
-        if build is not None:
-            _check_generation_received(root, build, targets)
-        if targets:
-            payload = _issue_wave(root, toc_key, spec, session, build, targets)
+            info = _info_from_build(build)
         else:
-            payload = _finish(root, toc_key, spec, session, build, expansion, changes)
+            try:
+                decision = backend_select.decide(root, startup=args.docdb_startup)
+            except backend_config.BackendConfigError as exc:
+                raise Rejected(exc.errors) from exc
+            if decision.pending is not None:
+                # 利用者の回答を待つ。構築しない（何も書き込まない）
+                return _emit(decision.pending.to_dict(), script_output.EXIT_OK)
+            info = decision.to_dict()
+        backend = info["backend"]
+        expansion, changes, plan = _prepare(root, spec, toc_key, session, True, backend)
+        code = script_output.EXIT_OK
+        if backend == backend_select.BACKEND_DOCDB:
+            payload, code = _docdb_done(
+                root, toc_key, spec, session, expansion, changes, decision, info
+            )
+        else:
+            targets = plan.generation_targets
+            if build is not None:
+                _check_generation_received(root, build, targets)
+            if targets:
+                payload = _issue_wave(
+                    root, toc_key, spec, session, build, targets, info
+                )
+            else:
+                payload = {
+                    **_finish(root, toc_key, spec, session, build, expansion, changes),
+                    **info,
+                }
     except Rejected as exc:
         return _rejected(session, exc.errors)
     except bsm.TransitionRejected as exc:
@@ -1006,7 +1126,7 @@ def advance(args: argparse.Namespace) -> int:
         if build is not None:
             _remove_build(root, build["build_id"])
         return _failed(root, toc_key, session, failure)
-    return _emit(payload, script_output.EXIT_OK)
+    return _emit(payload, code)
 
 
 def _generated_result(args: argparse.Namespace) -> dict:

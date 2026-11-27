@@ -11,13 +11,14 @@ doc_link_id: DLID-zvepba87h7zk
 | [DES-001 全体設計][des-001]              | システム境界、主要操作の接続、全体シーケンス、共通不変条件                                            |
 | [DES-002 実行主体][des-002]              | Skill・決定論的な script・各 AI の責務と書き込み権限                                                  |
 | [DES-003 データモデル][des-003]          | 識別子、情報源、論理的な関係・版・鮮度                                                                |
-| [DES-004 状態モデル][des-004]            | 独立した状態機械、許可遷移、禁止遷移、失敗・再実行                                                    |
+| [DES-004 状態モデル][des-004]            | 独立した状態機械（ToC の構築、DLID 付与、doc-db の同期）、許可遷移、禁止遷移、失敗・再実行            |
 | [DES-005 ToC 構築][des-005]              | 対象確定、ID 確認、DLID 付与操作、差分、情報取得、候補検査・確定                                      |
 | [DES-006 文書検索][des-006]              | 検索前検査、利用者の選択、検索結果の鮮度、[DLID]の解決                                                |
 | [DES-007 参照と変更通知][des-007]        | 参照検査、逆引き、[変更影響候補の通知]                                                                |
 | [DES-008 内容規則][des-008]              | Markdown 解析、ID、ハッシュ、AI 生成結果の検証契約                                                    |
 | [DES-009 検証設計][des-009]              | 状態遷移と変換規則のテスト、要件との対応                                                              |
 | [DES-010 SKILL と Agent の構成][des-010] | SKILL・カスタム Agent の責務、検査の SKILL ごとの検出事項の扱い、ユースケース、SKILL ごとのシーケンス |
+| [DES-011 検索基盤の切り替え][des-011]    | doc-db と ToC の切り替え、doc-db の同期・検索結果の対応づけ、自動切り替えと通知                       |
 
 各図は理解用の表示であり、許可遷移の規範は DES-004 の遷移表とする。各処理の詳細は当該文書だけに置き、全体設計には重複して記載しない。
 
@@ -31,3 +32,4 @@ doc_link_id: DLID-zvepba87h7zk
 [des-008]: DES-008_content-rules.md "f28039845959 DLID-ywa6htx8vq09"
 [des-009]: DES-009_verification.md "d35ff8247ac2 DLID-xmg0jcmep2h2"
 [des-010]: DES-010_skill-composition.md "e6cd2ff8b7ec DLID-7e90gq3sdncc"
+[des-011]: DES-011_backend-switch.md "4a533053fc58 DLID-dwtbdwda6d0e"

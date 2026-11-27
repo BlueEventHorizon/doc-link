@@ -39,6 +39,7 @@ uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_toc.py" --project-root "${CLA
   - `counts`: 変更の種別ごとの文書の件数（`new`・`departed`・`path_changed`・`content_changed`・`references_changed`）、変更のあるセクションの件数（`sections`）、ID 未付与・ID 重複で ToC に入れなかった文書の件数（`missing_id`・`duplicate_id`）、ToC に入っているが今回 ID の重複で除外された文書の件数（`excluded_in_toc`。再構築すると ToC から除かれる）
   - `scale`: 再構築の規模（新規・離脱・パス変更・内容変更・ID 未付与・ID 重複の件数と、AI による生成が必要な文書の件数）
   - `target_spec_changed` が真のときは、渡された対象指定が、ToC に保存された指定（`saved_target_spec`）と違うこと
+- `ai_fields_needed`・`ai_fields_unfilled`: AI 生成フィールドが要る文書の件数と、そのうち未生成の文書の件数（未構築・判定不能のときは `null`）。検索基盤によらず、再構築要否とは別に返す。`up_to_date` でも 0 とは限らない。件数は、検索基盤に応じて扱う（doc-db を使うときは無視する。ToC を使うときは、未生成の文書があれば、または再構築不要なのに 0 でなければ、`index-docs` による構築が要る）。このスキルは doc-db へ接続せず、設定ファイルも読まない
 - `problems`・`warnings`: 存在しない・Markdown でない指定など。あれば、あわせて報告する
 
 明細ファイルは、報告に文書ごとの明細が要るときだけ読む。件数が多いときは、一度に全部を読まない。

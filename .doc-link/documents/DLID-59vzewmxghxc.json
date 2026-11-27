@@ -14,7 +14,6 @@
     "caller handling"
   ],
   "last_check": {
-    "checked_at": "2026-11-25T11:41:00+00:00",
     "result": "success"
   },
   "path": "docs/rules/plugin_script_error_output_rules.md",

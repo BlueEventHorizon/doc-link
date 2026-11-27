@@ -12,6 +12,8 @@ Agent の結果の受け取り（TASK-014）、[ToC 候補]の組み立てと公
 - `build_update_plan(project_root, change_set)` が `UpdatePlan` を返す。文書と[文書情報]を読むだけで、何も書き込まない。
   入力は変更集合と[文書情報]だけであり、指定されていないキーの[ToC]は読まない
 - `apply_path_updates(project_root, skill, plan)` が、パスだけの更新を保存する
+- `apply_unfilled(project_root, skill, plan)` が、[doc-db]を使う構築のために、生成対象の文書の[文書情報]を、AI に生成させ
+  ずに整える（下の「[AI 生成フィールド]を作らない構築」）
 - `store_generated(project_root, skill, plan, generated)` が、検証済みの生成結果を文書ごとに保存する
 - 失敗は `change_set.ChangeFailure`（計画を作れない。`kind` を保つ。例外クラスと失敗の区別は `change_set` のものを使う）、または保存結果 `StoreOutcome` の `failed`（文書ごと）で返す
 
@@ -54,6 +56,17 @@ Agent の結果の受け取り（TASK-014）、[ToC 候補]の組み立てと公
   `H`・係数・余白は、計画にも結果にも含めない（NFR-008）
 - `documents` の順は、変更集合の[確定 Index 対象リスト]の順
 
+[AI 生成フィールド]を作らない構築（`apply_unfilled`。DES-011 §3・§6、要件 REQ-006 FR-019・D-064）:
+
+- 生成対象の文書のうち、[文書情報]が無い文書（`new_document`）は、[AI 生成フィールド]を持たない（未生成）[文書情報]を
+  保存する。目的は空の文字列、概要・適用作業・キーワードは空の配列、[内容ハッシュ]は `UNFILLED_CONTENT_HASH`（空の
+  文字列。実在の[内容ハッシュ]と一致しない）、タイトルは H1 から取れたタイトル（無ければ空の文字列）とする。
+  [内容ハッシュ]が[現在ハッシュ]と一致しないので、次の更新計画は、この文書を `generate`（生成対象）にする
+  （「[AI 生成フィールド]が要る文書」）
+- [文書情報]がある文書（`content_changed`）は、現在のパスだけを更新する。[AI 生成フィールド]と、その[内容ハッシュ]は
+  既存のまま残す。[内容ハッシュ]が[現在ハッシュ]と違うので、[ToC]へ切り替えたとき、再生成の対象になる
+- 文書ごとに保存し、失敗しても残りを続ける。内容が変わらない[文書情報]は書き換えない
+
 保存:
 
 - 生成対象の文書の結果は、H1 から取れたタイトルがあるとき、検証の前に `title` をそのタイトルで置き換える
@@ -90,6 +103,9 @@ REASON_CONTENT_CHANGED = "content_changed"
 STATUS_SAVED = "saved"
 STATUS_UNCHANGED = "unchanged"
 STATUS_FAILED = "failed"
+
+#: 未生成の[文書情報]の[内容ハッシュ]。実在の[内容ハッシュ]（SHA-256）と一致しない
+UNFILLED_CONTENT_HASH = ""
 
 KIND_REJECTED = "rejected"
 KIND_NOT_PLANNED = "not_planned"
@@ -128,6 +144,10 @@ class DocumentPlan:
     reason: str | None
     title: str | None
     generate_fields: tuple[str, ...]
+    # [AI 生成フィールド]が未生成か（[内容ハッシュ]が `UNFILLED_CONTENT_HASH` の[文書情報]がある）。
+    # 未生成の[文書情報]は、[doc-db]を使う構築が作る。[文書情報]がまだ無い新規の文書と、既存の[AI 生成フィールド]が
+    # 古いだけの文書は偽
+    unfilled: bool = False
 
     @property
     def limits(self) -> dict[str, int]:
@@ -160,6 +180,11 @@ class UpdatePlan:
     @property
     def generation_targets(self) -> tuple[DocumentPlan, ...]:
         return tuple(d for d in self.documents if d.action == ACTION_GENERATE)
+
+    @property
+    def unfilled_targets(self) -> tuple[DocumentPlan, ...]:
+        """生成対象のうち、[AI 生成フィールド]が未生成の文書。"""
+        return tuple(d for d in self.generation_targets if d.unfilled)
 
     def to_dict(self) -> dict:
         return {
@@ -268,6 +293,9 @@ def build_update_plan(project_root: str | Path, change_set: ChangeSet) -> Update
                 reason=reason,
                 title=title,
                 generate_fields=generate_fields,
+                unfilled=info is not None
+                and action == ACTION_GENERATE
+                and info["content_hash"] == UNFILLED_CONTENT_HASH,
             )
         )
     if problems or state_problems:
@@ -315,6 +343,37 @@ def apply_path_updates(
             outcomes.append(_failed(plan_doc, exc.kind, [FieldFailure(None, str(exc))]))
             continue
         info["path"] = plan_doc.path
+        outcomes.append(_save(root, skill, plan_doc, info))
+    return outcomes
+
+
+def apply_unfilled(
+    project_root: str | Path, skill: str, plan: UpdatePlan
+) -> list[StoreOutcome]:
+    """[doc-db]を使う構築で、生成対象の文書の[文書情報]を、AI に生成させずに整える（モジュールの docstring を参照）。"""
+    root = Path(project_root)
+    outcomes: list[StoreOutcome] = []
+    for plan_doc in plan.generation_targets:
+        try:
+            info = state_store.load_document_info(root, plan_doc.doc_link_id)
+        except state_store.StateStoreError as exc:
+            if exc.kind != state_store.KIND_MISSING:
+                outcomes.append(
+                    _failed(plan_doc, exc.kind, [FieldFailure(None, str(exc))])
+                )
+                continue
+            info = {
+                "doc_link_id": plan_doc.doc_link_id,
+                "path": plan_doc.path,
+                "title": plan_doc.title or "",
+                "purpose": "",
+                "summary": [],
+                "tasks": [],
+                "keywords": [],
+                "content_hash": UNFILLED_CONTENT_HASH,
+            }
+        else:
+            info["path"] = plan_doc.path
         outcomes.append(_save(root, skill, plan_doc, info))
     return outcomes
 

@@ -104,7 +104,7 @@ class CheckImpactTestBase(unittest.TestCase):
             item.doc_link_id: check_document(self.root, item.path, checked_at=WHEN)
             for item in cs.confirmed_documents
         }
-        toc_candidate.build_and_publish(self.root, "test", KEY, spec, cs, results, WHEN)
+        toc_candidate.build_and_publish(self.root, "test", KEY, spec, cs, results)
         self.spec = spec
 
     def hashes(self):

@@ -60,7 +60,6 @@ def make_toc(key="main", **overrides):
                 "kind": "document",
                 "check": {
                     "scope": "docs",
-                    "checked_at": "2026-01-01T00:00:00Z",
                     "result": "match",
                     "found_path": None,
                 },
@@ -74,9 +73,7 @@ def make_toc(key="main", **overrides):
                 "source_section_id": None,
             }
         ],
-        "last_checks": [
-            {"doc_link_id": "A", "checked_at": None, "result": "unprocessed"}
-        ],
+        "last_checks": [{"doc_link_id": "A", "result": "unprocessed"}],
     }
     toc.update(overrides)
     return toc
@@ -219,8 +216,8 @@ class DeterminismTest(StoreTestCase):
     def test_last_checks_order_does_not_change_the_bytes(self):
         other = Path(tempfile.mkdtemp(dir=self.root))
         checks = [
-            {"doc_link_id": "A", "checked_at": None, "result": "unprocessed"},
-            {"doc_link_id": "B", "checked_at": None, "result": "success"},
+            {"doc_link_id": "A", "result": "unprocessed"},
+            {"doc_link_id": "B", "result": "success"},
         ]
         self.save_toc(make_toc(last_checks=checks))
         self.save_toc(make_toc(last_checks=list(reversed(checks))), other)
@@ -328,11 +325,7 @@ class ReadFailureTest(StoreTestCase):
         # result が list・dict でも、TypeError ではなく corrupt（読取り）・invalid（保存）で失敗する
         for bad in ([], {}):
             with self.subTest(bad=bad):
-                toc = make_toc(
-                    last_checks=[
-                        {"doc_link_id": "A", "checked_at": None, "result": bad}
-                    ]
-                )
+                toc = make_toc(last_checks=[{"doc_link_id": "A", "result": bad}])
                 with self.assertRaises(state_store.StateStoreError) as ctx:
                     state_store.save_confirmed_toc(self.root, SKILL, toc)
                 self.assertEqual(ctx.exception.kind, "invalid")
@@ -462,9 +455,7 @@ class DocumentFactsTest(StoreTestCase):
         self.assertEqual(len(info_a["references"]), 1)
         self.assertNotIn("source_doc_id", info_a["references"][0])
         self.assertEqual(info_a["references"][0]["target_doc_id"], "B")
-        self.assertEqual(
-            info_a["last_check"], {"checked_at": None, "result": "unprocessed"}
-        )
+        self.assertEqual(info_a["last_check"], {"result": "unprocessed"})
         info_b = state_store.load_document_info(self.root, "B")
         self.assertEqual(info_b["applied_hash"], "b" * 64)
         self.assertEqual(info_b["sections"], [])
@@ -543,7 +534,7 @@ class DocumentFactsTest(StoreTestCase):
             ("references", {**make_toc()["references"][0], "source_doc_id": "X"}),
             (
                 "last_checks",
-                {"doc_link_id": "X", "checked_at": None, "result": "success"},
+                {"doc_link_id": "X", "result": "success"},
             ),
         ):
             with self.subTest(field=name):
@@ -645,6 +636,81 @@ class PreviousFormatTest(StoreTestCase):
         with self.assertRaises(state_store.StateStoreError) as ctx:
             state_store.load_confirmed_toc(self.root, "main")
         self.assertEqual(ctx.exception.kind, "corrupt")
+
+
+class LegacyCheckTimeTest(StoreTestCase):
+    """旧形式の記録にある検査の時点（`checked_at`）は、読むときに無視し、書くときは持たせない。"""
+
+    TIME = "2026-01-01T00:00:00Z"
+
+    def legacy_info(self):
+        return make_info(
+            "A",
+            applied_hash="a" * 64,
+            sections=[],
+            references=[
+                {
+                    "source_section_id": None,
+                    "position": 0,
+                    "target_doc_id": "B",
+                    "target_section_id": None,
+                    "recorded_path": "b.md",
+                    "recorded_content_hash": None,
+                    "kind": "document",
+                    "check": {
+                        "scope": "docs",
+                        "checked_at": self.TIME,
+                        "result": "match",
+                        "found_path": None,
+                    },
+                }
+            ],
+            last_check={"checked_at": self.TIME, "result": "success"},
+        )
+
+    def write_legacy(self):
+        path = state_store.document_info_path(self.root, "A")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(state_store.serialize(self.legacy_info()))
+        return path
+
+    def test_legacy_time_is_ignored_when_reading(self):
+        self.write_legacy()
+        info = state_store.load_document_info(self.root, "A")
+        self.assertEqual(info["last_check"], {"result": "success"})
+        self.assertNotIn("checked_at", info["references"][0]["check"])
+
+    def test_saving_with_a_time_is_rejected(self):
+        with self.assertRaises(state_store.StateStoreError) as ctx:
+            state_store.save_document_info(self.root, SKILL, self.legacy_info())
+        self.assertEqual(ctx.exception.kind, "invalid")
+
+    def test_saving_a_loaded_legacy_record_rewrites_it_once(self):
+        path = self.write_legacy()
+        info = state_store.load_document_info(self.root, "A")
+        self.assertTrue(state_store.save_document_info(self.root, SKILL, info))
+        self.assertNotIn("checked_at", path.read_text("utf-8"))
+        self.assertFalse(state_store.save_document_info(self.root, SKILL, info))
+
+    def test_previous_format_toc_with_legacy_times_is_read(self):
+        toc = make_toc()
+        reference = toc["references"][0]
+        legacy = make_toc(
+            references=[
+                {**reference, "check": {**reference["check"], "checked_at": self.TIME}}
+            ],
+            last_checks=[
+                {"doc_link_id": "A", "checked_at": None, "result": "unprocessed"}
+            ],
+        )
+        for entry in legacy["documents"]:
+            path = state_store.document_info_path(self.root, entry["doc_link_id"])
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(state_store.serialize(make_info(entry["doc_link_id"])))
+        path = state_store.confirmed_toc_path(self.root, "main")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(state_store.serialize(legacy))
+        self.assertEqual(state_store.load_confirmed_toc(self.root, "main"), toc)
 
 
 if __name__ == "__main__":

@@ -19,6 +19,7 @@ import query_docs  # noqa: E402
 import worker_io  # noqa: E402
 
 sys.path.insert(0, str(PROJECT_ROOT / "plugins" / "doc-link" / "scripts"))
+import backend_select  # noqa: E402
 import change_set  # noqa: E402
 import search_prepare  # noqa: E402
 import state_store  # noqa: E402
@@ -43,8 +44,20 @@ TASK = "検索のタスク"
 TARGET = ("--key", KEY, "--paths", "a.md", "b.md")
 
 
+def _force_toc_backend(testcase):
+    """既存の検査が、実機の doc-db へ接続・起動しないよう、基盤判定を[ToC]の強制スイッチに固定する。"""
+    patcher = mock.patch.object(
+        backend_select,
+        "decide",
+        return_value=backend_select.Decision(backend_select.BACKEND_TOC, forced=True),
+    )
+    patcher.start()
+    testcase.addCleanup(patcher.stop)
+
+
 class QueryTestBase(unittest.TestCase):
     def setUp(self):
+        _force_toc_backend(self)
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         self.root = Path(self._tmp.name)
@@ -81,7 +94,7 @@ class QueryTestBase(unittest.TestCase):
             item.doc_link_id: check_document(self.root, item.path, checked_at=WHEN)
             for item in cs.confirmed_documents
         }
-        toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results, WHEN)
+        toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results)
 
     def snapshot(self):
         return {
@@ -451,6 +464,13 @@ class ExchangeTest(QueryTestBase):
 @unittest.skipUnless(shutil.which("uv"), "uv が使えない環境では実行しない")
 class EntryScriptWithUvTest(QueryTestBase):
     SCRIPT = SKILL_SCRIPTS_DIR / "query_docs.py"
+
+    def setUp(self):
+        super().setUp()
+        # 別プロセスで動くので、基盤判定の差し替えは届かない。設定ファイルで[ToC]を強制し、実機の doc-db に触れない
+        config = self.root / ".doc-link" / "config.json"
+        config.parent.mkdir(parents=True, exist_ok=True)
+        config.write_text('{"backend": "toc"}\n', encoding="utf-8")
 
     def uv_run(self, *args):
         return subprocess.run(

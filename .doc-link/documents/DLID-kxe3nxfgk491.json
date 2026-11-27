@@ -1,5 +1,5 @@
 {
-  "applied_hash": "ff59d70f59e6fbd8610f76faebfc5f4b29a5c46101461d28ea66eee94cc998d7",
+  "applied_hash": "693db354a8ba7be2390af25cbf5376bf4737f7dcec3719d97fb3c3db137668b0",
   "content_hash": "ff59d70f59e6fbd8610f76faebfc5f4b29a5c46101461d28ea66eee94cc998d7",
   "doc_link_id": "DLID-kxe3nxfgk491",
   "keywords": [
@@ -15,7 +15,6 @@
     "atomic finalization"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T13:56:07+00:00",
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-003_toc.md",
@@ -23,7 +22,6 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/design/DES-003_data-model.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,7 +36,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -53,7 +50,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -68,7 +64,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -83,7 +78,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -98,7 +92,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -113,7 +106,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -128,7 +120,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -143,7 +134,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -158,7 +148,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -173,7 +162,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -188,7 +176,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -203,7 +190,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -218,7 +204,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -233,7 +218,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -248,7 +232,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -263,7 +246,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -278,7 +260,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -293,7 +274,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -308,7 +288,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -323,7 +302,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -338,7 +316,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -408,6 +385,12 @@
       "section_id": "DLID-ef9szvy6w2cj"
     },
     {
+      "content_hash": "516b8a9b57f3e12298f01f545f0d8ccde9a6a4de98a576f8e8cf3572392614f7",
+      "heading": "7.1 [文書情報]",
+      "position": 2,
+      "section_id": "DLID-dyqq1wmrry2m"
+    },
+    {
       "content_hash": "51b57b11c1e580b0ad80625faf6d5a1741fa2d7aca4226e06336e5ae1d733d15",
       "heading": "11.2.4 [ToC 候補]の検査と確定",
       "position": 25,
@@ -448,6 +431,12 @@
       "heading": "AC-017 [ToC]の再構築",
       "position": 31,
       "section_id": "DLID-ewwpxdk5fbg4"
+    },
+    {
+      "content_hash": "7a3ffa4475ec829a10d73e0e32f31d294b41346fa8aec7703edf3a4cd1d627bc",
+      "heading": "7. [ToC]の情報要件",
+      "position": 1,
+      "section_id": "DLID-3x56epwte9qn"
     },
     {
       "content_hash": "7b75758d45bcdc5b666d963f5d4f7b65f0acda1e3207069e9c37a6fd9a55d24a",
@@ -492,12 +481,6 @@
       "section_id": "DLID-p34dr3pjy0dv"
     },
     {
-      "content_hash": "b12bf84e8effdec0854e896ee020fa43e48e09ebbca0b4e95ea33fd201ecf910",
-      "heading": "7.1 [文書情報]",
-      "position": 2,
-      "section_id": "DLID-dyqq1wmrry2m"
-    },
-    {
       "content_hash": "ba2baf55e29ba1932e6f6d9dd6cfa476c792ce5fd33afc6075323ab73a08da61",
       "heading": "7.3 参照エントリ",
       "position": 4,
@@ -528,16 +511,16 @@
       "section_id": "DLID-dmkbxbz5ph81"
     },
     {
+      "content_hash": "dd92c037436e8f505907d05ae8228e7d8550192df3e951d1e85faa1cf6067a4f",
+      "heading": "doc-link 要件定義書 — [ToC]管理",
+      "position": 0,
+      "section_id": "DLID-4pgmjg3my8bn"
+    },
+    {
       "content_hash": "dfb119ed393adeb400838ece39715b1fb00799a40122950c5e619794703011bf",
       "heading": "10.1.2 [内容ハッシュ]",
       "position": 13,
       "section_id": "DLID-c3prh9y4nbzw"
-    },
-    {
-      "content_hash": "e0ddcc386ede4c513c8d738bc6178e8b9294d1d518e151773032d53154ad77f9",
-      "heading": "doc-link 要件定義書 — [ToC]管理",
-      "position": 0,
-      "section_id": "DLID-4pgmjg3my8bn"
     },
     {
       "content_hash": "e4f7a9b2bfdeacea4ee33a754246b6f57b37210714de50a2438d4652844d910c",
@@ -562,12 +545,6 @@
       "heading": "FR-004 [ToC]の構築と再構築",
       "position": 17,
       "section_id": "DLID-7hjmngynv8sb"
-    },
-    {
-      "content_hash": "f7a6a86cd652637646db38446ec99ac375205f6bc0c02d64f21dd01b6a63c86d",
-      "heading": "7. [ToC]の情報要件",
-      "position": 1,
-      "section_id": "DLID-3x56epwte9qn"
     }
   ],
   "summary": [

@@ -51,7 +51,6 @@
 ## 6. 未処理
 
 - 古い `git stash`（放棄した方式の退避）。
-- Issue #20（`checked_at` の削除）。
 - push、PR、バージョンの更新（`/forge:update-version`）、CHANGELOG。CHANGELOG には、`submit-item`・`submit-end`・`request-path` の廃止、`worker_io.py` の `next`/`answer`、`relevance` の追加と `rejected` の廃止、結果の並びの変更を、破壊的変更として書く。
 
 ## 7. 次に確かめること

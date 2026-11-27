@@ -15,7 +15,6 @@
     "Index target specification"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T13:56:07+00:00",
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-004_search.md",
@@ -23,7 +22,6 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -38,7 +36,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -53,7 +50,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -68,7 +64,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/requirement"

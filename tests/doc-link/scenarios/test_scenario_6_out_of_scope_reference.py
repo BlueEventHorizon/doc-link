@@ -70,15 +70,14 @@ class OutOfScopeReferenceScenarioTest(ScenarioBase):
         self.assertEqual(found["result"], "match")
         self.assertEqual(found["found_path"], "ext/x.md")
         self.assertEqual(found["scope"], "ext")
-        self.assertRegex(
-            found["checked_at"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$"
-        )
-        # 同じ範囲・時点が、構築の結果にも付く
+        # 検査の時点は、管理状態に記録しない
+        self.assertNotIn("checked_at", found)
+        # 構築の結果の検出事項は、走査した範囲と、その実行の時点を持つ
         for finding in result["reference_findings"]:
             self.assertIn("directory", finding["scope"])
-            self.assertEqual(
+            self.assertRegex(
                 finding["scope"]["checked_at"],
-                self.references()[finding["reference"]["dlid"]]["check"]["checked_at"],
+                r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$",
             )
         # 参照元・参照先の文書は書き換わらない
         self.assertEqual(self.snapshot("docs", "ext"), before)

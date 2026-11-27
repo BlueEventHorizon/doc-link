@@ -239,7 +239,6 @@ _SECTION_FIELDS = {
 }
 _REFERENCE_CHECK_FIELDS = {
     "scope": _is_str,
-    "checked_at": _is_str,
     "result": _is_str,
     "found_path": _is_opt_str,
 }
@@ -263,7 +262,6 @@ _REVERSE_REFERENCE_FIELDS = {
 _LAST_CHECK_RESULTS = frozenset({"success", "failure", "unprocessed"})
 _LAST_CHECK_FIELDS = {
     "doc_link_id": _is_str,
-    "checked_at": _is_opt_str,
     "result": lambda value: isinstance(value, str) and value in _LAST_CHECK_RESULTS,
 }
 
@@ -493,8 +491,40 @@ def _read_json(path: Path):
         ) from exc
 
 
+def _without_legacy_times(value):
+    """旧形式の記録にある検査の時点（`checked_at`）を取り除く。
+
+    かつては、文書ごとの `last_check` と、参照ごとの `check` に、検査の時点を記録していた。
+    今は記録しないので、旧形式のファイルは、時点を無視して読む。書くときは時点を持たせない
+    （検証が定義外として拒否する）。
+    """
+    if not isinstance(value, dict):
+        return value
+
+    def _drop(entry):
+        if isinstance(entry, dict) and "checked_at" in entry:
+            return {key: item for key, item in entry.items() if key != "checked_at"}
+        return entry
+
+    converted = dict(value)
+    if "last_check" in converted:
+        converted["last_check"] = _drop(converted["last_check"])
+    if isinstance(converted.get("last_checks"), list):
+        converted["last_checks"] = [_drop(entry) for entry in converted["last_checks"]]
+    if isinstance(converted.get("references"), list):
+        converted["references"] = [
+            (
+                {**entry, "check": _drop(entry["check"])}
+                if isinstance(entry, dict) and "check" in entry
+                else entry
+            )
+            for entry in converted["references"]
+        ]
+    return converted
+
+
 def _load_validated(path: Path, validate, id_field: str, expected_id: str):
-    value = _read_json(path)
+    value = _without_legacy_times(_read_json(path))
     try:
         validate(value)
         if value[id_field] != expected_id:
@@ -549,7 +579,7 @@ def _unconfirmed_facts() -> dict:
 def _recorded_facts(path: Path) -> dict:
     """保存済みの[文書情報]の確定した 4 項目。保存が無い・壊れている（置き換えで直る）ときは、無いことを表す値。"""
     try:
-        existing = _with_facts(_read_json(path))
+        existing = _with_facts(_without_legacy_times(_read_json(path)))
         validate_document_info(existing)
     except StateStoreError as exc:
         if exc.kind in (KIND_MISSING, KIND_CORRUPT):

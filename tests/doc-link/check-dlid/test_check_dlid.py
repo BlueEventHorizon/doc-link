@@ -86,9 +86,7 @@ class CheckTestBase(unittest.TestCase):
                 ],
                 "references": [],
                 "reverse_references": [],
-                "last_checks": [
-                    {"doc_link_id": doc_id, "checked_at": None, "result": "unprocessed"}
-                ],
+                "last_checks": [{"doc_link_id": doc_id, "result": "unprocessed"}],
             },
         )
 

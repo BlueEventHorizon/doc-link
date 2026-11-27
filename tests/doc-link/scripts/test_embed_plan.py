@@ -45,7 +45,6 @@ class PlanTestBase(unittest.TestCase):
             "kind": "doc",
             "check": {
                 "scope": "s",
-                "checked_at": "t",
                 "result": "match",
                 "found_path": None,
             },
@@ -88,9 +87,7 @@ class PlanTestBase(unittest.TestCase):
                     "source_section_id": None,
                 }
             ],
-            "last_checks": [
-                {"doc_link_id": doc_id, "checked_at": None, "result": "unprocessed"}
-            ],
+            "last_checks": [{"doc_link_id": doc_id, "result": "unprocessed"}],
         }
         if previous_format:
             # ひとつ前の保存形式（文書ごとの値を[確定 ToC]のファイルが持つ）

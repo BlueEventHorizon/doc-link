@@ -1,5 +1,5 @@
 {
-  "applied_hash": "fe43f27be4dad4ff03f3582f707f77460794948e9b7ea2f1a8a9e308e22eda1c",
+  "applied_hash": "a44ff906a48e3c409fb5243bf507bb7eb219c252660e4ee0f54afc0d9c95bb2f",
   "content_hash": "fe43f27be4dad4ff03f3582f707f77460794948e9b7ea2f1a8a9e308e22eda1c",
   "doc_link_id": "DLID-yqqrwtycr379",
   "keywords": [
@@ -15,7 +15,6 @@
     "AI-generated fields"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T13:56:07+00:00",
     "result": "success"
   },
   "path": "docs/specs/design/DES-003_data-model.md",
@@ -23,7 +22,6 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/design/DES-002_execution-responsibilities.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -38,7 +36,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/design/DES-010_skill-composition.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -53,7 +50,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/design/DES-011_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/design"
@@ -68,7 +64,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -83,7 +78,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -98,7 +92,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -113,7 +106,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -128,7 +120,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -143,7 +134,6 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
@@ -171,13 +161,19 @@
       "section_id": "DLID-61vvsqe67hht"
     },
     {
+      "content_hash": "749488cfd9369bdc88c17dabc16a697d6369b77aff8b32490c20fae57265842f",
+      "heading": "2. 情報と識別子",
+      "position": 2,
+      "section_id": "DLID-m8vs7s3gahbx"
+    },
+    {
       "content_hash": "74e3dd3d00601bc95e7d92289621362326c0be7934fdcd8290b1ed492bfe0ca6",
       "heading": "5. 未決の関係",
       "position": 5,
       "section_id": "DLID-yakr636h28ce"
     },
     {
-      "content_hash": "799d21c425e34574ca6fc880718185834b6714697173b964649dc0b9e72c3aaa",
+      "content_hash": "7fd93c6b678d48d00f64b14e63804eb74b7eb004515a9c563823e50d7c6e7d1e",
       "heading": "DES-003 論理データモデル",
       "position": 0,
       "section_id": "DLID-r0cbjnptm8qv"
@@ -187,12 +183,6 @@
       "heading": "1. モデルの境界",
       "position": 1,
       "section_id": "DLID-3wwk8rkdkpam"
-    },
-    {
-      "content_hash": "e31cfc0d59b862a04bf33997ae8b12ddb95f6afc52183654248592fb3babcd80",
-      "heading": "2. 情報と識別子",
-      "position": 2,
-      "section_id": "DLID-m8vs7s3gahbx"
     }
   ],
   "summary": [

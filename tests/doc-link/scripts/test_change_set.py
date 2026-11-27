@@ -98,7 +98,6 @@ class ChangeSetTestBase(unittest.TestCase):
                         "kind": "doc",
                         "check": {
                             "scope": "s",
-                            "checked_at": "t",
                             "result": "match",
                             "found_path": None,
                         },

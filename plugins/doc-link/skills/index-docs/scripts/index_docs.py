@@ -167,8 +167,8 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
   または検証に通らなかった）。Agent の完了の後に呼ぶ前提なので、待たず失敗にする
 - 対象文書の依頼の分け方: 生成対象を、ディレクトリごとにまとめて 3 文書ずつに分け、ディレクトリ名の昇順に並べ、
   先頭の 10 件を 1 回の依頼にする
-- 検査の時点（`checked_at`）: 参照検査の結果と最終検査状態が、前回確定した[確定 ToC]と時点を除いて同じなら、前回の
-  時点を引き継ぐ（再実行で不要な差分を作らない。NFR-003）。違えば、今回の時点（UTC、秒）を記録する
+- 検査の時点: [文書情報]・[確定 ToC]には記録しない。参照検査の結果と最終検査状態が前回と同じなら、保存内容も同じなので、
+  再実行で不要な差分を作らない（NFR-003）。参照検査を実行した時点は、明細ファイルの検出事項の `scope` が持つ
 - `reference_check` の `findings`: 一致（`match`）以外の参照の検査結果。件数は `summary` に分類ごとに持つ
 - 依頼の置き場と名前: `<構築 ID>.exchange/request-<符号化した、昇順に並べて "+" でつないだ[文書 ID]>.json`。
   `toc-updater` が受け取る[文書 ID]の並びの順に依らず、同じ組は同じファイルに当たる。結果は
@@ -180,7 +180,6 @@ SKILL と `toc-updater` は、この script を 1 本だけ呼ぶ。script は�
 """
 
 import argparse
-import dataclasses
 import json
 import os
 import posixpath
@@ -810,72 +809,6 @@ def _issue_wave(
     }
 
 
-def _previous_toc(root: Path, toc_key: str) -> dict | None:
-    try:
-        return state_store.load_confirmed_toc(root, toc_key)
-    except state_store.StateStoreError as exc:
-        if exc.kind == state_store.KIND_MISSING:
-            return None
-        raise BuildFailed(
-            toc_candidate.STAGE_ASSEMBLY,
-            [
-                toc_candidate.CandidateProblem(
-                    None,
-                    str(exc.path) if exc.path else None,
-                    "version",
-                    f"前の[確定 ToC]を読めない（{exc.kind}）: {exc}",
-                )
-            ],
-            publication=True,
-        ) from exc
-
-
-def _recorded_times(previous: dict) -> dict[str, str]:
-    """前回の確定で、文書ごとに記録した検査の時点。時点が 1 つに決まる文書だけを返す。
-
-    時点は文書ごとの値である。同じ文書を複数の[ToC 識別キー]で使うと、文書によって時点が異なりうる。
-    """
-    times: dict[str, set[str]] = {}
-    for check in previous["last_checks"]:
-        times.setdefault(check["doc_link_id"], set()).add(check["checked_at"])
-    for entry in previous["references"]:
-        times.setdefault(entry["source_doc_id"], set()).add(
-            entry["check"]["checked_at"]
-        )
-    return {
-        doc_id: next(iter(found))
-        for doc_id, found in times.items()
-        if len(found) == 1 and None not in found
-    }
-
-
-def _assemble(root, toc_key, spec, changes, results, now: str) -> dict:
-    """候補を組み立てる。検査の結果が前回の確定と時点を除いて同じなら、前回の時点を引き継ぐ。"""
-    candidate = toc_candidate.assemble_candidate(
-        root, toc_key, spec, changes, results, now
-    )
-    previous = _previous_toc(root, toc_key)
-    if previous is None:
-        return candidate
-    recorded = _recorded_times(previous)
-    whens = {doc_id: recorded.get(doc_id, now) for doc_id in results}
-    if all(when == now for when in whens.values()):
-        return candidate
-    carried = {
-        doc_id: [
-            dataclasses.replace(result, checked_at=whens[doc_id]) for result in found
-        ]
-        for doc_id, found in results.items()
-    }
-    same_time = toc_candidate.assemble_candidate(
-        root, toc_key, spec, changes, carried, whens
-    )
-    # 版が前の版のままなのは、時点を除いて内容が同じとき（toc_candidate の版の決め方）。
-    if same_time["version"] == previous["version"]:
-        return same_time
-    return candidate
-
-
 def _reference_report(results) -> tuple[dict, list[dict]]:
     """参照検査結果の（分類ごとの件数、一致以外の検出事項の全件）を返す。
 
@@ -957,7 +890,9 @@ def _finish(
     )
 
     try:
-        candidate = _assemble(root, toc_key, spec, changes, results, now)
+        candidate = toc_candidate.assemble_candidate(
+            root, toc_key, spec, changes, results
+        )
         toc_candidate.validate_candidate(
             root, candidate, changes.confirmed_documents, require_ai_fields
         )

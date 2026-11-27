@@ -94,7 +94,7 @@ class QueryTestBase(unittest.TestCase):
             item.doc_link_id: check_document(self.root, item.path, checked_at=WHEN)
             for item in cs.confirmed_documents
         }
-        toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results, WHEN)
+        toc_candidate.build_and_publish(self.root, "test", key, spec, cs, results)
 
     def snapshot(self):
         return {

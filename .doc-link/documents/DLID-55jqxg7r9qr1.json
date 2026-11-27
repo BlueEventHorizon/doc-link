@@ -15,7 +15,6 @@
     "supply chain"
   ],
   "last_check": {
-    "checked_at": "2026-11-25T11:41:00+00:00",
     "result": "success"
   },
   "path": "docs/rules/plugin_uv_usage_rules.md",
@@ -23,7 +22,6 @@
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-25T11:41:00+00:00",
         "found_path": "docs/rules/plugin_implementation_guidelines.md",
         "result": "match",
         "scope": "docs/rules"

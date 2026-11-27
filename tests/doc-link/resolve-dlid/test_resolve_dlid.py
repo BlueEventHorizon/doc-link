@@ -79,8 +79,7 @@ class Base(unittest.TestCase):
             "references": [],
             "reverse_references": [],
             "last_checks": [
-                {"doc_link_id": d, "checked_at": None, "result": "unprocessed"}
-                for d in doc_ids
+                {"doc_link_id": d, "result": "unprocessed"} for d in doc_ids
             ],
         }
 

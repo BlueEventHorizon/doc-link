@@ -1,65 +1,35 @@
 {
-  "applied_hash": "a18201d4a6880bcd5e8778c9624d8cf4a536c3876dc72b796ff8986b7e8cb587",
-  "content_hash": "a18201d4a6880bcd5e8778c9624d8cf4a536c3876dc72b796ff8986b7e8cb587",
+  "applied_hash": "86f72a2c3b926eb2f9e10f4ff8192aca919922cee1178eea421a9c98162f413f",
+  "content_hash": "86f72a2c3b926eb2f9e10f4ff8192aca919922cee1178eea421a9c98162f413f",
   "doc_link_id": "DLID-h96208rqr773",
   "keywords": [
     "document search",
+    "FR-006",
     "ToC",
     "rebuild confirmation",
+    "target specification file",
+    "recall-first",
     "search result",
-    "recall",
-    "ToC identification key",
-    "Index target specification",
+    "AC-019",
     "stale ToC",
-    "doc-link",
-    "doc-db"
+    "Index target specification"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T09:48:01+00:00",
+    "checked_at": "2026-11-26T13:56:07+00:00",
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-004_search.md",
-  "purpose": "Requirements for document search in doc-link when the ToC is the search backend: finding task-relevant documents, pre-search rebuild confirmation, result contents, and the related acceptance criterion.",
+  "purpose": "Requirements for document search when the search backend is ToC: recall-first search, pre-search rebuild check with a two-choice prompt, target specification file, and required result items.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-001_overview.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 0,
-      "recorded_content_hash": "93356ddc0c6c",
-      "recorded_path": "REQ-001_overview.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-veg2nsjk8zw1",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 1,
-      "recorded_content_hash": "d4eb78414c6e",
-      "recorded_path": "REQ-002_document-id.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-002_document-id.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 2,
+      "position": 0,
       "recorded_content_hash": "0292868ab4b5",
       "recorded_path": "REQ-002_document-id.md#fr-017-toc-識別キーとindex-対象指定の受領-dlid-3wc02prwb6x7",
       "source_section_id": null,
@@ -68,28 +38,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-003_toc.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 3,
-      "recorded_content_hash": "c065536a773d",
-      "recorded_path": "REQ-003_toc.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-kxe3nxfgk491",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 7,
+      "position": 2,
       "recorded_content_hash": "f55cd670bc00",
       "recorded_path": "REQ-003_toc.md#fr-004-tocの構築と再構築-dlid-7hjmngynv8sb",
       "source_section_id": null,
@@ -98,43 +53,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-004_search.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 4,
-      "recorded_content_hash": "3dee26a7c09a",
-      "recorded_path": "REQ-004_search.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-h96208rqr773",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 5,
-      "recorded_content_hash": "762ad095b964",
-      "recorded_path": "REQ-005_references.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-005_references.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 8,
+      "position": 3,
       "recorded_content_hash": "0cbc9091ee0f",
       "recorded_path": "REQ-005_references.md#fr-016-不整合検査-dlid-jhkngqtfdnhn",
       "source_section_id": null,
@@ -143,13 +68,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
-      "position": 6,
+      "position": 1,
       "recorded_content_hash": "75495766ea7c",
       "recorded_path": "REQ-006_backend-switch.md",
       "source_section_id": null,
@@ -159,7 +84,7 @@
   ],
   "sections": [
     {
-      "content_hash": "19b53773ef4cc1f41835fc3ef40aeb1dd8298ef061fe16c941b2ec93a49df5a1",
+      "content_hash": "2f00ed69e1bdfe50aa77fb5c3af675c86053281b91d788db19d0fed3d8897a64",
       "heading": "doc-link 要件定義書 — 文書検索",
       "position": 0,
       "section_id": "DLID-tc02dcf51xb4"
@@ -190,23 +115,24 @@
     }
   ],
   "summary": [
-    "FR-006 document search: finding documents relevant to a task given by a user or another skill",
-    "Recall-first policy: include uncertain documents and exclude only clearly irrelevant ones",
-    "Key handling: --key selects the ToC, and the reserved key all is used when omitted",
-    "Behavior when the ToC is not built: return that an initial build is required",
-    "Pre-search check of whether a rebuild is needed, with a choice between rebuilding and searching the existing ToC",
-    "Target specification file returned with the confirmation so the checked target is the one rebuilt",
-    "Rebuild scale shown to the user: counts by change type and the number needing AI summaries",
-    "Failure to judge rebuild need stops the search and offers no keep-existing option",
-    "Search results contain document ID, path, reason, sections and ToC state",
-    "Acceptance criterion AC-019 for the pre-search rebuild confirmation"
+    "FR-006 defines task-related document search that prioritizes avoiding misses over precision",
+    "Search uses the ToC for the given key, or the reserved key all in standalone mode",
+    "Missing ToC returns a first-build-needed response; existing ToC is inspected for rebuild necessity",
+    "When rebuild is needed the user chooses rebuild-then-search or search the existing ToC",
+    "Two-choice prompt is skipped when AI-generated fields are missing or stale (REQ-006 FR-022)",
+    "A target specification file records the checked key and Index target spec so rebuild covers the same targets",
+    "Rebuild-scale counts go to stdout and per-document details go to a work file",
+    "Undeterminable rebuild necessity stops the search as a fault without offering the existing ToC",
+    "Search results include document ID, ToC path, reason, sections, and ToC state",
+    "AC-019 acceptance criterion for the pre-search ToC rebuild confirmation"
   ],
   "tasks": [
-    "Implementing the document search feature",
-    "Designing the pre-search rebuild confirmation",
-    "Implementing search result output",
+    "Implementing or modifying the search skill",
+    "Implementing the pre-search rebuild check",
+    "Designing search result output format",
+    "Handling stale or missing ToC during search",
     "Writing tests for AC-019",
-    "Choosing documents to read before a task"
+    "Reviewing search behavior against requirements"
   ],
   "title": "doc-link 要件定義書 — 文書検索"
 }

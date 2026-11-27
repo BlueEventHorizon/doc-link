@@ -1,36 +1,66 @@
 {
-  "applied_hash": "75495766ea7c67c4d76f1f1c595af294a43ef4ec3d759e1b72efafc831c26c11",
-  "content_hash": "75495766ea7c67c4d76f1f1c595af294a43ef4ec3d759e1b72efafc831c26c11",
+  "applied_hash": "0877573e25b209d1e337f17704fb9ba04bf97264e017ebbefa341f78507279af",
+  "content_hash": "0877573e25b209d1e337f17704fb9ba04bf97264e017ebbefa341f78507279af",
   "doc_link_id": "DLID-emxm9mx5a4d2",
   "keywords": [
     "doc-db",
     "ToC",
     "search backend",
-    "forced switch",
+    "force switch",
     "automatic fallback",
-    "EMBEDDING_FAILED",
+    "OpenAI failure",
+    "Embedding",
     "AI-generated fields",
-    "doc-db startup",
-    "document_errors",
-    "DLID managed state"
+    "EMBEDDING_FAILED",
+    "document_errors"
   ],
   "last_check": {
-    "checked_at": "2026-11-26T09:48:01+00:00",
+    "checked_at": "2026-11-26T13:56:07+00:00",
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-006_backend-switch.md",
-  "purpose": "Requirements for switching the search backend between doc-db and ToC: defaults, forced switch, automatic fallback, doc-db startup, the doc-db contract, and credential handling.",
+  "purpose": "Requirements for switching the search backend between doc-db and ToC: default, force switch, automatic fallback, notification, doc-db sync, results, startup, and the contract required of doc-db.",
   "references": [
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
+        "found_path": "docs/specs/design/DES-001_system-overview.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 7,
+      "recorded_content_hash": "c9a70afb040f",
+      "recorded_path": "../design/DES-001_system-overview.md#1-システム境界-dlid-gzrbkxrazr3s",
+      "source_section_id": null,
+      "target_doc_id": "DLID-3da82gspdp44",
+      "target_section_id": "DLID-gzrbkxrazr3s"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:56:07+00:00",
+        "found_path": "docs/specs/design/DES-011_backend-switch.md",
+        "result": "match",
+        "scope": "docs/specs/design"
+      },
+      "kind": "section",
+      "position": 8,
+      "recorded_content_hash": "874dbcf330b2",
+      "recorded_path": "../design/DES-011_backend-switch.md#21-強制スイッチの設定ファイル-dlid-mrgdxghyajjc",
+      "source_section_id": null,
+      "target_doc_id": "DLID-dwtbdwda6d0e",
+      "target_section_id": "DLID-mrgdxghyajjc"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
-      "position": 0,
-      "recorded_content_hash": "10c935be3c29",
+      "position": 2,
+      "recorded_content_hash": "9e80926f0773",
       "recorded_path": "REQ-001_overview.md",
       "source_section_id": null,
       "target_doc_id": "DLID-veg2nsjk8zw1",
@@ -38,29 +68,29 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-002_document-id.md",
+        "checked_at": "2026-11-26T13:56:07+00:00",
+        "found_path": "docs/specs/requirement/REQ-001_overview.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
-      "kind": "document",
-      "position": 1,
-      "recorded_content_hash": "d4eb78414c6e",
-      "recorded_path": "REQ-002_document-id.md",
+      "kind": "section",
+      "position": 5,
+      "recorded_content_hash": "542eb657b7be",
+      "recorded_path": "REQ-001_overview.md#4-用語-dlid-4g10ekjssxdx",
       "source_section_id": null,
-      "target_doc_id": "DLID-bk29x4s8tadq",
-      "target_section_id": null
+      "target_doc_id": "DLID-veg2nsjk8zw1",
+      "target_section_id": "DLID-4g10ekjssxdx"
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
-      "position": 2,
-      "recorded_content_hash": "c065536a773d",
+      "position": 3,
+      "recorded_content_hash": "ff59d70f59e6",
       "recorded_path": "REQ-003_toc.md",
       "source_section_id": null,
       "target_doc_id": "DLID-kxe3nxfgk491",
@@ -68,13 +98,13 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-003_toc.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 6,
+      "position": 0,
       "recorded_content_hash": "47be50aa7f05",
       "recorded_path": "REQ-003_toc.md#fr-005-文書情報の生成-dlid-65nf6n2jax82",
       "source_section_id": null,
@@ -83,14 +113,29 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
+        "found_path": "docs/specs/requirement/REQ-003_toc.md",
+        "result": "match",
+        "scope": "docs/specs/requirement"
+      },
+      "kind": "section",
+      "position": 6,
+      "recorded_content_hash": "f7a6a86cd652",
+      "recorded_path": "REQ-003_toc.md#7-tocの情報要件-dlid-3x56epwte9qn",
+      "source_section_id": null,
+      "target_doc_id": "DLID-kxe3nxfgk491",
+      "target_section_id": "DLID-3x56epwte9qn"
+    },
+    {
+      "check": {
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "document",
-      "position": 3,
-      "recorded_content_hash": "3dee26a7c09a",
+      "position": 4,
+      "recorded_content_hash": "86f72a2c3b92",
       "recorded_path": "REQ-004_search.md",
       "source_section_id": null,
       "target_doc_id": "DLID-h96208rqr773",
@@ -98,48 +143,18 @@
     },
     {
       "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
+        "checked_at": "2026-11-26T13:56:07+00:00",
         "found_path": "docs/specs/requirement/REQ-004_search.md",
         "result": "match",
         "scope": "docs/specs/requirement"
       },
       "kind": "section",
-      "position": 7,
+      "position": 1,
       "recorded_content_hash": "5b1ed8d54266",
       "recorded_path": "REQ-004_search.md#fr-006-文書検索-dlid-481cwc8365a3",
       "source_section_id": null,
       "target_doc_id": "DLID-h96208rqr773",
       "target_section_id": "DLID-481cwc8365a3"
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-005_references.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 4,
-      "recorded_content_hash": "762ad095b964",
-      "recorded_path": "REQ-005_references.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-pc44gkb54821",
-      "target_section_id": null
-    },
-    {
-      "check": {
-        "checked_at": "2026-11-26T09:48:01+00:00",
-        "found_path": "docs/specs/requirement/REQ-006_backend-switch.md",
-        "result": "match",
-        "scope": "docs/specs/requirement"
-      },
-      "kind": "document",
-      "position": 5,
-      "recorded_content_hash": "3a6cc3bcee23",
-      "recorded_path": "REQ-006_backend-switch.md",
-      "source_section_id": null,
-      "target_doc_id": "DLID-emxm9mx5a4d2",
-      "target_section_id": null
     }
   ],
   "sections": [
@@ -162,12 +177,6 @@
       "section_id": "DLID-rdjxpkgzdx06"
     },
     {
-      "content_hash": "1b8290aaa2ebc1ba45faca66787bb878ce431a9bd4721583b41a6b9d1e6cab01",
-      "heading": "doc-link 要件定義書 — 検索基盤の切り替え",
-      "position": 0,
-      "section_id": "DLID-4042ef3rdqs9"
-    },
-    {
       "content_hash": "1e40c8b76414641416b823476c433736cdf0f8fd6c9be9cd4ab1f19acc909ebd",
       "heading": "FR-023 切り替えの通知",
       "position": 7,
@@ -178,12 +187,6 @@
       "heading": "AC-041 切り替え後の構築",
       "position": 21,
       "section_id": "DLID-eneb4zh60v0y"
-    },
-    {
-      "content_hash": "20ceffc3e4630c3f937aa2f4935bb237e8c8111a2b8d784b1a4ac766fad38f3f",
-      "heading": "18.9 既存の要件との関係",
-      "position": 14,
-      "section_id": "DLID-cxeygdg5k5f5"
     },
     {
       "content_hash": "2129d12505fb75ac30083af838fe8897c6acb6bdebf656bbb7e32d98522b916c",
@@ -214,6 +217,12 @@
       "heading": "AC-040 ほかの失敗では切り替えない",
       "position": 20,
       "section_id": "DLID-527hbjx06rxq"
+    },
+    {
+      "content_hash": "66c3083e16d8d81220c8feddad76e2c015a02150dbe0eae8b8552971e84eadb7",
+      "heading": "doc-link 要件定義書 — 検索基盤の切り替え",
+      "position": 0,
+      "section_id": "DLID-4042ef3rdqs9"
     },
     {
       "content_hash": "73f36430b8a283a8ffa753ef4605f6c76ecc84ddbaf241e5597d005c34049016",
@@ -264,12 +273,6 @@
       "section_id": "DLID-j3azdgm64pqp"
     },
     {
-      "content_hash": "ca8b5870abb2d9f4f442e62e8d69aae2825099254e22563c00620b2528b9ac7e",
-      "heading": "18. 検索基盤の切り替え",
-      "position": 1,
-      "section_id": "DLID-06wcf22rjcdy"
-    },
-    {
       "content_hash": "cb1831b4fcf50300e4869073c0874c76cfc336abdec1f3da0b1520ce6d2cbd58",
       "heading": "FR-019 検索基盤の既定",
       "position": 3,
@@ -286,6 +289,12 @@
       "heading": "FR-020 強制スイッチ",
       "position": 4,
       "section_id": "DLID-5xay6r1be1c5"
+    },
+    {
+      "content_hash": "d40e77fcb8d3bc1423e7ed1c2655378e5c9ea6c6a95f7e0d35af0d324407d31a",
+      "heading": "18. 検索基盤の切り替え",
+      "position": 1,
+      "section_id": "DLID-06wcf22rjcdy"
     },
     {
       "content_hash": "e761c9eb19aa7383ba62f84c584cc6b09db120df9d0afa1fb1176d497075b197",
@@ -318,6 +327,12 @@
       "section_id": "DLID-j457th355zzz"
     },
     {
+      "content_hash": "f4ba849ed85bf9b8ec1cc18e207fc95866cfd4528e292099acfd2d9b9d6e41f7",
+      "heading": "18.9 既存の要件との関係",
+      "position": 14,
+      "section_id": "DLID-cxeygdg5k5f5"
+    },
+    {
       "content_hash": "fa49f64cd8d82713342f308c495cd4e0a73271ba3dcab28c830bbb85ef0c0146",
       "heading": "AC-048 [強制スイッチ]の設定",
       "position": 28,
@@ -325,25 +340,27 @@
     }
   ],
   "summary": [
-    "Scope and terms: doc-db skips AI-generated fields, ToC keeps them, and machine-extracted info is always built",
-    "Default backend and the settings-file forced switch (FR-019, FR-020)",
-    "Automatic fallback to ToC when doc-db is unreachable or OpenAI fails, and cases that must not switch (FR-021)",
-    "Building AI-generated fields on demand after switching to ToC, without a two-choice prompt (FR-022)",
-    "User notification content for a switch (FR-023)",
-    "doc-db sync from managed state, and search result format with mapping to document IDs and sections (FR-024, FR-025)",
-    "DLID and managed state stay independent of the backend (FR-026)",
-    "Permission-based doc-db startup with reconnect deadline and failure handling (FR-027)",
-    "Contract required of doc-db: error codes, document_errors, incomplete embeddings, legacy handling (FR-028)",
-    "No-credential rule NFR-009, relation to existing requirements, acceptance criteria AC-036 to AC-049"
+    "Defines the two search backends (doc-db and ToC) and which AI-generated fields depend on the backend",
+    "Default backend rule (FR-019) and the configuration-file force switch to ToC (FR-020)",
+    "Automatic fallback to ToC on connection failure or OpenAI failure, and no fallback for other failures (FR-021)",
+    "Build rules after switching to ToC, including generating only missing or stale AI-generated fields (FR-022)",
+    "Switch notification content for users (FR-023)",
+    "doc-db update from managed state, search result format, and its limits (FR-024, FR-025)",
+    "Independence of DLID and managed state from the backend (FR-026)",
+    "doc-db startup with user permission and handling of startup failure (FR-027)",
+    "Contract required of doc-db: error codes, document_errors, incomplete-embedding handling (FR-028), and no credential handling (NFR-009)",
+    "Relation to existing requirements table and acceptance criteria AC-036 to AC-049"
   ],
   "tasks": [
-    "Designing or implementing backend switching between doc-db and ToC",
-    "Implementing doc-db connection, startup and permission flow",
-    "Implementing automatic fallback and switch notifications",
-    "Implementing doc-db sync and search result mapping",
-    "Reviewing doc-db error classification and contract",
+    "Designing or implementing the backend switch between doc-db and ToC",
+    "Implementing the force switch setting and its configuration file handling",
+    "Implementing automatic fallback and failure classification",
+    "Implementing doc-db synchronization from the confirmed ToC",
+    "Implementing doc-db startup with permission",
+    "Implementing search result mapping from doc-db to document IDs",
+    "Writing switch notifications to users",
     "Writing tests against acceptance criteria AC-036 to AC-049",
-    "Implementing the forced switch settings file"
+    "Reviewing consistency with REQ-001, REQ-003, and REQ-004"
   ],
   "title": "doc-link 要件定義書 — 検索基盤の切り替え"
 }

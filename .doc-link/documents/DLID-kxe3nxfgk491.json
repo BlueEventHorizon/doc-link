@@ -1,24 +1,24 @@
 {
   "applied_hash": "693db354a8ba7be2390af25cbf5376bf4737f7dcec3719d97fb3c3db137668b0",
-  "content_hash": "ff59d70f59e6fbd8610f76faebfc5f4b29a5c46101461d28ea66eee94cc998d7",
+  "content_hash": "693db354a8ba7be2390af25cbf5376bf4737f7dcec3719d97fb3c3db137668b0",
   "doc_link_id": "DLID-kxe3nxfgk491",
   "keywords": [
     "ToC",
-    "change detection",
+    "document information",
     "content hash",
-    "SHA-256",
+    "change detection",
+    "rebuild",
     "AI-generated fields",
-    "ToC rebuild",
-    "reference entries",
-    "section entries",
-    "update plan",
-    "atomic finalization"
+    "description limit",
+    "reference entry",
+    "section entry",
+    "change set"
   ],
   "last_check": {
     "result": "success"
   },
   "path": "docs/specs/requirement/REQ-003_toc.md",
-  "purpose": "Requirements for ToC management: information managed per document, section and reference, AI-generated field limits, ToC metadata, change detection, content hashing, and ToC build, update and finalization.",
+  "purpose": "Defines what a ToC manages for documents, sections and references, AI-field limits, hash-based change detection, and the ToC build, rebuild and commit process.",
   "references": [
     {
       "check": {
@@ -548,24 +548,24 @@
     }
   ],
   "summary": [
-    "Information requirements for document info, section entries and reference entries, with acquisition methods",
-    "AI-generated field limits: description limit L and internal tolerance limit H = floor(L x 1.3), not disclosed to the generator",
-    "ToC metadata: key and normalized index target specification, rebuild detection on changed specification",
-    "Change detection against the existing ToC: new, body change, reference change, move or rename, departure, unchanged",
-    "Content hash rules: SHA-256 of original text, exclusion of reference link definitions, 12-digit recorded hash, update timing",
-    "ToC build and rebuild in stages with update plan, information acquisition, reference state reconstruction",
-    "ToC candidate validation and atomic finalization, keeping the last confirmed ToC on failure",
-    "Completion result returned as counts plus a detail file",
-    "Acceptance criteria AC-001 to AC-027"
+    "Information requirements for document info entries: document ID, path, title, purpose, summary, tasks, keywords, hashes, sections, references, check state",
+    "Section entry and reference entry fields, with acquisition method and whether anything is written to user documents",
+    "Per-field limits for AI-generated fields: description limit L shown to the generating AI, internal tolerance H = floor(L x 1.3) never disclosed",
+    "ToC metadata: ToC identification key and normalized index target specification, with rebuild required when the specification differs",
+    "Change detection (FR-003, FR-011, FR-012): content hash as SHA-256 of raw text, reference link definition lines excluded, 12-digit hash recorded in link titles",
+    "Change classification into new, body change, reference change, move or rename, departure from index target, and unchanged",
+    "ToC build and rebuild (FR-004, FR-005, FR-008): three-stage order, update plan, reference reconstruction, candidate validation, atomic commit",
+    "Completion result returned to the project management AI: counts on stdout and full detail in a work file",
+    "Acceptance conditions AC-001 to AC-027 covering move, rebuild, failure handling, independence from notification, and tolerance margin"
   ],
   "tasks": [
-    "Designing the ToC data model and storage",
-    "Implementing change detection and content hash computation",
-    "Implementing ToC build, rebuild and finalization",
-    "Implementing AI-generated field generation and validation",
-    "Implementing reference extraction and reverse reference",
-    "Writing tests for ToC acceptance criteria",
-    "Designing the build result output and detail file"
+    "Designing or implementing ToC build and rebuild processing",
+    "Implementing change detection and content hash calculation",
+    "Implementing AI-generated field generation and validation of limits",
+    "Designing the ToC data model and metadata storage",
+    "Implementing the build completion result and detail file output",
+    "Writing or reviewing tests for ToC acceptance conditions",
+    "Reviewing requirements consistency between ToC, references and document ID specifications"
   ],
   "title": "doc-link 要件定義書 — [ToC]管理"
 }

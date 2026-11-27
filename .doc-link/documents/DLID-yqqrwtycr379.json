@@ -1,24 +1,24 @@
 {
   "applied_hash": "a44ff906a48e3c409fb5243bf507bb7eb219c252660e4ee0f54afc0d9c95bb2f",
-  "content_hash": "fe43f27be4dad4ff03f3582f707f77460794948e9b7ea2f1a8a9e308e22eda1c",
+  "content_hash": "a44ff906a48e3c409fb5243bf507bb7eb219c252660e4ee0f54afc0d9c95bb2f",
   "doc_link_id": "DLID-yqqrwtycr379",
   "keywords": [
     "data model",
-    "document information",
+    "document info",
+    "doc_link_id",
     "confirmed ToC",
     "content hash",
     "reference description",
     "section entry",
-    "multiplicity",
-    "freshness",
-    "ToC key",
-    "AI-generated fields"
+    "back reference",
+    "ToC identification key",
+    "freshness"
   ],
   "last_check": {
     "result": "success"
   },
   "path": "docs/specs/design/DES-003_data-model.md",
-  "purpose": "Defines the logical data model of doc-link: information entities, identifiers, relationships, multiplicity, value meanings and freshness, independent of any physical schema.",
+  "purpose": "Defines the logical data model of doc-link: identity, relations, versions and primary sources of information such as document info, references, section entries and confirmed ToC.",
   "references": [
     {
       "check": {
@@ -186,22 +186,25 @@
     }
   ],
   "summary": [
-    "Model boundary: logical identity, relations, versions and sources of truth; current files and the last confirmed index are separate information",
-    "Entity table: document identity, index target specification, observations, document information, reference description, check result, section entry, final check state, confirmed ToC, build run",
-    "Document information is stored once per doc_link_id and shared by all keys, never copied per key",
-    "AI-generated fields have an ungenerated state when the search backend is doc-db",
-    "Multiplicity: one document in many keys, many references per document, at most one confirmed ToC per key",
-    "Section identification by DLID at heading-line ends; no heading text as permanent ID",
-    "Value meaning and freshness: document ID versus content hash, reference check results valid only for the checked directory and time",
-    "Documents leaving the index target are removed from the confirmed ToC without searching outside scope"
+    "Model boundary: logical definition only, JSON file storage, current files versus last confirmed index are distinct, no notification state",
+    "Table of logical information with identifiers, attributes, primary sources and relations",
+    "Document info is stored once per doc_link_id and shared by all ToC identification keys",
+    "Confirmed ToC holds only per-key data: version, target spec, member document IDs, back references",
+    "AI-generated fields may be ungenerated when the search backend is doc-db; staleness judged by content hash",
+    "Cardinality: one key has many document IDs, one document ID belongs to many keys, at most one confirmed ToC per key",
+    "Section identification by trailing DLID on headings; sections without DLID have no stable identity",
+    "Meaning and freshness of values: document ID versus content hash, reference check results valid only for recorded scope and time",
+    "Documents leaving the index target are removed from the confirmed ToC without searching outside scope",
+    "No unresolved relations at present"
   ],
   "tasks": [
-    "Designing or changing stored data structures for ToC and document information",
-    "Implementing JSON file storage for document information and confirmed ToC",
-    "Implementing reference checks and reverse reference derivation",
-    "Working on content hash and freshness handling",
-    "Designing the doc-db backend switch and ungenerated AI fields",
-    "Reviewing data consistency across multiple ToC keys"
+    "Designing or changing the logical data model",
+    "Implementing document info and confirmed ToC storage",
+    "Implementing reference description and reference check results",
+    "Implementing section entries and section ID handling",
+    "Reviewing consistency between requirements and data model design",
+    "Deciding content hash and reflected hash semantics",
+    "Designing ToC build and rebuild behavior across multiple keys"
   ],
   "title": "DES-003 論理データモデル"
 }
